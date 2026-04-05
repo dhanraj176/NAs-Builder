@@ -1,0 +1,17 @@
+.env
+*.pth
+*.pt
+*.pkl
+*.zip
+__pycache__/
+*.pyc
+datasets/
+cache/
+user_data/
+agent_data/
+brain_data/research_cache/
+.vscode/
+fix_nzg.py
+test_network.py
+test_topology.py
+test_network.zip

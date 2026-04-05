@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoArchitect AI — Agent Network Architecture Search</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-inner">
+            <div class="logo-block">
+                <div class="logo">AutoArchitect <span>AI</span></div>
+                <div class="tagline">Agent Network Architecture Search — Plain English to Deployable AI</div>
+            </div>
+            <div class="header-stats">
+                <div class="stat"><span class="stat-num">+22.33%</span><span class="stat-lbl">vs human baseline</span></div>
+                <div class="stat"><span class="stat-num">2066x</span><span class="stat-lbl">cache speedup</span></div>
+                <div class="stat"><span class="stat-num">81.11%</span><span class="stat-lbl">test accuracy</span></div>
+                <div class="stat"><span class="stat-num">$0</span><span class="stat-lbl">infrastructure</span></div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- STEP 1 -->
+        <section class="card" id="step1">
+            <div class="card-header">
+                <div class="step-badge">Step 1</div>
+                <h2>Describe Your Problem</h2>
+                <p class="subtitle">Type any problem in plain English. AutoArchitect automatically designs, trains, and deploys a multi-agent AI network.</p>
+            </div>
+
+            <textarea id="problemInput"
+                placeholder="e.g. detect illegal dumping in Oakland street cameras and classify severity..."
+                rows="3"></textarea>
+
+            <div class="examples">
+                <span class="example-label">Try:</span>
+                <button class="example-btn" onclick="setExample(this)">Detect potholes in road images</button>
+                <button class="example-btn" onclick="setExample(this)">Classify medical xray scans</button>
+                <button class="example-btn" onclick="setExample(this)">Detect fraud in banking transactions</button>
+                <button class="example-btn" onclick="setExample(this)">Classify spam text messages</button>
+            </div>
+
+            <div class="mode-selector">
+                <button id="modeNAS" class="mode-btn active" onclick="setMode('nas')">
+                    <span class="mode-title">NAS Mode</span>
+                    <span class="mode-desc">Auto design + HuggingFace dataset training</span>
+                </button>
+                <button id="modeUpload" class="mode-btn" onclick="setMode('upload')">
+                    <span class="mode-title">Your Data Mode</span>
+                    <span class="mode-desc">Upload your own labeled data for real accuracy</span>
+                </button>
+            </div>
+
+            <div id="uploadSection" class="hidden upload-section">
+                <div class="upload-box">
+                    <div class="upload-box-title">Upload Labeled Data</div>
+                    <div class="upload-box-desc">Upload images or text files with class labels. Minimum 4 files, 2 classes.</div>
+                    <label class="input-label">Class names (comma separated):</label>
+                    <input id="classInput" type="text" placeholder="e.g. clean, illegal_dump" class="text-input"/>
+                    <div id="classUploadAreas"></div>
+                    <button onclick="generateUploadAreas()" class="btn-outline">Generate Upload Areas</button>
+                </div>
+                <div id="uploadStats" class="hidden upload-stats">
+                    <span id="uploadCount">0 files uploaded</span>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="solveProblem()">Launch Multi-Agent NAS</button>
+        </section>
+
+        <!-- STEP 2 -->
+        <section class="card hidden" id="step2">
+            <div class="card-header">
+                <div class="step-badge processing">Processing</div>
+                <h2 id="step2Title">AutoArchitect is thinking...</h2>
+            </div>
+            <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+            <div id="nasStatus" class="status-text">Analyzing your problem...</div>
+            <div id="workflowPanel" class="workflow-panel"></div>
+            <div id="livePipeline" class="live-pipeline">
+                <div class="pipeline-label">Live Agent Pipeline</div>
+                <div id="pipelineSteps"></div>
+            </div>
+            <div class="pulse-row">
+                <div class="dot"></div><div class="dot"></div>
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+        </section>
+
+        <!-- STEP 3 -->
+        <section class="card hidden" id="step3">
+            <div class="card-header">
+                <div class="step-badge complete">Complete</div>
+                <h2 id="resultsTitle">Results</h2>
+            </div>
+            <div id="resultsContent"></div>
+
+            <div id="testSection" class="hidden section-divider">
+                <div class="section-title">Test Your Model</div>
+                <div class="section-desc">Upload any image and get a real prediction from your trained model.</div>
+                <div id="testUploadArea" class="test-upload" onclick="document.getElementById('testImageInput').click()">
+                    <div class="test-upload-title">Click to upload test image</div>
+                    <div class="test-upload-desc">Get a real prediction instantly</div>
+                    <input type="file" id="testImageInput" accept="image/*" style="display:none" onchange="runRealPrediction(event)"/>
+                </div>
+                <div id="predictionResult" class="hidden pred-result">
+                    <div id="predLabel" class="pred-label"></div>
+                    <div id="predConf" class="pred-conf"></div>
+                    <div id="predScores"></div>
+                </div>
+            </div>
+
+            <div id="downloadSection" class="hidden section-divider">
+                <div class="section-title">Download Agent Network</div>
+                <div class="section-desc">Complete autonomous multi-agent network — runs forever after deployment.</div>
+                <div class="download-grid">
+                    <div class="download-col">
+                        <div class="download-col-title">NAS Package</div>
+                        <div class="download-col-desc">Full pipeline — retrain on any machine</div>
+                        <div class="feature-list">
+                            <div class="feature-item">NAS Engine (DARTS)</div>
+                            <div class="feature-item">All 4 domain agents</div>
+                            <div class="feature-item">Fusion + Evaluator</div>
+                            <div class="feature-item">ResNet18 transfer learning</div>
+                            <div class="feature-item">Brain + strategy library</div>
+                            <div class="feature-item">run_nas.py script</div>
+                        </div>
+                        <button class="btn-primary" id="downloadBtn" onclick="downloadMultiNAS()">Download NAS Package</button>
+                    </div>
+                    <div class="download-col highlight-col">
+                        <div class="download-col-badge">RECOMMENDED</div>
+                        <div class="download-col-title">Agent Network</div>
+                        <div class="download-col-desc">Ready-to-run autonomous agent network</div>
+                        <div class="feature-list">
+                            <div class="feature-item">Multi-agent network</div>
+                            <div class="feature-item">Custom agents per problem</div>
+                            <div class="feature-item">network.py connector</div>
+                            <div class="feature-item">Trained model weights</div>
+                            <div class="feature-item">REST API server</div>
+                            <div class="feature-item">run_network.py (1 command)</div>
+                        </div>
+                        <button class="btn-success" id="downloadNetworkBtn" onclick="downloadNetwork()">Download Agent Network</button>
+                    </div>
+                </div>
+                <div id="downloadStatus" class="download-status"></div>
+            </div>
+
+            <button class="btn-ghost" onclick="startOver()">Solve Another Problem</button>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-title">AutoArchitect AI</div>
+            <div class="footer-desc">Oakland Research Showcase 2026 — Agent Network Architecture Search (ANAS)</div>
+            <div class="footer-stats">
+                <span>+22.33% over human baseline</span>
+                <span>·</span>
+                <span>2066x cache speedup</span>
+                <span>·</span>
+                <span>81.11% test accuracy</span>
+                <span>·</span>
+                <span>$0 infrastructure cost</span>
+                <span>·</span>
+                <span>10 research contributions</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
