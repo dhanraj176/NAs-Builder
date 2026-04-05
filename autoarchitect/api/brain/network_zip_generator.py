@@ -402,11 +402,87 @@ class {class_name}:
             pass
 
     def learn(self):
+        """Real retraining on accumulated memory examples."""
         if len(self.memory) < 20:
-            print(f"   [{self.name}] Need {{20 - len(self.memory)}} more examples")
+            print(f"   [{self.name}] Need {20 - len(self.memory)} more examples to retrain")
             return
-        print(f"   [{self.name}] Retraining on {{len(self.memory)}} examples...")
-        print(f"   [{self.name}] ✅ Retrain complete")
+
+        print(f"   [{self.name}] Retraining on {len(self.memory)} examples...")
+
+        try:
+            import torch
+            import torch.nn as nn
+            from torch.utils.data import DataLoader, Dataset
+            from torchvision import models, transforms
+            from PIL import Image
+            import json
+
+            # Build dataset from memory
+            class MemoryDataset(Dataset):
+                def __init__(self, memory, transform):
+                    self.items = [m for m in memory if Path(m.get("input","")).exists()]
+                    self.transform = transform
+                    self.labels = sorted(set(m["label"] for m in self.items))
+                    self.label_map = {l: i for i, l in enumerate(self.labels)}
+
+                def __len__(self):
+                    return len(self.items)
+
+                def __getitem__(self, idx):
+                    m = self.items[idx]
+                    img = Image.open(m["input"]).convert("RGB")
+                    return self.transform(img), self.label_map[m["label"]]
+
+            transform = transforms.Compose([
+                transforms.Resize((224, 224)),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485,0.456,0.406],[0.229,0.224,0.225])
+            ])
+
+            dataset = MemoryDataset(self.memory, transform)
+            if len(dataset) < 10:
+                print(f"   [{self.name}] Not enough valid image examples")
+                return
+
+            loader = DataLoader(dataset, batch_size=8, shuffle=True)
+            n_classes = len(dataset.labels)
+
+            # Load existing model or create new ResNet18
+            model = models.resnet18(weights=None)
+            model.fc = nn.Linear(512, n_classes)
+
+            if self.model_path.exists():
+                try:
+                    model.load_state_dict(
+                        torch.load(str(self.model_path), map_location="cpu"),
+                        strict=False
+                    )
+                    print(f"   [{self.name}] Loaded existing weights for fine-tuning")
+                except Exception:
+                    print(f"   [{self.name}] Starting fresh")
+
+            model.train()
+            optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+            criterion = nn.CrossEntropyLoss()
+
+            for epoch in range(3):
+                correct = total = 0
+                for imgs, labels in loader:
+                    optimizer.zero_grad()
+                    out = model(imgs)
+                    loss = criterion(out, labels)
+                    loss.backward()
+                    optimizer.step()
+                    correct += (out.argmax(1) == labels).sum().item()
+                    total += len(labels)
+                acc = round(100 * correct / total, 1)
+                print(f"   [{self.name}] Epoch {epoch+1}/3 → {acc}%")
+
+            torch.save(model.state_dict(), str(self.model_path))
+            print(f"   [{self.name}] ✅ Retrain complete — model updated at {self.model_path}")
+
+        except Exception as e:
+            print(f"   [{self.name}] ⚠️  Retrain failed: {e}")
 
     def status(self) -> dict:
         return {{
@@ -552,11 +628,87 @@ class {class_name}:
             pass
 
     def learn(self):
+        """Real retraining on accumulated memory examples."""
         if len(self.memory) < 20:
-            print(f"   [{self.name}] Need {{20 - len(self.memory)}} more examples")
+            print(f"   [{self.name}] Need {20 - len(self.memory)} more examples to retrain")
             return
-        print(f"   [{self.name}] Retraining on {{len(self.memory)}} examples...")
-        print(f"   [{self.name}] ✅ Retrain complete")
+
+        print(f"   [{self.name}] Retraining on {len(self.memory)} examples...")
+
+        try:
+            import torch
+            import torch.nn as nn
+            from torch.utils.data import DataLoader, Dataset
+            from torchvision import models, transforms
+            from PIL import Image
+            import json
+
+            # Build dataset from memory
+            class MemoryDataset(Dataset):
+                def __init__(self, memory, transform):
+                    self.items = [m for m in memory if Path(m.get("input","")).exists()]
+                    self.transform = transform
+                    self.labels = sorted(set(m["label"] for m in self.items))
+                    self.label_map = {l: i for i, l in enumerate(self.labels)}
+
+                def __len__(self):
+                    return len(self.items)
+
+                def __getitem__(self, idx):
+                    m = self.items[idx]
+                    img = Image.open(m["input"]).convert("RGB")
+                    return self.transform(img), self.label_map[m["label"]]
+
+            transform = transforms.Compose([
+                transforms.Resize((224, 224)),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485,0.456,0.406],[0.229,0.224,0.225])
+            ])
+
+            dataset = MemoryDataset(self.memory, transform)
+            if len(dataset) < 10:
+                print(f"   [{self.name}] Not enough valid image examples")
+                return
+
+            loader = DataLoader(dataset, batch_size=8, shuffle=True)
+            n_classes = len(dataset.labels)
+
+            # Load existing model or create new ResNet18
+            model = models.resnet18(weights=None)
+            model.fc = nn.Linear(512, n_classes)
+
+            if self.model_path.exists():
+                try:
+                    model.load_state_dict(
+                        torch.load(str(self.model_path), map_location="cpu"),
+                        strict=False
+                    )
+                    print(f"   [{self.name}] Loaded existing weights for fine-tuning")
+                except Exception:
+                    print(f"   [{self.name}] Starting fresh")
+
+            model.train()
+            optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+            criterion = nn.CrossEntropyLoss()
+
+            for epoch in range(3):
+                correct = total = 0
+                for imgs, labels in loader:
+                    optimizer.zero_grad()
+                    out = model(imgs)
+                    loss = criterion(out, labels)
+                    loss.backward()
+                    optimizer.step()
+                    correct += (out.argmax(1) == labels).sum().item()
+                    total += len(labels)
+                acc = round(100 * correct / total, 1)
+                print(f"   [{self.name}] Epoch {epoch+1}/3 → {acc}%")
+
+            torch.save(model.state_dict(), str(self.model_path))
+            print(f"   [{self.name}] ✅ Retrain complete — model updated at {self.model_path}")
+
+        except Exception as e:
+            print(f"   [{self.name}] ⚠️  Retrain failed: {e}")
 
     def status(self) -> dict:
         return {{
