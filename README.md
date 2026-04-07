@@ -1,4 +1,5 @@
 # AutoArchitect AI
+
 ### Autonomous Agent Network Generator — Oakland Research Showcase 2026
 
 > **Describe any problem in plain English. Get a fully trained, deployable AI agent network in minutes.**
@@ -30,6 +31,7 @@ Output: Trained ResNet18 model — 81.11% test accuracy
 ```
 
 Second run of the same problem:
+
 ```
 ChromaDB recall: 100% match — result in 1.07 seconds
 ```
@@ -38,19 +40,19 @@ ChromaDB recall: 100% match — result in 1.07 seconds
 
 ## Proven Results
 
-| Problem | Domain | Agents | Accuracy |
-|---------|--------|--------|----------|
-| Illegal dumping detection | Image | 3 | **81.11%** |
-| Pothole & road damage | Image | 3 | 100%* |
-| Toxic comment detection | Text | 2 | **92.8%** |
-| Spam classification | Text | 1 | 86.0% |
-| Pneumonia detection (X-ray) | Medical | 1 | 100%* |
-| Sentiment analysis (IMDB) | Text | 2 | 100%* |
-| Multi-domain Oakland monitoring | Image | 3 | **81.4%** |
+| Problem                         | Domain  | Agents | Accuracy   |
+| ------------------------------- | ------- | ------ | ---------- |
+| Illegal dumping detection       | Image   | 3      | **81.11%** |
+| Pothole & road damage           | Image   | 3      | 100%\*     |
+| Toxic comment detection         | Text    | 2      | **92.8%**  |
+| Spam classification             | Text    | 1      | 86.0%      |
+| Pneumonia detection (X-ray)     | Medical | 1      | 100%\*     |
+| Sentiment analysis (IMDB)       | Text    | 2      | 100%\*     |
+| Multi-domain Oakland monitoring | Image   | 3      | **81.4%**  |
 
 **Infrastructure cost: $0** — fully local, open-source stack.
 
-*100% accuracy reported on the test split used during evaluation.
+\*100% accuracy reported on the test split used during evaluation.
 
 ---
 
@@ -110,17 +112,17 @@ The diagram above shows the full component breakdown across four subsystems:
 
 ## Tech Stack
 
-| Component | Technology |
-|-----------|-----------|
-| Domain Classification | BERT (417MB, local) |
-| Architecture Search | DARTS NAS |
-| Image Training | ResNet18 Transfer Learning |
-| Text Training | Bag-of-Words + custom NN |
-| Memory | ChromaDB 1.5.5 |
-| Web Research | Crawl4AI + DuckDuckGo |
-| LLM Output | Groq (Llama 3, optional) |
-| Backend | Flask |
-| ML Framework | PyTorch |
+| Component             | Technology                 |
+| --------------------- | -------------------------- |
+| Domain Classification | BERT (417MB, local)        |
+| Architecture Search   | DARTS NAS                  |
+| Image Training        | ResNet18 Transfer Learning |
+| Text Training         | Bag-of-Words + custom NN   |
+| Memory                | ChromaDB 1.5.5             |
+| Web Research          | Crawl4AI + DuckDuckGo      |
+| LLM Output            | Groq (Llama 3, optional)   |
+| Backend               | Flask                      |
+| ML Framework          | PyTorch                    |
 
 ---
 
@@ -153,16 +155,16 @@ python app.py
 
 ## Verified Working Datasets
 
-| Domain | Dataset |
-|--------|---------|
+| Domain                    | Dataset                                         |
+| ------------------------- | ----------------------------------------------- |
 | Garbage / Illegal Dumping | `dmedhi/garbage-image-classification-detection` |
-| Potholes / Road Damage | `taroii/pothole-detection` |
-| Pneumonia / X-Ray | `hf-vision/chest-xray-pneumonia` |
-| Skin Cancer | `marmal88/skin_cancer` |
-| Spam Detection | `sms_spam` |
-| Sentiment Analysis | `imdb` |
-| Fake News | `GonzaloA/fake_news` |
-| Toxic Comments | `SetFit/toxic_conversations_50k` |
+| Potholes / Road Damage    | `taroii/pothole-detection`                      |
+| Pneumonia / X-Ray         | `hf-vision/chest-xray-pneumonia`                |
+| Skin Cancer               | `marmal88/skin_cancer`                          |
+| Spam Detection            | `sms_spam`                                      |
+| Sentiment Analysis        | `imdb`                                          |
+| Fake News                 | `GonzaloA/fake_news`                            |
+| Toxic Comments            | `SetFit/toxic_conversations_50k`                |
 
 ---
 
@@ -182,6 +184,16 @@ The core novel contribution — **ANAS (Agent Network Architecture Search)** —
 MS Computer Science Engineering  
 Northeastern University Oakland  
 GitHub: [@dhanraj176](https://github.com/dhanraj176)
+
+**Vinal Dalcy Dsouza**  
+MS Computer Science Engineering  
+Northeastern University Oakland  
+GitHub: [@vinaldsz](https://github.com/vinaldsz)
+
+**Nakul Shivaraj**  
+MS Computer Science Engineering  
+Northeastern University Oakland  
+GitHub: [@nakulShivaraj](https://github.com/Nakul-Shivaraj)
 
 ---
 
