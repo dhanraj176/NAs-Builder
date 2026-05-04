@@ -1,0 +1,206 @@
+{
+  "experiment": "ANAS Baseline Comparison",
+  "dataset": "dmedhi/garbage-image-classification-detection",
+  "problem": "detect illegal dumping and garbage in street cameras",
+  "budget": 20,
+  "seeds": [
+    42,
+    123,
+    456
+  ],
+  "run_at": "2026-05-04T17:49:37.245385",
+  "methods": {
+    "Single model": {
+      "method": "Single model",
+      "architecture": [
+        "image"
+      ],
+      "topology": "sequential",
+      "seeds": [
+        81.36,
+        81.11,
+        82.87
+      ],
+      "accuracy_mean": 81.78,
+      "accuracy_std": 0.95,
+      "searches": 1,
+      "blocked": 0,
+      "proxy_score": null,
+      "source": "cached",
+      "note": "3 existing ResNet18 fine-tune runs on same dataset"
+    },
+    "Random search": {
+      "method": "Random search",
+      "architecture": [
+        [
+          "optimizer",
+          "report"
+        ],
+        [
+          "image",
+          "report"
+        ],
+        [
+          "medical",
+          "report"
+        ]
+      ],
+      "topology": [
+        "parallel",
+        "pipeline",
+        "conditional"
+      ],
+      "seeds": [
+        0.0,
+        81.78,
+        0.0
+      ],
+      "accuracy_mean": 27.26,
+      "accuracy_std": 47.22,
+      "searches": 20,
+      "blocked": 0,
+      "proxy_score": null,
+      "source": "random_selection",
+      "seed_details": [
+        {
+          "seed": 42,
+          "architecture": [
+            "optimizer",
+            "report"
+          ],
+          "topology": "parallel",
+          "primary_domain": "text",
+          "accuracy": 0.0,
+          "source": "domain_mismatch",
+          "proxy_score": null
+        },
+        {
+          "seed": 123,
+          "architecture": [
+            "image",
+            "report"
+          ],
+          "topology": "pipeline",
+          "primary_domain": "image",
+          "accuracy": 81.78,
+          "source": "cached",
+          "proxy_score": null
+        },
+        {
+          "seed": 456,
+          "architecture": [
+            "medical",
+            "report"
+          ],
+          "topology": "conditional",
+          "primary_domain": "medical",
+          "accuracy": 0.0,
+          "source": "domain_mismatch",
+          "proxy_score": null
+        }
+      ],
+      "note": "Architecture varies by seed; 0% = domain mismatch"
+    },
+    "Template match": {
+      "method": "Template match",
+      "architecture": [
+        "image",
+        "severity",
+        "report"
+      ],
+      "topology": "sequential",
+      "template_source": "cache",
+      "seeds": [
+        81.36,
+        81.11,
+        82.87
+      ],
+      "accuracy_mean": 81.78,
+      "accuracy_std": 0.95,
+      "searches": 1,
+      "blocked": 0,
+      "proxy_score": null,
+      "source": "cached",
+      "note": "Deterministic keyword lookup; same arch every run"
+    },
+    "ANAS (ours)": {
+      "method": "ANAS (ours)",
+      "architecture": [
+        "image",
+        "report"
+      ],
+      "topology": "sequential",
+      "proxy_score": 0.9459,
+      "seeds": [
+        81.36,
+        81.11,
+        82.87
+      ],
+      "accuracy_mean": 81.78,
+      "accuracy_std": 0.95,
+      "searches": 20,
+      "blocked": 2,
+      "source": "cached",
+      "search_elapsed_s": 0.007,
+      "top5_candidates": [
+        {
+          "rank": 1,
+          "agents": [
+            "image",
+            "report"
+          ],
+          "topology": "sequential",
+          "score": 0.9459,
+          "source": "template:detect_and_report:domain_match"
+        },
+        {
+          "rank": 2,
+          "agents": [
+            "image",
+            "severity",
+            "report"
+          ],
+          "topology": "sequential",
+          "score": 0.8543,
+          "source": "template:detect_classify_report:domain_match"
+        },
+        {
+          "rank": 3,
+          "agents": [
+            "image",
+            "medical",
+            "report"
+          ],
+          "topology": "sequential",
+          "score": 0.8174,
+          "source": "meta_combo"
+        },
+        {
+          "rank": 4,
+          "agents": [
+            "medical",
+            "report"
+          ],
+          "topology": "sequential",
+          "score": 0.7771,
+          "source": "meta_combo"
+        },
+        {
+          "rank": 5,
+          "agents": [
+            "medical",
+            "severity",
+            "report"
+          ],
+          "topology": "sequential",
+          "score": 0.7447,
+          "source": "template:medical_pipeline"
+        }
+      ],
+      "proxy_real_indicator": 0.729,
+      "immune_toxic_loaded": 3,
+      "immune_success_loaded": 3,
+      "note": "Real brain_data/ vaults used read-only; learn() not called"
+    }
+  }
+}
