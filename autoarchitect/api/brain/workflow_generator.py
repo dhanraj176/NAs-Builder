@@ -11,6 +11,11 @@ from api.brain.strategy_library    import StrategyLibrary
 from api.brain.performance_tracker import PerformanceTracker
 from api.brain.meta_learner        import get_meta_learner
 
+# Domains the self-trainer can actually train (ANAS may suggest others like
+# "severity" or "report" which are topology-only agents, not trainable).
+_TRAINABLE_DOMAINS    = {"image", "text", "medical", "security"}
+_ANAS_PROXY_THRESHOLD = 0.70  # min proxy_score to trust ANAS over strategy library
+
 
 class WorkflowGenerator:
     """
@@ -24,7 +29,8 @@ class WorkflowGenerator:
         self.library  = StrategyLibrary()
         self.tracker  = PerformanceTracker()
         self.meta     = get_meta_learner()
-        print("🤖 Workflow Generator ready!")
+        self.use_anas = True  # set to False (via USE_ANAS in app.py) to revert to strategy library
+        print("[WorkflowGenerator] ready!")
         print(f"   Knows {len(self.library.strategies)} strategies")
 
     def generate(self, problem: str,
@@ -38,7 +44,7 @@ class WorkflowGenerator:
         2. Strategy library (uses corrected domain from orchestrator)
         """
         start = time.time()
-        print(f"\n🤖 Generating workflow for: {problem[:50]}")
+        print(f"\n[WorkflowGenerator] generating workflow for: {problem[:50]}")
 
         # ── Try meta-learner first ──────────────────────────
         meta_pred = self.meta.predict(
@@ -58,36 +64,46 @@ class WorkflowGenerator:
             strategy_name = f"meta_predicted_{'+'.join(agents)}"
             avg_accuracy  = meta_pred["accuracy"]
 
-            print(f"  🔮 Meta-learner prediction:")
+            print(f"  [MetaLearner] prediction:")
             print(f"     Agents:     {agents}")
             print(f"     Dataset:    {meta_pred.get('dataset', 'unknown')}")
             print(f"     Method:     {meta_pred.get('method', 'unknown')}")
             print(f"     Expected:   ~{avg_accuracy}%")
             print(f"     Confidence: {meta_pred['confidence']:.1%}")
-            print(f"  🔮 Meta-learner override! "
+            print(f"  [MetaLearner] override! "
                   f"Confidence: {meta_pred['confidence']:.1%}")
             source = "meta_learner"
 
         else:
-            # Fall back to strategy library — uses corrected domain
+            # Print meta-learner low-confidence warning if applicable
             if meta_pred.get("predicted"):
-                print(f"  🔮 Meta-learner prediction:")
+                print(f"  [MetaLearner] prediction:")
                 print(f"     Agents:     {meta_pred.get('agents', [])}")
                 print(f"     Dataset:    {meta_pred.get('dataset', 'unknown')}")
                 print(f"     Method:     {meta_pred.get('method', 'unknown')}")
                 print(f"     Expected:   ~{meta_pred.get('accuracy', 0)}%")
                 print(f"     Confidence: {meta_pred.get('confidence', 0):.1%}")
-                print(f"  ⚠️  Meta-learner confidence too low "
+                print(f"  [MetaLearner] confidence too low "
                       f"({meta_pred.get('confidence', 0):.1%}) "
-                      f"— using strategy library")
+                      f"-- using strategy library")
 
-            strategy      = self.library.find_best_strategy(
-                problem, bert_domain)
-            agents        = strategy["agents"]
-            workflow_type = "multi" if len(agents) > 1 else "single"
-            strategy_name = strategy["strategy_name"]
-            avg_accuracy  = strategy["avg_accuracy"]
-            source        = "strategy_library"
+            # ANAS primary / strategy library fallback
+            anas = (self._anas_suggest_workflow(problem, bert_domain, bert_embedding)
+                    if self.use_anas else None)
+
+            if anas:
+                agents        = anas["agents"]
+                workflow_type = "multi" if len(agents) > 1 else "single"
+                strategy_name = f"anas_search_{'+'.join(agents)}"
+                avg_accuracy  = 80.0  # real accuracy comes from training
+                source        = "anas_search_engine"
+            else:
+                strategy      = self.library.find_best_strategy(problem, bert_domain)
+                agents        = strategy["agents"]
+                workflow_type = "multi" if len(agents) > 1 else "single"
+                strategy_name = strategy["strategy_name"]
+                avg_accuracy  = strategy["avg_accuracy"]
+                source        = "strategy_library"
 
         # Build steps
         steps = []
@@ -108,7 +124,7 @@ class WorkflowGenerator:
             f"Cache Agent — save forever")
 
         elapsed = round(time.time() - start, 3)
-        print(f"  ✅ Workflow generated in {elapsed}s")
+        print(f"  [WorkflowGenerator] done in {elapsed}s")
         print(f"     Source:   {source}")
         print(f"     Strategy: {strategy_name}")
         print(f"     Agents:   {agents}")
@@ -125,6 +141,43 @@ class WorkflowGenerator:
             "source":            source,
             "meta_prediction":   meta_pred,
         }
+
+    def _anas_suggest_workflow(self, problem, bert_domain, bert_embedding=None):
+        """
+        Query ANAS search engine for agent selection.
+        Returns dict(agents, proxy_score, source) or None when ANAS is
+        unavailable, low-proxy, or produces no trainable agents.
+        Lazy-imports get_anas_search_engine to avoid circular imports.
+        """
+        try:
+            from api.brain.anas_search_engine import get_anas_search_engine
+            engine = get_anas_search_engine()
+
+            hints  = [bert_domain]
+            hints += [w for w in problem.lower().split() if len(w) > 3][:8]
+
+            result = engine.search(
+                problem      = problem,
+                domain_hints = hints,
+                budget       = 20,
+            )
+            proxy = result["proxy_score"]
+            if proxy < _ANAS_PROXY_THRESHOLD:
+                print(f"  [ANAS workflow] low proxy ({proxy:.4f}) -- using strategy library")
+                return None
+
+            arch      = result["architecture"]
+            trainable = [a for a in arch.agents if a in _TRAINABLE_DOMAINS]
+            if not trainable:
+                print(f"  [ANAS workflow] no trainable agents in {arch.agents} -- using strategy library")
+                return None
+
+            print(f"  [ANAS workflow] agents={trainable}  proxy={proxy:.4f}")
+            return {"agents": trainable, "proxy_score": proxy, "source": "anas_search_engine"}
+
+        except Exception as e:
+            print(f"  [ANAS workflow] failed ({e}) -- using strategy library")
+            return None
 
     def learn_from_result(self, problem: str,
                            workflow: dict,
@@ -143,7 +196,7 @@ class WorkflowGenerator:
         agents        = workflow.get("agents", [])
 
         if accuracy == 0.0:
-            print(f"  ⚠️  Brain skipping update — no dataset found, strategy scores protected")
+            print(f"  [Brain] skipping update -- no dataset found, strategy scores protected")
             return
 
         # 1. Update strategy library
@@ -176,8 +229,8 @@ class WorkflowGenerator:
                 bert_embedding  = bert_embedding,
             )
 
-        print(f"  🧠 Brain updated! Strategy: {strategy_name} "
-              f"→ {accuracy}% accuracy")
+        print(f"  [Brain] updated! Strategy: {strategy_name} "
+              f"-> {accuracy}% accuracy")
 
     def get_brain_status(self) -> dict:
         """How smart is the brain right now?"""

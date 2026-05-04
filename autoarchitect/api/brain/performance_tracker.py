@@ -25,8 +25,7 @@ class PerformanceTracker:
     def __init__(self):
         os.makedirs(BRAIN_DIR, exist_ok=True)
         self._load()
-        print(f"📊 Performance Tracker: "
-              f"{len(self.history)} problems tracked")
+        print(f"[PerformanceTracker] {len(self.history)} problems tracked")
 
     def record(self, problem: str, strategy: str,
                agents: list, accuracy: float,

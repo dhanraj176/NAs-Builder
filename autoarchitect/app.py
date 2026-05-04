@@ -37,10 +37,21 @@ from api.data_uploader import (
 app = Flask(__name__)
 CORS(app)
 
+# ── ANAS toggle ────────────────────────────────────────────────────────────
+# Set to False to revert topology/workflow selection to template matching
+# and strategy library (useful for debugging or A/B comparison).
+USE_ANAS = True
+
 analyzer     = ProblemAnalyzer()
 orchestrator = AutoArchitectOrchestrator(
     groq_api_key=os.getenv("GROQ_API_KEY", "")
 )
+
+# Wire USE_ANAS into the topology designer and workflow generator
+if orchestrator.topology_enabled and orchestrator.topology_designer:
+    orchestrator.topology_designer.use_anas = USE_ANAS
+if orchestrator.brain_enabled and orchestrator.brain:
+    orchestrator.brain.use_anas = USE_ANAS
 
 
 # ============================================

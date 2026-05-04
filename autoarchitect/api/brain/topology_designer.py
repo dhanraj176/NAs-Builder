@@ -17,6 +17,12 @@ from pathlib import Path
 from datetime import datetime
 
 
+# ── ANAS integration ───────────────────────────────────────────────────────
+# Minimum proxy_score from ANAS search to accept its result over templates.
+# 0.70 is conservative -- ANAS winners typically score 0.90+ (see ablation).
+_ANAS_CONFIDENCE_THRESHOLD = 0.70
+
+
 # ── Topology types ─────────────────────────────────────────────────────────
 
 SEQUENTIAL   = "sequential"
@@ -184,6 +190,7 @@ class TopologyDesigner:
         self.data_dir.mkdir(exist_ok=True)
         self.topology_log = self.data_dir / "topology_history.json"
         self.history      = self._load_history()
+        self.use_anas     = True  # set to False (via USE_ANAS in app.py) to revert to templates
         print(f"[TopologyDesigner] ready -- {len(self.history)} topologies learned")
 
     # ── Main entry point ───────────────────────────────────────────────────
@@ -192,21 +199,27 @@ class TopologyDesigner:
                meta_suggestion: dict = None) -> dict:
         problem_lower = problem.lower()
 
-        # 1. Meta-learner suggestion first
+        # 1. Meta-learner suggestion (externally provided -- highest priority)
         if meta_suggestion and meta_suggestion.get("agents"):
             topology = self._from_meta_suggestion(problem, meta_suggestion)
             topology["source"] = "meta_learner"
             self._store(problem, topology)
             return topology
 
-        # 2. Cache check — stricter threshold to avoid wrong matches
+        # 2. Cache check -- fast lookup for repeated problems
         cached = self._check_cache(problem_lower)
         if cached:
             cached["source"] = "cache"
             print(f"  [TopologyDesigner] cache hit!")
             return cached
 
-        # 3. Template match
+        # 3. ANAS primary -- formal search over Lambda (new)
+        if self.use_anas:
+            anas_result = self._anas_design(problem, domain)
+            if anas_result:
+                return anas_result
+
+        # 4. Template match fallback (used only if ANAS disabled or low-proxy)
         template_match = self._match_template(problem_lower)
         if template_match:
             topology = self._from_template(problem, template_match)
@@ -214,11 +227,57 @@ class TopologyDesigner:
             self._store(problem, topology)
             return topology
 
-        # 4. Rule-based fallback
+        # 5. Rule-based last resort
         topology = self._rule_based_design(problem, problem_lower, domain)
         topology["source"] = "rule_based"
         self._store(problem, topology)
         return topology
+
+    # ── ANAS search integration ────────────────────────────────────────────
+
+    def _anas_design(self, problem, domain=None):
+        """
+        Run ANAS search and return a topology dict, or None on failure / low proxy.
+        Lazy-imports get_anas_search_engine to avoid circular import at load time.
+        """
+        try:
+            from api.brain.anas_search_engine import get_anas_search_engine
+            engine = get_anas_search_engine()
+
+            # Build domain hints from BERT domain + significant problem tokens
+            hints = []
+            if domain:
+                hints.append(domain)
+            hints += [w for w in problem.lower().split() if len(w) > 3][:8]
+
+            result = engine.search(
+                problem      = problem,
+                domain_hints = hints if hints else None,
+                budget       = 20,
+            )
+
+            proxy = result["proxy_score"]
+            if proxy < _ANAS_CONFIDENCE_THRESHOLD:
+                print(f"  [ANAS] low proxy ({proxy:.4f}) -- falling back to templates")
+                return None
+
+            arch = result["architecture"]
+            topo = engine.to_topology_dict(arch, problem, proxy_score=proxy)
+            topo["source"]         = "anas_search_engine"
+            topo["anas_proxy"]     = proxy
+            topo["anas_evaluated"] = result["evaluated"]
+            topo["anas_aborted"]   = result["aborted"]
+
+            print(f"  [ANAS] winner: {arch.agents} / {arch.topology}  "
+                  f"proxy={proxy:.4f}  "
+                  f"(eval={result['evaluated']}, blocked={result['aborted']})")
+
+            self._store(problem, topo)
+            return topo
+
+        except Exception as e:
+            print(f"  [ANAS] search error ({e}) -- falling back to templates")
+            return None
 
     # ── Design strategies ──────────────────────────────────────────────────
 
