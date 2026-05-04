@@ -1,0 +1,1026 @@
+{
+  "experiment": "ANAS Ablation Study",
+  "claim": "Every ANAS component contributes to search quality or efficiency",
+  "budget": 20,
+  "rng_seed": 42,
+  "run_at": "2026-05-04T18:11:49.681661",
+  "variants": [
+    {
+      "id": "no_immune",
+      "name": "No immune system",
+      "ablated": "ImmuneSystem.check() -- never blocks",
+      "expected_effect": "Evaluates toxic architectures; zero compute saved"
+    },
+    {
+      "id": "no_warm_start",
+      "name": "No warm start",
+      "ablated": "warm_start_candidates() + meta injection",
+      "expected_effect": "Random initial pool; lower-quality candidates"
+    },
+    {
+      "id": "no_proxy",
+      "name": "No proxy scoring",
+      "ablated": "proxy_score() -- all candidates score 0.5",
+      "expected_effect": "Random winner selection; lower architecture quality"
+    },
+    {
+      "id": "full_anas",
+      "name": "Full ANAS (ours)",
+      "ablated": "none",
+      "expected_effect": "Optimal: highest proxy, immune blocks, domain match"
+    }
+  ],
+  "results": [
+    {
+      "problem": "detect illegal dumping in Oakland cameras",
+      "hints": [
+        "detect",
+        "dumping",
+        "illegal",
+        "image",
+        "camera",
+        "visual",
+        "monitor",
+        "street"
+      ],
+      "variants": {
+        "no_immune": {
+          "variant_name": "No immune system",
+          "ablated": "ImmuneSystem.check() -- never blocks",
+          "expected_effect": "Evaluates toxic architectures; zero compute saved",
+          "winner": [
+            "image",
+            "report"
+          ],
+          "winner_topology": "sequential",
+          "assigned_score": 0.9459,
+          "real_proxy": 0.9459,
+          "proxy_breakdown": {
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.7835,
+            "topology_fit": 1.0
+          },
+          "evaluated": 20,
+          "actually_blocked": 0,
+          "would_have_blocked": 2,
+          "aborted_details": [],
+          "compute_saved": {
+            "gpu_min": 0.0,
+            "cost_usd": 0.0
+          },
+          "would_have_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "elapsed_s": 0.009,
+          "top3": [
+            {
+              "rank": 1,
+              "agents": [
+                "image",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.9459,
+              "real_proxy": 0.9459
+            },
+            {
+              "rank": 2,
+              "agents": [
+                "image",
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.8543,
+              "real_proxy": 0.8543
+            },
+            {
+              "rank": 3,
+              "agents": [
+                "image",
+                "medical",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.8174,
+              "real_proxy": 0.8174
+            }
+          ]
+        },
+        "no_warm_start": {
+          "variant_name": "No warm start",
+          "ablated": "warm_start_candidates() + meta injection",
+          "expected_effect": "Random initial pool; lower-quality candidates",
+          "winner": [
+            "report"
+          ],
+          "winner_topology": "sequential",
+          "assigned_score": 0.9247,
+          "real_proxy": 0.9247,
+          "proxy_breakdown": {
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.6989,
+            "topology_fit": 1.0
+          },
+          "evaluated": 20,
+          "actually_blocked": 2,
+          "would_have_blocked": 2,
+          "aborted_details": [
+            {
+              "arch_id": "b629a03c",
+              "agents": [
+                "text",
+                "report"
+              ],
+              "topology": "sequential",
+              "similarity": 0.9089,
+              "reason": "Cosine similarity 0.909 >= 0.90 with known failure 'd67c94ea' (acc=11.0%, reason"
+            },
+            {
+              "arch_id": "c2869ea1",
+              "agents": [
+                "medical",
+                "security",
+                "report"
+              ],
+              "topology": "conditional",
+              "similarity": 0.9089,
+              "reason": "Cosine similarity 0.909 >= 0.90 with known failure 'e2cae86f' (acc=22.5%, reason"
+            }
+          ],
+          "compute_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "would_have_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "elapsed_s": 0.006,
+          "top3": [
+            {
+              "rank": 1,
+              "agents": [
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.9247,
+              "real_proxy": 0.9247
+            },
+            {
+              "rank": 2,
+              "agents": [
+                "report"
+              ],
+              "topology": "pipeline",
+              "score": 0.8415,
+              "real_proxy": 0.8415
+            },
+            {
+              "rank": 3,
+              "agents": [
+                "optimizer",
+                "report"
+              ],
+              "topology": "conditional",
+              "score": 0.6773,
+              "real_proxy": 0.6773
+            }
+          ]
+        },
+        "no_proxy": {
+          "variant_name": "No proxy scoring",
+          "ablated": "proxy_score() -- all candidates score 0.5",
+          "expected_effect": "Random winner selection; lower architecture quality",
+          "winner": [
+            "image",
+            "report"
+          ],
+          "winner_topology": "sequential",
+          "assigned_score": 0.5,
+          "real_proxy": 0.9459,
+          "proxy_breakdown": {
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.7835,
+            "topology_fit": 1.0
+          },
+          "evaluated": 20,
+          "actually_blocked": 2,
+          "would_have_blocked": 2,
+          "aborted_details": [
+            {
+              "arch_id": "deb70820",
+              "agents": [
+                "image",
+                "text",
+                "report"
+              ],
+              "topology": "parallel",
+              "similarity": 0.9818,
+              "reason": "Cosine similarity 0.982 >= 0.90 with known failure 'a6669c0a' (acc=18.2%, reason"
+            },
+            {
+              "arch_id": "b629a03c",
+              "agents": [
+                "text",
+                "report"
+              ],
+              "topology": "sequential",
+              "similarity": 0.9089,
+              "reason": "Cosine similarity 0.909 >= 0.90 with known failure 'd67c94ea' (acc=11.0%, reason"
+            }
+          ],
+          "compute_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "would_have_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "elapsed_s": 0.004,
+          "top3": [
+            {
+              "rank": 1,
+              "agents": [
+                "image",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.5,
+              "real_proxy": 0.9459
+            },
+            {
+              "rank": 2,
+              "agents": [
+                "image",
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.5,
+              "real_proxy": 0.8543
+            },
+            {
+              "rank": 3,
+              "agents": [
+                "sentiment",
+                "audience",
+                "report"
+              ],
+              "topology": "hierarchical",
+              "score": 0.5,
+              "real_proxy": 0.7036
+            }
+          ]
+        },
+        "full_anas": {
+          "variant_name": "Full ANAS (ours)",
+          "ablated": "none",
+          "expected_effect": "Optimal: highest proxy, immune blocks, domain match",
+          "winner": [
+            "image",
+            "report"
+          ],
+          "winner_topology": "sequential",
+          "assigned_score": 0.9459,
+          "real_proxy": 0.9459,
+          "proxy_breakdown": {
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.7835,
+            "topology_fit": 1.0
+          },
+          "evaluated": 20,
+          "actually_blocked": 2,
+          "would_have_blocked": 2,
+          "aborted_details": [
+            {
+              "arch_id": "deb70820",
+              "agents": [
+                "image",
+                "text",
+                "report"
+              ],
+              "topology": "parallel",
+              "similarity": 0.9818,
+              "reason": "Cosine similarity 0.982 >= 0.90 with known failure 'a6669c0a' (acc=18.2%, reason"
+            },
+            {
+              "arch_id": "b629a03c",
+              "agents": [
+                "text",
+                "report"
+              ],
+              "topology": "sequential",
+              "similarity": 0.9089,
+              "reason": "Cosine similarity 0.909 >= 0.90 with known failure 'd67c94ea' (acc=11.0%, reason"
+            }
+          ],
+          "compute_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "would_have_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "elapsed_s": 0.007,
+          "top3": [
+            {
+              "rank": 1,
+              "agents": [
+                "image",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.9459,
+              "real_proxy": 0.9459
+            },
+            {
+              "rank": 2,
+              "agents": [
+                "image",
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.8543,
+              "real_proxy": 0.8543
+            },
+            {
+              "rank": 3,
+              "agents": [
+                "image",
+                "medical",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.8174,
+              "real_proxy": 0.8174
+            }
+          ]
+        }
+      }
+    },
+    {
+      "problem": "identify skin cancer from dermoscopy images",
+      "hints": [
+        "skin",
+        "cancer",
+        "dermoscopy",
+        "medical",
+        "diagnosis",
+        "classify",
+        "lesion",
+        "malignant"
+      ],
+      "variants": {
+        "no_immune": {
+          "variant_name": "No immune system",
+          "ablated": "ImmuneSystem.check() -- never blocks",
+          "expected_effect": "Evaluates toxic architectures; zero compute saved",
+          "winner": [
+            "medical",
+            "report"
+          ],
+          "winner_topology": "sequential",
+          "assigned_score": 0.9521,
+          "real_proxy": 0.9521,
+          "proxy_breakdown": {
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.8083,
+            "topology_fit": 1.0
+          },
+          "evaluated": 20,
+          "actually_blocked": 0,
+          "would_have_blocked": 2,
+          "aborted_details": [],
+          "compute_saved": {
+            "gpu_min": 0.0,
+            "cost_usd": 0.0
+          },
+          "would_have_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "elapsed_s": 0.007,
+          "top3": [
+            {
+              "rank": 1,
+              "agents": [
+                "medical",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.9521,
+              "real_proxy": 0.9521
+            },
+            {
+              "rank": 2,
+              "agents": [
+                "text",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.9091,
+              "real_proxy": 0.9091
+            },
+            {
+              "rank": 3,
+              "agents": [
+                "medical",
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.8613,
+              "real_proxy": 0.8613
+            }
+          ]
+        },
+        "no_warm_start": {
+          "variant_name": "No warm start",
+          "ablated": "warm_start_candidates() + meta injection",
+          "expected_effect": "Random initial pool; lower-quality candidates",
+          "winner": [
+            "report"
+          ],
+          "winner_topology": "sequential",
+          "assigned_score": 0.9247,
+          "real_proxy": 0.9247,
+          "proxy_breakdown": {
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.6989,
+            "topology_fit": 1.0
+          },
+          "evaluated": 20,
+          "actually_blocked": 0,
+          "would_have_blocked": 0,
+          "aborted_details": [],
+          "compute_saved": {
+            "gpu_min": 0.0,
+            "cost_usd": 0.0
+          },
+          "would_have_saved": {
+            "gpu_min": 0.0,
+            "cost_usd": 0.0
+          },
+          "elapsed_s": 0.005,
+          "top3": [
+            {
+              "rank": 1,
+              "agents": [
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.9247,
+              "real_proxy": 0.9247
+            },
+            {
+              "rank": 2,
+              "agents": [
+                "text",
+                "sentiment",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.7952,
+              "real_proxy": 0.7952
+            },
+            {
+              "rank": 3,
+              "agents": [
+                "sentiment",
+                "medical",
+                "report"
+              ],
+              "topology": "parallel",
+              "score": 0.7632,
+              "real_proxy": 0.7632
+            }
+          ]
+        },
+        "no_proxy": {
+          "variant_name": "No proxy scoring",
+          "ablated": "proxy_score() -- all candidates score 0.5",
+          "expected_effect": "Random winner selection; lower architecture quality",
+          "winner": [
+            "image",
+            "severity",
+            "report"
+          ],
+          "winner_topology": "sequential",
+          "assigned_score": 0.5,
+          "real_proxy": 0.7377,
+          "proxy_breakdown": {
+            "compatibility": 1.0,
+            "domain_align": 0.3333,
+            "success_sim": 0.884,
+            "topology_fit": 1.0
+          },
+          "evaluated": 20,
+          "actually_blocked": 2,
+          "would_have_blocked": 2,
+          "aborted_details": [
+            {
+              "arch_id": "b629a03c",
+              "agents": [
+                "text",
+                "report"
+              ],
+              "topology": "sequential",
+              "similarity": 0.9089,
+              "reason": "Cosine similarity 0.909 >= 0.90 with known failure 'd67c94ea' (acc=11.0%, reason"
+            },
+            {
+              "arch_id": "deb70820",
+              "agents": [
+                "image",
+                "text",
+                "report"
+              ],
+              "topology": "parallel",
+              "similarity": 0.9818,
+              "reason": "Cosine similarity 0.982 >= 0.90 with known failure 'a6669c0a' (acc=18.2%, reason"
+            }
+          ],
+          "compute_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "would_have_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "elapsed_s": 0.004,
+          "top3": [
+            {
+              "rank": 1,
+              "agents": [
+                "image",
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.5,
+              "real_proxy": 0.7377
+            },
+            {
+              "rank": 2,
+              "agents": [
+                "medical",
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.5,
+              "real_proxy": 0.8613
+            },
+            {
+              "rank": 3,
+              "agents": [
+                "image",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.5,
+              "real_proxy": 0.7709
+            }
+          ]
+        },
+        "full_anas": {
+          "variant_name": "Full ANAS (ours)",
+          "ablated": "none",
+          "expected_effect": "Optimal: highest proxy, immune blocks, domain match",
+          "winner": [
+            "medical",
+            "report"
+          ],
+          "winner_topology": "sequential",
+          "assigned_score": 0.9521,
+          "real_proxy": 0.9521,
+          "proxy_breakdown": {
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.8083,
+            "topology_fit": 1.0
+          },
+          "evaluated": 20,
+          "actually_blocked": 2,
+          "would_have_blocked": 2,
+          "aborted_details": [
+            {
+              "arch_id": "b629a03c",
+              "agents": [
+                "text",
+                "report"
+              ],
+              "topology": "sequential",
+              "similarity": 0.9089,
+              "reason": "Cosine similarity 0.909 >= 0.90 with known failure 'd67c94ea' (acc=11.0%, reason"
+            },
+            {
+              "arch_id": "deb70820",
+              "agents": [
+                "image",
+                "text",
+                "report"
+              ],
+              "topology": "parallel",
+              "similarity": 0.9818,
+              "reason": "Cosine similarity 0.982 >= 0.90 with known failure 'a6669c0a' (acc=18.2%, reason"
+            }
+          ],
+          "compute_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "would_have_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "elapsed_s": 0.006,
+          "top3": [
+            {
+              "rank": 1,
+              "agents": [
+                "medical",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.9521,
+              "real_proxy": 0.9521
+            },
+            {
+              "rank": 2,
+              "agents": [
+                "medical",
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.8613,
+              "real_proxy": 0.8613
+            },
+            {
+              "rank": 3,
+              "agents": [
+                "image",
+                "medical",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.8174,
+              "real_proxy": 0.8174
+            }
+          ]
+        }
+      }
+    },
+    {
+      "problem": "classify toxic comments by severity",
+      "hints": [
+        "toxic",
+        "comments",
+        "severity",
+        "text",
+        "classify",
+        "hate",
+        "content",
+        "moderate"
+      ],
+      "variants": {
+        "no_immune": {
+          "variant_name": "No immune system",
+          "ablated": "ImmuneSystem.check() -- never blocks",
+          "expected_effect": "Evaluates toxic architectures; zero compute saved",
+          "winner": [
+            "text",
+            "report"
+          ],
+          "winner_topology": "sequential",
+          "assigned_score": 0.9091,
+          "real_proxy": 0.9091,
+          "proxy_breakdown": {
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.6365,
+            "topology_fit": 1.0
+          },
+          "evaluated": 20,
+          "actually_blocked": 0,
+          "would_have_blocked": 2,
+          "aborted_details": [],
+          "compute_saved": {
+            "gpu_min": 0.0,
+            "cost_usd": 0.0
+          },
+          "would_have_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "elapsed_s": 0.005,
+          "top3": [
+            {
+              "rank": 1,
+              "agents": [
+                "text",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.9091,
+              "real_proxy": 0.9091
+            },
+            {
+              "rank": 2,
+              "agents": [
+                "medical",
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.8613,
+              "real_proxy": 0.8613
+            },
+            {
+              "rank": 3,
+              "agents": [
+                "image",
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.8543,
+              "real_proxy": 0.8543
+            }
+          ]
+        },
+        "no_warm_start": {
+          "variant_name": "No warm start",
+          "ablated": "warm_start_candidates() + meta injection",
+          "expected_effect": "Random initial pool; lower-quality candidates",
+          "winner": [
+            "report"
+          ],
+          "winner_topology": "sequential",
+          "assigned_score": 0.9247,
+          "real_proxy": 0.9247,
+          "proxy_breakdown": {
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.6989,
+            "topology_fit": 1.0
+          },
+          "evaluated": 20,
+          "actually_blocked": 1,
+          "would_have_blocked": 1,
+          "aborted_details": [
+            {
+              "arch_id": "e2cae86f",
+              "agents": [
+                "security",
+                "report"
+              ],
+              "topology": "conditional",
+              "similarity": 1.0,
+              "reason": "Cosine similarity 1.000 >= 0.90 with known failure 'e2cae86f' (acc=22.5%, reason"
+            }
+          ],
+          "compute_saved": {
+            "gpu_min": 15.0,
+            "cost_usd": 0.125
+          },
+          "would_have_saved": {
+            "gpu_min": 15.0,
+            "cost_usd": 0.125
+          },
+          "elapsed_s": 0.005,
+          "top3": [
+            {
+              "rank": 1,
+              "agents": [
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.9247,
+              "real_proxy": 0.9247
+            },
+            {
+              "rank": 2,
+              "agents": [
+                "report"
+              ],
+              "topology": "pipeline",
+              "score": 0.8415,
+              "real_proxy": 0.8415
+            },
+            {
+              "rank": 3,
+              "agents": [
+                "text",
+                "sentiment",
+                "report"
+              ],
+              "topology": "hierarchical",
+              "score": 0.8132,
+              "real_proxy": 0.8132
+            }
+          ]
+        },
+        "no_proxy": {
+          "variant_name": "No proxy scoring",
+          "ablated": "proxy_score() -- all candidates score 0.5",
+          "expected_effect": "Random winner selection; lower architecture quality",
+          "winner": [
+            "image",
+            "severity",
+            "report"
+          ],
+          "winner_topology": "sequential",
+          "assigned_score": 0.5,
+          "real_proxy": 0.8543,
+          "proxy_breakdown": {
+            "compatibility": 1.0,
+            "domain_align": 0.6667,
+            "success_sim": 0.884,
+            "topology_fit": 1.0
+          },
+          "evaluated": 20,
+          "actually_blocked": 2,
+          "would_have_blocked": 2,
+          "aborted_details": [
+            {
+              "arch_id": "b629a03c",
+              "agents": [
+                "text",
+                "report"
+              ],
+              "topology": "sequential",
+              "similarity": 0.9089,
+              "reason": "Cosine similarity 0.909 >= 0.90 with known failure 'd67c94ea' (acc=11.0%, reason"
+            },
+            {
+              "arch_id": "deb70820",
+              "agents": [
+                "image",
+                "text",
+                "report"
+              ],
+              "topology": "parallel",
+              "similarity": 0.9818,
+              "reason": "Cosine similarity 0.982 >= 0.90 with known failure 'a6669c0a' (acc=18.2%, reason"
+            }
+          ],
+          "compute_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "would_have_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "elapsed_s": 0.003,
+          "top3": [
+            {
+              "rank": 1,
+              "agents": [
+                "image",
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.5,
+              "real_proxy": 0.8543
+            },
+            {
+              "rank": 2,
+              "agents": [
+                "image",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.5,
+              "real_proxy": 0.7709
+            },
+            {
+              "rank": 3,
+              "agents": [
+                "sentiment",
+                "audience",
+                "report"
+              ],
+              "topology": "hierarchical",
+              "score": 0.5,
+              "real_proxy": 0.7036
+            }
+          ]
+        },
+        "full_anas": {
+          "variant_name": "Full ANAS (ours)",
+          "ablated": "none",
+          "expected_effect": "Optimal: highest proxy, immune blocks, domain match",
+          "winner": [
+            "severity",
+            "report"
+          ],
+          "winner_topology": "sequential",
+          "assigned_score": 0.9582,
+          "real_proxy": 0.9582,
+          "proxy_breakdown": {
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.8328,
+            "topology_fit": 1.0
+          },
+          "evaluated": 20,
+          "actually_blocked": 2,
+          "would_have_blocked": 2,
+          "aborted_details": [
+            {
+              "arch_id": "b629a03c",
+              "agents": [
+                "text",
+                "report"
+              ],
+              "topology": "sequential",
+              "similarity": 0.9089,
+              "reason": "Cosine similarity 0.909 >= 0.90 with known failure 'd67c94ea' (acc=11.0%, reason"
+            },
+            {
+              "arch_id": "deb70820",
+              "agents": [
+                "image",
+                "text",
+                "report"
+              ],
+              "topology": "parallel",
+              "similarity": 0.9818,
+              "reason": "Cosine similarity 0.982 >= 0.90 with known failure 'a6669c0a' (acc=18.2%, reason"
+            }
+          ],
+          "compute_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "would_have_saved": {
+            "gpu_min": 30.0,
+            "cost_usd": 0.25
+          },
+          "elapsed_s": 0.006,
+          "top3": [
+            {
+              "rank": 1,
+              "agents": [
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.9582,
+              "real_proxy": 0.9582
+            },
+            {
+              "rank": 2,
+              "agents": [
+                "medical",
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.8613,
+              "real_proxy": 0.8613
+            },
+            {
+              "rank": 3,
+              "agents": [
+                "image",
+                "severity",
+                "report"
+              ],
+              "topology": "sequential",
+              "score": 0.8543,
+              "real_proxy": 0.8543
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "mean_proxy": {
+      "no_immune": 0.9357,
+      "no_warm_start": 0.9247,
+      "no_proxy": 0.846,
+      "full_anas": 0.9521
+    },
+    "total_wasted_evals_without_immune": 6,
+    "total_gpu_min_saved_full_anas": 90.0,
+    "total_cost_saved_full_anas_usd": 0.75
+  }
+}
