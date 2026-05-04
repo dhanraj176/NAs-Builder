@@ -131,19 +131,19 @@ class MetaLearner:
                                map_location='cpu',
                                weights_only=True))
                 self.trained = True
-                print(f"🧠 Meta-learner loaded! "
+                print(f"[MetaLearner] loaded! "
                       f"Trained on {len(self.examples)} examples")
             except Exception:
-                print(f"🧠 Meta-learner: retraining needed")
+                print(f"[MetaLearner] retraining needed")
 
         # Force train if we have enough examples but no saved model
         if len(self.examples) >= self.MIN_EXAMPLES_TO_TRAIN \
                 and not self.trained:
-            print(f"  🔄 Force training on "
+            print(f"  [MetaLearner] Force training on "
                   f"{len(self.examples)} existing examples...")
             self._train()
 
-        print(f"🧠 Meta-learner ready — "
+        print(f"[MetaLearner] ready -- "
               f"{len(self.examples)} training examples")
 
     # ── PREDICT ──────────────────────────────────────────────
@@ -189,7 +189,7 @@ class MetaLearner:
         predicted_method   = METHODS[method_idx]
         predicted_accuracy = max(0, min(100, acc_pred))
 
-        print(f"  🔮 Meta-learner prediction:")
+        print(f"  [MetaLearner] prediction:")
         print(f"     Agents:     {predicted_agents}")
         print(f"     Dataset:    {predicted_dataset}")
         print(f"     Method:     {predicted_method}")
@@ -216,11 +216,11 @@ class MetaLearner:
 
         embedding = bert_embedding or self._get_embedding(problem)
         if not embedding:
-            print("  ⚠️ Meta-learner: no embedding, skipping")
+            print("  [MetaLearner] no embedding, skipping")
             return
-        
+
         if actual_accuracy == 0.0:
-            print(f"  ⚠️  Skipping meta-learner — no dataset found, not storing 0% result")
+            print(f"  [MetaLearner] skipping -- no dataset found, not storing 0% result")
             return
 
         example = {
@@ -239,18 +239,18 @@ class MetaLearner:
         self.examples.append(example)
         self._save_examples()
 
-        print(f"  🧠 Meta-learner: stored example #{len(self.examples)}")
+        print(f"  [MetaLearner] stored example #{len(self.examples)}")
         print(f"     Problem: {problem[:40]}")
-        print(f"     Result:  {agents_used} → {actual_accuracy}%")
+        print(f"     Result:  {agents_used} -> {actual_accuracy}%")
 
         # Retrain every N examples once we have enough
         n = len(self.examples)
         if n >= self.MIN_EXAMPLES_TO_TRAIN and \
                 n % self.RETRAIN_EVERY == 0:
-            print(f"  🔄 Retraining meta-model on {n} examples...")
+            print(f"  [MetaLearner] Retraining on {n} examples...")
             self._train()
         elif n >= self.MIN_EXAMPLES_TO_TRAIN and not self.trained:
-            print(f"  🔄 First training triggered on {n} examples...")
+            print(f"  [MetaLearner] First training triggered on {n} examples...")
             self._train()
 
         self._save_insights()
@@ -306,7 +306,7 @@ class MetaLearner:
             preds = out["agents"].argmax(dim=1)
             acc   = (preds == y_combo).float().mean().item()
 
-        print(f"  ✅ Meta-model trained!")
+        print(f"  [MetaLearner] trained!")
         print(f"     Examples: {len(self.examples)}")
         print(f"     Agent prediction accuracy: {acc:.1%}")
         print(f"     Loss: {best_loss:.4f}")
@@ -385,7 +385,7 @@ class MetaLearner:
             from api.cache_manager import get_embedding
             return get_embedding(text)
         except Exception as e:
-            print(f"  ⚠️ Embedding error: {e}")
+            print(f"  [MetaLearner] embedding error: {e}")
             return []
 
     def _encode_combo(self, agents: list) -> int:

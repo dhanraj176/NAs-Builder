@@ -184,7 +184,7 @@ class TopologyDesigner:
         self.data_dir.mkdir(exist_ok=True)
         self.topology_log = self.data_dir / "topology_history.json"
         self.history      = self._load_history()
-        print(f"🏗️  TopologyDesigner ready — {len(self.history)} topologies learned")
+        print(f"[TopologyDesigner] ready -- {len(self.history)} topologies learned")
 
     # ── Main entry point ───────────────────────────────────────────────────
 
@@ -203,7 +203,7 @@ class TopologyDesigner:
         cached = self._check_cache(problem_lower)
         if cached:
             cached["source"] = "cache"
-            print(f"  ⚡ Topology cache hit!")
+            print(f"  [TopologyDesigner] cache hit!")
             return cached
 
         # 3. Template match
@@ -239,7 +239,7 @@ class TopologyDesigner:
                 best_score = score
                 best_match = (name, template)
         if best_score >= 1:
-            print(f"  📐 Template matched: {best_match[0]} (score {best_score})")
+            print(f"  [TopologyDesigner] template matched: {best_match[0]} (score {best_score})")
             return best_match
         return None
 
@@ -417,14 +417,14 @@ class TopologyDesigner:
         }
         self.history.append(entry)
         self._save_history()
-        print(f"  💾 Topology stored — brain now knows {len(self.history)} topologies")
+        print(f"  [TopologyDesigner] topology stored -- brain now knows {len(self.history)} topologies")
 
     def update_accuracy(self, problem: str, accuracy: float):
         for entry in reversed(self.history):
             if entry["problem"] == problem:
                 entry["accuracy"] = accuracy
                 self._save_history()
-                print(f"  🧠 Brain updated: topology accuracy = {accuracy:.1%}")
+                print(f"  [TopologyDesigner] accuracy updated = {accuracy:.1%}")
                 return
 
     def _load_history(self) -> list:

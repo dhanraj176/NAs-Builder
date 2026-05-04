@@ -405,7 +405,7 @@ class ImmuneSystem:
         self._toxic_threshold = toxic_threshold
         self._total_checks, self._total_aborts = self._load_stats()
         print(
-            f"[ImmuneSystem] ready — "
+            f"[ImmuneSystem] ready -- "
             f"{len(self.toxic_vault)} toxic, "
             f"{len(self.success_vault)} successes, "
             f"{self._total_aborts} lifetime aborts"
