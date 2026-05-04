@@ -1,0 +1,290 @@
+{
+  "experiment": "ANAS Generalization Test",
+  "reviewer_question": "Why use ANAS if template matching works?",
+  "n_templates_available": 9,
+  "n_test_problems": 3,
+  "budget": 20,
+  "run_at": "2026-05-04T17:59:49.661195",
+  "results": [
+    {
+      "problem": "identify skin cancer type from dermoscopy images",
+      "expected_domain": "medical",
+      "why_template_fails": "No template covers dermatology. medical_pipeline matches xray/hospital/pneumonia -- none present here. Falls to rule-based heuristic which may miss the medical domain.",
+      "template": {
+        "agents": [
+          "image"
+        ],
+        "topology": "sequential",
+        "source": "cache (prev rule_based)",
+        "confidence": 0.75,
+        "primary_domain": "image",
+        "domain_correct": false,
+        "proxy_score": 0.5148,
+        "proxy_breakdown": {
+          "compatibility": 1.0,
+          "domain_align": 0.0,
+          "success_sim": 0.4591,
+          "topology_fit": 1.0,
+          "weighted_total": 0.5148
+        }
+      },
+      "anas": {
+        "agents": [
+          "medical",
+          "report"
+        ],
+        "topology": "sequential",
+        "proxy_score": 0.9521,
+        "primary_domain": "medical",
+        "domain_correct": true,
+        "evaluated": 20,
+        "blocked": 2,
+        "elapsed_s": 0.01,
+        "top3_candidates": [
+          {
+            "rank": 1,
+            "agents": [
+              "medical",
+              "report"
+            ],
+            "topology": "sequential",
+            "proxy_score": 0.9521,
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.8083,
+            "topology_fit": 1.0,
+            "primary_domain": "medical"
+          },
+          {
+            "rank": 2,
+            "agents": [
+              "medical",
+              "severity",
+              "report"
+            ],
+            "topology": "sequential",
+            "proxy_score": 0.8613,
+            "compatibility": 1.0,
+            "domain_align": 0.6667,
+            "success_sim": 0.912,
+            "topology_fit": 1.0,
+            "primary_domain": "medical"
+          },
+          {
+            "rank": 3,
+            "agents": [
+              "image",
+              "medical",
+              "report"
+            ],
+            "topology": "sequential",
+            "proxy_score": 0.8174,
+            "compatibility": 1.0,
+            "domain_align": 0.6667,
+            "success_sim": 0.7362,
+            "topology_fit": 1.0,
+            "primary_domain": "image"
+          }
+        ]
+      },
+      "comparison": {
+        "same_architecture": false,
+        "template_domain_ok": false,
+        "anas_domain_ok": true,
+        "proxy_delta": 0.4373,
+        "domain_upgrade": true,
+        "verdict": "ANAS WINS -- fixes domain mismatch from template matching"
+      }
+    },
+    {
+      "problem": "detect toxic comments with severity scoring",
+      "expected_domain": "text",
+      "why_template_fails": "KEYWORD COLLISION: 'detect'+'classify'+'severity' all appear in detect_classify_report (an IMAGE template). Template matching fires this template despite the task being purely textual -- returning an image pipeline for a text problem.",
+      "template": {
+        "agents": [
+          "image",
+          "severity",
+          "report"
+        ],
+        "topology": "sequential",
+        "source": "template:detect_classify_report",
+        "confidence": 0.88,
+        "primary_domain": "image",
+        "domain_correct": false,
+        "proxy_score": 0.971,
+        "proxy_breakdown": {
+          "compatibility": 1.0,
+          "domain_align": 1.0,
+          "success_sim": 0.884,
+          "topology_fit": 1.0,
+          "weighted_total": 0.971
+        }
+      },
+      "anas": {
+        "agents": [
+          "image",
+          "severity",
+          "report"
+        ],
+        "topology": "sequential",
+        "proxy_score": 0.971,
+        "primary_domain": "image",
+        "domain_correct": false,
+        "evaluated": 20,
+        "blocked": 2,
+        "elapsed_s": 0.008,
+        "top3_candidates": [
+          {
+            "rank": 1,
+            "agents": [
+              "image",
+              "severity",
+              "report"
+            ],
+            "topology": "sequential",
+            "proxy_score": 0.971,
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.884,
+            "topology_fit": 1.0,
+            "primary_domain": "image"
+          },
+          {
+            "rank": 2,
+            "agents": [
+              "severity",
+              "report"
+            ],
+            "topology": "sequential",
+            "proxy_score": 0.9582,
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.8328,
+            "topology_fit": 1.0,
+            "primary_domain": "image"
+          },
+          {
+            "rank": 3,
+            "agents": [
+              "image",
+              "report"
+            ],
+            "topology": "sequential",
+            "proxy_score": 0.9459,
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.7835,
+            "topology_fit": 1.0,
+            "primary_domain": "image"
+          }
+        ]
+      },
+      "comparison": {
+        "same_architecture": true,
+        "template_domain_ok": false,
+        "anas_domain_ok": false,
+        "proxy_delta": 0.0,
+        "domain_upgrade": false,
+        "verdict": "SAME ARCH -- ANAS validates template choice with proxy score"
+      }
+    },
+    {
+      "problem": "classify satellite images of urban areas",
+      "expected_domain": "image",
+      "why_template_fails": "No template covers satellite/aerial/urban imagery. The closest match is the generic detect_classify_report (keyword 'classify') but the domain is correct by accident -- ANAS validates it with an explicit proxy score.",
+      "template": {
+        "agents": [
+          "image",
+          "severity",
+          "report"
+        ],
+        "topology": "sequential",
+        "source": "template:detect_classify_report",
+        "confidence": 0.88,
+        "primary_domain": "image",
+        "domain_correct": true,
+        "proxy_score": 0.8543,
+        "proxy_breakdown": {
+          "compatibility": 1.0,
+          "domain_align": 0.6667,
+          "success_sim": 0.884,
+          "topology_fit": 1.0,
+          "weighted_total": 0.8543
+        }
+      },
+      "anas": {
+        "agents": [
+          "image",
+          "report"
+        ],
+        "topology": "sequential",
+        "proxy_score": 0.9459,
+        "primary_domain": "image",
+        "domain_correct": true,
+        "evaluated": 20,
+        "blocked": 2,
+        "elapsed_s": 0.007,
+        "top3_candidates": [
+          {
+            "rank": 1,
+            "agents": [
+              "image",
+              "report"
+            ],
+            "topology": "sequential",
+            "proxy_score": 0.9459,
+            "compatibility": 1.0,
+            "domain_align": 1.0,
+            "success_sim": 0.7835,
+            "topology_fit": 1.0,
+            "primary_domain": "image"
+          },
+          {
+            "rank": 2,
+            "agents": [
+              "image",
+              "severity",
+              "report"
+            ],
+            "topology": "sequential",
+            "proxy_score": 0.8543,
+            "compatibility": 1.0,
+            "domain_align": 0.6667,
+            "success_sim": 0.884,
+            "topology_fit": 1.0,
+            "primary_domain": "image"
+          },
+          {
+            "rank": 3,
+            "agents": [
+              "image",
+              "medical",
+              "report"
+            ],
+            "topology": "sequential",
+            "proxy_score": 0.8174,
+            "compatibility": 1.0,
+            "domain_align": 0.6667,
+            "success_sim": 0.7362,
+            "topology_fit": 1.0,
+            "primary_domain": "image"
+          }
+        ]
+      },
+      "comparison": {
+        "same_architecture": false,
+        "template_domain_ok": true,
+        "anas_domain_ok": true,
+        "proxy_delta": 0.0916,
+        "domain_upgrade": false,
+        "verdict": "ANAS WINS -- higher proxy score (+0.0916)"
+      }
+    }
+  ],
+  "summary": {
+    "template_domain_errors": 2,
+    "anas_domain_errors": 1,
+    "domain_upgrades": 1,
+    "mean_proxy_delta": 0.1763
+  }
+}
