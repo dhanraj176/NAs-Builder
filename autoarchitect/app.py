@@ -13,6 +13,8 @@ from dotenv import load_dotenv
 from api.self_trainer import self_train
 
 load_dotenv()
+os.environ['HF_TOKEN'] = os.getenv('HF_TOKEN', '')
+os.environ['HUGGING_FACE_HUB_TOKEN'] = os.getenv('HF_TOKEN', '')
 
 sys.path.append(os.path.dirname(__file__))
 from api.analyzer      import ProblemAnalyzer
