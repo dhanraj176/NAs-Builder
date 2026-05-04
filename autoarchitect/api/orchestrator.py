@@ -164,9 +164,10 @@ class AutoArchitectOrchestrator:
             result_type = meta.get("result_type", "single")
             agents_used = meta.get("agents_used", [domain])
             all_acc     = meta.get("all_accuracies", {})
-            avg_acc     = meta.get("avg_accuracy", 0)
+            # avg_accuracy (multi-agent) or test_accuracy (self_trainer) —
+            # use whichever is populated; default 0 only when both absent.
+            avg_acc     = meta.get("avg_accuracy") or meta.get("test_accuracy") or 0
 
-            
             base = {
                 "status":       "success",
                 "from_cache":   True,
@@ -177,11 +178,11 @@ class AutoArchitectOrchestrator:
                 "search_time":  meta.get("search_time", 0),
                 "use_count":    meta.get("use_count", 1),
                 "elapsed":      round(time.time() - start, 2),
-                "message":      "⚡ Loaded instantly from knowledge base!",
+                "message":      "Loaded instantly from knowledge base!",
                 "type":         result_type,
                 "agents_used":  agents_used,
-                "test_accuracy": meta.get("avg_accuracy", 0),
-                "avg_accuracy":  meta.get("avg_accuracy", 0),
+                "test_accuracy": avg_acc,
+                "avg_accuracy":  avg_acc,
             }
 
             if result_type == "multi_agent_nas":
@@ -221,6 +222,7 @@ class AutoArchitectOrchestrator:
             sim_meta        = similar.get("metadata", {})
             sim_result_type = sim_meta.get("result_type", "single")
             sim_agents_used = sim_meta.get("agents_used", [domain])
+            sim_avg_acc     = sim_meta.get("avg_accuracy") or sim_meta.get("test_accuracy") or 0
 
             base = {
                 "status":       "success",
@@ -232,11 +234,11 @@ class AutoArchitectOrchestrator:
                 "search_time":  sim_meta.get("search_time", 0),
                 "use_count":    sim_meta.get("use_count", 1),
                 "elapsed":      round(time.time() - start, 2),
-                "message":      "⚡ Loaded instantly from knowledge base!",
+                "message":      "Loaded instantly from knowledge base!",
                 "type":         sim_result_type,
                 "agents_used":  sim_agents_used,
-                "test_accuracy": sim_meta.get("avg_accuracy", 0),
-                "avg_accuracy":  sim_meta.get("avg_accuracy", 0),
+                "test_accuracy": sim_avg_acc,
+                "avg_accuracy":  sim_avg_acc,
             }
             base["readable_output"] = self._get_readable_output(problem, base)
             base["topology"]        = self._design_topology(
