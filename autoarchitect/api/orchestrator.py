@@ -34,7 +34,7 @@ LLM_KEYWORDS = [
 
 class AutoArchitectOrchestrator:
     def __init__(self, groq_api_key: str = ""):
-        print("🧠 Initializing AutoArchitect Orchestrator v8...")
+        print("[Orchestrator] Initializing AutoArchitect Orchestrator v8...")
         self.analyzer        = ProblemAnalyzer()
         self.workflow        = WorkflowEngine()
         self._agents         = {}
@@ -46,9 +46,9 @@ class AutoArchitectOrchestrator:
             from api.brain.workflow_generator import WorkflowGenerator
             self.brain         = WorkflowGenerator()
             self.brain_enabled = True
-            print("🧠 Brain enabled — learning from every problem!")
+            print("[Orchestrator] Brain enabled -- learning from every problem!")
         except Exception as e:
-            print(f"⚠️  Brain not loaded: {e}")
+            print(f"[Orchestrator] Brain not loaded: {e}")
             self.brain         = None
             self.brain_enabled = False
 
@@ -57,9 +57,9 @@ class AutoArchitectOrchestrator:
             from api.brain.topology_designer import TopologyDesigner
             self.topology_designer = TopologyDesigner()
             self.topology_enabled  = True
-            print("🏗️  Topology Designer ready — designing agent networks!")
+            print("[Orchestrator] Topology Designer ready -- designing agent networks!")
         except Exception as e:
-            print(f"⚠️  Topology Designer not loaded: {e}")
+            print(f"[Orchestrator] Topology Designer not loaded: {e}")
             self.topology_designer = None
             self.topology_enabled  = False
 
@@ -68,9 +68,9 @@ class AutoArchitectOrchestrator:
             from api.brain.network_zip_generator import NetworkZipGenerator
             self.network_zip         = NetworkZipGenerator()
             self.network_zip_enabled = True
-            print("📦 Network Zip Generator ready — full networks to download!")
+            print("[Orchestrator] Network Zip Generator ready -- full networks to download!")
         except Exception as e:
-            print(f"⚠️  Network Zip Generator not loaded: {e}")
+            print(f"[Orchestrator] Network Zip Generator not loaded: {e}")
             self.network_zip         = None
             self.network_zip_enabled = False
 
@@ -79,9 +79,9 @@ class AutoArchitectOrchestrator:
             from api.brain.web_researcher import WebResearcher
             self.researcher         = WebResearcher(groq_api_key=self.groq_key)
             self.researcher_enabled = True
-            print("🌐 Web Researcher ready — brain searches internet!")
+            print("[Orchestrator] Web Researcher ready -- brain searches internet!")
         except Exception as e:
-            print(f"⚠️  Web Researcher not loaded: {e}")
+            print(f"[Orchestrator] Web Researcher not loaded: {e}")
             self.researcher         = None
             self.researcher_enabled = False
 
@@ -90,9 +90,9 @@ class AutoArchitectOrchestrator:
             from api.brain.self_evaluator import SelfEvaluator
             self.self_evaluator         = SelfEvaluator()
             self.self_evaluator_enabled = True
-            print("🔍 Self Evaluator ready — brain evaluates its own output!")
+            print("[Orchestrator] Self Evaluator ready -- brain evaluates its own output!")
         except Exception as e:
-            print(f"⚠️  Self Evaluator not loaded: {e}")
+            print(f"[Orchestrator] Self Evaluator not loaded: {e}")
             self.self_evaluator         = None
             self.self_evaluator_enabled = False
 
@@ -101,9 +101,9 @@ class AutoArchitectOrchestrator:
             from api.brain.output_generator import generate_output
             self._generate_output = generate_output
             self.output_enabled   = True
-            print("💡 Output Generator enabled — human readable results!")
+            print("[Orchestrator] Output Generator enabled -- human readable results!")
         except Exception as e:
-            print(f"⚠️  Output generator not loaded: {e}")
+            print(f"[Orchestrator] Output generator not loaded: {e}")
             self._generate_output = None
             self.output_enabled   = False
 
@@ -114,7 +114,7 @@ class AutoArchitectOrchestrator:
         self._last_research        = {}
         self._last_eval_result     = {}
 
-        print("✅ Orchestrator v8 ready — NAS + Topology + Network + Research + Self-Eval!")
+        print("[Orchestrator] v8 ready -- NAS + Topology + Network + Research + Self-Eval!")
 
     # ─────────────────────────────────────────────────────────────────────
     # PUBLIC — main entry point
@@ -142,7 +142,7 @@ class AutoArchitectOrchestrator:
           from api.self_trainer import _correct_domain
           corrected = _correct_domain(problem, domain)
           if corrected != domain:
-                print(f"🔧 Early domain correction: {domain} → {corrected}")
+                print(f"[Orchestrator] Early domain correction: {domain} -> {corrected}")
                 domain = corrected
                 analysis["category"] = domain
         except Exception:
@@ -158,7 +158,7 @@ class AutoArchitectOrchestrator:
         # 4. Cache check
         cached = check_cache(problem)
         if cached["found"]:
-            print(f"⚡ Cache hit: {problem[:40]}")
+            print(f"[Orchestrator] Cache hit: {problem[:40]}")
             increment_use_count(cached)
             meta        = cached["metadata"]
             result_type = meta.get("result_type", "single")
@@ -166,6 +166,7 @@ class AutoArchitectOrchestrator:
             all_acc     = meta.get("all_accuracies", {})
             avg_acc     = meta.get("avg_accuracy", 0)
 
+            
             base = {
                 "status":       "success",
                 "from_cache":   True,
@@ -179,6 +180,8 @@ class AutoArchitectOrchestrator:
                 "message":      "⚡ Loaded instantly from knowledge base!",
                 "type":         result_type,
                 "agents_used":  agents_used,
+                "test_accuracy": meta.get("avg_accuracy", 0),
+                "avg_accuracy":  meta.get("avg_accuracy", 0),
             }
 
             if result_type == "multi_agent_nas":
@@ -205,7 +208,7 @@ class AutoArchitectOrchestrator:
                         from_cache     = True
                     )
                 except Exception as e:
-                    print(f"⚠️  Brain update skipped: {e}")
+                    print(f"[Orchestrator] Brain update skipped: {e}")
 
             self._last_workflow_result = base
             self._last_problem         = problem
@@ -214,24 +217,30 @@ class AutoArchitectOrchestrator:
         # 5. Similar problem check
         similar = find_similar_cached(problem, domain)
         if similar:
-            print(f"🔄 Similar: {similar['problem'][:40]}")
+            print(f"[Orchestrator] Similar: {similar['problem'][:40]}")
+            sim_meta        = similar.get("metadata", {})
+            sim_result_type = sim_meta.get("result_type", "single")
+            sim_agents_used = sim_meta.get("agents_used", [domain])
+
             base = {
                 "status":       "success",
                 "from_cache":   True,
-                "similar":      True,
                 "domain":       domain,
                 "analysis":     analysis,
-                "architecture": similar.get("architecture", []),
-                "parameters":   similar.get("parameters", 0),
-                "search_time":  similar.get("search_time", 0),
+                "architecture": sim_meta.get("architecture", []),
+                "parameters":   sim_meta.get("parameters", 0),
+                "search_time":  sim_meta.get("search_time", 0),
+                "use_count":    sim_meta.get("use_count", 1),
                 "elapsed":      round(time.time() - start, 2),
-                "type":         similar.get("result_type", "single"),
-                "agents_used":  similar.get("agents_used", [domain]),
-                "message":      "Reused similar solution!",
+                "message":      "⚡ Loaded instantly from knowledge base!",
+                "type":         sim_result_type,
+                "agents_used":  sim_agents_used,
+                "test_accuracy": sim_meta.get("avg_accuracy", 0),
+                "avg_accuracy":  sim_meta.get("avg_accuracy", 0),
             }
             base["readable_output"] = self._get_readable_output(problem, base)
             base["topology"]        = self._design_topology(
-                problem, domain, base, base["agents_used"])
+                problem, domain, base, sim_agents_used)
             self._last_workflow_result = base
             self._last_problem         = problem
             return base
@@ -244,17 +253,17 @@ class AutoArchitectOrchestrator:
                     domain,
                     bert_embedding=self._last_embedding
                 )
-                print(f"🧠 Brain workflow: {workflow['type']} "
-                      f"— {workflow['agents']} "
+                print(f"[Orchestrator] Brain workflow: {workflow['type']} "
+                      f"-- {workflow['agents']} "
                       f"(strategy: {workflow['strategy_name']}, "
                       f"source: {workflow.get('source', 'unknown')})")
             except Exception as e:
-                print(f"⚠️  Brain failed, fallback: {e}")
+                print(f"[Orchestrator] Brain failed, fallback: {e}")
                 workflow = self.workflow.build_workflow(problem, domain)
         else:
             workflow = self.workflow.build_workflow(problem, domain)
 
-        print(f"🗺️  Workflow: {workflow['type']} — agents: {workflow['agents']}")
+        print(f"[Orchestrator] Workflow: {workflow['type']} -- agents: {workflow['agents']}")
 
         # 7. Web Research — find best approach before running agents
         research = {}
@@ -265,11 +274,11 @@ class AutoArchitectOrchestrator:
                     domain  = domain,
                 )
                 self._last_research = research
-                print(f"🌐 Research: {research.get('best_model','?')} | "
+                print(f"[Orchestrator] Research: {research.get('best_model','?')} | "
                       f"Dataset: {research.get('best_dataset','?')} | "
                       f"Expected: {research.get('expected_acc','?')}")
             except Exception as e:
-                print(f"⚠️  Research skipped: {e}")
+                print(f"[Orchestrator] Research skipped: {e}")
 
         # 8. Run agents
         if workflow["type"] == "multi":
@@ -318,7 +327,7 @@ class AutoArchitectOrchestrator:
                 if self.topology_enabled and accuracy:
                     self.topology_designer.update_accuracy(problem, accuracy / 100)
             except Exception as e:
-                print(f"⚠️  Brain learn skipped: {e}")
+                print(f"[Orchestrator] Brain learn skipped: {e}")
 
         # 12. Generate human readable output
         result["readable_output"] = self._get_readable_output(problem, result)
@@ -369,8 +378,8 @@ class AutoArchitectOrchestrator:
         )
         self._last_topology = topology
 
-        print(f"\n🏗️  Network topology:")
-        print(f"   Agents:    {' → '.join(topology['agents'])}")
+        print(f"\n[Orchestrator] Network topology:")
+        print(f"   Agents:    {' -> '.join(topology['agents'])}")
         print(f"   Topology:  {topology['topology']}")
         print(f"   Confidence:{topology['confidence']:.0%}")
         print(f"   Source:    {topology['source']}")
@@ -399,19 +408,19 @@ class AutoArchitectOrchestrator:
                     topology  = topology,
                     domain    = domain,
                 )
-                print(f"🔍 Self-eval: {eval_result['score']}/100 "
-                      f"({eval_result['grade']}) — "
-                      f"{'✅ passed' if eval_result['passed'] else '❌ needs improvement'}")
+                print(f"[Orchestrator] Self-eval: {eval_result['score']}/100 "
+                      f"({eval_result['grade']}) -- "
+                      f"{'PASSED' if eval_result['passed'] else 'needs improvement'}")
 
                 # Feed self-eval score back to topology brain
-                # Brain now knows quality of topology — not just training accuracy
+                # Brain now knows quality of topology -- not just training accuracy
                 if self.topology_enabled:
                     self.topology_designer.update_accuracy(
                         problem,
                         eval_result["score"] / 100
                     )
             except Exception as e:
-                print(f"⚠️  Self-eval skipped: {e}")
+                print(f"[Orchestrator] Self-eval skipped: {e}")
 
         self._last_eval_result = eval_result
 
@@ -438,7 +447,7 @@ class AutoArchitectOrchestrator:
                     from_cache     = False,
                 )
             except Exception as e:
-                print(f"⚠️  Brain network update skipped: {e}")
+                print(f"[Orchestrator] Brain network update skipped: {e}")
 
         return zip_bytes, topology, eval_result
 
@@ -448,7 +457,7 @@ class AutoArchitectOrchestrator:
             gen = AgentGenerator()
             return gen.generate(problem, result)
         except Exception as e:
-            print(f"⚠️  Fallback zip failed: {e}")
+            print(f"[Orchestrator] Fallback zip failed: {e}")
             return b""
 
     # ─────────────────────────────────────────────────────────────────────
@@ -464,7 +473,7 @@ class AutoArchitectOrchestrator:
                 domain  = domain,
             )
         except Exception as e:
-            print(f"⚠️  Topology design skipped: {e}")
+            print(f"[Orchestrator] Topology design skipped: {e}")
             return {}
 
     # ─────────────────────────────────────────────────────────────────────
@@ -478,11 +487,11 @@ class AutoArchitectOrchestrator:
                     result   = result,
                     groq_key = self.groq_key
                 )
-                print(f"  💡 Output: {output.get('verdict')} "
+                print(f"  [Orchestrator] Output: {output.get('verdict')} "
                       f"({output.get('overall_score')}%)")
                 return output
             except Exception as e:
-                print(f"⚠️  Output generation skipped: {e}")
+                print(f"[Orchestrator] Output generation skipped: {e}")
 
         eval_score = 0
         evaluation = result.get("evaluation", {})
@@ -506,12 +515,12 @@ class AutoArchitectOrchestrator:
     # ─────────────────────────────────────────────────────────────────────
     def _run_single_agent(self, problem: str,
                            domain: str, image_data: str) -> dict:
-        print(f"➡️  Single agent: {domain}")
+        print(f"[Orchestrator] Single agent: {domain}")
         agent  = self._wake_agent(domain,problem)
         result = agent.run(problem, image_data)
 
         try:
-            print(f"🤖 Auto self-training for: {problem[:40]}")
+            print(f"[Orchestrator] Auto self-training for: {problem[:40]}")
             from api.self_trainer import self_train
             trained = self_train(problem=problem, category=domain, epochs=3)
             result["self_trained"]   = True
@@ -523,7 +532,7 @@ class AutoArchitectOrchestrator:
             result["real_training"]  = True
             result["model_path"]     = trained.get("model_path")
             result["classes"]        = trained.get("classes", [])
-            print(f"✅ Self-trained! Accuracy: {trained['test_accuracy']}%")
+            print(f"[Orchestrator] Self-trained! Accuracy: {trained['test_accuracy']}%")
 
             # Connect trained model to agent via factory
             mp      = trained.get("model_path")
@@ -536,15 +545,15 @@ class AutoArchitectOrchestrator:
                         problem, domain, trained)
                     key = f"{domain}_{problem[:20]}"
                     self._agents[key] = new_agent
-                    print(f"   🔗 {new_agent.class_name} "
+                    print(f"   [Orchestrator] {new_agent.class_name} "
                           f"connected to trained model")
                     result["agent_name"]  = new_agent.agent_name
                     result["class_name"]  = new_agent.class_name
                 except Exception as e:
-                    print(f"   ⚠️  Agent connection: {e}")
+                    print(f"   [Orchestrator] Agent connection: {e}")
 
         except Exception as e:
-            print(f"⚠️  Self-train skipped: {e}")
+            print(f"[Orchestrator] Self-train skipped: {e}")
             result["self_trained"] = False
 
 
@@ -568,20 +577,20 @@ class AutoArchitectOrchestrator:
     # ─────────────────────────────────────────────────────────────────────
     def _run_multi_agent(self, problem: str,
                           domains: list, image_data: str) -> dict:
-        print(f"🔀 Multi-agent pipeline: {domains}")
+        print(f"[Orchestrator] Multi-agent pipeline: {domains}")
 
         agent_results  = []
         all_accuracies = []
         all_acc_dict   = {}
 
         for domain in domains:
-            print(f"  🤖 Running {domain} NAS agent...")
+            print(f"  [Orchestrator] Running {domain} NAS agent...")
             agent  = self._wake_agent(domain)
             result = agent.run(problem, image_data)
             result["domain"] = domain
 
             try:
-                print(f"  🤖 Auto self-training {domain}...")
+                print(f"  [Orchestrator] Auto self-training {domain}...")
                 from api.self_trainer import self_train
                 trained = self_train(problem=problem,
                                      category=domain, epochs=3)
@@ -595,7 +604,7 @@ class AutoArchitectOrchestrator:
                 result["classes"]        = trained.get("classes", [])
                 all_accuracies.append(trained["test_accuracy"])
                 all_acc_dict[domain]     = trained["test_accuracy"]
-                print(f"  ✅ {domain} self-trained: "
+                print(f"  [Orchestrator] {domain} self-trained: "
                       f"{trained['test_accuracy']}%")
 
                 # Connect trained model to agent
@@ -608,25 +617,25 @@ class AutoArchitectOrchestrator:
                             problem, domain, trained)
                         key = f"{domain}_{problem[:20]}"
                         self._agents[key] = new_agent
-                        print(f"   🔗 {new_agent.class_name} connected")
+                        print(f"   [Orchestrator] {new_agent.class_name} connected")
                         result["agent_name"]  = new_agent.agent_name
                         result["class_name"]  = new_agent.class_name
                     except Exception as e:
-                        print(f"   ⚠️  Agent connection: {e}")
+                        print(f"   [Orchestrator] Agent connection: {e}")
 
             except Exception as e:
-                print(f"  ⚠️  {domain} self-train skipped: {e}")
+                print(f"  [Orchestrator] {domain} self-train skipped: {e}")
                 result["self_trained"] = False
 
             agent_results.append(result)
             self._sleep_agent(domain)
 
-        print("  🔀 Fusing architectures...")
+        print("  [Orchestrator] Fusing architectures...")
         from api.agents.fusion_agent import FusionAgent
         fusion = FusionAgent()
         fused  = fusion.fuse(agent_results, problem)
 
-        print("  📊 Evaluating fused model...")
+        print("  [Orchestrator] Evaluating fused model...")
         evaluator  = self._wake_evaluator()
         evaluation = evaluator.evaluate(fused, problem)
         self._sleep_agent("evaluator")
@@ -664,7 +673,7 @@ class AutoArchitectOrchestrator:
     def _wake_agent(self, domain: str, problem: str = ""):
         key = f"{domain}_{problem[:20]}" if problem else domain
         if key not in self._agents:
-            print(f"  ↑ Loading {domain} agent for: {problem[:30]}")
+            print(f"  [Orchestrator] Loading {domain} agent for: {problem[:30]}")
             from api.agents.agent_factory import get_factory
             factory = get_factory()
             agent   = factory.create(
@@ -677,10 +686,10 @@ class AutoArchitectOrchestrator:
     def _sleep_agent(self, domain: str, problem: str = ""):
        key = f"{domain}_{problem[:20]}" if problem else domain
        if key in self._agents:
-         print(f"  ↓ Unloading {domain} agent...")
+         print(f"  [Orchestrator] Unloading {domain} agent...")
          del self._agents[key]
        elif domain in self._agents:
-         print(f"  ↓ Unloading {domain} agent...")
+         print(f"  [Orchestrator] Unloading {domain} agent...")
          del self._agents[domain]
 
 
@@ -698,7 +707,7 @@ class AutoArchitectOrchestrator:
         return any(kw in problem.lower() for kw in LLM_KEYWORDS)
 
     def _run_llm(self, problem: str) -> dict:
-        print(f"💬 LLM: {problem[:40]}")
+        print(f"[Orchestrator] LLM: {problem[:40]}")
         if not self.groq_key:
             return {
                 "status":  "success",
@@ -743,7 +752,7 @@ class AutoArchitectOrchestrator:
                 "message": "Generated by Llama 3 via Groq",
             }
         except Exception as e:
-            print(f"⚠️ Groq error: {e}")
+            print(f"[Orchestrator] Groq error: {e}")
             return {
                 "status":  "success",
                 "type":    "llm_generation",

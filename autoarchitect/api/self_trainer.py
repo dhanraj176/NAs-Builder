@@ -92,7 +92,7 @@ def _correct_domain(problem: str, bert_domain: str) -> str:
     for keyword, correct_domain in DOMAIN_OVERRIDES.items():
         if keyword in p:
             if correct_domain != bert_domain:
-                print(f"   🔧 Domain corrected: {bert_domain} → "
+                print(f"   [SelfTrainer] Domain corrected: {bert_domain} -> "
                       f"{correct_domain} (keyword: '{keyword}')")
             return correct_domain
     return bert_domain
@@ -117,12 +117,12 @@ def _fetch_dataset_smart(problem: str, category: str,
         if result and result.get("name") != "clip_zero_shot":
             if result["name"] not in _used_datasets_this_run:
                 _used_datasets_this_run.add(result["name"])
-                print(f"   ✅ Discovery engine found: {result['name']}")
+                print(f"   [SelfTrainer] Discovery engine found: {result['name']}")
                 return result
             else:
-                print(f"   ⚠️  Dataset {result['name']} already used — searching alternative")
+                print(f"   [SelfTrainer] Dataset {result['name']} already used -- searching alternative")
     except Exception as e:
-        print(f"   ⚠️  Discovery engine error: {e}")
+        print(f"   [SelfTrainer] Discovery engine error: {e}")
 
     # 2. Registry fallback
     try:
@@ -131,14 +131,14 @@ def _fetch_dataset_smart(problem: str, category: str,
         if result and result.get("real_dataset"):
             if result["name"] not in _used_datasets_this_run:
                 _used_datasets_this_run.add(result["name"])
-                print(f"   ✅ Registry found: {result['name']}")
+                print(f"   [SelfTrainer] Registry found: {result['name']}")
                 return result
     except Exception as e:
-        print(f"   ⚠️  Registry error: {e}")
+        print(f"   [SelfTrainer] Registry error: {e}")
 
     # 3. Honest last resort
-    print(f"   ⚠️  No real dataset found")
-    print(f"   💡 Upload your own data for 85%+ accuracy")
+    print(f"   [SelfTrainer] No real dataset found")
+    print(f"   [SelfTrainer] Upload your own data for 85%+ accuracy")
     return None
 
 
@@ -147,7 +147,7 @@ class SelfTrainingAgent:
     def __init__(self):
         self.device = torch.device(
             'cuda' if torch.cuda.is_available() else 'cpu')
-        print(f"🤖 SelfTrainingAgent ready on {self.device}")
+        print(f"[SelfTrainer] ready on {self.device}")
 
     def train(self, problem, category,
               epochs=3, progress_callback=None):
@@ -162,7 +162,7 @@ class SelfTrainingAgent:
 
         # Step 1
         self._update(results, progress_callback, 1, 6,
-            "🔍 Analyzing problem requirements...")
+            "Analyzing problem requirements...")
         print(f"   Problem:  {problem[:40]}")
         print(f"   Category: {category}")
 
@@ -173,12 +173,12 @@ class SelfTrainingAgent:
 
         # Step 2 — fetch dataset
         self._update(results, progress_callback, 2, 6,
-            f"📦 Fetching best dataset for: {problem[:30]}...")
+            f"Fetching best dataset for: {problem[:30]}...")
 
         data = _fetch_dataset_smart(problem, category, subset_size=2000)
 
         if data is None or data.get("train_loader") is None:
-            print(f"   ⚠️  No training data available")
+            print(f"   [SelfTrainer] No training data available")
             results.update({
                 'dataset':        'none',
                 'train_size':     0,
@@ -205,13 +205,13 @@ class SelfTrainingAgent:
 
         # Step 3 — architecture
         self._update(results, progress_callback, 3, 6,
-            "🧠 Running Neural Architecture Search...")
+            "Running Neural Architecture Search...")
 
         num_classes  = data['num_classes']
         use_transfer = category in ('image', 'medical')
 
         if use_transfer:
-            print(f"   🔥 Image/Medical → ResNet18 transfer learning")
+            print(f"   [SelfTrainer] Image/Medical -> ResNet18 transfer learning")
             params = 11_177_538
         else:
             model  = DARTSNet(C=16, num_cells=3,
@@ -223,7 +223,7 @@ class SelfTrainingAgent:
 
         # Step 4 — train
         self._update(results, progress_callback, 4, 6,
-            f"⚡ Training on {data['train_size']} samples...")
+            f"Training on {data['train_size']} samples...")
 
         if use_transfer:
             from api.transfer_trainer import train_transfer
@@ -241,7 +241,7 @@ class SelfTrainingAgent:
 
             # Save model to known location
             self._update(results, progress_callback, 6, 6,
-                "💾 Saving to knowledge base...")
+                "Saving to knowledge base...")
             model_path, classes_path = self._save_trained_model(
                 tr['model'], problem, category, data['classes'], results)
             results['model_path']   = model_path
@@ -253,7 +253,7 @@ class SelfTrainingAgent:
             results['status']     = 'complete'
             results['trained_at'] = datetime.now().isoformat()
 
-            print(f"\n✅ Self-training complete!")
+            print(f"\n[SelfTrainer] Self-training complete!")
             print(f"   Dataset: {data['name']} "
                   f"({'REAL' if data.get('real_dataset') else 'synthetic'})")
             print(f"   Method:  ResNet18 Transfer Learning")
@@ -299,17 +299,17 @@ class SelfTrainingAgent:
 
             acc = round(100 * correct / total, 2)
             epoch_results.append(acc)
-            print(f"   Epoch {epoch+1}/{epochs} → Accuracy: {acc}%")
+            print(f"   Epoch {epoch+1}/{epochs} -> Accuracy: {acc}%")
             if progress_callback:
                 progress_callback(4, 6,
-                    f"Training epoch {epoch+1}/{epochs} — {acc}%")
+                    f"Training epoch {epoch+1}/{epochs} -- {acc}%")
 
         results['train_accuracy'] = epoch_results[-1]
         results['epoch_history']  = epoch_results
 
         # Step 5 — evaluate
         self._update(results, progress_callback, 5, 6,
-            "📊 Evaluating on test data...")
+            "Evaluating on test data...")
         test_acc = self._evaluate(model, data['test_loader'])
         results['test_accuracy']     = test_acc
         results['expected_accuracy'] = data.get('expected_accuracy', 50)
@@ -317,7 +317,7 @@ class SelfTrainingAgent:
 
         # Step 6 — save
         self._update(results, progress_callback, 6, 6,
-            "💾 Saving to knowledge base...")
+            "Saving to knowledge base...")
         model_path, classes_path = self._save_trained_model(
             model, problem, category, data['classes'], results)
         results['model_path']   = model_path
@@ -329,7 +329,7 @@ class SelfTrainingAgent:
         results['status']     = 'complete'
         results['trained_at'] = datetime.now().isoformat()
 
-        print(f"\n✅ Self-training complete!")
+        print(f"\n[SelfTrainer] Self-training complete!")
         print(f"   Dataset: {data['name']} "
               f"({'REAL' if data.get('real_dataset') else 'synthetic'})")
         print(f"   Train:   {results['train_accuracy']}%")
@@ -366,7 +366,7 @@ class SelfTrainingAgent:
         with open(cls_path, 'w') as f:
             json.dump(meta, f, indent=2)
 
-        print(f"   💾 Model saved: {model_path}")
+        print(f"   [SelfTrainer] Model saved: {model_path}")
         return model_path, cls_path
 
     def _save_cache(self, model, problem, results, data):

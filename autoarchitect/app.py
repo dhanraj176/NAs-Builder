@@ -2,12 +2,20 @@
 # AutoArchitect — Main Flask Server
 # ============================================
 
+import sys
+import io
+
+# Force UTF-8 on Windows cp1252 terminals so emoji in print() don't crash.
+# Must happen before any other import that calls print().
+if hasattr(sys.stdout, 'buffer'):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'buffer'):
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
 from flask import Flask, render_template, request, jsonify, send_file
 from flask_cors import CORS
 import json
-import sys
 import os
-import io
 import zipfile
 from dotenv import load_dotenv
 from api.self_trainer import self_train
