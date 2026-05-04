@@ -51,8 +51,6 @@ VERIFIED_HF = {
     "garbage":       "dmedhi/garbage-image-classification-detection",
     "trash":         "dmedhi/garbage-image-classification-detection",
     "dumping":       "dmedhi/garbage-image-classification-detection",
-    "fire":          "sdproject2025/Wildfire_Images_From_Satilite_For_Azerbaijan",
-    "smoke":         "sdproject2025/Wildfire_Images_From_Satilite_For_Azerbaijan",
     "pneumonia":     "hf-vision/chest-xray-pneumonia",
     "xray":          "hf-vision/chest-xray-pneumonia",
     "skin cancer":   "marmal88/skin_cancer",
@@ -462,6 +460,12 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
         ds    = load_dataset(dataset_id, cache_dir=str(hf_cache),
                              trust_remote_code=False)
         split = ds.get("train", list(ds.values())[0])
+
+        if len(split) < 500:
+            print(f"   ⚠️  {dataset_id} has only {len(split)} samples "
+                  f"— minimum 500 required, skipping")
+            return None
+
         cols  = split.column_names
 
         image_col = next((c for c in cols if "image" in c.lower()), None)
@@ -558,9 +562,12 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                       list(dl_path.rglob("*.png")))
             csvs   = list(dl_path.rglob("*.csv"))
 
-            if images and len(images) > 20:
+            if images and len(images) >= 500:
                 return self._build_image_loader_from_files(
                     images, candidate["name"], subset_size)
+            elif images:
+                print(f"   ⚠️  Kaggle dataset has only {len(images)} images "
+                      f"— minimum 500 required, skipping")
             elif csvs:
                 return self._build_tabular_from_csv(
                     csvs[0], candidate["name"], subset_size)

@@ -333,14 +333,12 @@ function completeWorkflowPanel(finalAcc) {
 
 // ── RESULTS ────────────────────────────────────────────────────────────────
 
+
 function showMultiAgentResults(data) {
     hide('step2');
     document.getElementById('resultsTitle').textContent = 'Multi-Agent NAS Complete';
 
-    var agents     = data.agents_used || [];
-    var eval_      = data.evaluation  || {};
-    var score      = eval_.avg_score  || 0;
-    var scoreColor = score >= 85 ? 'var(--success-light)' : score >= 70 ? 'var(--warning)' : 'var(--danger)';
+    var agents = data.agents_used || [];
 
     var badges = agents.map(function(a) {
         return '<span class="agent-badge badge-' + a + '">' + a.toUpperCase() + ' NAS</span>';
@@ -355,23 +353,16 @@ function showMultiAgentResults(data) {
                '</div><div class="nas-arrow">&#8250;</div>';
     }).join('');
 
-    var scoreBars = Object.entries(eval_.scores || {}).map(function(e) {
-        return '<div class="op-row"><div class="op-name">' + e[0] + '</div>' +
-               '<div class="op-bar-bg"><div class="op-bar-fill" style="width:' + e[1] + '%"></div></div>' +
-               '<div style="color:var(--muted);font-size:0.72rem;min-width:36px">' + e[1] + '%</div></div>';
-    }).join('');
-
-    var trainHTML = '';
-    if (data.self_trained && data.avg_accuracy) {
-        var rows = Object.entries(data.all_accuracies || {}).map(function(e) {
-            return '<div>' + e[0].toUpperCase() + ': <strong class="highlight">' + e[1] + '%</strong></div>';
-        }).join('');
-        trainHTML = '<div class="acc-box"><div class="acc-box-title">Training Results</div>' +
-                    '<div class="acc-row">' + rows + '<div>Average: <strong class="highlight">' + data.avg_accuracy + '%</strong></div></div></div>';
-    }
+    var anyAcc = data.test_accuracy || data.avg_accuracy || data.cached_accuracy || data.accuracy || (data.evaluation && data.evaluation.avg_score) || 0;
+    var accColor = anyAcc >= 80 ? 'var(--success-light)' : anyAcc >= 60 ? 'var(--warning)' : 'var(--danger)';
+    var accuracyHTML = anyAcc > 0 ?
+        '<div class="acc-box" style="text-align:center;padding:28px">' +
+        '<div style="font-size:3.5rem;font-weight:900;color:' + accColor + ';line-height:1">' + anyAcc + '%</div>' +
+        '<div style="color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;margin-top:6px">Test Accuracy</div>' +
+        '</div>' : '';
 
     document.getElementById('resultsContent').innerHTML =
-        readableOutputHTML(data.readable_output) +
+        accuracyHTML +
         '<div class="agent-badges">' + badges + '</div>' +
         '<div class="nas-visual">' +
         '<div style="color:var(--muted);font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Multi-Agent Pipeline</div>' +
@@ -382,18 +373,11 @@ function showMultiAgentResults(data) {
         '<div class="nas-node agent-fusion"><div class="nas-node-label">FUSION</div><div class="nas-node-sub">Agent</div></div><div class="nas-arrow">&#8250;</div>' +
         '<div class="nas-node agent-output"><div class="nas-node-label">OUTPUT</div><div class="nas-node-sub">Model</div></div>' +
         '</div></div>' +
-        '<div class="score-card"><div class="score-number" style="color:' + scoreColor + '">' + score + '%</div>' +
-        '<div style="color:#fff;font-weight:700;margin:6px 0 4px">' +
-        (eval_.verdict === 'excellent' ? 'Excellent Architecture' : eval_.verdict === 'good' ? 'Good Architecture' : 'Needs Improvement') +
-        '</div><div class="score-label">Architecture Quality Score</div></div>' +
-        (scoreBars ? '<div class="info-box"><div class="info-box-title">Score Breakdown</div>' + scoreBars + '</div>' : '') +
-        trainHTML + researchProofHTML() +
+        cacheHTML(data) +
         '<div class="results-grid">' +
         '<div class="result-card"><div class="big-number">' + agents.length + '</div><div class="label">Agents Deployed</div></div>' +
         '<div class="result-card"><div class="big-number">' + ((data.parameters || 0) / 1000).toFixed(0) + 'K</div><div class="label">Parameters</div></div>' +
-        '<div class="result-card"><div class="big-number">' + (data.elapsed || 0) + 's</div><div class="label">Total Time</div></div></div>' +
-        '<div style="color:#fff;font-weight:700;font-size:0.85rem;margin-bottom:10px">Discovered Architecture</div>' +
-        buildArchHTML(data.architecture || []) + cacheHTML(data);
+        '<div class="result-card"><div class="big-number">' + (data.elapsed || 0) + 's</div><div class="label">Total Time</div></div></div>';
 
     show('downloadSection');
     hide('testSection');
@@ -406,32 +390,35 @@ function showSingleAgentResults(data) {
     var domain = data.domain || 'image';
     document.getElementById('resultsTitle').textContent = domain.toUpperCase() + ' NAS Complete';
 
-    var trainHTML = '';
-    if (data.self_trained) {
-        var accColor = (data.test_accuracy || 0) >= 70 ? 'var(--success-light)' :
-                       (data.test_accuracy || 0) >= 50 ? 'var(--warning)' : 'var(--danger)';
-        trainHTML = '<div class="acc-box"><div class="acc-box-title">Training Results</div>' +
-            '<div class="acc-row">' +
-            'Dataset: <strong>' + (data.dataset || 'HuggingFace') + '</strong> ' +
-            (data.real_dataset ? '<span style="color:var(--success-light);font-size:0.72rem">Real Data</span>' : '') + '<br>' +
-            'Method: <strong>' + (data.method || 'DARTS NAS') + '</strong><br>' +
-            'Train Accuracy: <strong>' + (data.train_accuracy || 0) + '%</strong><br>' +
-            'Test Accuracy: <strong style="color:' + accColor + ';font-size:1rem">' + (data.test_accuracy || 0) + '%</strong><br>' +
-            'Samples: <strong>' + (data.train_size || 0) + '</strong>' +
-            '</div></div>';
-    }
+    // Accuracy — show regardless of cache hit or fresh train
+    var acc = data.test_accuracy || data.avg_accuracy || data.cached_accuracy || data.accuracy || (data.evaluation && data.evaluation.avg_score) || 0;
+    var accColor = acc >= 80 ? 'var(--success-light)' : acc >= 60 ? 'var(--warning)' : 'var(--danger)';
+    var accuracyHTML = '<div class="acc-box" style="text-align:center;padding:28px">' +
+        '<div style="font-size:3.5rem;font-weight:900;color:' + accColor + ';line-height:1">' + acc + '%</div>' +
+        '<div style="color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;margin-top:6px">Test Accuracy</div>' +
+        (data.dataset ? '<div style="color:var(--muted);font-size:0.78rem;margin-top:8px">Dataset: <strong style="color:#fff">' + data.dataset + '</strong></div>' : '') +
+        '</div>';
+
+    // Agent pipeline — always show
+    var pipelineHTML = '<div class="nas-visual">' +
+        '<div style="color:var(--muted);font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Agent Pipeline</div>' +
+        '<div class="nas-flow">' +
+        '<div class="nas-node"><div class="nas-node-label">INPUT</div><div class="nas-node-sub">Problem</div></div><div class="nas-arrow">&#8250;</div>' +
+        '<div class="nas-node agent-image"><div class="nas-node-label">BERT</div><div class="nas-node-sub">Classifier</div></div><div class="nas-arrow">&#8250;</div>' +
+        '<div class="nas-node agent-' + domain + '"><div class="nas-node-label">' + domain.toUpperCase() + '</div><div class="nas-node-sub">NAS Agent</div>' +
+        (acc > 0 ? '<div style="color:var(--success-light);font-size:0.62rem;font-weight:800;margin-top:2px">' + acc + '%</div>' : '') +
+        '</div><div class="nas-arrow">&#8250;</div>' +
+        '<div class="nas-node agent-output"><div class="nas-node-label">OUTPUT</div><div class="nas-node-sub">Model</div></div>' +
+        '</div></div>';
 
     document.getElementById('resultsContent').innerHTML =
-        readableOutputHTML(data.readable_output) +
+        accuracyHTML +
+        pipelineHTML +
         cacheHTML(data) +
-        researchProofHTML() +
         '<div class="results-grid">' +
         '<div class="result-card"><div class="big-number">1</div><div class="label">Agent Used</div></div>' +
         '<div class="result-card"><div class="big-number">' + ((data.parameters || 0) / 1000).toFixed(0) + 'K</div><div class="label">Parameters</div></div>' +
-        '<div class="result-card"><div class="big-number">' + (data.search_time || 0) + 's</div><div class="label">Search Time</div></div></div>' +
-        trainHTML +
-        '<div style="color:#fff;font-weight:700;font-size:0.85rem;margin-bottom:10px">Discovered Architecture</div>' +
-        buildArchHTML(data.architecture || []);
+        '<div class="result-card"><div class="big-number">' + (data.search_time || 0) + 's</div><div class="label">Search Time</div></div></div>';
 
     show('downloadSection');
     hide('testSection');

@@ -118,7 +118,7 @@ def check_cache(problem):
 
 
 def find_semantic_match(problem: str,
-                        threshold: float = 0.88) -> dict:
+                        threshold: float = 0.94) -> dict:
     """Find cached problem with similar meaning."""
     if not os.path.exists(CACHE_DIR):
         return None
