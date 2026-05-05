@@ -221,7 +221,7 @@ from datetime import datetime
 
 CLASSES     = {classes_str}
 NUM_CLASSES = {num_classes}
-MODEL_PATH  = Path(__file__).parent.parent / "models" / "{agent_name[:-6]}_model.pth"
+MODEL_PATH  = Path(__file__).parent.parent / "models" / "{agent_name}_model.pth"
 ACCURACY    = {accuracy}
 
 TRANSFORM = T.Compose([
@@ -238,12 +238,12 @@ def load_model():
         try:
             model.load_state_dict(torch.load(
                 str(MODEL_PATH), map_location="cpu", weights_only=True), strict=False)
-            print(f"✅ {class_name} loaded — {{ACCURACY}}% accuracy")
+            print(f"[OK] {class_name} loaded - {{ACCURACY}}% accuracy")
         except Exception as e:
-            print(f"⚠️  model load failed: architecture mismatch (will retrain)")  #")
+            print(f"[!] model load failed: architecture mismatch")
     else:
-        print(f"⚠️  No model file found at {{MODEL_PATH}}")
-        print(f"   Re-run AutoArchitect to retrain.")
+        print(f"[!] No model file found at {{MODEL_PATH}}")
+        print(f"    Re-run AutoArchitect to retrain.")
     model.eval()
     return model
 
@@ -264,7 +264,7 @@ class {class_name}:
         self.model       = load_model()
         self.predictions = 0
         self.memory      = []
-        print(f"🤖 {{self.__class__.__name__}} ready")
+        print(f"[Agent] {{self.__class__.__name__}} ready")
         print(f"   Classes: {{self.classes}}")
 
     def predict(self, image_path: str) -> dict:
@@ -304,13 +304,13 @@ class {class_name}:
         conf  = result.get("confidence", 0)
         label = result.get("label", "unknown")
         if conf > 0.85:
-            print(f"   🚨 HIGH CONFIDENCE: {{label}} ({{conf:.0%}})")
+            print(f"   [ALERT] HIGH: {{label}} ({{conf:.0%}})")
             result["action"] = "alert"
         elif conf > 0.6:
-            print(f"   ⚠️  MEDIUM: {{label}} ({{conf:.0%}})")
+            print(f"   [WARN] MEDIUM: {{label}} ({{conf:.0%}})")
             result["action"] = "log"
         else:
-            print(f"   ✅ LOW: {{label}} ({{conf:.0%}})")
+            print(f"   [OK] LOW: {{label}} ({{conf:.0%}})")
             result["action"] = "monitor"
         return result
 
@@ -327,7 +327,7 @@ class {class_name}:
             print(f"   Need {{20 - len(self.memory)}} more examples to retrain")
             return
         print(f"   Retraining on {{len(self.memory)}} examples...")
-        print(f"   ✅ Retrain complete")
+        print(f"   [OK] Retrain complete")
 
     def status(self) -> dict:
         return {{
@@ -373,7 +373,7 @@ from datetime import datetime
 
 CLASSES     = {classes_str}
 NUM_CLASSES = {num_classes}
-MODEL_PATH  = Path(__file__).parent.parent / "models" / "{agent_name[:-6]}_model.pth"
+MODEL_PATH  = Path(__file__).parent.parent / "models" / "{agent_name}_model.pth"
 ACCURACY    = {accuracy}
 VOCAB_SIZE  = 1000
 
@@ -400,8 +400,7 @@ class DARTSNet(nn.Module):
     class Cell(nn.Module):
         def __init__(self, C):
             super().__init__()
-            from api.brain.agent_factory import DARTSNet as DN
-            self.ops = nn.ModuleList([DN.MixedOp(C) for _ in range(4)])
+            self.ops = nn.ModuleList([DARTSNet.MixedOp(C) for _ in range(4)])
         def forward(self, x):
             for op in self.ops: x = op(x)
             return x
@@ -425,9 +424,9 @@ def load_model():
         try:
             model.load_state_dict(torch.load(
                 str(MODEL_PATH), map_location="cpu", weights_only=True), strict=False)
-            print(f"✅ {class_name} loaded — {{ACCURACY}}% accuracy")
+            print(f"[OK] {class_name} loaded - {{ACCURACY}}% accuracy")
         except Exception as e:
-            print(f"⚠️  model load failed: architecture mismatch (will retrain)")  #")
+            print(f"[!] model load failed: architecture mismatch")
     model.eval()
     return model
 
@@ -446,9 +445,14 @@ class {class_name}:
         self.accuracy    = ACCURACY
         self.model       = load_model()
         self.vocab       = {{}}
+        _vpath = Path(__file__).parent.parent / "models" / "{agent_name}_vocab.json"
+        if _vpath.exists():
+            with open(_vpath, encoding="utf-8") as _f:
+                self.vocab = json.load(_f)
+            print(f"   Vocab: {{len(self.vocab)}} words loaded")
         self.predictions = 0
         self.memory      = []
-        print(f"🤖 {{self.__class__.__name__}} ready")
+        print(f"[Agent] {{self.__class__.__name__}} ready")
 
     def _to_tensor(self, text: str) -> torch.Tensor:
         vec = torch.zeros(VOCAB_SIZE)
@@ -499,13 +503,13 @@ class {class_name}:
         conf  = result.get("confidence", 0)
         label = result.get("label", "unknown")
         if conf > 0.85:
-            print(f"   🚨 HIGH: {{label}} ({{conf:.0%}})")
+            print(f"   [ALERT] HIGH: {{label}} ({{conf:.0%}})")
             result["action"] = "alert"
         elif conf > 0.6:
-            print(f"   ⚠️  MEDIUM: {{label}} ({{conf:.0%}})")
+            print(f"   [WARN] MEDIUM: {{label}} ({{conf:.0%}})")
             result["action"] = "log"
         else:
-            print(f"   ✅ LOW: {{label}} ({{conf:.0%}})")
+            print(f"   [OK] LOW: {{label}} ({{conf:.0%}})")
             result["action"] = "monitor"
         return result
 
@@ -522,7 +526,7 @@ class {class_name}:
             print(f"   Need {{20 - len(self.memory)}} more examples")
             return
         print(f"   Retraining on {{len(self.memory)}} examples...")
-        print(f"   ✅ Retrain complete")
+        print(f"   [OK] Retrain complete")
 
     def status(self) -> dict:
         return {{

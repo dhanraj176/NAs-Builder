@@ -324,6 +324,13 @@ class SelfTrainingAgent:
         results['classes_path'] = classes_path
         self._save_cache(model, problem, results, data)
 
+        if category == "text" and data.get("w2i"):
+            h          = _problem_hash(problem)
+            vocab_path = os.path.join(TRAINED_DIR, f"{h}_text_vocab.json")
+            with open(vocab_path, "w") as _f:
+                json.dump(data["w2i"], _f)
+            print(f"   Vocab: {len(data['w2i'])} words -> {vocab_path}")
+
         duration              = round(time.time() - start, 1)
         results['time']       = duration
         results['status']     = 'complete'

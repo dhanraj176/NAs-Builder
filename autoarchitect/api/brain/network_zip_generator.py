@@ -199,6 +199,35 @@ class NetworkZipGenerator:
                 ))
             print(f"   ✅ retrain.py")
 
+            # 9. Standalone predict.py — works on any machine
+            primary_domain   = agents[0]
+            primary_file_mod = agent_file_map[primary_domain]
+            primary_cls_name = agent_class_map[primary_domain]
+            zf.writestr("predict.py",
+                self._generate_predict_script(
+                    problem    = problem,
+                    domain     = primary_domain,
+                    agent_mod  = primary_file_mod,
+                    agent_cls  = primary_cls_name,
+                    classes    = classes_info.get(primary_domain, {}).get("classes", []),
+                    accuracy   = classes_info.get(primary_domain, {}).get("test_accuracy", 0),
+                ))
+            print(f"   ✅ predict.py")
+
+            # 10. Vocab file for text domain
+            for domain in agents:
+                if domain not in ("text", "security"):
+                    continue
+                file_mod = agent_file_map[domain]
+                import hashlib, re
+                cleaned    = re.sub(r'[^\w\s]', '', problem)
+                normalized = ' '.join(cleaned.lower().split())
+                h          = hashlib.md5(normalized.encode()).hexdigest()[:10]
+                vocab_path = TRAINED_DIR / f"{h}_text_vocab.json"
+                if vocab_path.exists():
+                    zf.write(str(vocab_path), f"models/{file_mod}_vocab.json")
+                    print(f"   ✅ models/{file_mod}_vocab.json")
+
         print(f"\n✅ Network zip ready — "
               f"{len(agents)} agents, {topo_type} topology")
         return buf.getvalue()
@@ -550,11 +579,11 @@ def _load_model(num_classes={num_classes}):
         try:
             model.load_state_dict(torch.load(
                 str(MODEL_PATH), map_location="cpu", weights_only=True))
-            print(f"✅ {class_name} loaded — {accuracy}% accuracy")
+            print(f"[OK] {class_name} loaded - {accuracy}% accuracy")
         except Exception as e:
-            print(f"⚠️  Model load warning: {{e}}")
+            print(f"[!] Model load warning: {{e}}")
     else:
-        print(f"⚠️  No model at {{MODEL_PATH}} — using untrained ResNet18")
+        print(f"[!] No model at {{MODEL_PATH}} - using untrained ResNet18")
     model.eval()
     return model
 
@@ -575,7 +604,7 @@ class {class_name}:
         self.model       = _load_model()
         self.predictions = 0
         self.memory      = []
-        print(f"🤖 {class_name} ready — {{len(self.classes)}} classes")
+        print(f"[Agent] {class_name} ready - {{len(self.classes)}} classes")
 
     def predict(self, input_path: str) -> dict:
         """Run real inference on an image file."""
@@ -614,13 +643,13 @@ class {class_name}:
         conf  = result.get("confidence", 0)
         label = result.get("label", "unknown")
         if conf > 0.85:
-            print(f"   🚨 [{self.name.upper()}] HIGH: {{label}} ({{conf:.0%}})")
+            print(f"   [ALERT] {{label}} ({{conf:.0%}})")
             result["action"] = "alert"
         elif conf > 0.6:
-            print(f"   ⚠️  [{self.name.upper()}] MEDIUM: {{label}} ({{conf:.0%}})")
+            print(f"   [WARN] {{label}} ({{conf:.0%}})")
             result["action"] = "log"
         else:
-            print(f"   ✅ [{self.name.upper()}] LOW: {{label}} ({{conf:.0%}})")
+            print(f"   [OK] {{label}} ({{conf:.0%}})")
             result["action"] = "monitor"
         return result
 
@@ -710,10 +739,10 @@ class {class_name}:
                 print(f"   [{self.name}] Epoch {epoch+1}/3 → {acc}%")
 
             torch.save(model.state_dict(), str(self.model_path))
-            print(f"   [{self.name}] ✅ Retrain complete — model updated at {self.model_path}")
+            print(f"   [{self.name}] Retrain complete - model updated")
 
         except Exception as e:
-            print(f"   [{self.name}] ⚠️  Retrain failed: {e}")
+            print(f"   [{self.name}] Retrain failed: {e}")
 
     def status(self) -> dict:
         return {{
@@ -750,23 +779,55 @@ MODEL_PATH = Path(__file__).parent.parent / "models" / "{agent_name}_model.pth"
 VOCAB_SIZE = 1000
 
 
+class _DARTSNet(nn.Module):
+    class _MixedOp(nn.Module):
+        def __init__(self, C):
+            super().__init__()
+            import torch.nn.functional as F
+            self.F   = F
+            self.ops = nn.ModuleList([
+                nn.Identity(),
+                nn.Sequential(nn.Conv2d(C,C,3,padding=1,bias=False), nn.BatchNorm2d(C), nn.ReLU()),
+                nn.Sequential(nn.Conv2d(C,C,5,padding=2,bias=False), nn.BatchNorm2d(C), nn.ReLU()),
+                nn.MaxPool2d(3,stride=1,padding=1),
+                nn.AvgPool2d(3,stride=1,padding=1),
+            ])
+            self.aw = nn.Parameter(torch.ones(5)/5)
+        def forward(self, x):
+            w = self.F.softmax(self.aw, dim=0)
+            return sum(wi*op(x) for wi,op in zip(w, self.ops))
+    class _Cell(nn.Module):
+        def __init__(self, C):
+            super().__init__()
+            self.ops = nn.ModuleList([_DARTSNet._MixedOp(C) for _ in range(4)])
+        def forward(self, x):
+            for op in self.ops: x = op(x)
+            return x
+    def __init__(self, C=16, num_cells=3, num_classes=2):
+        super().__init__()
+        self.stem  = nn.Sequential(nn.Conv2d(3,C,3,padding=1,bias=False), nn.BatchNorm2d(C), nn.ReLU())
+        self.cells = nn.ModuleList([self._Cell(C) for _ in range(num_cells)])
+        self.gap   = nn.AdaptiveAvgPool2d(1)
+        self.fc    = nn.Linear(C, num_classes)
+    def forward(self, x):
+        x = self.stem(x)
+        for cell in self.cells: x = cell(x)
+        return self.fc(self.gap(x).view(x.size(0), -1))
+
+
 def _load_model(num_classes={num_classes}):
-    try:
-        import sys
-        sys.path.insert(0, str(Path(__file__).parent.parent))
-        from nas_engine import DARTSNet
-        model = DARTSNet(C=16, num_cells=3, num_classes=num_classes)
-        if MODEL_PATH.exists():
+    model = _DARTSNet(C=16, num_cells=3, num_classes=num_classes)
+    if MODEL_PATH.exists():
+        try:
             model.load_state_dict(torch.load(
                 str(MODEL_PATH), map_location="cpu", weights_only=True))
-            print(f"✅ {class_name} loaded — {accuracy}% accuracy")
-        else:
-            print(f"⚠️  No model at {{MODEL_PATH}} — using untrained DARTS")
-        model.eval()
-        return model
-    except Exception as e:
-        print(f"⚠️  Model load failed: {{e}}")
-        return None
+            print(f"[OK] {class_name} loaded - {accuracy}% accuracy")
+        except Exception as e:
+            print(f"[!] Model load failed: {{e}}")
+    else:
+        print(f"[!] No model at {{MODEL_PATH}} - using untrained DARTS")
+    model.eval()
+    return model
 
 
 class {class_name}:
@@ -785,7 +846,7 @@ class {class_name}:
         self.vocab       = {{}}
         self.predictions = 0
         self.memory      = []
-        print(f"🤖 {class_name} ready — {{len(self.classes)}} classes")
+        print(f"[Agent] {class_name} ready - {{len(self.classes)}} classes")
 
     def _to_tensor(self, text: str):
         vec = torch.zeros(VOCAB_SIZE)
@@ -840,13 +901,13 @@ class {class_name}:
         conf  = result.get("confidence", 0)
         label = result.get("label", "unknown")
         if conf > 0.85:
-            print(f"   🚨 [{self.name.upper()}] HIGH: {{label}} ({{conf:.0%}})")
+            print(f"   [ALERT] {{label}} ({{conf:.0%}})")
             result["action"] = "alert"
         elif conf > 0.6:
-            print(f"   ⚠️  [{self.name.upper()}] MEDIUM: {{label}} ({{conf:.0%}})")
+            print(f"   [WARN] {{label}} ({{conf:.0%}})")
             result["action"] = "log"
         else:
-            print(f"   ✅ [{self.name.upper()}] LOW: {{label}} ({{conf:.0%}})")
+            print(f"   [OK] {{label}} ({{conf:.0%}})")
             result["action"] = "monitor"
         return result
 
@@ -936,10 +997,10 @@ class {class_name}:
                 print(f"   [{self.name}] Epoch {epoch+1}/3 → {acc}%")
 
             torch.save(model.state_dict(), str(self.model_path))
-            print(f"   [{self.name}] ✅ Retrain complete — model updated at {self.model_path}")
+            print(f"   [{self.name}] Retrain complete - model updated")
 
         except Exception as e:
-            print(f"   [{self.name}] ⚠️  Retrain failed: {e}")
+            print(f"   [{self.name}] Retrain failed: {e}")
 
     def status(self) -> dict:
         return {{
@@ -1204,58 +1265,84 @@ if __name__ == "__main__":
 
         pipeline = " → ".join(agent_class_map[a] for a in agents)
 
-        return f"""# AutoArchitect Agent Network
+        primary         = agents[0]
+        primary_domain  = primary
+        is_text         = primary_domain in ("text", "security")
+        infer_example   = (
+            'python predict.py --text "paste your text here"\n'
+            'python predict.py --text article.txt'
+            if is_text else
+            'python predict.py --image your_photo.jpg'
+        )
+        retrain_example = (
+            'python retrain.py --data_path ./new_texts/'
+            if is_text else
+            'python retrain.py --data_path ./new_images/'
+        )
+
+        return f"""# How to use your AutoArchitect agent
+
 **Problem:** {problem}
 **Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M')}
-**Topology:** {topo_type}
 **Pipeline:** {pipeline}
 
-## Quick Start
+## Install
+
+```bash
+pip install -r requirements.txt
+```
+
+## Run inference
+
+```bash
+{infer_example}
+```
+
+## Retrain on new data
+
+```bash
+{retrain_example}
+```
+
+## What this agent does
+
+{problem}
+
+| Agent | Accuracy | Classes |
+|-------|----------|---------|
+{agent_rows}
+
+## Autonomous mode (watch a folder forever)
 
 ```bash
 pip install -r requirements.txt
 python run_network.py input/
 ```
 
-Drop files into `input/`. Network processes them automatically. Forever.
+Drop files into `input/` — the network processes every new file automatically.
 
-## Your Agents
+## REST API
 
-| Agent | Accuracy | Classes |
-|-------|----------|---------|
-{agent_rows}
-
-## Usage
-
-```python
-# Autonomous mode — runs forever
-python run_network.py my_folder/
-
-# Single file
-python run_network.py image.jpg
-
-# REST API
+```bash
 python api_server.py
-# POST http://localhost:8000/predict
-# body: {{"input": "path/to/file"}}
-
-# Python
-from network import AgentNetwork
-net    = AgentNetwork()
-result = net.predict("my_file.jpg")
-print(result)
-# {{"label": "pothole", "confidence": 0.87, "action": "alert"}}
+# POST http://localhost:8000/predict   body: {{"input": "path/to/file"}}
+# GET  http://localhost:8000/status
 ```
 
-## How It Gets Smarter
+## Files in this ZIP
 
-- Every prediction stored in `memory_*.jsonl`
-- Every 50 predictions → agents retrain on your data
-- More data = higher accuracy
-- No ceiling. No human. Compounds forever.
+| File | Purpose |
+|------|---------|
+| `predict.py` | Standalone inference — no server needed |
+| `retrain.py` | Fine-tune on your own data |
+| `run_network.py` | Watch a folder, run forever |
+| `api_server.py` | REST API endpoint |
+| `network.py` | Agent network logic |
+| `agents/` | Trained agent classes |
+| `models/` | Model weights (.pth) + metadata |
 
 ---
-*Built with AutoArchitect AI — The ChatGPT for AI Agents*
+*Built with [AutoArchitect AI](https://github.com/dhanraj176/NAs-Builder)*
 """
 
     def _generate_retrain_script(self, problem: str,
@@ -1492,10 +1579,108 @@ if __name__ == "__main__":
     main()
 '''
 
+    def _generate_predict_script(self, problem: str, domain: str,
+                                  agent_mod: str, agent_cls: str,
+                                  classes: list, accuracy: float) -> str:
+        is_text  = domain in ("text", "security")
+        examples = (
+            '    python predict.py --text "your headline here"\n'
+            '    python predict.py --text article.txt'
+            if is_text else
+            '    python predict.py --image photo.jpg\n'
+            '    python predict.py --image /path/to/image.png'
+        )
+        required_arg = "--text" if is_text else "--image"
+        classes_str  = json.dumps(classes)
+
+        return f'''"""
+predict.py — Standalone inference for your AutoArchitect agent
+Problem:  {problem[:60]}
+Accuracy: {accuracy}%
+Classes:  {classes_str}
+
+Usage:
+{examples}
+
+Works on Windows / Mac / Linux with no server required.
+"""
+import argparse
+import importlib.util
+import json
+import sys
+from pathlib import Path
+
+HERE = Path(__file__).parent
+
+
+def _load_agent():
+    sys.path.insert(0, str(HERE))
+    agents_dir = HERE / "agents"
+    if not agents_dir.exists():
+        raise RuntimeError(f"agents/ folder not found at {{HERE}}")
+    for f in sorted(agents_dir.glob("*.py")):
+        if f.stem.startswith("_"):
+            continue
+        spec = importlib.util.spec_from_file_location(f.stem, str(f))
+        mod  = importlib.util.module_from_spec(spec)
+        try:
+            spec.loader.exec_module(mod)
+        except Exception as e:
+            print(f"Warning: could not load {{f.name}}: {{e}}", file=sys.stderr)
+            continue
+        for name in dir(mod):
+            obj = getattr(mod, name)
+            if (isinstance(obj, type)
+                    and name.endswith("Agent")
+                    and name != "DARTSNet"):
+                return obj()
+    raise RuntimeError(
+        "No agent found in agents/\\n"
+        "Make sure you extracted the full ZIP, including the agents/ folder."
+    )
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Run AutoArchitect agent inference",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    grp = parser.add_mutually_exclusive_group(required=True)
+    grp.add_argument("--image", metavar="PATH",
+                     help="Path to an image file (JPEG / PNG)")
+    grp.add_argument("--text",  metavar="TEXT_OR_PATH",
+                     help="Text string or path to a .txt file")
+    args = parser.parse_args()
+
+    if args.image:
+        inp = args.image
+        if not Path(inp).exists():
+            print(f"ERROR: image not found: {{inp}}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        inp = args.text
+
+    print("Loading agent...", file=sys.stderr)
+    try:
+        agent = _load_agent()
+    except RuntimeError as e:
+        print(f"ERROR: {{e}}", file=sys.stderr)
+        sys.exit(1)
+
+    result = agent.predict(inp)
+    agent.act(result)
+    print(json.dumps(result, indent=2))
+
+
+if __name__ == "__main__":
+    main()
+'''
+
     def _requirements(self) -> str:
         return """torch>=2.0.0
 torchvision>=0.15.0
-flask>=3.0.0
 pillow>=10.0.0
 numpy>=1.24.0
+requests>=2.28.0
+flask>=2.3.0
 """

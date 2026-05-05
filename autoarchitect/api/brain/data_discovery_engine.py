@@ -938,6 +938,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
             "real_dataset":      True,
             "expected_accuracy": 87,
             "source":            "huggingface_verified",
+            "w2i":               train_ds.w2i,
         }
 
     def _build_image_loader_from_files(self, image_files: list,
