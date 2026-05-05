@@ -18,6 +18,7 @@ import os
 import json
 import time
 import requests
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from datetime import datetime
 
@@ -204,14 +205,262 @@ class DatasetIntelligence:
             print(f"   Scout sync error: {e}")
             return []
 
+    # ── Multi-source parallel discovery ────────────────────────────────────────
+
+    def discover(self, problem: str, domain: str) -> dict:
+        """
+        Query Papers With Code, OpenML, Roboflow, and HuggingFace in parallel
+        (10 s timeout per source). Rank by: sample count → open license →
+        keyword overlap → SOTA benchmark bonus. Min 500 samples enforced.
+        Cache best in ChromaDB. Fallback to HuggingFace if all 3 new sources fail.
+        """
+        search_term = self._build_search_query(problem, domain)
+        print(f"   [Discover] Querying 4 sources for: '{search_term}'")
+
+        with ThreadPoolExecutor(max_workers=4) as ex:
+            futures = {
+                "pwc":         ex.submit(self._query_papers_with_code, search_term),
+                "openml":      ex.submit(self._query_openml,           search_term),
+                "roboflow":    ex.submit(self._query_roboflow,         search_term),
+                "huggingface": ex.submit(self._query_huggingface_api,  search_term),
+            }
+            source_results = {}
+            for key, fut in futures.items():
+                try:
+                    source_results[key] = fut.result(timeout=12)
+                except Exception as e:
+                    print(f"   [Discover] {key} error: {e}")
+                    source_results[key] = []
+
+        counts = {k: len(v) for k, v in source_results.items()}
+        print(f"   [Discover] PWC:{counts['pwc']} OpenML:{counts['openml']} "
+              f"Roboflow:{counts['roboflow']} HF:{counts['huggingface']}")
+
+        all_candidates = []
+        for items in source_results.values():
+            all_candidates.extend(items)
+
+        # Fallback to HF Crawl4AI only if ALL 4 sources (incl. HF API) returned nothing
+        if not all_candidates:
+            print("   [Discover] All sources empty — HuggingFace Crawl4AI fallback")
+            hf_ids = self.scout_huggingface_sync(problem, domain)
+            return {
+                "best": {"name": hf_ids[0], "source": "huggingface_crawl"} if hf_ids else None,
+                "candidates": [{"name": h, "source": "huggingface_crawl"} for h in hf_ids],
+                "source_counts": counts,
+            }
+
+        ranked = self._rank_candidates(all_candidates, problem)
+        best   = ranked[0] if ranked else None
+
+        if best:
+            sota_acc = float(best.get("sota_accuracy") or 0)
+            self.store(problem, domain, best["name"], sota_acc)
+
+        return {
+            "best":          best,
+            "candidates":    ranked[:10],
+            "source_counts": counts,
+        }
+
+    def _query_papers_with_code(self, search_term: str) -> list:
+        """Papers With Code API — returns name, url, paper_citation, sota_accuracy."""
+        resp = requests.get(
+            "https://paperswithcode.com/api/v1/datasets/",
+            params={"q": search_term.replace("+", " "), "limit": 10},
+            headers={"Accept": "application/json"},
+            timeout=10,
+        )
+        resp.raise_for_status()
+        if "json" not in resp.headers.get("content-type", ""):
+            return []  # API returned HTML — likely needs auth or has changed
+        results = []
+        for item in resp.json().get("results", []):
+            name = item.get("name", "")
+            if not name:
+                continue
+            paper         = item.get("introduced_in_paper") or {}
+            sota_accuracy = None
+            if isinstance(paper, dict):
+                for metric_row in paper.get("results", []):
+                    if isinstance(metric_row, dict):
+                        acc = metric_row.get("metrics", {}).get("Accuracy")
+                        if acc is not None:
+                            sota_accuracy = acc
+                            break
+            results.append({
+                "source":         "papers_with_code",
+                "name":           name,
+                "url":            item.get("url", ""),
+                "paper_citation": paper.get("title", "") if isinstance(paper, dict) else "",
+                "sota_accuracy":  sota_accuracy,
+                "num_instances":  1000,  # academic benchmark datasets always adequate
+                "license":        "unknown",
+            })
+        return results
+
+    def _query_openml(self, search_term: str) -> list:
+        """OpenML — returns name, num_instances, num_features, task_type."""
+        try:
+            import openml
+        except ImportError:
+            return []  # skip gracefully if package not installed
+
+        keywords = [k.strip() for k in search_term.split("+") if k.strip()]
+        try:
+            df = openml.datasets.list_datasets(output_format="dataframe")
+        except Exception:
+            return []
+
+        # Search with combined term first, then individual keywords
+        seen, all_rows = set(), []
+        for kw in [" ".join(keywords)] + keywords:
+            mask = df["name"].str.contains(kw, case=False, na=False)
+            for idx in df[mask].index:
+                if idx not in seen:
+                    seen.add(idx)
+                    all_rows.append(df.loc[idx])
+
+        results = []
+        for row in all_rows[:20]:
+            raw_n = row.get("NumberOfInstances")
+            try:
+                n = int(raw_n) if raw_n is not None else 0
+            except (ValueError, TypeError):
+                continue  # NaN or non-numeric — skip
+            if n < 500:
+                continue
+            did = row.get("did", "")
+            results.append({
+                "source":        "openml",
+                "name":          str(row["name"]),
+                "num_instances": n,
+                "num_features":  int(row.get("NumberOfFeatures", 0) or 0),
+                "task_type":     "classification",  # OpenML list doesn't expose task_type
+                "license":       "unknown",          # per-dataset call needed for license
+                "url":           f"https://www.openml.org/d/{did}",
+                "sota_accuracy": None,
+            })
+        return results
+
+    def _query_roboflow(self, search_term: str) -> list:
+        """Roboflow Universe — returns name, url, num_images, classes."""
+        RF_KEY = "VBDUPRj7iL5fDKVVJkNt"
+        resp = requests.get(
+            "https://universe.roboflow.com/search/datasets",
+            params={"q": search_term.replace("+", " ")},
+            headers={"Authorization": f"Bearer {RF_KEY}"},
+            timeout=10,
+        )
+        resp.raise_for_status()
+        results = []
+        for item in resp.json().get("results", []):
+            num_images = int(item.get("images", 0) or item.get("num_images", 0) or 0)
+            if num_images < 500:
+                continue
+            classes = item.get("classes", [])
+            if isinstance(classes, int):
+                classes = [f"class_{i}" for i in range(classes)]
+            results.append({
+                "source":        "roboflow",
+                "name":          item.get("name", "") or item.get("id", ""),
+                "url":           item.get("url", ""),
+                "num_images":    num_images,
+                "classes":       classes,
+                "num_instances": num_images,
+                "license":       item.get("license", "unknown"),
+                "sota_accuracy": None,
+            })
+        return results
+
+    def _query_huggingface_api(self, search_term: str) -> list:
+        """HuggingFace Hub API — tries combined query, then individual keywords."""
+        keywords = [k.strip() for k in search_term.split("+") if k.strip()]
+        # Try combined first, then each keyword separately (dedup by id)
+        queries  = [" ".join(keywords)] + keywords
+        seen, results = set(), []
+
+        for q in queries:
+            try:
+                resp = requests.get(
+                    "https://huggingface.co/api/datasets",
+                    params={"search": q, "limit": 10, "sort": "downloads"},
+                    timeout=10,
+                )
+                if resp.status_code != 200:
+                    continue
+            except Exception:
+                continue
+            for ds in resp.json():
+                ds_id = ds.get("id", "")
+                if not ds_id or ds_id in seen:
+                    continue
+                seen.add(ds_id)
+                downloads = ds.get("downloads", 0) or 0
+                card      = ds.get("cardData") or {}
+                license_  = card.get("license", "unknown") if isinstance(card, dict) else "unknown"
+                results.append({
+                    "source":        "huggingface",
+                    "name":          ds_id,
+                    "url":           f"https://huggingface.co/datasets/{ds_id}",
+                    "downloads":     downloads,
+                    "num_instances": max(downloads, 500),
+                    "license":       license_,
+                    "sota_accuracy": None,
+                })
+        return results
+
+    def _rank_candidates(self, candidates: list, problem: str) -> list:
+        """
+        Rank by: sample count (log scale, 10 pts max) → open license (3 pts) →
+        keyword overlap with problem (6 pts) → SOTA benchmark bonus (2 pts).
+        Candidates with < 500 samples are excluded.
+        """
+        import math
+        p_words = set(problem.lower().split())
+
+        def score(c) -> float:
+            n = max(int(c.get("num_instances", 0) or 0), 0)
+            if n < 500:
+                return -1.0
+
+            # Sample count (max 5 pts) — capped so keyword relevance dominates
+            sample_score = min(math.log10(max(n, 1)) * 1.0, 5.0)
+
+            lic = str(c.get("license", "")).lower()
+            lic_score = 3.0 if any(
+                k in lic for k in ("mit", "cc", "apache", "public", "open")
+            ) else (1.0 if lic in ("unknown", "") else 0.5)
+
+            name_words = set(
+                str(c.get("name", "")).lower()
+                .replace("/", " ").replace("-", " ").replace("_", " ").split()
+            )
+            # Prefix match handles plurals/truncations (weapon≈weapons, detect≈detection)
+            overlap = sum(
+                1 for pw in p_words
+                if any(len(pw) > 3 and len(nw) > 3 and
+                       (pw.startswith(nw[:4]) or nw.startswith(pw[:4]))
+                       for nw in name_words)
+            )
+            bert_score = min(overlap * 3.0, 9.0)  # 3 pts/match, max 9
+
+            benchmark = 2.0 if c.get("sota_accuracy") else 0.0
+
+            return sample_score + lic_score + bert_score + benchmark
+
+        return sorted(candidates, key=score, reverse=True)
+
+    # ── Crawl4AI Scout (HuggingFace) ───────────────────────────────────────
+
     def _build_search_query(self, problem: str, domain: str) -> str:
-        """Build a focused search query from the problem description."""
+        """Build a focused search query from the problem description (up to 3 keywords)."""
         stop = {"detect", "identify", "classify", "monitor", "analyze",
                 "build", "find", "using", "from", "in", "on", "at", "to",
                 "for", "and", "or", "the", "a", "an", "with", "that"}
         words = [w.strip(".,!?") for w in problem.lower().split()
                  if w not in stop and len(w) > 3][:3]
-        query = "+".join(words[:2]) if words else domain
+        query = "+".join(words) if words else domain
         return query
 
     # ── Validate candidate ─────────────────────────────────────────────────

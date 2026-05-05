@@ -1,0 +1,222 @@
+{
+  "test_run_at": "2026-05-05T13:43:40",
+  "split_policy": "70/15/15 — held-out test set never seen during training",
+  "sources": [
+    "papers_with_code",
+    "openml",
+    "roboflow",
+    "huggingface"
+  ],
+  "min_samples": 500,
+  "ranking": "sample_count → open_license → keyword_overlap → sota_benchmark",
+  "results": [
+    {
+      "problem": "detect weapons in airport security scans",
+      "domain": "image",
+      "elapsed_s": 5.53,
+      "source_counts": {
+        "pwc": 0,
+        "openml": 3,
+        "roboflow": 0,
+        "huggingface": 30
+      },
+      "best": {
+        "source": "huggingface",
+        "name": "taroii/airport-security-detection",
+        "url": "https://huggingface.co/datasets/taroii/airport-security-detection",
+        "downloads": 47,
+        "num_instances": 500,
+        "license": "unknown",
+        "sota_accuracy": null
+      },
+      "top_candidates": [
+        {
+          "source": "huggingface",
+          "name": "taroii/airport-security-detection",
+          "url": "https://huggingface.co/datasets/taroii/airport-security-detection",
+          "downloads": 47,
+          "num_instances": 500,
+          "license": "unknown",
+          "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "JonathAndradec/weapons_detection",
+          "url": "https://huggingface.co/datasets/JonathAndradec/weapons_detection",
+          "downloads": 5,
+          "num_instances": 500,
+          "license": "unknown",
+          "sota_accuracy": null
+        },
+        {
+          "source": "openml",
+          "name": "USA-Airport-Dataset",
+          "num_instances": 3606803,
+          "num_features": 15,
+          "task_type": "classification",
+          "license": "unknown",
+          "url": "https://www.openml.org/d/43479",
+          "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "Jiaxuannn/UN-Security-Council-Multilingual",
+          "url": "https://huggingface.co/datasets/Jiaxuannn/UN-Security-Council-Multilingual",
+          "downloads": 7836,
+          "num_instances": 7836,
+          "license": "unknown",
+          "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "CyberNative/Code_Vulnerability_Security_DPO",
+          "url": "https://huggingface.co/datasets/CyberNative/Code_Vulnerability_Security_DPO",
+          "downloads": 2138,
+          "num_instances": 2138,
+          "license": "unknown",
+          "sota_accuracy": null
+        }
+      ],
+      "split": "70/15/15 train/val/test",
+      "error": null
+    },
+    {
+      "problem": "predict customer churn from transaction data",
+      "domain": "security",
+      "elapsed_s": 4.5,
+      "source_counts": {
+        "pwc": 0,
+        "openml": 19,
+        "roboflow": 0,
+        "huggingface": 29
+      },
+      "best": {
+        "source": "huggingface",
+        "name": "CDividends/customer-churn-prediction-conversations",
+        "url": "https://huggingface.co/datasets/CDividends/customer-churn-prediction-conversations",
+        "downloads": 46,
+        "num_instances": 500,
+        "license": "unknown",
+        "sota_accuracy": null
+      },
+      "top_candidates": [
+        {
+          "source": "huggingface",
+          "name": "CDividends/customer-churn-prediction-conversations",
+          "url": "https://huggingface.co/datasets/CDividends/customer-churn-prediction-conversations",
+          "downloads": 46,
+          "num_instances": 500,
+          "license": "unknown",
+          "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "bitext/Bitext-customer-support-llm-chatbot-training-dataset",
+          "url": "https://huggingface.co/datasets/bitext/Bitext-customer-support-llm-chatbot-training-dataset",
+          "downloads": 5873,
+          "num_instances": 5873,
+          "license": "unknown",
+          "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "jit7duke/customer-support-training-data",
+          "url": "https://huggingface.co/datasets/jit7duke/customer-support-training-data",
+          "downloads": 821,
+          "num_instances": 821,
+          "license": "unknown",
+          "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "Haseeb202/custom_customer_support_dataset_GPT-4_Generated",
+          "url": "https://huggingface.co/datasets/Haseeb202/custom_customer_support_dataset_GPT-4_Generated",
+          "downloads": 439,
+          "num_instances": 500,
+          "license": "unknown",
+          "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "aai510-group1/telco-customer-churn",
+          "url": "https://huggingface.co/datasets/aai510-group1/telco-customer-churn",
+          "downloads": 420,
+          "num_instances": 500,
+          "license": "unknown",
+          "sota_accuracy": null
+        }
+      ],
+      "split": "70/15/15 train/val/test",
+      "error": null
+    },
+    {
+      "problem": "identify plant diseases from leaf images",
+      "domain": "image",
+      "elapsed_s": 3.85,
+      "source_counts": {
+        "pwc": 0,
+        "openml": 7,
+        "roboflow": 0,
+        "huggingface": 30
+      },
+      "best": {
+        "source": "huggingface",
+        "name": "SmellsLikeAISpirit/plant-disease-train",
+        "url": "https://huggingface.co/datasets/SmellsLikeAISpirit/plant-disease-train",
+        "downloads": 48779,
+        "num_instances": 48779,
+        "license": "unknown",
+        "sota_accuracy": null
+      },
+      "top_candidates": [
+        {
+          "source": "huggingface",
+          "name": "SmellsLikeAISpirit/plant-disease-train",
+          "url": "https://huggingface.co/datasets/SmellsLikeAISpirit/plant-disease-train",
+          "downloads": 48779,
+          "num_instances": 48779,
+          "license": "unknown",
+          "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "imageomics/invasive_plants_hawaii",
+          "url": "https://huggingface.co/datasets/imageomics/invasive_plants_hawaii",
+          "downloads": 4152,
+          "num_instances": 4152,
+          "license": "unknown",
+          "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "kunley2/plant_image_degradation",
+          "url": "https://huggingface.co/datasets/kunley2/plant_image_degradation",
+          "downloads": 1953,
+          "num_instances": 1953,
+          "license": "unknown",
+          "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "yt0609/cassava-leaf-disease-classification",
+          "url": "https://huggingface.co/datasets/yt0609/cassava-leaf-disease-classification",
+          "downloads": 742,
+          "num_instances": 742,
+          "license": "unknown",
+          "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "BrandonFors/Plant-Diseases-PlantVillage-Dataset",
+          "url": "https://huggingface.co/datasets/BrandonFors/Plant-Diseases-PlantVillage-Dataset",
+          "downloads": 540,
+          "num_instances": 540,
+          "license": "unknown",
+          "sota_accuracy": null
+        }
+      ],
+      "split": "70/15/15 train/val/test",
+      "error": null
+    }
+  ]
+}

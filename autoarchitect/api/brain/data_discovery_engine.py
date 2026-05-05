@@ -481,19 +481,39 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
             return None
 
         n       = min(subset_size, len(split))
-        n_train = int(n * 0.8)
-        n_test  = n - n_train
+        n_train = int(n * 0.70)
+        n_val   = int(n * 0.15)
+        n_test  = n - n_train - n_val
 
-        # Check for separate test split
-        test_split = ds.get("test", ds.get("validation", None))
-        if test_split is not None:
-            n_test     = min(500, len(test_split))
+        # Preserve held-out test — never seen during training
+        test_split = ds.get("test", None)
+        val_split  = ds.get("validation", None)
+        if test_split is not None and val_split is not None:
+            n_val      = min(int(n * 0.15), len(val_split))
+            n_test     = min(int(n * 0.15), len(test_split))
             train_data = split.select(range(n_train))
+            val_data   = val_split.select(range(n_val))
             test_data  = test_split.select(range(n_test))
-        else:
+        elif test_split is not None:
+            n_test     = min(int(n * 0.15), len(test_split))
+            val_end    = n_train + n_val
             train_data = split.select(range(n_train))
-            test_data  = split.select(range(n_train,
-                                            min(n_train + n_test, len(split))))
+            val_data   = split.select(range(n_train, min(val_end, len(split))))
+            test_data  = test_split.select(range(n_test))
+        elif val_split is not None:
+            n_val      = min(int(n * 0.15), len(val_split))
+            test_end   = n_train + n_val + n_test
+            train_data = split.select(range(n_train))
+            val_data   = val_split.select(range(n_val))
+            test_data  = split.select(range(n_train + n_val,
+                                            min(test_end, len(split))))
+        else:
+            val_end    = n_train + n_val
+            test_end   = val_end + n_test
+            train_data = split.select(range(n_train))
+            val_data   = split.select(range(n_train, min(val_end, len(split))))
+            test_data  = split.select(range(val_end,
+                                            min(test_end, len(split))))
 
         unique_labels = list(set(
             str(split[i][label_col])
@@ -501,11 +521,11 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
 
         if image_col:
             return self._build_image_loader(
-                train_data, test_data, image_col, label_col,
+                train_data, val_data, test_data, image_col, label_col,
                 unique_labels, dataset_id)
         elif text_col:
             return self._build_text_loader(
-                train_data, test_data, text_col, label_col,
+                train_data, val_data, test_data, text_col, label_col,
                 unique_labels, dataset_id)
 
         return None
@@ -713,22 +733,27 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                         self._cache[url] = torch.zeros(3, 224, 224)
                 return self._cache[url], label
 
-        n_train = int(len(img_list) * 0.8)
-        train_ds = OIDataset(img_list[:n_train],       IMAGE_TRANSFORM)
-        test_ds  = OIDataset(img_list[n_train:],       IMAGE_TRANSFORM)
+        n_train  = int(len(img_list) * 0.70)
+        n_val    = int(len(img_list) * 0.15)
+        train_ds = OIDataset(img_list[:n_train],                IMAGE_TRANSFORM)
+        val_ds   = OIDataset(img_list[n_train:n_train + n_val], IMAGE_TRANSFORM)
+        test_ds  = OIDataset(img_list[n_train + n_val:],        IMAGE_TRANSFORM)
 
         print(f"   ✅ OpenImages dataset: {len(train_ds)} train, "
-              f"{len(test_ds)} test — REAL labels from annotation CSV")
+              f"{len(val_ds)} val, {len(test_ds)} test — REAL labels")
 
         return {
             "name":              "openimages_real_labels",
             "train_loader":      DataLoader(train_ds, batch_size=16,
                                             shuffle=True,  num_workers=0),
+            "val_loader":        DataLoader(val_ds,   batch_size=16,
+                                            shuffle=False, num_workers=0),
             "test_loader":       DataLoader(test_ds,  batch_size=16,
                                             shuffle=False, num_workers=0),
             "num_classes":       len(class_names),
             "classes":           class_names,
             "train_size":        len(train_ds),
+            "val_size":          len(val_ds),
             "test_size":         len(test_ds),
             "real_dataset":      True,
             "expected_accuracy": 75,
@@ -737,7 +762,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
 
     # ── Dataset builders ───────────────────────────────────────────────────
 
-    def _build_image_loader(self, train_data, test_data,
+    def _build_image_loader(self, train_data, val_data, test_data,
                              image_col, label_col, unique_labels,
                              name) -> dict:
 
@@ -771,26 +796,30 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                 return self.tfm(image), int(label)
 
         train_ds = HFImgDs(train_data, image_col, label_col, IMAGE_TRANSFORM)
+        val_ds   = HFImgDs(val_data,   image_col, label_col, IMAGE_TRANSFORM)
         test_ds  = HFImgDs(test_data,  image_col, label_col, IMAGE_TRANSFORM)
 
         print(f"   ✅ Real image dataset: {len(train_ds)} train, "
-              f"{len(test_ds)} test")
+              f"{len(val_ds)} val, {len(test_ds)} test")
         return {
             "name":              name,
             "train_loader":      DataLoader(train_ds, batch_size=32,
                                             shuffle=True,  num_workers=0),
+            "val_loader":        DataLoader(val_ds,   batch_size=32,
+                                            shuffle=False, num_workers=0),
             "test_loader":       DataLoader(test_ds,  batch_size=32,
                                             shuffle=False, num_workers=0),
             "num_classes":       max(len(unique_labels), 2),
             "classes":           unique_labels,
             "train_size":        len(train_ds),
+            "val_size":          len(val_ds),
             "test_size":         len(test_ds),
             "real_dataset":      True,
             "expected_accuracy": 82,
             "source":            "huggingface_verified",
         }
 
-    def _build_text_loader(self, train_data, test_data,
+    def _build_text_loader(self, train_data, val_data, test_data,
                             text_col, label_col, unique_labels,
                             name) -> dict:
         from collections import Counter
@@ -833,22 +862,27 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
             return texts, labels
 
         tr_texts, tr_labels = _extract(train_data, text_col, label_col)
+        va_texts, va_labels = _extract(val_data,   text_col, label_col)
         te_texts, te_labels = _extract(test_data,  text_col, label_col)
 
         train_ds = TextDs(tr_texts, tr_labels)
+        val_ds   = TextDs(va_texts, va_labels, w2i=train_ds.w2i)
         test_ds  = TextDs(te_texts, te_labels, w2i=train_ds.w2i)
 
         print(f"   ✅ Real text dataset: {len(train_ds)} train, "
-              f"{len(test_ds)} test")
+              f"{len(val_ds)} val, {len(test_ds)} test")
         return {
             "name":              name,
             "train_loader":      DataLoader(train_ds, batch_size=64,
                                             shuffle=True,  num_workers=0),
+            "val_loader":        DataLoader(val_ds,   batch_size=64,
+                                            shuffle=False, num_workers=0),
             "test_loader":       DataLoader(test_ds,  batch_size=64,
                                             shuffle=False, num_workers=0),
             "num_classes":       len(unique_labels),
             "classes":           unique_labels,
             "train_size":        len(train_ds),
+            "val_size":          len(val_ds),
             "test_size":         len(test_ds),
             "real_dataset":      True,
             "expected_accuracy": 87,
@@ -880,21 +914,26 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                 except Exception:
                     return torch.zeros(3, 224, 224), self.labels[idx]
 
-        n_train  = int(len(files) * 0.8)
-        train_ds = FileDs(files[:n_train],  labels[:n_train],  IMAGE_TRANSFORM)
-        test_ds  = FileDs(files[n_train:],  labels[n_train:],  IMAGE_TRANSFORM)
+        n_train  = int(len(files) * 0.70)
+        n_val    = int(len(files) * 0.15)
+        train_ds = FileDs(files[:n_train],               labels[:n_train],               IMAGE_TRANSFORM)
+        val_ds   = FileDs(files[n_train:n_train + n_val], labels[n_train:n_train + n_val], IMAGE_TRANSFORM)
+        test_ds  = FileDs(files[n_train + n_val:],       labels[n_train + n_val:],       IMAGE_TRANSFORM)
 
         print(f"   ✅ Kaggle image dataset: {len(train_ds)} train, "
-              f"{len(test_ds)} test")
+              f"{len(val_ds)} val, {len(test_ds)} test")
         return {
             "name":              name,
             "train_loader":      DataLoader(train_ds, batch_size=32,
                                             shuffle=True,  num_workers=0),
+            "val_loader":        DataLoader(val_ds,   batch_size=32,
+                                            shuffle=False, num_workers=0),
             "test_loader":       DataLoader(test_ds,  batch_size=32,
                                             shuffle=False, num_workers=0),
             "num_classes":       len(unique),
             "classes":           unique,
             "train_size":        len(train_ds),
+            "val_size":          len(val_ds),
             "test_size":         len(test_ds),
             "real_dataset":      True,
             "expected_accuracy": 80,
@@ -929,21 +968,26 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                 def __getitem__(self, i):
                     return self.X[i], self.y[i]
 
-            n_train = int(len(X) * 0.8)
-            train_ds = TabDs(X[:n_train], y[:n_train])
-            test_ds  = TabDs(X[n_train:], y[n_train:])
+            n_train  = int(len(X) * 0.70)
+            n_val    = int(len(X) * 0.15)
+            train_ds = TabDs(X[:n_train],               y[:n_train])
+            val_ds   = TabDs(X[n_train:n_train + n_val], y[n_train:n_train + n_val])
+            test_ds  = TabDs(X[n_train + n_val:],       y[n_train + n_val:])
 
             print(f"   ✅ Kaggle tabular: {len(train_ds)} train, "
-                  f"{len(test_ds)} test")
+                  f"{len(val_ds)} val, {len(test_ds)} test")
             return {
                 "name":              name,
                 "train_loader":      DataLoader(train_ds, batch_size=64,
                                                 shuffle=True,  num_workers=0),
+                "val_loader":        DataLoader(val_ds,   batch_size=64,
+                                                shuffle=False, num_workers=0),
                 "test_loader":       DataLoader(test_ds,  batch_size=64,
                                                 shuffle=False, num_workers=0),
                 "num_classes":       len(unique),
                 "classes":           [str(u) for u in unique],
                 "train_size":        len(train_ds),
+                "val_size":          len(val_ds),
                 "test_size":         len(test_ds),
                 "real_dataset":      True,
                 "expected_accuracy": 80,
@@ -996,7 +1040,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
         path = self.cache_dir / f"{key}.json"
         try:
             save = {k: v for k, v in data.items()
-                    if k not in ("train_loader", "test_loader")}
+                    if k not in ("train_loader", "val_loader", "test_loader")}
             save["cached_at"] = datetime.now().isoformat()
             with open(path, "w") as f:
                 json.dump(save, f, indent=2)
