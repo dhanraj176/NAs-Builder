@@ -1,0 +1,4513 @@
+{
+  "problem": "classify fake news articles",
+  "domain": "text",
+  "classes": [
+    "real",
+    "fake"
+  ],
+  "saved_at": "2026-05-05T23:56:22.480977",
+  "note": "Saved BEFORE training. These samples are never seen during training.",
+  "total": 750,
+  "samples": [
+    {
+      "idx": 1,
+      "snippet": "erbil while iraqi forces are advancing in mosul to free the city some iraqi officers were informed about new plan of ter",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 2,
+      "snippet": "WASHINGTON (Reuters) - U.S. Senate Minority Leader Chuck Schumer and 11 other Democrats said on Tuesday it was “critical",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 3,
+      "snippet": "When The Newsroom was canceled almost at the height of its popularity, a hole was left in the world that none have yet f",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 4,
+      "snippet": "Arnold Schwarzenegger, who replaced Donald Trump as host of  Celebrity Apprentice,  is calling it quits:In remarks Frida",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 5,
+      "snippet": "Tune in to the Alternate Current Radio Network (ACR) for another LIVE broadcast of  The Boiler Room tonight 6:00 PM PST ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 6,
+      "snippet": "NEW YORK/WASHINGTON (Reuters) - Republican presidential candidate Donald Trump plunged into a deep crisis on Friday afte",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 7,
+      "snippet": "WASHINGTON (Reuters) - Republican presidential candidate Ben Carson said on Wednesday that he does not see a “political ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 8,
+      "snippet": "One of the positive effects of the racial tension in Ferguson, Missouri that began with the killing of Michael Brown was",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 9,
+      "snippet": "BERLIN (Reuters) - German parliamentary legal experts, reacting to calls by some Polish politicians, have ruled that War",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 10,
+      "snippet": "WASHINGTON (Reuters) - Two Democratic senators said on Wednesday they may hold up the confirmation of President Donald T",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 11,
+      "snippet": "To all the college students who think it s okay to demand that hard-working Americans pay for your college debt, this Ma",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 12,
+      "snippet": "AMMAN (Reuters) - Prime Minister Theresa May on Thursday underlined Britain s support for the nuclear deal concluded wit",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 13,
+      "snippet": "TOKYO (Reuters) - Japanese Prime Minister Shinzo Abe and U.S. President Donald Trump discussed North Korea’s missile lau",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 14,
+      "snippet": "BARCELONA (Reuters) - In a glass building overlooking Barcelona s port, empty desks and computers wait for new workers o",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 15,
+      "snippet": "WASHINGTON (Reuters) - President Donald Trump has signed off on sending 4,000 more troops to Afghanistan, Fox News repor",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 16,
+      "snippet": "WASHINGTON (Reuters) - The U.S. Congress may be able to wrap up tax negotiations before Dec. 22 and send a final bill to",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 17,
+      "snippet": "SEOUL (Reuters) - North Korean Foreign Minister Ri Yong Ho said on Friday he believes the North could consider a hydroge",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 18,
+      "snippet": "BERLIN (Reuters) - Catalonia s moves to seek independence from Spain could unleash a new euro crisis, Manfred Weber, hea",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 19,
+      "snippet": "HARARE (Reuters) - In the annals of missed stories, it ranks up there. When Wednesday s edition of The Herald, Zimbabwe ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 20,
+      "snippet": "This is proof positive that we have a delusional leader who s got an ego the size of Texas! ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 21,
+      "snippet": "Thank God for brave people like this farmer, who was willing to fight back against a radical government agency that has ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 22,
+      "snippet": "ERBIL, Iraq (Reuters) - Aid officials in Iraq said they were  gravely concerned  about the fate of about 1,400 foreign w",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 23,
+      "snippet": "ISTANBUL (Reuters) - Dozens of people were stopped from flying to the United States from Istanbul Ataturk Airport on Sun",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 24,
+      "snippet": "Hillary Clinton isn t just looking ahead to the Democratic National Convention, which kicks off this week, but she s als",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 25,
+      "snippet": "STRASBOURG (Reuters) - European Commission President Jean-Claude Juncker made key proposals in his annual State of the E",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 26,
+      "snippet": "Dressing up as an Arab Sheik for Halloween was not what I had planned but now I REALLY think I ll buy this costume and w",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 27,
+      "snippet": "BERLIN (Reuters) - German Chancellor Angela Merkel appointed Jan Hecker, her refugee policy coordinator, as her new fore",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 28,
+      "snippet": "It gets more outrageous by the day for the Trump campaign when it comes to racism and racists. It appears Trump has asse",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 29,
+      "snippet": "GAZA (Reuters) - Israeli troops shot dead four Palestinians and wounded 150 others with live fire on Friday, medical off",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 30,
+      "snippet": "MANILA (Reuters) - The Philippines  environment minister said he was hopeful that a ban on open-pit mining would be lift",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 31,
+      "snippet": "WASHINGTON (Reuters) - President Donald Trump on Friday fired his chief strategist Stephen Bannon, a right-wing politica",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 32,
+      "snippet": "Bill Clinton was in Philly today and got swamped by protesters holding signs about Black Lives Matter or Benghazi. It wa",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 33,
+      "snippet": "BERLIN (Reuters) - German Chancellor Angela Merkel said she has no regrets about her 2015 decision to open the country s",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 34,
+      "snippet": "reprinted from palestinian media watch   fatah has posted several childrens drawings on facebook the drawings clearly sh",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 35,
+      "snippet": "RAQQA, Syria (Reuters) - Air raids by U.S. coalition warplanes have intensified in recent days as Kurdish and Arab milit",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 36,
+      "snippet": "During the Democrats  first debate last month, Bernie Sanders said  we should look to countries like Denmark, like Swede",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 37,
+      "snippet": "WASHINGTON (Reuters) - U.S. House Republicans proposed on Tuesday to delay or suspend several taxes under former Preside",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 38,
+      "snippet": "Donald Trump has been bragging nonstop about the Carrier deal that supposedly kept more than 1,000 jobs in the U.S., but",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 39,
+      "snippet": "WASHINGTON (Reuters) - President Donald Trump had a brief message for former FBI Director James Comey on Tuesday ahead o",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 40,
+      "snippet": "Republicans are once again putting their party before their country. Just before the highly anticipated testimony from f",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 41,
+      "snippet": "MIAMI (Reuters) - Miami area police arrested more than 50 suspected looters during Hurricane Irma, including 26 people w",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 42,
+      "snippet": "Just another deranged leftist. From the registered Democrat Muslim terrorist in Orlando to the casual 19 year old Califo",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 43,
+      "snippet": "The presidential debate schedule is already out, and, true to form, Donald Trump is already throwing a livid fit about i",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 44,
+      "snippet": "WASHINGTON (Reuters) - Donald Trump’s administration is committed to eliminating Barack Obama’s Climate Action Plan and ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 45,
+      "snippet": "WASHINGTON (Reuters) - U.S. Representative Steve King on Monday stood by controversial remarks on immigration and birth ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 46,
+      "snippet": "WASHINGTON (Reuters) - President Donald Trump signed the annual defense policy bill on Tuesday and urged Congress to ful",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 47,
+      "snippet": "WASHINGTON (Reuters) - U.S. President Donald Trump is likely to make a stop in China in November during his first offici",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 48,
+      "snippet": "DOHA (Reuters) - Qatar s defense minister has signed a letter of intent to purchase 24 Typhoon jets from British defense",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 49,
+      "snippet": "LIMA (Reuters) - The government of Peru s President Pedro Pablo Kuczynski told opposition lawmakers on Wednesday that th",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 50,
+      "snippet": "Bill Maher mocked the idea that Ted Cruz could possibly have affairs with multiple women and questioned whether five wom",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 51,
+      "snippet": "KIRKUK, Iraq (Reuters) - Visitors to Kirkuk in northern Iraq are greeted by an imposing statue of a Kurdish Peshmerga fi",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 52,
+      "snippet": "PARIS (Reuters) - European Union countries should take advantage of a slowdown in the flow of migrants from Africa and t",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 53,
+      "snippet": "BEIJING (Reuters) - China s drug control agency disputed on Friday U.S. President Donald Trump s claim that most of the ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 54,
+      "snippet": "Thanks to the CATO Institute we know for sure that government workers are paid waaay too much! An average of $84,153 for",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 55,
+      "snippet": "WASHINGTON (Reuters) - U.S. President Donald Trump’s fellow Republicans in Congress on Tuesday assailed his proposed cut",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 56,
+      "snippet": "BERLIN (Reuters) - Germany s Social Democrats (SPD) voted on Thursday to hold talks with Chancellor Angela Merkel s cons",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 57,
+      "snippet": "In the week since Donald Trump s complete collapse in his head to head debate with Hillary Clinton, nearly every nationa",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 58,
+      "snippet": "MARACAIBO/CARACAS, Venezuela (Reuters) - The newly elected opposition governor of Venezuela s western Zulia state was di",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 59,
+      "snippet": "email  with protests erupting across the country this week and emotions running high american companies are trying to ma",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 60,
+      "snippet": "What s gotten into John Boehner? He gave a strange interview to left-leaning Politico and unloaded on former colleagues.",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 61,
+      "snippet": "Ted Cruz is having a rough week, and now he just received a failing grade from a history professor.Ever since Supreme Co",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 62,
+      "snippet": "a reply to windword shall i post videos of hillary laughing at death and mayhem they are both terrible people period end",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 63,
+      "snippet": "GENEVA (Reuters) - The top U.N. human rights official on Monday denounced Myanmar s  brutal security operation  against ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 64,
+      "snippet": "DHAKA (Reuters) - Bangladeshi counter-terrorism police said on Monday they had arrested an Islamist militant wanted for ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 65,
+      "snippet": "NIAMEY (Reuters) - Mali and Niger, two of the West African nations worst affected by jihadist violence, appealed on Wedn",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 66,
+      "snippet": "WASHINGTON (Reuters) - Donald Trump on Thursday fired back at a critic in his own party who had denounced the president’",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 67,
+      "snippet": "If you are a young white male in America, apparently you are free to stick your genitalia into whomever you please witho",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 68,
+      "snippet": "BUSHENYI, Uganda (Reuters) - When Ugandan President Yoweri Museveni returned to his home region to throw an Independence",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 69,
+      "snippet": "The city s first transgender police officer was kept out of an event at the San Diego LGBT Community Center because she ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 70,
+      "snippet": "GENEVA (Reuters) - The United Nations must take over responsibility for investigating rights violations in Yemen s civil",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 71,
+      "snippet": "Given Donald Trump s disastrous presidential campaign and his even worse first month in the White House, several experts",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 72,
+      "snippet": "JAKARTA (Reuters) - Indonesia s speaker of parliament, who was arrested last week over his alleged role in a $170 millio",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 73,
+      "snippet": "WASHINGTON (Reuters) - If the U.S. Supreme Court endorses a key immigration initiative of President Barack Obama protect",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 74,
+      "snippet": "WASHINGTON (Reuters) - The U.S. Senate on Thursday gave final legislative approval to a $1.2 trillion spending bill to k",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 75,
+      "snippet": "by clint siegner it just doesnt matter much whether hillary clinton or donald trump wins the election at least in terms ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 76,
+      "snippet": "shapiro eviscerates raucous protesters at university of wisconsin by hank berrien november    daily wire editorinchief b",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 77,
+      "snippet": "BERLIN (Reuters) - Chancellor Angela Merkel piled pressure on Monday on the Social Democrats (SPD) to rejoin a  grand co",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 78,
+      "snippet": "podcast play in new window  download  embed  today james talks to nomi prins  author of books like all the presidents ba",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 79,
+      "snippet": "The overwhelming response to her temper tantrum was so humiliating that Sarah Palin removed the outrageous tweet.Just af",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 80,
+      "snippet": "WASHINGTON (Reuters) - The U.S. Department of Justice’s lawsuit aimed at stopping AT&T Inc from buying movie and TV show",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 81,
+      "snippet": "WASHINGTON (Reuters) - The U.S. Supreme Court on Monday left in place a lower court’s ruling that barred private citizen",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 82,
+      "snippet": "The wicked witch of the White House makes America sick again.As we all know, Donald Trump botched his first visit to Tex",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 83,
+      "snippet": "Donald Trump is causing mass chaos within the Republican Party as infighting over endorsements reaches a fever pitch.On ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 84,
+      "snippet": "Now that Donald Trump has shot himself in the foot by picking a fight with the entire Republican Party (after leaked rev",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 85,
+      "snippet": "WASHINGTON (Reuters) - U.S. Senator John McCain, who was diagnosed with brain cancer, is returning home to Arizona for m",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 86,
+      "snippet": "The Ferguson #BlackLivesMatter protesters are spilling the beans on the so-called  grassroots  movement.Earlier this wee",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 87,
+      "snippet": "DUBAI (Reuters) - An Indian priest kidnapped by gunmen in Yemen last year has been freed, Oman s state news agency ONA s",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 88,
+      "snippet": "21st Century Wire says After a long drawn out round of bilateral peace talks in Geneva Switzerland this week, Russia and",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 89,
+      "snippet": "KUALA LUMPUR (Reuters) - Police in Malaysia have arrested seven youths in connection with a fire at an Islamic boarding ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 90,
+      "snippet": "NEW YORK (Reuters) - Republican Mitt Romney made an impassioned statement in support of President-elect Donald Trump on ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 91,
+      "snippet": "Donald Trump hasn t even secured the nomination of his party yet and already his anti-Hillary Clinton misogyny is on ful",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 92,
+      "snippet": "Sarah Huckabee Sanders has taken control of the media and is no longer allowing them to push a false narrative when it c",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 93,
+      "snippet": "PARIS (Reuters) - French President Emmanuel Macron on Tuesday reaffirmed that he wanted the euro zone to have its own bu",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 94,
+      "snippet": "It really says something when Republican leaders tell Trump not to tweet during an important event.When Former FBI Direc",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 95,
+      "snippet": "NEW YORK (Thomson Reuters Foundation) - As a Supreme Court decision on abortion rights is highly anticipated in the Unit",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 96,
+      "snippet": "In a desperate attempt to make Steve Bannon seem less like a crazed, apocalypse-obsessed maniac, Fox News played a littl",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 97,
+      "snippet": "2016 Ted Cruz is a moralizing, holier than thou insufferable prick on a mission from Jesus to save America from liberals",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 98,
+      "snippet": "TAMPA, Fla. (Reuters) - Democratic presidential candidate Hillary Clinton criticized Republican rival Donald Trump on Tu",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 99,
+      "snippet": "Donald Trump claimed on Wednesday morning that he had  witnessed the horror and devastation  caused by Hurricane Harvey ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 100,
+      "snippet": "(Reuters) - U.S. TV networks, buoyed by strong demand from advertisers, are adding hours of coverage for this week’s Rep",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 101,
+      "snippet": "WASHINGTON (Reuters) - President Donald Trump said on Thursday he wants to ensure the U.S. nuclear arsenal is at the “to",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 102,
+      "snippet": "A Carrier union leader called Donald Trump out for his lies about the deal that supposedly saved American jobs from movi",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 103,
+      "snippet": "WASHINGTON/MIAMI BEACH, Fla. (Reuters) - Republican Donald Trump called President Barack Obama and Democratic rival Hill",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 104,
+      "snippet": "President Obama s new budget will eliminate all government funding for abstinence-only sex education.For too long the fe",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 105,
+      "snippet": "One of Trump s Latino surrogates, Marco Gutierrez, warned us of an oddly specific horror should we not elect Trump in No",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 106,
+      "snippet": "Obama released a statement on his position regarding the Islamist government  of Turkey   is anyone surprised that he ch",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 107,
+      "snippet": "Kellyanne Conway tried to baffle George Stephanopoulos with bullshit on Monday morning and got her ass handed to her wit",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 108,
+      "snippet": "ROME (Reuters) - Italy, France and Germany said on Thursday they regretted U.S. President Donald Trump’s decision to wit",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 109,
+      "snippet": "Bill O Reilly is a real piece of work. On his show, he often passes judgment on those he believes aren t upholding what ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 110,
+      "snippet": "WASHINGTON (Reuters) - The United States plans to reduce military support for groups fighting Islamic State in Iraq and ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 111,
+      "snippet": "wars and rumors of wars russia unveils satan  missile nuclear weapon could wipe out france or texas report says publishe",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 112,
+      "snippet": "by sean colarossi on mon oct st  at  pm cnn has obtained audio of north carolina gop senator richard burr joking about g",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 113,
+      "snippet": "The shocking truth about how close we are to becoming a one-party fascist stateThis is the most brilliant and scary anal",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 114,
+      "snippet": "The author of  Clinton Cash  responds to Hillary Clinton s brazen dishonesty. Who does she think she s fooling   is she ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 115,
+      "snippet": "Former Acting Attorney General Sally Yates was fired by Donald Trump when she refused to defend his travel ban, which we",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 116,
+      "snippet": "How does the saying go? Fox News: Not racist, but number one with racists. Actually, no, they are pretty damn racist. An",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 117,
+      "snippet": "Just when you thought Republicans couldn t be bigger pricks toward Rep. John Lewis, one governor is demanding that Lewis",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 118,
+      "snippet": "RIYADH (Reuters) - A campaign of mass arrests of Saudi Arabian royals, ministers and businessmen expanded on Monday afte",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 119,
+      "snippet": "A three-year-old South Carolina girl died on Saturday, after a days-long battle for her life. According to WACH, the tod",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 120,
+      "snippet": "DUBLIN (Reuters) - Irish Prime Minister Leo Varadkar said on Friday that the British government must produce credible, c",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 121,
+      "snippet": "According to the New Yorker, Bill Clinton received a $500,000 speaking fee for a speech in Moscow paid for by a Kremlin-",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 122,
+      "snippet": "No matter which candidate you support, this moment on the campaign trail is pretty awesome. Trump has said he wants to s",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 123,
+      "snippet": "JERUSALEM (Reuters) - Israel s intelligence minister said U.S. President Donald Trump s speech against the 2015 internat",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 124,
+      "snippet": "HARARE (Reuters) - Zimbabwe s military said it was engaging President Robert Mugabe in talks on the way forward for the ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 125,
+      "snippet": "LANGUAGE ALERT: Welfare Queen: Get out of here, b*tch. F*ck the government. F*ck Trump. I m gonna rape that sh*t sitting",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 126,
+      "snippet": "NAIROBI (Reuters) - Burundi s cabinet backed a constitutional change that would allow its president to stay in office un",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 127,
+      "snippet": "WASHINGTON (Reuters) - Democratic National Committee Vice Chair Tulsi Gabbard resigned from her post on Sunday to endors",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 128,
+      "snippet": "Well, we ve known this was coming even with opposition to close GITMO Obama has wanted to close GITMO since elected and ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 129,
+      "snippet": " Trump and Palin etc, represent the contempt that whitey shares for this intangible, uncontrollable new black mind that ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 130,
+      "snippet": "WASHINGTON/NEW YORK (Reuters) - U.S. President Donald Trump called the U.S. air traffic control system out of date on Th",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 131,
+      "snippet": "WASHINGTON (Reuters) - U.S. officials are aggressively investigating what caused symptoms ranging from hearing loss to m",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 132,
+      "snippet": "After the photo was tweeted out, the left responded with this:  Does the left want Ivanka to hide her kids for the next ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 133,
+      "snippet": "she is a total idiot how did she ever get that job oh i forgot who she was working for",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 134,
+      "snippet": "Republican frontrunner Donald Trump is in the news again for violence during one of his rallies in St. Louis and his Chi",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 135,
+      "snippet": "Scott and Clint Eastwood are a great father/son duo in their latest interview with Esquire magazine. The banter between ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 136,
+      "snippet": "LIMA (Reuters) - President Barack Obama on Sunday called U.S. House Democratic chief Nancy Pelosi a remarkable leader, g",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 137,
+      "snippet": "Kellyanne Conway:   I think the biggest fake news was that Donald Trump couldn t win.  pic.twitter.com/T5i68K0gW4  Washi",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 138,
+      "snippet": "WASHINGTON (Reuters) - North Korea s Kim Jong Un  will be tested like never before,  U.S. President Donald Trump said on",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 139,
+      "snippet": "BAGHDAD (Reuters) - Iraq will deploy troops to regain full control of the Kirkuk oil area and fields surrounding it to r",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 140,
+      "snippet": "SEOUL/MOSCOW (Reuters) - North Korea s latest missile test puts Washington within range, but Pyongyang still needs to pr",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 141,
+      "snippet": "STRASBOURG (Reuters) - The European Commission is not negotiating with London in a hostile way and assumes that the EU a",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 142,
+      "snippet": "NEW YORK (Reuters) - U.S. Democratic presidential candidate Bernie Sanders accused front-runner Hillary Clinton of appar",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 143,
+      "snippet": "21st Century Wire says The FBI released 27  never before seen  images chronicling the destructive Pentagon attack on 9/1",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 144,
+      "snippet": "Many people have looked to Donald Trump s son-in-law, Jared Kushner, to be a moderating influence on the erratic behavio",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 145,
+      "snippet": "LONDON (Reuters) - Britain s government has not yet decided what it wants from a final Brexit deal because it is still w",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 146,
+      "snippet": "Imam Tawhidi is an outspoken voice in the Muslim community, who is unafraid to openly condemn Islamic extremists. After ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 147,
+      "snippet": "North Korea just blinked With the strong statements from Defense Secretary Jim  Mad Dog  Mattis and after President Trum",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 148,
+      "snippet": "WASHINGTON (Reuters) - Republican Senator Rand Paul said on Tuesday he would vote to open debate on a healthcare overhau",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 149,
+      "snippet": "PRAGUE (Reuters) - Czech President Milos Zeman declared on Wednesday he was “very happy” with Donald Trump’s election vi",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 150,
+      "snippet": "The incredibly talented voice actor, Billy West, who is probably best known for his work on the hit television show Futu",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 151,
+      "snippet": "LONDON (Reuters) - Reports that Donald Trump is about to quit the Paris accord drew calls on Wednesday for other countri",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 152,
+      "snippet": "MARAWI CITY, Philippines (Reuters) - Philippine troops were locked in an intense urban firefight on Sunday with the last",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 153,
+      "snippet": "WASHINGTON (Reuters) - President Barack Obama said on Monday he was “cautiously optimistic” that the U.S. Congress would",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 154,
+      "snippet": "PHNOM PENH (Reuters) - Cambodia s government has raised the possibility that the main opposition party could be ruled ou",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 155,
+      "snippet": "donnerstag  oktober  studie beweist indianer kennen doch schmerz new havenconnecticut archiv  ein indianer kennt keinen ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 156,
+      "snippet": "ANKARA (Reuters) - The mayor of Ankara said on Monday he will step down this week, the fifth mayor from the ruling party",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 157,
+      "snippet": "MARAWI CITY, Philippines (Reuters) - Marawi resident Baimona Amintao hopes her turn comes quickly once authorities begin",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 158,
+      "snippet": "LONDON (Reuters) - Iran will strengthen its missile capabilities and not seek any country s permission, President Hassan",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 159,
+      "snippet": "PARIS/SEOUL (Reuters) - France’s Winter Olympics team will not travel to the 2018 Games in South Korea if its security c",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 160,
+      "snippet": "WEST PALM BEACH, Fla. (Reuters) - U.S. President Donald Trump will meet with congressional leaders next week to discuss ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 161,
+      "snippet": "DUBAI (Reuters) - U.S President Donald Trump s decision to recognize Jerusalem as Israel s capital could provide a lifel",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 162,
+      "snippet": "LIMA (Reuters) - Villagers in the Peruvian Amazon have shut down at least 50 oil wells operated by Frontera Energy Corp ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 163,
+      "snippet": "CHICAGO (Reuters) - An Illinois man accused of abducting a Chinese visiting scholar  at the University of Illinois faces",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 164,
+      "snippet": "COX S BAZAR, Bangladesh (Reuters) - Wild elephants trampled to death two Rohingya Muslims in Bangladesh on Monday when t",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 165,
+      "snippet": "WASHINGTON (Reuters) - While he has swallowed a big budget cut and had the White House veto his chosen deputy, Secretary",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 166,
+      "snippet": "MOSCOW (Reuters) - The Kremlin said on Monday that it was in touch with the French government over a possible visit to R",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 167,
+      "snippet": "The following statements were posted to the verified Twitter accounts of U.S. President Donald Trump, @realDonaldTrump a",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 168,
+      "snippet": "Support for an investigation into the shooting death of Lavoy Finicum has been growing. Something about his shooting dea",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 169,
+      "snippet": "CHICAGO (Reuters) - Illinois Governor Bruce Rauner on Tuesday blocked hundreds of millions of new state dollars from goi",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 170,
+      "snippet": "fbi releases files on bill clintons cash for pardons scandal november   daniel greenfield  the fbi has an early present ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 171,
+      "snippet": "NEW YORK (Reuters) - Some rabbis and Jewish students are planning protests against Donald Trump’s speech on Monday at a ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 172,
+      "snippet": "BERLIN (Reuters) - Members of Germany s Social Democrats (SPD) and Chancellor Angela Merkel s conservatives argued on We",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 173,
+      "snippet": "NEW YORK (Reuters) - U.S. Senator Bernie Sanders is set to throw his support behind fellow Democrat Hillary Clinton’s bi",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 174,
+      "snippet": "MANILA (Reuters) - The Philippine Congress approved a bill that removes a proposed 900 million pesos ($17.87 million) fo",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 175,
+      "snippet": "President Trump has started his presidency out in the worst possible way: His inauguration turnout was dismal; his most ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 176,
+      "snippet": "Gregg Jarrett says Mueller must resign after his latest new hire for the panel of lawyers. The entire panel is biased. I",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 177,
+      "snippet": "WASHINGTON (Reuters) - It will be difficult for future U.S. administrations to undo President Barack Obama’s policy of e",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 178,
+      "snippet": "PORT-AU-PRINCE (Reuters) - U.S. Homeland Security Secretary John Kelly on Wednesday said he was open to discussing letti",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 179,
+      "snippet": "North Korea just made it abundantly clear that they have no intention of backing down from Trump, and that Trump, for al",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 180,
+      "snippet": "keywords alkaline water  water can either be acidic or alkaline depending on its ph level ph stands for potential hydrog",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 181,
+      "snippet": "NICE, France (Reuters) - Russian businessman and lawmaker Suleiman Kerimov was arrested by French police at Nice airport",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 182,
+      "snippet": " You re At Forefront Of This Cause And As Young People, Our Time Is Now    PROSECUTER MALTBY",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 183,
+      "snippet": "posted on october   by paul joseph watson authorities claim its for security reasons towns across sweden have banned chr",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 184,
+      "snippet": "Please go to the BEST MULCH Facebook page and give them a thumbs up!Thank you all for the overwhelming support! We have ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 185,
+      "snippet": "SANTIAGO (Reuters) - Conservative Sebastian Pinera took an early lead of more than seven percentage points in Chile s pr",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 186,
+      "snippet": "SANDY SPRINGS, Ga. (Reuters) - Georgia Republican Karen Handel won the most expensive congressional race in history on T",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 187,
+      "snippet": "CRANFORD, New Jersey (Reuters) - Appearing at a town hall in upscale Cranford, New Jersey this week, five-term Republica",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 188,
+      "snippet": "DES MOINES, Iowa/WASHINGTON (Reuters) - U.S. Democratic presidential candidates gave a cool reception on Sunday to forme",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 189,
+      "snippet": "NEW YORK (Reuters) - Would-be presidential assassin John Hinckley Jr. was released from a psychiatric hospital on Saturd",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 190,
+      "snippet": "Nancy Sinatra sent out an absolutely vile tweet today, that suggested 5 million NRA members should be killed by a firing",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 191,
+      "snippet": "PHNOM PENH (Reuters) - Cambodia s detained opposition leader, who is accused of treason by the government of strongman P",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 192,
+      "snippet": "Real journalism ended a long time ago, but this is a new low even for leftist Barbara Walters. Just embarrassing He was ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 193,
+      "snippet": "(Reuters) - U.S. Republican presidential candidate Donald Trump on Wednesday called for a “21st century” version of the ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 194,
+      "snippet": "ANKARA (Reuters) - Turkish President Tayyip Erdogan and U.S. President Donald Trump agreed in an overnight phone call on",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 195,
+      "snippet": "Michael Cohen is a man who knows Donald Trump well. He has been Trump s personal lawyer for many years, and he spent the",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 196,
+      "snippet": "Even though amateur president Donald Trump will likely reach the 100-day mark of his alleged presidency with no notable ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 197,
+      "snippet": "HUGE NEWS: The head coach of the University of Michigan s football team just tweeted that the football team WILL watch  ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 198,
+      "snippet": "When we lost boxing legend Mohammed Ali this week, we lost more than an athlete. We lost a humanitarian, a man who was a",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 199,
+      "snippet": "This summer s box office numbers were the worst they ve been in over 25 years, and now this   KNOCK, KNOCK! Who s there?",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 200,
+      "snippet": "Here s a new low for America: During the unfolding tragedy in England, NBC announced that it would not be displaying the",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 201,
+      "snippet": "JERUSALEM (Reuters) - Israel s mayor of Jerusalem Nir Barkat said on Tuesday that moving the U.S. Embassy in Israel from",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 202,
+      "snippet": "This video exposes the underbelly of the illegal alien community and the hate they have for anyone who would enforce the",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 203,
+      "snippet": "WASHINGTON (Reuters) - U.S. President Donald Trump will not necessarily insist on including funding for a border wall wi",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 204,
+      "snippet": "WASHINGTON (Reuters) - The White House said on Friday that President Donald Trump and Mexican President Enrique Pena Nie",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 205,
+      "snippet": "MANCHESTER, England (Reuters) - British Prime Minister Theresa May said she was sorry her Conservative Party lost seats ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 206,
+      "snippet": "TORONTO (Reuters) - More than 200 Canadian technology company founders, executives and investors called on Sunday for Ot",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 207,
+      "snippet": "TOKYO (Reuters) - U.S. Secretary of State Rex Tillerson stressed on Thursday the importance of the United States working",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 208,
+      "snippet": "BEIJING (Reuters) - The ruling Communist Party s flagship newspaper on Thursday provided more evidence that President Xi",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 209,
+      "snippet": "If Dr. Dre were a white guy the police would have treated him totally differently.But because the legendary rapper is bl",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 210,
+      "snippet": "GENEVA (Reuters) - The top United Nations human rights official called on Spanish authorities on Monday to investigate t",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 211,
+      "snippet": "WASHINGTON (Reuters) - U.S. Director of National Intelligence James Clapper said he spoke with President-elect Donald Tr",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 212,
+      "snippet": "(Reuters) - In a stinging rebuke to President Donald Trump, a U.S. appeals court refused on Thursday to reinstate his tr",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 213,
+      "snippet": "by reuters    pm democrat hillary clintons top aides on saturday lashed out at fbi director james comey for igniting a n",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 214,
+      "snippet": "(Reuters) - Hackers are joining forces with U.S. governors and academics in a new group aimed at preventing the manipula",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 215,
+      "snippet": "BUDAPEST (Reuters) - The European Union should seek a new deal with the United States as the free trade agreement has fa",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 216,
+      "snippet": "home  news  watch  video leaked from obamas  campaign is every trump haters worst nightmare watch  video leaked from oba",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 217,
+      "snippet": "Paul Joseph Watson is the bomb! He makes the greatest videos and cuts through the bull to get to the truth. Here s a gre",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 218,
+      "snippet": "WASHINGTON (Reuters) - Conservative Republicans in Congress said on Tuesday they oppose aspects of the Republican leader",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 219,
+      "snippet": "TUNIS (Reuters) - More than 90 mayors from across Libya s political divides are meeting for the first time in an effort ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 220,
+      "snippet": "I m sure it just slipped the feeble minds of the leftist media If it weren t for double standards, the left would have n",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 221,
+      "snippet": "Former Republican presidential candidate Jeb Bush has been forced to deny a claim that he ordered the outlandish  dirty ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 222,
+      "snippet": "CAIRO (Reuters) - U.S. President Donald Trump called Egyptian President Abdel Fattah al-Sisi on Thursday and said he was",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 223,
+      "snippet": "The following statements were posted to the verified Twitter accounts of U.S. President Donald Trump, @realDonaldTrump a",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 224,
+      "snippet": "Other than the wall and maybe the Muslim ban, the signature issue for Donald Trump the presidential candidate was repeal",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 225,
+      "snippet": "February 12, is the 207th anniversary of President Abraham Lincoln s birth, and Twitter decided to celebrate it like onl",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 226,
+      "snippet": "Having lived through an assassination attempt herself, former Rep. Gabby Giffords (D-AZ) understands the seriousness of ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 227,
+      "snippet": "UPDATE: No #BlackLivesMatter Protests PlannedChicago has no shortage of thugs. What they do have a shortage of is suppor",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 228,
+      "snippet": "World-renowned writer/director Joss Whedon has returned to social media with a vengeance and a message that needs to be ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 229,
+      "snippet": "Hillary Clinton has just launched the first ad directly aimed at Donald Trump s campaign. The ad is all about New York, ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 230,
+      "snippet": "The legal mind behind the Bush Administration s illegal wiretapping, torture and other violations of the Geneva Conventi",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 231,
+      "snippet": "If you ve been living under a rock for the past few days, you re probably unaware that Donald Trump Jr. committed treaso",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 232,
+      "snippet": "Donald Trump is being sued   again. Three organizations have joined together to file suit against Mango Mussolini for hi",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 233,
+      "snippet": "Bill Clinton somehow seems to sabotage Hillary quite frequently. It s kind of funny but she s probably not too happy wit",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 234,
+      "snippet": "Sacrifice, pride, honor ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 235,
+      "snippet": "House Speaker Paul Ryan is a snake, a hypocrite, and a weasel. He is also an incredible coward. Part of being a public s",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 236,
+      "snippet": "LA PAZ (Reuters) - Bolivia s socialist President Evo Morales on Wednesday hailed a decision by the country s highest cou",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 237,
+      "snippet": "BEIJING (Reuters) - U.S. President Donald Trump accepted his Chinese counterpart Xi Jinping’s invitation to visit China,",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 238,
+      "snippet": "In one of his regular appearances on the Imus In The Morning radio show, Dan Rather was asked by Imus in 1999, if he had",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 239,
+      "snippet": "STRASBOURG (Reuters) - British Prime Minister Theresa May should address the European Parliament when she visits the EU ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 240,
+      "snippet": "ISTANBUL (Reuters) - Amnesty International s Turkey director, freed from four months detention but still facing trial on",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 241,
+      "snippet": "WASHINGTON (Reuters) - U.S. Senator Ben Cardin, the top Democrat on the Senate Foreign Relations Committee, said on Wedn",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 242,
+      "snippet": "How unqualified and out of touch is he? I m wondering if Brian Williams would ve been better off fired rather than join ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 243,
+      "snippet": "by hrafnkell haraldsson    am the kkk newspaper features the front page full page story make america great again with a ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 244,
+      "snippet": "DUBAI (Reuters) - U.S. President Donald Trump, departing from his predecessor’s practice, is expected to sidestep human ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 245,
+      "snippet": "(Reuters) - North Carolina Republican lawmakers said late on Wednesday they had reached a deal to repeal the state’s con",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 246,
+      "snippet": "WASHINGTON (Reuters) - The White House asked the U.S. Supreme Court on Monday to allow President Donald Trump’s latest t",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 247,
+      "snippet": "BUENOS AIRES (Reuters) - A federal judge in Argentina indicted former President Cristina Fernandez for treason and asked",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 248,
+      "snippet": "WASHINGTON (Reuters) - The tax bill is President Donald Trump’s biggest legislative victory this year, but Democratic st",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 249,
+      "snippet": "HAVANA (Reuters) - The Cuban diplomats expelled from the United States this week included all those dealing with U.S. bu",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 250,
+      "snippet": "President Obama s response to the attacks on Belgium were dignified and hopeful, and it was exactly the opposite of the ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 251,
+      "snippet": "WASHINGTON (Reuters) - Republican lawmakers should follow their conscience on whether to support Donald Trump in Novembe",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 252,
+      "snippet": "WASHINGTON (Reuters) - U.S. House Republicans are working on changes to their healthcare overhaul bill to provide more g",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 253,
+      "snippet": "Just days after Melissa Harris-Perry wrote a scathing indictment of MSNBC s willful shift away from powerful and necessa",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 254,
+      "snippet": "eight tips to a deeper and more relaxing sleep ad   hbs account   httpblogsnaturalnewscomeighttipsdeeperrelaxingsleep  b",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 255,
+      "snippet": "NEW YORK (Reuters) - Democratic presidential candidate Hillary Clinton has canceled a campaign trip to California becaus",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 256,
+      "snippet": "WASHINGTON (Reuters) - U.S. House Speaker Paul Ryan on Thursday urged fellow Republicans to back the party’s healthcare ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 257,
+      "snippet": "WASHINGTON (Reuters) - The campaign of Roy Moore, the Republican candidate for U.S. senator in Alabama who has been accu",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 258,
+      "snippet": "A week after President Trump endorsed Ron DeSantis for Florida governor via Twitter, a handful of billionaires have thro",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 259,
+      "snippet": "Is this any way to run a campaign? Jeb Bush was living La Vida Loca with his soirees at the Four Seasons and jet set cam",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 260,
+      "snippet": "ANKARA/BEIRUT (Reuters) - Syrian rebel fighters are launching a major military operation backed by Turkish forces into a",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 261,
+      "snippet": "BEIRUT (Reuters) - Syrian rebels in a pocket of land near where the Syrian, Lebanese and Israeli borders meet are negoti",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 262,
+      "snippet": "Saturday s GOP debate got off to a hilarious start as candidates Ben Carson and Donald Trump both failed to appear on st",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 263,
+      "snippet": "Natasha Stoynoff, a writer who covered Donald Trump for People, just published a shocking account of sexual assault at t",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 264,
+      "snippet": "One thing is for certain when it comes to Donald Trump s *presidency, he s failing miserably and his approval rating is ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 265,
+      "snippet": "Huh? Do these people live in a bubble or what? It s almost like they re sticking their fingers in their ears singing La,",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 266,
+      "snippet": "The anti-establishment tide is rolling across Europe. You really can t blame the citizens for being furious at their lea",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 267,
+      "snippet": "The more they hammer the GOP frontrunners, the more popular they become with the American voter. Is the real revolution ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 268,
+      "snippet": "(Reuters) - Republican presidential candidate Donald Trump said on Friday he favored the United States reaching trade ag",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 269,
+      "snippet": "WASHINGTON (Reuters) - Former Democratic Representative Harold Ford Jr of Tennessee is being considered for U.S. transpo",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 270,
+      "snippet": "Gee I sure hope their FREE housing, FREE education, FREE food, FREE health care and FREE monthly spending stipend is  go",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 271,
+      "snippet": "21st Century Wire says President Donald J. Trump is leaving no stone unturned by asking the US Congress to investigate t",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 272,
+      "snippet": "by everett numbers the pentagon and congress are both promising quick fixes to the scandal surrounding excessive nationa",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 273,
+      "snippet": "After Bill  and Chelsea Clinton both dodged reporters asking if their foundation would return donations from Harvey Wein",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 274,
+      "snippet": "MADRID (Reuters) - Spain s central authorities moved on Thursday to crush plans by the northeastern region of Catalonia ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 275,
+      "snippet": "NEW YORK (Reuters) - The United States, Britain and other countries opposed to Syrian President Bashar al-Assad will not",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 276,
+      "snippet": "Rep. Elijah E. Cummings is demanding answers after presidential staff members reportedly passed confidential information",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 277,
+      "snippet": "RIO DE JANEIRO (Reuters) - Brazilian President Michel Temer is recovering after a successful operation in a Sao Paulo ho",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 278,
+      "snippet": "MILAN (Reuters) - Italy s ruling Democratic Party (PD) has lost further ground over its rivals after political infightin",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 279,
+      "snippet": "WASHINGTON (Reuters) - U.S. House Speaker Paul Ryan on Thursday said he had a good conversation with presumptive Republi",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 280,
+      "snippet": "WASHINGTON (Reuters) - President Barack Obama will nominate U.S. Appeals Court Judge Merrick Garland to the U.S. Supreme",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 281,
+      "snippet": "TRIPOLI (Reuters) - Across Libya s capital residents have started drilling through pavements to access wells in a desper",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 282,
+      "snippet": "CAIRO (Reuters) - Egypt s Coptic Church has rejected a meeting requested by U.S. Vice President Mike Pence during his vi",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 283,
+      "snippet": "Brit Hume says video exposing Planned Parenthood s trafficking of fetal body parts removes  the veil of antiseptic tidin",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 284,
+      "snippet": "Hillary Clinton and her aides must have felt like  mandatory  didn t apply to them they were obviously reminded several ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 285,
+      "snippet": "ANKARA (Reuters) - Turkey s President Tayyip Erdogan said on Thursday the United States was hiding a suspect in its Ista",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 286,
+      "snippet": "Melania Trump just accepted damages of approximately $3 million  from Daily Mail after they published a smut article cla",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 287,
+      "snippet": "WASHINGTON (Reuters) - Democratic Party communications director Luis Miranda is expected to leave the Democratic Nationa",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 288,
+      "snippet": "WASHINGTON (Reuters) - The Senate Finance Committee on Tuesday approved President Donald Trump’s choice for U.S. Trade R",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 289,
+      "snippet": "When it comes to how horrible Donald Trump has been behaving with his actions, words, tweets and executive orders, we re",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 290,
+      "snippet": "OSAKA, Japan (Reuters) - Ethnic Koreans living in Japan are nervously watching growing tensions over North Korea and are",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 291,
+      "snippet": "CHITTAGONG, Bangladesh (Reuters) - Mohammed Idrees, a 10-year-old Rohingya boy, does not remember how he landed at the h",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 292,
+      "snippet": "A Trump sign-stealer gets a verbal beatdown and discovers he s actually a Trump supporter! Bahaha! ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 293,
+      "snippet": "After being assaulted at a Donald Trump rally, allegedly by the candidates own campaign manager Corey Lewandowski, Breit",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 294,
+      "snippet": "(Reuters) - Highlights of the day for U.S. President Donald Trump’s administration on Tuesday: Trump knew for weeks that",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 295,
+      "snippet": "Friday, Wikileaks released their first batch of Podesta s emails, which included excerpts from Clinton s Wall Street tra",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 296,
+      "snippet": "Big news out of the Treasury Department: After much debate, Alexander Hamilton will remain on the $10 bill   and instead",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 297,
+      "snippet": "TALLINN/PARIS (Reuters) - German Chancellor Angela Merkel s call to stop Turkey s European Union accession talks drew a ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 298,
+      "snippet": "CAIRO (Reuters) - Bahrain said on Tuesday it would impose entry visas on Qatar nationals and residents in what it called",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 299,
+      "snippet": " When the Environmental Protection Agency proposed rules regulating carbon dioxide emissions from coal-fired power plant",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 300,
+      "snippet": "DIYARBAKIR, Turkey (Reuters) - Turkish security forces killed 17 Kurdish militants near the border between Iraq and sout",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 301,
+      "snippet": "WASHINGTON (Reuters) - The U.S. House banking chairman said on Thursday his attempt to eliminate limits on fees banks ca",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 302,
+      "snippet": "Convicted  Palestinian  terrorist and leader of  A Day Without a Woman  march, Rasmea Odeh, 69 is being stripped of her ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 303,
+      "snippet": "Donald Trump was in a room full of Irish reporters while placing a call to their newly elected Irish leader Leo Varadkar",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 304,
+      "snippet": "A new report has just revealed that Fox News patriarch Rupert Murdoch was so horrified by the idea of Donald Trump becom",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 305,
+      "snippet": "GENEVA (Reuters) - Muslim Rohingyas continue to flee Myanmar to Bangladesh and the United Nations is bracing for possibl",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 306,
+      "snippet": "CNN has been heavily criticized for its coverage of Donald Trump s rise and rightfully so. For months, one of the most w",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 307,
+      "snippet": "IS HE FOR REAL? This is so alarming on so many levels because we lost over 1,000 soldiers in Ramadi and took it back but",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 308,
+      "snippet": "The Senate session is coming to a close for the 113th Congress, and we are seeing a dramatic change in its composition c",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 309,
+      "snippet": "Speaker Paul Ryan put on a public temper tantrum after FBI director James Comey came out and said he and his team did no",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 310,
+      "snippet": "NEW YORK (Thomson Reuters Foundation) - Thousands of people have made donations to Planned Parenthood in the name of Vic",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 311,
+      "snippet": "WASHINGTON (Reuters) - U.S. Senate Finance Committee Chairman Orrin Hatch said on Wednesday it is not yet clear how big ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 312,
+      "snippet": "The irony in this situation is pretty huge. Prince didn t like meddling in his music or business but now the government ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 313,
+      "snippet": "email  last night the chicago cubs eked out a thrilling game  victory in the world series against the cleveland indians ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 314,
+      "snippet": "WASHINGTON (Reuters) - The top U.S. diplomat for the Middle East has told colleagues that he has decided to retire, thre",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 315,
+      "snippet": "WASHINGTON (Reuters) - The head of the U.S. House of Representatives’ banking panel has unveiled the Republicans’ most a",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 316,
+      "snippet": "DENVER (Reuters) - Kansas on Tuesday asked a U.S. appeals court to reinstate rules requiring proof of U.S. citizenship f",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 317,
+      "snippet": "WASHINGTON (Reuters) - U.S. President Donald Trump on Tuesday postponed signing an executive order that is expected to r",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 318,
+      "snippet": " pm again donald trump was not opposed to the war in iraq    ever since donald trump was lambasted by leaders in both pa",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 319,
+      "snippet": "The media will lose it again because Melania Trump wore stilettos on her way to Texas. Nevermind that she ll probably ch",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 320,
+      "snippet": "PARACAS, Peru (Reuters) - Support from business leaders for Peru s President Pedro Pablo Kuczynski has plummeted, a surv",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 321,
+      "snippet": "BEIRUT (Reuters) - The Syrian government envoy to U.N.-backed peace talks in Geneva said on Friday that Saudi Arabia had",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 322,
+      "snippet": "NEW DELHI (Reuters) - Nearly nine out of 10 Indians hold a favorable opinion of Prime Minister Narendra Modi and more th",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 323,
+      "snippet": "MANILA (Reuters) - Philippine President Rodrigo Duterte has ordered the police to actively support the drugs enforcement",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 324,
+      "snippet": "BAGHDAD (Reuters) - The United Nations has offered to help  solve the problem  between the Iraqi government and the Kurd",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 325,
+      "snippet": "Was it just a slip of the tongue or a sign that Donald Trump is mentally unfit to be president?Because it certainly appe",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 326,
+      "snippet": "NEW DELHI (Reuters) - Indian Prime Minister Narendra Modi was in the final phase of campaigning on Thursday to retain po",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 327,
+      "snippet": "AUSTIN, Texas (Reuters) - Texas Republican Governor Greg Abbott signed into law on Sunday a measure to punish “sanctuary",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 328,
+      "snippet": "Paul Joseph Watson nails it again. In the video below, Watson does a brilliant job of exposing the hypocrisy of the medi",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 329,
+      "snippet": " By Vin ArmaniHillary Clinton continues to blame Russia for the email leak   even though it doesn t matter who leaked th",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 330,
+      "snippet": "For the second time in as many weeks, Trump s Twitter feed has been filled with bravado over his job saving and job crea",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 331,
+      "snippet": "hillary clinton and the presidents  longer game  at home and abroad a nation less affluent less free and far less secure",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 332,
+      "snippet": "SHANGHAI (Reuters) - A former vice-chairman of China s securities regulator, Yao Gang, is being investigated for taking ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 333,
+      "snippet": "UNITED NATIONS (Reuters) - U.S. Secretary of State Rex Tillerson on Friday said the United States would not accept any p",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 334,
+      "snippet": "BOGOTA (Reuters) - A bomb attack by Colombia s leftist ELN rebel group has halted pumping operations along the country s",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 335,
+      "snippet": "Some good news for today! Al Jazeera is dead, gone, kaput Remember Al Jazeera bought Al Gore s Current TV:Al Gore said A",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 336,
+      "snippet": "WASHINGTON (Reuters) - President Barack Obama on Tuesday said he would seek changes in the way U.S. oil and coal resourc",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 337,
+      "snippet": "MOSCOW (Reuters) - Russia’s Foreign Ministry said on Monday that U.S. accusations that Moscow was behind a hack of Democ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 338,
+      "snippet": "WASHINGTON (Reuters) - President Donald Trump signed an executive order formally withdrawing the United States from the ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 339,
+      "snippet": "ISTANBUL (Reuters) - Turkey s President Tayyip Erdogan said on Wednesday that the United States could no longer be a med",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 340,
+      "snippet": "WASHINGTON (Reuters) - While President Donald Trump opened the door on Monday to beefing up U.S. forces in Afghanistan, ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 341,
+      "snippet": "White people the only lives that DON T matter. Imagine the outrage if he were taking a victory lap over a study showing ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 342,
+      "snippet": "KIEV (Reuters) - Ukrainian President Petro Poroshenko has submitted a new draft law to parliament for the creation of an",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 343,
+      "snippet": "THE EYE OF HURRICANE IRMA (Reuters) - The sky darkened, lightning flashed and a jolt of turbulence shook the cabin of th",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 344,
+      "snippet": "(Reuters) - At least five animal rights activists on Monday rushed the stage as presidential candidate Bernie Sanders sp",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 345,
+      "snippet": "Julia Hahn is a young, brilliant reporter with Breitbart News. She already has a reputation for fearlessly exposing corr",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 346,
+      "snippet": "ABOARD AIR FORCE ONE (Reuters) - President Barack Obama will not speak with Hillary Clinton about the FBI’s investigatio",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 347,
+      "snippet": "ISLAMABAD (Reuters) - Pakistan s ruling party on Tuesday re-elected ousted premier Nawaz Sharif as its leader, saying he",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 348,
+      "snippet": "Thirty years ago, the state of California sentenced Kevin Cooper to death. In 2004, his life was spared just hours befor",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 349,
+      "snippet": "Democrats were hoping yesterday s Electoral Vote would end with electors rejecting Republican Donald Trump in droves.It ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 350,
+      "snippet": "WASHINGTON (Reuters) - The U.S. Senate on Thursday voted to advance the nomination of President Donald Trump’s pick to r",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 351,
+      "snippet": "It looks as though the conservative target of choice this week to throw all their blind rage at is legendary artist Beyo",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 352,
+      "snippet": "(Reuters) - UK Prime Minister Theresa May s conservative party is leading in polls for the first time since the June ele",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 353,
+      "snippet": "Polls have shown for awhile that Donald Trump has a solid lead among white voters without a college education. What abou",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 354,
+      "snippet": "LUANDA (Reuters) - Angola s main opposition party has appealed to the constitutional court to annul the results of last ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 355,
+      "snippet": "WASHINGTON (Reuters) - In a heated moment during his unconventional and combative news conference on Thursday, President",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 356,
+      "snippet": "VALLETTA (Reuters) - European Union leaders said they agreed to stick together in dealing with Donald Trump, but at thei",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 357,
+      "snippet": "WASHINGTON (Reuters) - U.S. President Donald Trump invited Indian Prime Minister Narendra Modi to visit the United State",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 358,
+      "snippet": "This weekend, neo-Nazis and white supremacists gathered in eastern Kentucky. On Friday, Art Jones addressed the group. T",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 359,
+      "snippet": "HARARE (Reuters) - Zimbabwean President Robert Mugabe is set to appoint a woman deputy after a special ruling party cong",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 360,
+      "snippet": "PRAGUE (Reuters) - The newly-elected Czech lower house of parliament on Wednesday picked a speaker from the biggest part",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 361,
+      "snippet": "BERLIN (Reuters) - Swept into parliament by those Germans angered at the arrival of more than a million refugees and mig",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 362,
+      "snippet": "LOS ANGELES (Reuters) - Caitlyn Jenner has joined the list of celebrities who are considering running for political offi",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 363,
+      "snippet": "Immigration advocate Roberto Hernandez joined Tucker Carlson to debate the controversial payout of $190K to an illegal f",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 364,
+      "snippet": "WASHINGTON (Reuters) - The U.S. House of Representatives on Thursday took a step toward averting a partial government sh",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 365,
+      "snippet": "NEW YORK (Reuters) - Green groups on Friday slammed U.S. President Donald Trump for choosing a nominee for White House e",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 366,
+      "snippet": "LONDON (Reuters) - Britain urgently needs a  standstill  deal to keep its ties with the European Union unchanged in a po",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 367,
+      "snippet": "Marco Rubio, the latest victim of the Trump train that has wreacked havoc on the Republican Party, has bowed out of the ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 368,
+      "snippet": "This story is a perfect example of how Muslim migrants do NOT assimilate in their host countries. Instead of assimilatin",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 369,
+      "snippet": "It s no secret that Secretary of State Rex Tillerson is a tell-it-like-it is kind of guy. So when he was bombarded with ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 370,
+      "snippet": "Our first black President of the United States has quite an impressive list of accomplishments. Sadly, not one of his ac",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 371,
+      "snippet": "White House press secretary Sean Spicer literally denied the meaning of alleged president Donald Trump s words during a ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 372,
+      "snippet": "If today on Fox News was any indication at all, Donald Trump may have finally gone too far, even for some of his base, w",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 373,
+      "snippet": "(Reuters) - Oklahoma’s Republican Governor Mary Fallin vetoed a bill calling for prison terms of up the three years for ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 374,
+      "snippet": "While Donald Trump may have bribed Carrier into keeping some 800 jobs in the United States with millions of dollars in t",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 375,
+      "snippet": "The wife of a Russian hacker who was arrested in Spain has spoken out, confirming that her husband, Pyotr Levashov, was ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 376,
+      "snippet": "Democratic Rep. John Lewis of Georgia says he doesn t view Donald Trump as a legitimate president and will be skipping n",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 377,
+      "snippet": "Several mosques in California have received threatening letters from some of Trump s loyal subjects, which boldly procla",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 378,
+      "snippet": "LIMA (Reuters) - Peru s President Pedro Pablo Kuczynski defended his pardon for Alberto Fujimori on Monday as justified ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 379,
+      "snippet": "WASHINGTON (Reuters) - The White House on Monday insisted that Washington’s “one China” policy should not be used as a “",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 380,
+      "snippet": "WASHINGTON (Reuters) - The U.S. Congress on Wednesday passed and sent to President Barack Obama legislation strengthenin",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 381,
+      "snippet": "WASHINGTON (Reuters) - President Donald Trump’s administration on Wednesday denied being misleading about a U.S. carrier",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 382,
+      "snippet": " ((This December 4 story has been corrected to change  last year  to 2015 in sixth paragraph, June to July in 11th parag",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 383,
+      "snippet": "When the Bundy Moron Militia decided to illegally occupy the Malheur Federal Wildlife Reserve in Oregon, one of the thin",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 384,
+      "snippet": "BEIRUT (Reuters) - The United States, which wants to prevent violence spilling over from Syria into Lebanon, will give t",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 385,
+      "snippet": "(Reuters) - Highlights of the day for U.S. President Donald Trump’s administration on Monday: Trump says the United Stat",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 386,
+      "snippet": "WASHINGTON (Reuters) - U.S. Defense Secretary Jim Mattis said on Tuesday current policy regarding transgender personnel ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 387,
+      "snippet": "Not a bad imitation of a black pastor from a guy who quit going to church when he entered the White House because accord",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 388,
+      "snippet": "TOKYO (Reuters) - The U.S. Navy carrier Ronald Reagan is conducting drills with Japanese warships in seas south of the K",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 389,
+      "snippet": "BRUSSELS (Reuters) - A Belgian judge made no ruling on Friday on a European arrest warrant issued by Spain for ousted Ca",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 390,
+      "snippet": "Oh, the wiretapping scandal. Or it would be a scandal if it were true. Trump hasn t produced any hard evidence of being ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 391,
+      "snippet": "NEW YORK/SINGAPORE (Reuters) - United Airlines said it had resumed flights from Newark, New Jersey to New Delhi, India o",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 392,
+      "snippet": "BUENOS AIRES (Reuters) - Argentina s lower house on Thursday suspended a vote on President Mauricio Macri s pension refo",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 393,
+      "snippet": "Is it really possible to describe Donald Trump with just one word? Certainly a few come to mind. Try and pick just one, ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 394,
+      "snippet": "And the winner is the  Anti-Billionaire or the guy who detests rich people or how about the guy who made a LOT of people",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 395,
+      "snippet": "DUBAI (Reuters) - A Western-backed Saudi-led coalition scored its first major gains in Yemen since former President Ali ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 396,
+      "snippet": "VIENNA (Reuters) - Austria s newly formed conservative far-right coalition government said on Saturday it would be a rel",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 397,
+      "snippet": "BEIRUT/DUBAI (Reuters) - Iran warned the United States against designating its Revolutionary Guards Corp as a terrorist ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 398,
+      "snippet": "WASHINGTON (Reuters) - President Donald Trump on Thursday tapped Fed Governor Jerome Powell to become head of the U.S. c",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 399,
+      "snippet": " At some point, most of us grow up and realize there s no such thing as  free ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 400,
+      "snippet": "Yesterday, Beverly Young Nelson sat with the same leftist lawyer, Gloria Allred, who came out after Donald Trump with fa",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 401,
+      "snippet": "By now, we all know that upon having emergency surgery to remove a blood clot from above his left eye last week, it was ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 402,
+      "snippet": "WASHINGTON (Reuters) - U.S. House of Representatives Speaker Paul Ryan called on Wednesday for an end to Obamacare’s fin",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 403,
+      "snippet": "NEW YORK (Reuters) - U.S. President Barack Obama will raise concerns about Israeli settlement activity in Arab lands dur",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 404,
+      "snippet": "BUENOS AIRES (Reuters) - The family of a young protester who went missing in Argentina nearly three months ago identifie",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 405,
+      "snippet": "CINCINNATI (Reuters) - Democrat Richard Cordray delivered a campaign-style stump speech at a sprawling Labor Day celebra",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 406,
+      "snippet": "A blizzard fell upon Washington D.C. over this past weekend, basically shutting down the whole city, including the U.S. ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 407,
+      "snippet": "Sure, we need to save people from something that s naturally occurring pretty soon everyone with a hangnail will be cons",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 408,
+      "snippet": "(Reuters) - Boeing Co’s chief executive said on Tuesday that he and President-elect Donald Trump “made progress” on lowe",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 409,
+      "snippet": "RIYADH (Reuters) - President Barack Obama and Abu Dhabi’s crown prince Sheikh Mohammed bin Zayed al-Nahayan discussed a ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 410,
+      "snippet": "SYDNEY (Reuters) - Papua New Guinea began dismantling a shuttered Australian-run immigration detention center on Thursda",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 411,
+      "snippet": "It looks like we re not the only ones who are 100% FED UP! with people protesting to defend lawbreakers in our country W",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 412,
+      "snippet": "JORDAN RIVER, West Bank (Reuters) - Thousands of Israeli and Palestinian women trekked through a biblical desert landsca",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 413,
+      "snippet": "21st Century Wire says The following interview is the first western media appearance by Syrian President Bashar al Assad",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 414,
+      "snippet": "In an obvious scheme to keep the Supreme Court slanted their way, a conservative lawyer in Arizona claims that Scalia ca",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 415,
+      "snippet": "Student government leaders at Loyola University Maryland faced a barrage of pressure from the university administration ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 416,
+      "snippet": "Who hasn t seen his commercials over and over and over for  My Pillow Mike Lindell just promised to send 60,000 pillows ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 417,
+      "snippet": "The National Park Service might be out of a job keeping the White House grounds maintained. A 10-year-old boy named Fran",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 418,
+      "snippet": "the greatest trick that feminism has pulled is to convince the masses that women are presently disadvantaged relative to",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 419,
+      "snippet": "Remember when liberal media and entertainers, Democrat leaders and even Hillary Clinton got on TV and swore Trump never ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 420,
+      "snippet": "CLEVELAND/HERSHEY, Pa. (Reuters) - Democrat Hillary Clinton and Republican Donald Trump battled over the strength of the",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 421,
+      "snippet": "Helen Agbapuruonwu collected food stamps and Medicaid benefits from 2010 to 2016!Helen Agbapuruonwu  fraudulently obtain",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 422,
+      "snippet": "WASHINGTON (Reuters) - Expanded negotiations against North Korea announced on Thursday would “be very” good if they succ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 423,
+      "snippet": "SEOUL (Reuters) - After months of fiery rhetoric and rising tensions, U.S. President Donald Trump s secret attempt to pe",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 424,
+      "snippet": "RIYADH (Reuters) - Saudi King Salman appointed two new ministers on Saturday to key security and economic posts, removin",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 425,
+      "snippet": "BARCELONA (Reuters) - Barcelona s mayor has asked for reassurances that municipal staff would not face legal action or l",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 426,
+      "snippet": "Since March of 2010, the American people have had to suffer under the incredible economic burden of the Affordable Care ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 427,
+      "snippet": "The story of Trayvon Martin may be one of the saddest we as liberals have ever had to endure. Harassed and profiled beca",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 428,
+      "snippet": "On the surface, this seems like such a simple request it s not! After digging and finding the TRUE agenda on the climate",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 429,
+      "snippet": "Democratic California Rep. Brad Sherman appeared as a guest on Thursday s  Tucker Carlson Tonight,  and apparently didn ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 430,
+      "snippet": "WASHINGTON (Reuters) - The Trump administration and major U.S. states appear to be headed for a showdown over landmark r",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 431,
+      "snippet": " KILLED: Rancher and protest spokesman Robert  Lavoy  Finicum (Image Source: RT International)21st Century Wire says New",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 432,
+      "snippet": "British pop singer Rebecca Ferguson, daughter of a white British woman and Jamaican father, says she has been invited to",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 433,
+      "snippet": "MEXICO CITY (Reuters) - Mexico s ruling Institutional Revolutionary Party (PRI) said on Thursday registration for PRI co",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 434,
+      "snippet": "PARIS (Reuters) - President Emmanuel Macron invited cameras into his Elysee Palace office on Friday as he signed into la",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 435,
+      "snippet": "Why is this not front page news on every major media outlet?Russian intelligence targeted Hillary Clinton before she bec",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 436,
+      "snippet": "Writing on Twitter Sunday, the All in the Family star mentioned a Fox News report about the Trump campaign s alleged col",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 437,
+      "snippet": "You may have seen the pocket version of the United States Constitution the Bundy Bunch carries around. The distinctive p",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 438,
+      "snippet": "Dem. candidate for Georgia congressional seat @ossoff: Not an issue I don t live in district, can t vote for myself http",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 439,
+      "snippet": "CARACAS (Reuters) - President Nicolas Maduro defended Venezuela s  secure  election system on Tuesday as opponents strug",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 440,
+      "snippet": "Earlier this evening, Le Pen had security authorities on high alert, with rioting expected across the country in protest",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 441,
+      "snippet": "BISMARCK, N.D. (Reuters) - Donald Trump, the presumptive Republican presidential nominee, promised on Thursday to roll b",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 442,
+      "snippet": "(Reuters) - The U.S. Supreme Court on Friday refused to stay a ruling that two North Carolina congressional districts be",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 443,
+      "snippet": "JOHANNESBURG (Reuters) - South Africa s ruling African National Congress elects a new party leader to succeed President ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 444,
+      "snippet": "Manhattan is seeing significant problems due to Trump s insistence on staying in Trump Tower during his transition. He n",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 445,
+      "snippet": "At this point, it seems like Donald Trump cannot hold a rally without there being a protest. Some of those protestors ha",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 446,
+      "snippet": "It s been more than a week since the election of Donald Trump and his supporters have been teaching us a big lesson   na",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 447,
+      "snippet": "For almost an entire year Donald Trump insulted, berated, bastardized and scrutinized everything that wasn t a white, Ch",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 448,
+      "snippet": "While an armed militia group of domestic terrorists seize and occupy a federal building by force, GOP Presidential hopef",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 449,
+      "snippet": "WELLINGTON (Reuters) - Neither major New Zealand political party leader on Monday would rule out appointing nationalist ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 450,
+      "snippet": "BANJA LUKA, Bosnia (Reuters) - Bosnia s Serb Republic on Wednesday declared itself militarily neutral in a move its pres",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 451,
+      "snippet": "(Reuters) - Highlights of the day for U.S. President Donald Trump’s administration on Tuesday: Trump goes to Capitol Hil",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 452,
+      "snippet": "The liberal  third-world hell hole  (as Ann Coulter calls it) that is California has some of the strictest gun-control l",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 453,
+      "snippet": "loading posted on november   putin condemns europes handling of migrants and says the child rape in austria shows a dilu",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 454,
+      "snippet": "MOSCOW (Reuters) - Russia’s airbase in Latakia province and its naval facility in Tartus are protected by S-300 and S-40",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 455,
+      "snippet": "MOSCOW (Reuters) - President Vladimir Putin formally registered his re-election bid on Wednesday, submitting the necessa",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 456,
+      "snippet": "The World Class Grifters aka The Clintons are going on the road to  campaign. Does anyone else smell desperation? Can Hi",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 457,
+      "snippet": "ADEN, Yemen (Reuters) - Three suspected al Qaeda militants were killed in a drone strike in southern Yemen late on Thurs",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 458,
+      "snippet": "WASHINGTON (Reuters) - White House spokesman Josh Earnest on Wednesday would not comment on whether a U.S. intelligence ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 459,
+      "snippet": "Now that Special Counsel Robert Mueller is about to indict someone from Team Trump, The Donald and his cronies are panic",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 460,
+      "snippet": "MILWAUKEE (Reuters) - Green Party presidential candidate Jill Stein said on Thursday she has raised $3.5 million to forc",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 461,
+      "snippet": "LONDON (Reuters) - U.S. President Donald Trump and British Prime Minister Theresa May agreed during a telephone call on ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 462,
+      "snippet": "BERLIN (Reuters) - Police raided apartments across Germany on Tuesday, hunting for evidence on anti-capitalist protester",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 463,
+      "snippet": "WASHINGTON (Reuters) - A joint U.S.-South Korean military exercise will start on Aug. 21 as planned, the Pentagon said o",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 464,
+      "snippet": "CHICAGO (Reuters) - Chicago will continue to shrink its structural budget deficit in 2017 and 2018, but faces new pensio",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 465,
+      "snippet": "httpmediaarchivesgsradionetddukemp dr duke  andrew anglin the true voice of the republican party today dr duke had daily",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 466,
+      "snippet": "WASHINGTON (Reuters) - The White House has launched an internal investigation into the use of private email by senior ai",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 467,
+      "snippet": "WASHINGTON (Reuters) - Some Republican lawmakers appear to be reassessing whether to make changes to a surveillance law ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 468,
+      "snippet": "We should do NOTHING for these terrorists! They got money and a house from the government of Uruguay but want even more ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 469,
+      "snippet": "podcast play in new window  download  embed  do you have the sinking feeling that trump may start backing off his promis",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 470,
+      "snippet": "WASHINGTON (Reuters) - Top Democrats in the U.S. House of Representatives are refusing to endorse a Republican move to f",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 471,
+      "snippet": "Donald Trump must be forced to resign or be impeached, because this is really bad.On Monday, Trump s delusional alternat",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 472,
+      "snippet": "This case has been on our radar for some time now but will come to a head tomorrow. The government is offering its  last",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 473,
+      "snippet": "It s hard to believe that it s been nearly 13 years since Natalie Maines of the Dixie Chicks perfectly spoke her mind in",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 474,
+      "snippet": "north dakota is ablaze as a result of protesters against the dakota access pipeline and the protests have escalated quic",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 475,
+      "snippet": "NEW YORK (Reuters) - A onetime business partner of former U.S. Representative Michael Grimm is preparing to plead guilty",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 476,
+      "snippet": "NEW YORK (Reuters) - A U.S. appeals court on Tuesday threw out the conviction of former New York state Senate Majority L",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 477,
+      "snippet": "KIRKUK, Iraq (Reuters) - The governorate of Kirkuk declared an overnight curfew in the Iraqi oil city as tension simmere",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 478,
+      "snippet": "By now you have seen, or at least heard about Meryl Streep s speech at the Golden Globes where she went after Donald Tru",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 479,
+      "snippet": "NEW YORK (Reuters) - Last August, Bernie Sanders sat on a Craigslist-bought beige couch in his Washington office plottin",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 480,
+      "snippet": "(Reuters) - Having spent billions of dollars on post-crisis U.S. financial industry reforms they once scorned, bankers a",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 481,
+      "snippet": "A brilliant moment where a high school student turned the tables and gave her white male teacher a much-needed lesson on",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 482,
+      "snippet": "Poverty is a problem in America. While most of us are not filthy rich or anything, we also generally don t have to worry",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 483,
+      "snippet": "WASHINGTON (Reuters) - U.S. Treasury Secretary Steven Mnuchin said on Friday that he believes financial markets could im",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 484,
+      "snippet": "News broke a few days ago that there was more to the reported minor outpatient removal of a blood clot above John McCain",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 485,
+      "snippet": "(Reuters) - Thailand s junta needs to show greater flexibility in talks with Malay Muslim insurgents to bring on board t",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 486,
+      "snippet": "Trump influencer, conspiracy theorist Alex Jones, is downright  furious  with the  beta males  at Saturday Night Live fo",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 487,
+      "snippet": "foreign policy us secretary of defense ashton carter photo by afp  us defense secretary ashton carter says the pentagon ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 488,
+      "snippet": "The 20th season of South Park was largely centered around Donald Trump s campaign, with the show heavily mocking him at ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 489,
+      "snippet": "Donald Trump is very afraid of Special Counsel Robert Mueller. It has been reported repeatedly that he is completely obs",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 490,
+      "snippet": "Catherine Herridge: One of the key things we ve learned in the FBI interviews known as 302s came from Clinton aide Huma ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 491,
+      "snippet": "Yesterday, The New York Times ran a story in which they gave moving accounts of two women who say that Donald Trump sexu",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 492,
+      "snippet": "GENEVA (Reuters) - The United States wants to exhaust every diplomatic option on North Korea s nuclear and missile progr",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 493,
+      "snippet": "Political activist and Hillary supporter Amal Clooney traveled to Texas to warn Americans about our elected President Do",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 494,
+      "snippet": "A U.S. Marine s letter to Bernie Sanders that expressed the utmost gratitude for the Senator s position on not sending U",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 495,
+      "snippet": " wikileaks hillary revelations the media wont cover trump should win based on hillarys corruption alone david g brown  r",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 496,
+      "snippet": "TUNIS (Reuters) - The UAE, which angered Tunisia by banning Tunisian women from its passenger flights, has intelligence ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 497,
+      "snippet": "An examination of Republican House Intelligence Committee Chairman Devin Nunes on Saturday was totally devastating and d",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 498,
+      "snippet": "BEIJING (Reuters) - One of Australia s largest independent publishers said it decided to delay the publication of a book",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 499,
+      "snippet": "Eleven-year-old Marley Dias always wanted to be our first woman president so she could work to fix problems in the world",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 500,
+      "snippet": "This woman is insane.In an incredibly disrespectful rant against President Obama and anyone else who supports investigat",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 501,
+      "snippet": "This is hilarious and sad.Ever since New Jersey Governor Chris Christie became Trump s personal whipping boy by endorsin",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 502,
+      "snippet": "BRUSSELS (Reuters) - Belgium has received proposals from Britain and the United States to replace its ageing fleet of fi",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 503,
+      "snippet": "LONDON (Reuters) - Prime Minister Theresa May told her cabinet on Tuesday Britain s objective in leaving the EU should b",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 504,
+      "snippet": "WASHINGTON (Reuters) - U.S. Vice President Joe Biden discussed Iran, the threat from Islamic State militants and the cri",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 505,
+      "snippet": "WASHINGTON (Reuters) - The Trump administration has set a collision course with the auto industry as it launches renegot",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 506,
+      "snippet": "The obnoxious anti-Trump Hallie Jackson of NBC is constantly trying to play  gotcha  with Sean Spicer on policy issues r",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 507,
+      "snippet": "LONDON (Reuters) - Britain s government said on Friday that a decision by ratings agency Moody s to downgrade the countr",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 508,
+      "snippet": "WASHINGTON (Reuters) - The White House reached out to the offices of every U.S. senator during the process of choosing a",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 509,
+      "snippet": "This very important scandal is unfolding before us. It has many, many  legs  with different Obama administration officia",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 510,
+      "snippet": "SAN FRANCISCO (Reuters) - A federal appeals court on Monday rejected a U.S. Department of Justice request to place on ho",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 511,
+      "snippet": "BERLIN (Reuters) - The Bavarian sister party of German Chancellor Angela Merkel s Christian Democratic Union (CDU) has s",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 512,
+      "snippet": "QAMISHLI, Syria (Reuters) - Syrians voted on Friday in an election organized by the Kurdish-led authorities of northern ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 513,
+      "snippet": "(Reuters) - Calling him “the best hope for investors who want a Republican in the White House,” Barron’s announced its s",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 514,
+      "snippet": "Insane! This really is the definition of insanity. Letting  non-citizens  vote in our elections is something no other co",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 515,
+      "snippet": "Nope, it s not Hillary Yes, Communist agitator Bernie Sanders is the pick for satanists. Bern Like Hell In a highly popu",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 516,
+      "snippet": "House Republicans had seven years to come up with a plan superior to the Affordable Care Act and their plan is so bad th",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 517,
+      "snippet": "On the 75th anniversary of the bombing of Pearl Harbor in Hawaii many have been remembering all those who lost their liv",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 518,
+      "snippet": "21st Century Wire says For those who still refuse to entertain any Michael Hastings  Boston Breaks  conspiracy theories,",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 519,
+      "snippet": "WASHINGTON (Reuters) - The Trump administration will not issue executive orders calling for a review of international tr",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 520,
+      "snippet": "WASHINGTON (Reuters) - The U.S. Treasury would recommend China be considered a currency manipulator if Beijing began unf",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 521,
+      "snippet": " views share  dr david duke offers a new paradigm for humanity read and listen to this amazing statement that will creat",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 522,
+      "snippet": "BOSTON (Reuters) - Massachusetts Governor Charlie Baker on Friday signed a bill raising the tax on retail sales of recre",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 523,
+      "snippet": "During a campaign rally in Colorado Springs, Colorado on Friday, Donald Trump delivered a bizarre theory about the local",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 524,
+      "snippet": "21st Century Wire says Investigative reporter Robert Parry broke many of the Iran-Contra stories for The Associated Pres",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 525,
+      "snippet": "Is there any level to which Trump s press secretary, Sean Spicer, will not sink on behalf of his lying boss? It seems no",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 526,
+      "snippet": "Reality Leigh Winner, 25, a federal contractor at the NSA, was arrested for leaking a classified report containing what ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 527,
+      "snippet": "WASHINGTON (Reuters) - Iran would face tighter U.S. sanctions over ballistic missile launches and other non-nuclear acti",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 528,
+      "snippet": "BEIRUT (Reuters) - Syria s Foreign Ministry on Thursday called on the United Nations Security Council to condemn Israel ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 529,
+      "snippet": "For the last nine or so months, we ve all had to witness Donald Trump try to foray himself into our lives as a possible ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 530,
+      "snippet": "WASHINGTON (Reuters) - U.S. Republican presidential candidate Ted Cruz on Tuesday called the blasts in Belgium “the late",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 531,
+      "snippet": "Republicans in Hawaii punished the first female House Minority Leader for putting country before party.Prior to and afte",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 532,
+      "snippet": "WASHINGTON (Reuters) - Senior U.S. Republicans distanced themselves on Sunday from Donald Trump’s comments about a Mexic",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 533,
+      "snippet": "The leftist mainstream media would love Americans to believe Trump had Univision propagandist removed from the press con",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 534,
+      "snippet": "PARIS (Reuters) - The man suspected of carrying out Sunday s attack in the French city of Marseille, killing two people,",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 535,
+      "snippet": "MANCHESTER, N.H. (Reuters) - Bernie Sanders had breakfast with one of America’s most prominent civil rights activists, A",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 536,
+      "snippet": "MADRID (Reuters) - A Spanish judge has not yet issued a European arrest warrant for ousted Catalan leader Carles Puigdem",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 537,
+      "snippet": "Donald Trump claims to have a huge penis, but he apparently doesn t have the balls to handle tough questions about his r",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 538,
+      "snippet": "BRATISLAVA (Reuters) - Slovakia respects the European Union s highest court decision to dismiss complaints by Slovakia a",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 539,
+      "snippet": "Bernie Sanders smacked down a man at his Harlem rally on Saturday when he tried to imply that the senator was a supporte",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 540,
+      "snippet": "THE HAGUE (Reuters) - The U.N. war crimes court that prosecuted atrocities committed during the breakup of Yugoslavia in",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 541,
+      "snippet": "(Reuters) - U.S. oil and gas executives bet big on 2016 Republican presidential candidate Jeb Bush - they donated more t",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 542,
+      "snippet": "WASHINGTON (Reuters) - Republican presidential hopeful Ted Cruz is leaning on new sources of cash as he prepares for a l",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 543,
+      "snippet": "OSLO (Reuters) - Norway said on Friday it planned to send an armored battalion near its arctic border with Russia and bu",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 544,
+      "snippet": "WASHINGTON (Reuters) - U.S. House Republicans are working on changes to their healthcare overhaul bill that would implem",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 545,
+      "snippet": "WASHINGTON (Reuters) - U.S. Republican Senator Marco Rubio reluctantly backed President Donald Trump’s nominee for secre",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 546,
+      "snippet": "ADEN (Reuters) - Suspected al Qaeda militants attacked a military checkpoint in the southern Yemen province of Abyan on ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 547,
+      "snippet": "Donald Trump delivered his inaugural address on Friday, and it was predictably divisive and negative.Trump portrayed Ame",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 548,
+      "snippet": "This is great because Hillary Clinton is never asked questions like this one:  Um, you said earlier that you wanted to e",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 549,
+      "snippet": "WASHINGTON (Reuters) - The FBI’S deputy director, Andrew McCabe, will appear for a closed-door interview on Thursday wit",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 550,
+      "snippet": "It s hard to imagine, and very sad, that a hospital could hire someone who is so filled with hate and obsessed with race",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 551,
+      "snippet": "Seriously? VP Biden wants us all to know he regrets not running because he  would have been the best president . Yikes!V",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 552,
+      "snippet": "Over the last few weeks, I ve watched as the last shreds of the Republican Party s  family values  rotted away.As Alabam",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 553,
+      "snippet": "Donald Trump held a campaign rally in Raleigh, North Carolina on Tuesday night and once again his habit of simply saying",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 554,
+      "snippet": "WASHINGTON (Reuters) - There has been no evidence of widespread election fraud in the Nov. 8 presidential contest, the W",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 555,
+      "snippet": "WASHINGTON (Reuters) - The Republican chairman of the U.S. Senate Foreign Relations Committee said on Monday that if the",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 556,
+      "snippet": "the most important concepts the manosphere taught me the most important concepts the manosphere taught me lessons that m",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 557,
+      "snippet": "ALGIERS (Reuters) - Algeria s coastguard has picked up 286 illegal migrants heading across the Mediterranean to Europe b",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 558,
+      "snippet": "I guess the people who work for the Baltimore Mayor are like rats on the sinking Titanic. Maybe they figured out that it",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 559,
+      "snippet": "CALGARY, Alberta (Reuters) - A top adviser to U.S. President Donald Trump plans to hold talks in Canada on Tuesday with ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 560,
+      "snippet": "JOHANNESBURG (Reuters) - Voting for the new leader of South Africa s ruling ANC ended on Monday about ten hours after de",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 561,
+      "snippet": "LONDON (Reuters) - Foreign minister Boris Johnson said Poles in Britain  will be protected, whatever happens  after Brex",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 562,
+      "snippet": "Less than a week before one of the most important presidential elections of our lifetimes, the focus has been turned to ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 563,
+      "snippet": "Many Republicans often argue raising the minimum wage or increasing taxes on the rich would kill jobs and hurt the econo",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 564,
+      "snippet": "WASHINGTON (Reuters) - There is disagreement within President-elect Donald Trump’s camp about the structure of the top U",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 565,
+      "snippet": "The following statements were posted to the verified Twitter accounts of U.S. President Donald Trump, @realDonaldTrump a",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 566,
+      "snippet": "TOKYO (Reuters) - A Japanese man was arrested on Tuesday after parts of a dismembered body were found in a picnic cooler",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 567,
+      "snippet": "Joyce Curnell s family has been destroyed by South Carolina law enforcement after she was forced to spend 27 hours of pu",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 568,
+      "snippet": "We liberals have known exactly who Donald Trump really is all along. We knew which campaign promises he intended to keep",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 569,
+      "snippet": "MOSCOW (Reuters) - The United States is providing de-facto cover for Islamic State units in Syria and only pretending to",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 570,
+      "snippet": "Canada is going to miss President Obama when he leaves office just as much as most Americans will.But before that happen",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 571,
+      "snippet": "BEIJING (Reuters) - China on Friday urged the United States not to set itself up as a  human rights judge  and denounced",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 572,
+      "snippet": " In a little over two weeks, the Republican Party will hold its convention to, hypothetically, name Donald Trump as the ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 573,
+      "snippet": "TOULON, France (Reuters) - France s defense minister warned on Tuesday that North Korea could develop ballistic missiles",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 574,
+      "snippet": "Breaking and developing news on the occupation of the Oregon wildlife refuge: Ammon and Ryan Bundy, the brothers leading",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 575,
+      "snippet": "DUBAI (Reuters) - Saudi Arabia welcomed the new U.S. policy toward Iran and said lifting sanctions had allowed Iran to d",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 576,
+      "snippet": "Donald Trump has a new fundraising scheme. He s raffling off lunch with his son Eric and a tour of the Trump campaign he",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 577,
+      "snippet": "WASHINGTON (Reuters) - The chairman of the U.S. Federal Communications Commission is moving quickly to replace the Obama",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 578,
+      "snippet": "After reporter and model, Leeann Tweeden accused Franken of writing a sketch where he d come at her for a kiss, but she ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 579,
+      "snippet": "Oregon is showing Republicans in Congress how to get sh*t done.Republicans in Congress may be refusing to adhere to the ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 580,
+      "snippet": "HARARE (Reuters) - Zimbabwe s parliament has received a motion to impeach President Robert Mugabe after the army seized ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 581,
+      "snippet": "The families of the four dead Americans you left behind beg to differ. Not that you care, but Benghazi was kind of a big",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 582,
+      "snippet": "PARIS (Reuters) - French President Emmanuel Macron will announce his proposals for European Union reforms in a speech at",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 583,
+      "snippet": "NAJAF, Iraq (Reuters) - In early September, Ayatollah Mahmoud Hashemi Shahroudi, a senior Iranian official and cleric, f",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 584,
+      "snippet": "WASHINGTON (Reuters) - President Barack Obama said on Tuesday that he was willing to work with Republican Speaker Paul R",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 585,
+      "snippet": "Great parenting huh?",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 586,
+      "snippet": " views share commentary  seriously you always hear that we mustnt deport people because it could break up families yet w",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 587,
+      "snippet": "(Reuters) - A federal judge in Wisconsin dealt the first legal blow to President Donald Trump’s revised travel ban on Fr",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 588,
+      "snippet": "After a recent speech given by Minister Louis Farrakhan, he took questions from the audience. One woman goes to the mic ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 589,
+      "snippet": "BUDAPEST (Reuters) - Hungarian Prime Minister Viktor Orban said on Friday he would use all means necessary, including se",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 590,
+      "snippet": "BAGHDAD/KIRKUK (Reuters) - The Baghdad government recaptured territory from Kurds across the breadth of northern Iraq on",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 591,
+      "snippet": "SAN FRANCISCO (Reuters) - The Electronic Frontier Foundation sued the U.S. Department of Justice on Tuesday in an attemp",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 592,
+      "snippet": "BEIRUT (Reuters) - President Michel Aoun held talks on Monday with other Lebanese political leaders over the future of P",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 593,
+      "snippet": "TORONTO (Reuters) - A regional Latin American grouping on Thursday agreed more steps may be needed to further isolate Ve",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 594,
+      "snippet": "Donald Trump pissed off The New York Times, and that mistake bit him on the ass.On Tuesday morning, Trump attacked the n",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 595,
+      "snippet": "WASHINGTON (Reuters) - The economy, terrorism and healthcare ranked as the top three concerns facing Americans casting b",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 596,
+      "snippet": "RABAT (Reuters) - Moroccan authorities said on Saturday they had dismantled a cell linked to Islamic State that was acti",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 597,
+      "snippet": "The latest liberal meltdown comes from Minnesota This reminds of the mayor who was stopped by the police and had a fake ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 598,
+      "snippet": "LIMA (Reuters) - A congresswoman in Peru said embattled President Pedro Pablo Kuczynski survived a vote in Congress to o",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 599,
+      "snippet": "What a slap in the face to a strong candidate who has received little to no attention by the traditional GOP pundits and",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 600,
+      "snippet": "If you were wondering how a bunch of wannabe revolutionaries could afford to spend all of their time occupying wildlife ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 601,
+      "snippet": "A citizen from the United Arab Emirates (UAE) was brutally arrested after racist Islamophobes in Avon, Ohio, called the ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 602,
+      "snippet": "Leo must be drinking the climate change Kool-Aid:  It is the most existential human crisis that the world has ever known",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 603,
+      "snippet": "BERLIN (Reuters) - A leading candidate to be Germany s next finance minister signaled his willingness on Thursday to see",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 604,
+      "snippet": "WASHINGTON (Reuters) - The White House said on Sunday that U.S. President Donald Trump was open to signing legislation t",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 605,
+      "snippet": "MOSCOW (Reuters) - Russia is ready to work on improving bilateral relations win the United States after Donald Trump won",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 606,
+      "snippet": "In one glorious opening statement, Rep. Elijah Cummings made it clear that Michigan Governor Rick Snyder should face pri",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 607,
+      "snippet": "DUBAI (Reuters) - Former CIA director Leon Panetta said on Wednesday that President-elect Donald Trump risked being blam",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 608,
+      "snippet": "WASHINGTON (Reuters) - Prominent Republican senators on Thursday embraced a push to overhaul rules for addressing sexual",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 609,
+      "snippet": "WASHINGTON (Reuters) - The Senate Intelligence Committee is still negotiating with President Donald Trump’s former natio",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 610,
+      "snippet": "A tale of a mother and the dangerous religion of progressivism Putting her radical liberal ideology before the safety an",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 611,
+      "snippet": "Ammon Bundy and his band of armed domestic terrorists attended a meeting of Harney County residents on Tuesday night, an",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 612,
+      "snippet": "politics leader of the islamic revolution ayatollah seyyed ali khamenei r and finnish president sauli niinistö meet in t",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 613,
+      "snippet": "Sen. Bernie Sanders says that he doesn t think it s likely that Donald Trump will be reelected to a second term now that",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 614,
+      "snippet": "WASHINGTON (Reuters) - President Donald Trump urged two senior intelligence officials in March to publicly deny there wa",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 615,
+      "snippet": " I m a political refugee from Iran. I ve been to prison. I ve been under Islamic law. And I know how it starts, and I kn",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 616,
+      "snippet": "Donald Trump, the businessman who conservatives thought would be an ideal choice to become president of the most powerfu",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 617,
+      "snippet": "This ex-ICE agent reminds us of how ridiculous Jill Stein s  cherry-picked  3 state vote recount effort really is. Meanw",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 618,
+      "snippet": "Food Stamp use has miraculously gone down in several states! It s a miracle! In 13 Alabama counties, food stamp use went",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 619,
+      "snippet": "SAN FRANCISCO (Reuters) - Twitter Inc on Thursday accused Russian media outlets Russia Today (RT) and Sputnik of interfe",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 620,
+      "snippet": "BEIRUT (Reuters) - Islamic State is building up its defenses in a pocket of territory on the Syrian-Iraqi frontier, the ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 621,
+      "snippet": "JAKARTA (Reuters) - Indonesian President Joko Widodo has sent his foreign minister to Myanmar to urge its government to ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 622,
+      "snippet": "WASHINGTON (Reuters) - The Republican plan backed by President Donald Trump to overhaul the U.S. healthcare system clear",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 623,
+      "snippet": "BARCELONA (Reuters) - Catalonia s separatists look set to regain power in the wealthy Spanish region after local electio",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 624,
+      "snippet": "BEDMINSTER, N.J. (Reuters) - President-elect Donald Trump on Sunday assessed several more contenders for top U.S. posts ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 625,
+      "snippet": "MADRID (Reuters) - Spain on Friday sacked Catalonia s regional government, dissolved the Catalan parliament and called a",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 626,
+      "snippet": "In January, GOP presidential candidate Donald Trump said,  I try and pay as little tax as possible, because I hate what ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 627,
+      "snippet": "Sheriff Clarke:  Barack Obama for seven plus years has played the race card   that every time somebody criticized him it",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 628,
+      "snippet": "home this month popular why its absolutely worth it to learn game why its absolutely worth it to learn game  jon enjoys ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 629,
+      "snippet": "steht ganz neben sich klonforscher nach erfolgreichem experiment überwältigt   die kriminalpolizei brät bitte türen und ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 630,
+      "snippet": "BERLIN (Reuters) - Germany s liberal Free Democrats (FDP) set the stage for tough coalition talks with Chancellor Angela",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 631,
+      "snippet": "mark cuban has made no secret of his dislike for trump and his love for crooked hillary watch him tell fox news neil cav",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 632,
+      "snippet": "WASHINGTON (Reuters) - Democratic U.S. Senator Elizabeth Warren will keep up her assault on Republican presidential cand",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 633,
+      "snippet": "MEXICO CITY (Reuters) - Mexico on Thursday undertook to focus more resources on the search for missing people, the numbe",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 634,
+      "snippet": "Karma is a bitch and Senate Majority Leader Mitch McConnell is learning that the hard way.For nearly a year, Republicans",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 635,
+      "snippet": "Corporate sponsors like Coke should think again before hiring this potty mouthed anti-American hack singer for anything.",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 636,
+      "snippet": "This cop killer was a hateful, racist sub-human. He not only hated white people and cops, he bragged about it. The scary",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 637,
+      "snippet": "WASHINGTON (Reuters) - Donald Trump will speak with House of Representatives Republicans on July 7 in what would be the ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 638,
+      "snippet": "Senator Elizabeth Warren is pissed and she is letting the Securities and Exchange Commission (S.E.C.) know it in no unce",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 639,
+      "snippet": "LONDON (Reuters) - The leader of Britain s main opposition Labour Party, Jeremy Corbyn, and other politicians could lose",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 640,
+      "snippet": "ROME (Reuters) - Former Prime Minister Silvio Berlusconi said on Tuesday he and the leader of the Northern League had ag",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 641,
+      "snippet": "This heartfelt Facebook comment by a Detroit Lion s fan speaks for so many Americans:  I have been a die hard Detroit Li",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 642,
+      "snippet": "WASHINGTON (Reuters) - In Friday s speech laying out his strategy toward Iran and his decision not to certify it is comp",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 643,
+      "snippet": "A Highlands County woman could be charged with a felony after investigators say she allowed a toddler to be bitten by a ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 644,
+      "snippet": "https://www.youtube.com/watch?v=Ws5ojb0PCCo",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 645,
+      "snippet": "Diversity first Fordham University recently approved the removal of common restroom signage indicating use for either th",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 646,
+      "snippet": "21st Century Wire says The mainstream media continues to deflect from its own collapse in credibility in the wake of Hil",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 647,
+      "snippet": "While we re focused on the ridiculous Donald Trump tweets or the equally ridiculous Obamacare replacement bill, Republic",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 648,
+      "snippet": "GENEVA (Reuters) - The U.N. committees for women s and children s rights called on Myanmar s authorities on Wednesday to",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 649,
+      "snippet": "CHICAGO (Reuters) - Illinois Governor Bruce Rauner said on Monday the state has the power to block any debt offerings by",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 650,
+      "snippet": "MADRID (Reuters) - Spanish lender Sabadell decided on Thursday to transfer its legal base from Catalonia to Alicante, a ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 651,
+      "snippet": "There may have been a time, many years ago, when the Republican party gave a crap about its constituents, but those days",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 652,
+      "snippet": "It s about time Kansas Republicans saw the light and told Governor Sam Brownback to go f*ck himself.Kansas has been taki",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 653,
+      "snippet": "WASHINGTON (Reuters) - The White House said on Thursday it believed that Saudi Arabia would allow a blocked port in Yeme",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 654,
+      "snippet": "BAGHDAD (Reuters) - Iraq is satisfied with a U.S. appeals court ruling against a travel ban imposed by U.S. President Do",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 655,
+      "snippet": "WASHINGTON (Reuters) - President-elect Donald Trump will hold a series of meetings on Sunday in New Jersey as he continu",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 656,
+      "snippet": "It s over for Hillary It s officially over for the Democrat Party Obama built this!The nomination was barely sealed up a",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 657,
+      "snippet": "WASHINGTON (Reuters) - The House of Representatives Ethics Committee said on Wednesday it had opened an investigation in",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 658,
+      "snippet": "KAMPALA (Reuters) - Ugandan legislators voted late on Wednesday to amend the country s constitution to allow 73-year-old",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 659,
+      "snippet": "D Ann Loop of Brownsville, Texas lost much of her land ten years ago when the Bush administration decided to put up a bo",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 660,
+      "snippet": "Republicans treated President Obama like shit and he never attacked them like Donald Trump is attacking Democrats.Despit",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 661,
+      "snippet": "HUNTSVILLE, Alabama (Reuters) - President Donald Trump injected himself into a bitter U.S. Senate primary fight in Alaba",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 662,
+      "snippet": "VIENNA (Reuters) - Austrian far-right leader Heinz-Christian Strache congratulated Donald Trump on his victory in the U.",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 663,
+      "snippet": "CHICAGO (Reuters) - London’s first Muslim mayor, Sadiq Khan, voiced support for Democratic presidential nominee Hillary ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 664,
+      "snippet": "WASHINGTON (Reuters) - Former U.S. President Barack Obama on Thursday criticized his successor Donald Trump’s decision t",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 665,
+      "snippet": "(Reuters) - Puerto Rico’s governor said on Saturday he has delivered a revised fiscal turnaround plan to the U.S. territ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 666,
+      "snippet": "Well, no one will ever call Donald Trump the  speller-in-chief,  especially after this typo.Just a day after trashing th",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 667,
+      "snippet": "Spoken like a true gentleman and warrior in America s fight to defeat the Left The recent disclosure of lewd conversatio",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 668,
+      "snippet": "Rep. John Conyers  lawyer, Arnold Reed, threatened with  what s to come  during a press conference today: This, ladies a",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 669,
+      "snippet": "WASHINGTON (Reuters) - U.S. Senate Majority Leader Mitch McConnell, a Republican, said the United States needs to “be ca",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 670,
+      "snippet": "Approximately one year ago, my business partner sent me a screen shot of a list of  phony  or  not to be trusted  websit",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 671,
+      "snippet": "WASHINGTON (Reuters) - A senior U.S. senator said on Tuesday he would like to pass legislation to extend expiring sancti",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 672,
+      "snippet": "MOSCOW (Reuters) - Russian Foreign Minister Sergei Lavrov called on Monday for the United States and North Korea to star",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 673,
+      "snippet": "WASHINGTON/OSLO (Reuters) - Devastation from Hurricane Irma in the Caribbean will sharpen the demands from small island ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 674,
+      "snippet": "WASHINGTON (Reuters) - Republicans plan to release the language of their tax legislation early Thursday morning, the hea",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 675,
+      "snippet": "WASHINGTON (Reuters) - When President Barack Obama sets out this week to meet world leaders in China and Laos during his",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 676,
+      "snippet": "This is a story about how once trusted mainstream media outlets like Washington Post and the New York Times have used th",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 677,
+      "snippet": " It will bring back manufacturing jobs across the country, coal jobs across the country,  EPA Administrator Scott Pruitt",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 678,
+      "snippet": "WASHINGTON (Reuters) - U.S. Senate Democratic Leader Chuck Schumer said on Thursday that former FBI Director James Comey",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 679,
+      "snippet": "WASHINGTON (Reuters) - U.S. Senator Elizabeth Warren is due to meet Leandra English, an official with the Consumer Finan",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 680,
+      "snippet": "ISLAMABAD (Reuters) - The family of a former director of the Turkish PakTurk Schools in Pakistan has been abducted by au",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 681,
+      "snippet": "RABAT (Reuters) - Fifteen people were killed and five more injured when a stampede broke out in a southwestern Moroccan ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 682,
+      "snippet": "Tune in to the Alternate Current Radio Network (ACR) for another LIVE broadcast of  The Boiler Room tonight 6:00 PM PST ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 683,
+      "snippet": "LONDON (Reuters) - Queen Elizabeth will invite U.S. President-elect Donald Trump for a state visit to Britain next year ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 684,
+      "snippet": "(Reuters) - Billionaire investor Warren Buffett denied on Monday an allegation by Republican presidential candidate Dona",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 685,
+      "snippet": "WASHINGTON (Reuters) - President Donald Trump said on Wednesday that taxes on rich Americans might rise, as he pursues a",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 686,
+      "snippet": "INDIANAPOLIS (Reuters) - President Donald Trump said on Wednesday an unnamed foreign leader told him at the United Natio",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 687,
+      "snippet": "WASHINGTON (Reuters) - Prominent U.S. conservative congressman Raul Labrador has decided run for Idaho governor in the 2",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 688,
+      "snippet": "THANK GOODNESS! Devin Nunes just announced a probe into the Uranium One Deal that smells to high heaven of corruption an",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 689,
+      "snippet": "Obama and family arrived in Cuba today but little did we know that 40 MOOCHERS were joining the First Family. The usual ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 690,
+      "snippet": "(Reuters) - Former FBI Director James Comey, who was fired by U.S. President Donald Trump, has signed a deal for a book ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 691,
+      "snippet": "RIYADH (Reuters) - The United States Embassy in Saudi Arabia warned U.S. citizens to exercise caution in the area around",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 692,
+      "snippet": "While Trump crows about all the unscientific, self-selecting online polls that were rigged by his followers, the scienti",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 693,
+      "snippet": "WASHINGTON (Reuters) - Branding Donald Trump a “dangerous demagogue,” USA Today on Thursday urged its readers not to vot",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 694,
+      "snippet": "FLORENCE, Italy (Reuters) - A stone fragment, probably a piece of marble from the top of a column, fell on a tourist vis",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 695,
+      "snippet": "If there s one conclusion to draw from the horrific shootings that have been happening over the course of this past week",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 696,
+      "snippet": "FRANKFURT (Reuters) - The far right is making the most noise on Twitter during Germany s election campaign, but far less",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 697,
+      "snippet": "A tweet caught my eye after exploring all of the hate and violence posted from Charlottesville. Did you dig deeper and d",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 698,
+      "snippet": "NEW YORK (Reuters) - Rex Tillerson, the former oil executive under consideration for U.S. secretary of state, is trying ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 699,
+      "snippet": "WASHINGTON (Reuters) - Republican presidential nominee Donald Trump, one of the leaders of the “birther” movement that q",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 700,
+      "snippet": "SOCHI, Russia (Reuters) - Kremlin spokesman Dmitry Peskov declined to comment on the appointment of former FBI chief Rob",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 701,
+      "snippet": "On Wednesday, three young Washington teens received a terrifying  lesson  from one of the people the NRA says will save ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 702,
+      "snippet": "two powerful quakes hit italy within hours page  near the location of the deadly august quake see ats for the august qua",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 703,
+      "snippet": "At about the 7:30 mark you  ll hear The Black Eyed Peas song playing to get Bill clinton off of the stage. What a boring",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 704,
+      "snippet": "LONDON (Reuters) - Investors who sent copper to a 17-month peak on hopes for a splurge of U.S. infrastructure spending b",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 705,
+      "snippet": "LONDON (Reuters) - Tehran vowed on Tuesday to stand alongside Baghdad and Ankara  against the outcome of an independence",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 706,
+      "snippet": "LONDON (Reuters) - While many Kenyans fear Thursday s election re-run will provoke serious trouble, foreign investors ar",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 707,
+      "snippet": "It has just come to light that Stanislav Petrov, a former Soviet Lieutenant Colonel, passed away on May 19 this year in ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 708,
+      "snippet": "Florida Republicans have sponsored a bill that would literally ban all abortions except in cases where the woman s healt",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 709,
+      "snippet": "WASHINGTON (Reuters) - U.S. Republican Senator John McCain, who has been recuperating in Arizona after being diagnosed w",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 710,
+      "snippet": "The man who won two Super Bowls for the city of Pittsburgh says that he now regrets the fact that he and his Steelers te",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 711,
+      "snippet": "Do you remember Trump s first meltdown week? It was late July, after the Democratic National Convention, and as the elec",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 712,
+      "snippet": "ROME (Reuters) - The brother of the man who killed two women with a knife outside Marseille train station last week was ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 713,
+      "snippet": " It is absolutely unbelievable that he could be the leader of the greatest nation in the world and we cannot allow him t",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 714,
+      "snippet": "Despite having run one of the most disgusting campaigns most of us have ever witnessed, the not-my-president-elect told ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 715,
+      "snippet": "I HEARD THIS TONIGHT ALONG WITH THE HORRIBLE SPEECH FROM OBAMA AND THOUGHT IT WAS SPOT ON! O Reilly described the Howard",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 716,
+      "snippet": "WASHINGTON (Reuters) - U.S. Senate Republican leaders released a new draft of their healthcare bill on Thursday that ret",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 717,
+      "snippet": "by karencole  posted thursday october   at am edt  having a great smile can say so much about someone this is the first ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 718,
+      "snippet": "Former San Francisco 49ers quarterback Colin Kaepernick has been essentially blacklisted in the NFL for daring to kneel ",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 719,
+      "snippet": "MOSCOW (Reuters) - Russia on Tuesday unveiled a statue of Mikhail Kalashnikov,  inventor of the AK-47 assault rifle that",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 720,
+      "snippet": "Senator Lindsey Graham (R-SC) has never been a fan of Donald Trump. He regularly criticized Trump throughout his disastr",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 721,
+      "snippet": "dr duke and reverend dankof on the state of the campaign the synagogue of satin   am  dr duke and reverend dankof on the",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 722,
+      "snippet": "WASHINGTON (Reuters) - The United States should continue to be “engaged” in international climate change discussions but",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 723,
+      "snippet": "Oops.When you mistake a mistake one time, it s understandable. But Donald Trump s idiot son and namesake made the same e",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 724,
+      "snippet": " Join Patrick every week at 21WIRE.TV for news, views and analysis on all top stories domestically and abroad THIS WEEK:",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 725,
+      "snippet": "NEW YORK (Reuters) - Provocative far-right commentator Milo Yiannopoulos resigned on Tuesday as a senior editor of the B",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 726,
+      "snippet": "LISTEN TO THIS WOMEN SPEAK OF VOTING RIGHTS LIKE IT S 1960. WE DO NOT HAVE A VOTING RIGHTS PROBLEM.  LYNCH THEN SPEAKS A",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 727,
+      "snippet": "Former Republican Party chairman and U.S. Senate candidate Michael Steele, who is black, has made some interesting revel",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 728,
+      "snippet": "BRUSSELS (Reuters) - Poland s new prime minister said on Thursday he expected the European Commission to launch an unpre",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 729,
+      "snippet": "YANGON/SHAMLAPUR, Bangladesh (Reuters) - Myanmar said on Wednesday it was negotiating with China and Russia to ensure th",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 730,
+      "snippet": "LONDON (Reuters) - Britain has received assurances from the United States that allegations the GCHQ intelligence agency ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 731,
+      "snippet": "MOSCOW (Reuters) - Russia is quietly boosting economic support for North Korea to try to stymie any U.S.-led push to ous",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 732,
+      "snippet": "(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0];  if (d.getElementById(id)) return;  js = d.createElem",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 733,
+      "snippet": "WASHINGTON (Reuters) - U.S. Secretary of State John Kerry said on Sunday it would be valuable for President-elect Donald",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 734,
+      "snippet": "A Birmingham, Alabama police officer was arrested this week, after he allegedly pepper sprayed a fellow officer and thre",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 735,
+      "snippet": "BERLIN (Reuters) - Germany s Social Democrats (SPD) on Thursday insisted they were still in with a chance of ousting Cha",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 736,
+      "snippet": "Jared Kushner just spoke out on being accused of  colluding  with the Russians during the 2016 campaign: President Trump",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 737,
+      "snippet": "SEOUL (Reuters) - South Korea s foreign ministry said on Tuesday the United States  decision to put North Korea back on ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 738,
+      "snippet": "WASHINGTON (Reuters) - U.S. President Donald Trump honored military veterans in Washington on Saturday at a Kennedy Cent",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 739,
+      "snippet": "(Reuters) - Kansas vowed on Wednesday to sue the Obama administration over a directive telling U.S. public schools to al",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 740,
+      "snippet": "WASHINGTON (Reuters) - U.S. President-elect Donald Trump on Wednesday warned fellow Republicans to “be careful” over the",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 741,
+      "snippet": "LITTLE HOCKING, Ohio (Reuters) - While revelations that Donald Trump Jr. welcomed Russian help in last year’s presidenti",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 742,
+      "snippet": "LONDON (Reuters) - The British government is planning to pass a separate piece of legislation through parliament to appr",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 743,
+      "snippet": "Hillary s VP pick has ties with radical Islamists but the takeaway from the Dem convention is that he s pretty much a bo",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 744,
+      "snippet": "WASHINGTON (Reuters) - The U.S. military will fight Islamic State in Syria  as long as they want to fight,  Defense Secr",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 745,
+      "snippet": "VIENNA (Reuters) - Founded by former Nazis six decades ago, Austria s far-right Freedom Party (FPO) long ago left the po",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 746,
+      "snippet": "It s become abundantly clear that Donald Trump doesn t think through what he s saying, basically at any given moment. Hi",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 747,
+      "snippet": "MUNICH (Reuters) - U.S. Republican senators plan to introduce legislation to impose further sanctions on Iran, accusing ",
+      "true_label": 1,
+      "true_class": "fake"
+    },
+    {
+      "idx": 748,
+      "snippet": "It s no accident that President Obama named Vanita Gupta acting head of the Civil Rights Division of the DOJ. Gupta is b",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 749,
+      "snippet": "With his decision to withdraw from the Paris climate agreement, President Trump just gave the #ResistTrump crowd a new r",
+      "true_label": 0,
+      "true_class": "real"
+    },
+    {
+      "idx": 750,
+      "snippet": "MYEBON, Myanmar (Reuters) - Buddhist villagers in relatively peaceful parts of Myanmar s Rakhine state are enforcing a s",
+      "true_label": 1,
+      "true_class": "fake"
+    }
+  ]
+}
