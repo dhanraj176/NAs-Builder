@@ -238,6 +238,228 @@ class NetworkZipGenerator:
 
         return None, {}
 
+    # ── Retrain on new data ────────────────────────────────────────────────
+
+    def retrain(self, problem: str, domain: str, new_data_path: str) -> dict:
+        """
+        Fine-tune a saved ResNet18 on new images.
+
+        Epochs 1-3: frozen backbone, only fc trains.
+        Epochs 4-5: layer4 + fc unfrozen for deeper fine-tuning.
+        Saves best checkpoint (by val_acc) back to the same .pth file.
+        """
+        import hashlib
+        import re
+        import time
+        import torch
+        import torch.nn as nn
+        import torchvision.models as models
+        import torchvision.transforms as T
+        from torch.utils.data import DataLoader, Dataset, Subset
+        from PIL import Image
+
+        t0 = time.time()
+
+        # ── 1. Resolve model path from problem hash ────────────────────────
+        cleaned    = re.sub(r'[^\w\s]', '', problem)
+        normalized = ' '.join(cleaned.lower().split())
+        h          = hashlib.md5(normalized.encode()).hexdigest()[:10]
+
+        model_path = TRAINED_DIR / f"{h}_{domain}.pth"
+        cls_path   = TRAINED_DIR / f"{h}_{domain}_classes.json"
+
+        if not model_path.exists():
+            raise FileNotFoundError(
+                f"[Retrain] No trained model at {model_path}. "
+                f"Run the orchestrator on '{problem}' first."
+            )
+
+        # ── 2. Load class metadata ─────────────────────────────────────────
+        meta        = {}
+        if cls_path.exists():
+            with open(cls_path) as f:
+                meta = json.load(f)
+        classes     = meta.get("classes", [])
+        num_classes = len(classes) if classes else 2
+        print(f"[Retrain] Model  : {model_path.name}")
+        print(f"[Retrain] Classes: {classes}  (n={num_classes})")
+
+        # ── 3. Load ResNet18 with saved weights ────────────────────────────
+        model    = models.resnet18(weights=None)
+        model.fc = nn.Linear(model.fc.in_features, num_classes)
+        model.load_state_dict(
+            torch.load(str(model_path), map_location="cpu", weights_only=True))
+        print(f"[Retrain] Loaded weights ✓")
+
+        # ── 4. Build dataset — parent folder name = class label ───────────
+        data_root = Path(new_data_path)
+        if not data_root.exists():
+            raise FileNotFoundError(f"[Retrain] new_data_path not found: {new_data_path}")
+
+        IMG_EXTS    = {'.jpg', '.jpeg', '.png', '.bmp', '.webp'}
+        image_files = []
+        raw_labels  = []
+        for f in data_root.rglob('*'):
+            if f.is_file() and f.suffix.lower() in IMG_EXTS:
+                label = f.parent.name if f.parent != data_root else "_root"
+                image_files.append(f)
+                raw_labels.append(label)
+
+        if not image_files:
+            raise ValueError(f"[Retrain] No images found under {new_data_path}")
+
+        detected_classes = sorted(set(raw_labels))
+        label_map        = {c: i for i, c in enumerate(detected_classes)}
+
+        # Adapt fc if new data has a different class count than the saved model
+        if len(detected_classes) != num_classes:
+            print(f"[Retrain] Class count mismatch: "
+                  f"model={num_classes}, data={len(detected_classes)} — replacing fc")
+            num_classes = len(detected_classes)
+            model.fc    = nn.Linear(model.fc.in_features, num_classes)
+
+        transform_aug = T.Compose([
+            T.Resize((224, 224)),
+            T.RandomHorizontalFlip(),
+            T.ColorJitter(brightness=0.2, contrast=0.2),
+            T.ToTensor(),
+            T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+        ])
+        transform_val = T.Compose([
+            T.Resize((224, 224)),
+            T.ToTensor(),
+            T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+        ])
+
+        int_labels = [label_map[l] for l in raw_labels]
+
+        class _ImageList(Dataset):
+            def __init__(self, paths, labels, transform):
+                self.paths     = paths
+                self.labels    = labels
+                self.transform = transform
+            def __len__(self): return len(self.paths)
+            def __getitem__(self, idx):
+                img = Image.open(self.paths[idx]).convert("RGB")
+                return self.transform(img), self.labels[idx]
+
+        n       = len(image_files)
+        n_train = max(1, int(0.70 * n))
+        n_val   = max(1, int(0.15 * n)) if n >= 3 else 0
+        n_test  = n - n_train - n_val
+        # Keep n_train as the remainder so counts always sum to n
+        n_train = n - n_val - n_test
+
+        print(f"[Retrain] Dataset: {n} images — "
+              f"train={n_train} / val={n_val} / test={n_test}")
+
+        generator = torch.Generator().manual_seed(42)
+        idx_perm  = torch.randperm(n, generator=generator).tolist()
+        train_idx = idx_perm[:n_train]
+        val_idx   = idx_perm[n_train:n_train + n_val]
+        test_idx  = idx_perm[n_train + n_val:]
+
+        aug_ds  = _ImageList(image_files, int_labels, transform_aug)
+        eval_ds = _ImageList(image_files, int_labels, transform_val)
+
+        train_ds = Subset(aug_ds,  train_idx)
+        val_ds   = Subset(eval_ds, val_idx)
+        test_ds  = Subset(eval_ds, test_idx)
+
+        bs           = min(16, max(1, n_train))
+        train_loader = DataLoader(train_ds, batch_size=bs, shuffle=True,  num_workers=0)
+        val_loader   = DataLoader(val_ds,   batch_size=bs, shuffle=False, num_workers=0) \
+                       if n_val  > 0 else None
+        test_loader  = DataLoader(test_ds,  batch_size=bs, shuffle=False, num_workers=0) \
+                       if n_test > 0 else None
+
+        # ── 5. Training loop ───────────────────────────────────────────────
+        device    = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model     = model.to(device)
+        criterion = nn.CrossEntropyLoss()
+        EPOCHS    = 5
+
+        # Epochs 1-3: freeze backbone, only fc trains
+        for name, param in model.named_parameters():
+            param.requires_grad = name.startswith("fc")
+
+        optimizer = torch.optim.Adam(
+            filter(lambda p: p.requires_grad, model.parameters()), lr=0.001)
+
+        def _eval_loader(loader):
+            if loader is None:
+                return 0.0, 0.0
+            model.eval()
+            total_loss = correct = total = 0
+            with torch.no_grad():
+                for imgs, lbls in loader:
+                    imgs, lbls  = imgs.to(device), lbls.to(device)
+                    out          = model(imgs)
+                    total_loss  += criterion(out, lbls).item() * lbls.size(0)
+                    correct     += (out.argmax(1) == lbls).sum().item()
+                    total       += lbls.size(0)
+            if total == 0:
+                return 0.0, 0.0
+            return total_loss / total, 100.0 * correct / total
+
+        best_val_acc = 0.0
+
+        for epoch in range(1, EPOCHS + 1):
+            # Epoch 4: unfreeze layer4 + fc for deeper fine-tuning
+            if epoch == 4:
+                print(f"[Retrain] Unfreezing layer4 + fc")
+                for name, param in model.named_parameters():
+                    if name.startswith("layer4") or name.startswith("fc"):
+                        param.requires_grad = True
+                optimizer = torch.optim.Adam(
+                    filter(lambda p: p.requires_grad, model.parameters()), lr=0.001)
+
+            model.train()
+            running_loss = correct = total = 0
+            for imgs, lbls in train_loader:
+                imgs, lbls    = imgs.to(device), lbls.to(device)
+                optimizer.zero_grad()
+                out            = model(imgs)
+                loss           = criterion(out, lbls)
+                loss.backward()
+                optimizer.step()
+                running_loss  += loss.item() * lbls.size(0)
+                correct       += (out.argmax(1) == lbls).sum().item()
+                total         += lbls.size(0)
+
+            train_loss        = running_loss / total if total else 0.0
+            _, val_acc        = _eval_loader(val_loader)
+
+            print(f"[Retrain] Epoch {epoch}/{EPOCHS} — "
+                  f"loss: {train_loss:.4f} — val_acc: {val_acc:.2f}%")
+
+            if val_acc >= best_val_acc:
+                best_val_acc = val_acc
+                torch.save(model.state_dict(), str(model_path))
+
+        # If no validation set, save final weights unconditionally
+        if n_val == 0:
+            torch.save(model.state_dict(), str(model_path))
+
+        # ── 6. Final test accuracy + return ───────────────────────────────
+        _, test_acc = _eval_loader(test_loader)
+        elapsed     = round(time.time() - t0, 1)
+
+        print(f"[Retrain] ✅ Done — test_acc: {test_acc:.2f}%  "
+              f"best_val: {best_val_acc:.2f}%  time: {elapsed}s")
+        print(f"[Retrain] Saved → {model_path}")
+
+        return {
+            "status":       "retrained",
+            "new_accuracy": round(test_acc, 2),
+            "epochs":       EPOCHS,
+            "val_accuracy": round(best_val_acc, 2),
+            "elapsed":      elapsed,
+            "model_path":   str(model_path),
+            "classes":      detected_classes,
+            "train_size":   n_train,
+        }
+
     # ── Agent code generators ──────────────────────────────────────────────
 
     def _generate_real_agent_named(self, class_name: str,
