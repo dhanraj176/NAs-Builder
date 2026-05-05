@@ -1,5 +1,5 @@
 {
-  "test_run_at": "2026-05-05T14:32:46",
+  "test_run_at": "2026-05-05T14:50:35",
   "split_policy": "70/15/15 — held-out test set never seen during training",
   "sources": [
     "papers_with_code",
@@ -13,7 +13,7 @@
     {
       "problem": "detect weapons in airport security scans",
       "domain": "image",
-      "elapsed_s": 5.25,
+      "elapsed_s": 5.69,
       "source_counts": {
         "pwc": 0,
         "openml": 3,
@@ -93,7 +93,7 @@
     {
       "problem": "predict customer churn from transaction data",
       "domain": "security",
-      "elapsed_s": 3.45,
+      "elapsed_s": 3.51,
       "source_counts": {
         "pwc": 0,
         "openml": 19,
@@ -125,32 +125,10 @@
         },
         {
           "source": "huggingface",
-          "name": "bitext/Bitext-customer-support-llm-chatbot-training-dataset",
-          "url": "https://huggingface.co/datasets/bitext/Bitext-customer-support-llm-chatbot-training-dataset",
-          "downloads": 5873,
-          "num_instances": 5873,
-          "license": "unknown",
-          "size_categories": [],
-          "task_categories": [],
-          "sota_accuracy": null
-        },
-        {
-          "source": "huggingface",
           "name": "jit7duke/customer-support-training-data",
           "url": "https://huggingface.co/datasets/jit7duke/customer-support-training-data",
           "downloads": 821,
           "num_instances": 821,
-          "license": "unknown",
-          "size_categories": [],
-          "task_categories": [],
-          "sota_accuracy": null
-        },
-        {
-          "source": "huggingface",
-          "name": "Haseeb202/custom_customer_support_dataset_GPT-4_Generated",
-          "url": "https://huggingface.co/datasets/Haseeb202/custom_customer_support_dataset_GPT-4_Generated",
-          "downloads": 439,
-          "num_instances": 500,
           "license": "unknown",
           "size_categories": [],
           "task_categories": [],
@@ -166,6 +144,28 @@
           "size_categories": [],
           "task_categories": [],
           "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "MakTek/Customer_support_faqs_dataset",
+          "url": "https://huggingface.co/datasets/MakTek/Customer_support_faqs_dataset",
+          "downloads": 415,
+          "num_instances": 500,
+          "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
+          "sota_accuracy": null
+        },
+        {
+          "source": "huggingface",
+          "name": "scikit-learn/churn-prediction",
+          "url": "https://huggingface.co/datasets/scikit-learn/churn-prediction",
+          "downloads": 434,
+          "num_instances": 500,
+          "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
+          "sota_accuracy": null
         }
       ],
       "split": "70/15/15 train/val/test",
@@ -174,7 +174,7 @@
     {
       "problem": "identify plant diseases from leaf images",
       "domain": "image",
-      "elapsed_s": 3.57,
+      "elapsed_s": 3.36,
       "source_counts": {
         "pwc": 0,
         "openml": 7,

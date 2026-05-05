@@ -51,6 +51,12 @@ def run_test():
         print(f"Domain  : {tc['domain']}")
         print(f"{'='*60}")
 
+        # Purge any poisoned ChromaDB entries before the plant disease case
+        if "plant" in tc["problem"].lower():
+            purged = di.purge_problem_cache(["plant", "disease"])
+            if purged:
+                print(f"   [Cache] Purged {purged} stale entries for plant/disease")
+
         t0 = time.time()
         try:
             result = di.discover(tc["problem"], tc["domain"])

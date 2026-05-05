@@ -480,6 +480,11 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
         shard_count = self._count_hf_parquet_shards(dataset_id)
         if shard_count > 10:
             print(f"   ⚠️  {dataset_id} has {shard_count} parquet shards — too large, skipping")
+            try:
+                from api.brain.dataset_intelligence import DatasetIntelligence
+                DatasetIntelligence.blacklist_dataset(dataset_id)
+            except Exception:
+                pass
             return None
 
         ds    = load_dataset(dataset_id, cache_dir=str(hf_cache),

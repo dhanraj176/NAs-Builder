@@ -56,6 +56,35 @@ class DatasetIntelligence:
         count = self.collection.count()
         print(f"DatasetIntelligence ready — {count} proven solutions in memory")
 
+    # Session-level blacklist — populated when a dataset is blocked (e.g. too many shards)
+    _session_blacklist: set = set()
+
+    @classmethod
+    def blacklist_dataset(cls, name: str) -> None:
+        """Add a dataset to the session blacklist — won't be selected again this session."""
+        cls._session_blacklist.add(name)
+        print(f"   [Blacklist] {name}")
+
+    def purge_problem_cache(self, keywords: list) -> int:
+        """Delete ChromaDB entries whose stored problem contains any of the keywords."""
+        if self.collection.count() == 0:
+            return 0
+        try:
+            results   = self.collection.get()
+            to_delete = []
+            for i, doc in enumerate(results["documents"]):
+                if any(kw.lower() in doc.lower() for kw in keywords):
+                    to_delete.append(results["ids"][i])
+                    meta = results["metadatas"][i]
+                    print(f"   [Purge] '{doc[:50]}' -> {meta.get('dataset_id')}")
+            if to_delete:
+                self.collection.delete(ids=to_delete)
+                print(f"   [Purge] Removed {len(to_delete)} entries")
+            return len(to_delete)
+        except Exception as e:
+            print(f"   [Purge] Error: {e}")
+            return 0
+
     # ── Main entry — Stage 0 ───────────────────────────────────────────────
 
     def recall(self, problem: str, domain: str) -> dict:
@@ -240,6 +269,15 @@ class DatasetIntelligence:
         for items in source_results.values():
             all_candidates.extend(items)
 
+        # Strip session-blacklisted datasets (blocked for shards etc. earlier this session)
+        if DatasetIntelligence._session_blacklist:
+            before        = len(all_candidates)
+            all_candidates = [c for c in all_candidates
+                              if c.get("name") not in DatasetIntelligence._session_blacklist]
+            removed = before - len(all_candidates)
+            if removed:
+                print(f"   [Discover] {removed} blacklisted dataset(s) removed")
+
         # Fallback to HF Crawl4AI only if ALL 4 sources (incl. HF API) returned nothing
         if not all_candidates:
             print("   [Discover] All sources empty — HuggingFace Crawl4AI fallback")
@@ -418,12 +456,11 @@ class DatasetIntelligence:
                 })
         return results
 
-    # Keywords that indicate a dataset is NOT a simple image-classification set
-    _BAD_IMAGE_FORMAT_NAMES = (
-        "vqa", "caption", "captioning", "instruct", "instruction",
-        "llava", "chat", "conversation", "gpt", "llm", "text2image",
-        "image2text", "blip", "flamingo", "grounding",
+    # Hard-excluded by name — removed BEFORE scoring, unconditionally
+    _HARD_EXCLUDE_NAMES = (
+        "vqa", "caption", "llava", "gpt", "chat", "merged",
     )
+    # Soft penalty via task_categories (image tasks only)
     _BAD_IMAGE_TASK_CATS = (
         "visual-question-answering", "image-captioning", "image-to-text",
         "text-to-image", "question-answering", "text-generation",
@@ -438,9 +475,20 @@ class DatasetIntelligence:
         """
         Rank by: sample count (max 5) + license (max 3) + keyword overlap (max 9)
                  + SOTA bonus (2) − size penalty − shard penalty − format penalty.
-        Candidates with < 500 samples are excluded.
+        Candidates with < 500 samples or matching HARD_EXCLUDE_NAMES are removed first.
         """
         import math
+
+        # Hard pre-filter — excluded before scoring, regardless of task
+        filtered = []
+        for c in candidates:
+            name_lower = str(c.get("name", "")).lower()
+            if any(excl in name_lower for excl in self._HARD_EXCLUDE_NAMES):
+                print(f"   [Filter] Hard-excluded: {c['name']}")
+                continue
+            filtered.append(c)
+        candidates = filtered
+
         p_lower = problem.lower()
         p_words = set(p_lower.split())
         is_image_task = any(w in p_lower for w in self._IMAGE_PROBLEM_WORDS)
@@ -489,16 +537,13 @@ class DatasetIntelligence:
             shards = int(c.get("parquet_shards", 0) or 0)
             shard_penalty = -3.0 if shards > 5 else 0.0
 
-            # 7. Wrong-format penalty for image classification tasks
+            # 7. Wrong-format penalty via task_categories (image tasks only)
             format_penalty = 0.0
             if is_image_task:
-                name_lower = str(c.get("name", "")).lower()
-                task_cats  = " ".join(str(t).lower()
-                                      for t in (c.get("task_categories") or []))
+                task_cats = " ".join(str(t).lower()
+                                     for t in (c.get("task_categories") or []))
                 if any(b in task_cats for b in self._BAD_IMAGE_TASK_CATS):
                     format_penalty -= 4.0
-                if any(b in name_lower for b in self._BAD_IMAGE_FORMAT_NAMES):
-                    format_penalty -= 2.0
 
             return (sample_score + lic_score + bert_score + benchmark
                     + size_penalty + shard_penalty + format_penalty)
