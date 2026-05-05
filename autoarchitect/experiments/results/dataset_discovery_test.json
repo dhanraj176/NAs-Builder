@@ -1,5 +1,5 @@
 {
-  "test_run_at": "2026-05-05T13:43:40",
+  "test_run_at": "2026-05-05T14:32:46",
   "split_policy": "70/15/15 — held-out test set never seen during training",
   "sources": [
     "papers_with_code",
@@ -13,7 +13,7 @@
     {
       "problem": "detect weapons in airport security scans",
       "domain": "image",
-      "elapsed_s": 5.53,
+      "elapsed_s": 5.25,
       "source_counts": {
         "pwc": 0,
         "openml": 3,
@@ -27,6 +27,8 @@
         "downloads": 47,
         "num_instances": 500,
         "license": "unknown",
+        "size_categories": [],
+        "task_categories": [],
         "sota_accuracy": null
       },
       "top_candidates": [
@@ -37,6 +39,8 @@
           "downloads": 47,
           "num_instances": 500,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         },
         {
@@ -46,6 +50,8 @@
           "downloads": 5,
           "num_instances": 500,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         },
         {
@@ -65,6 +71,8 @@
           "downloads": 7836,
           "num_instances": 7836,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         },
         {
@@ -74,6 +82,8 @@
           "downloads": 2138,
           "num_instances": 2138,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         }
       ],
@@ -83,7 +93,7 @@
     {
       "problem": "predict customer churn from transaction data",
       "domain": "security",
-      "elapsed_s": 4.5,
+      "elapsed_s": 3.45,
       "source_counts": {
         "pwc": 0,
         "openml": 19,
@@ -97,6 +107,8 @@
         "downloads": 46,
         "num_instances": 500,
         "license": "unknown",
+        "size_categories": [],
+        "task_categories": [],
         "sota_accuracy": null
       },
       "top_candidates": [
@@ -107,6 +119,8 @@
           "downloads": 46,
           "num_instances": 500,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         },
         {
@@ -116,6 +130,8 @@
           "downloads": 5873,
           "num_instances": 5873,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         },
         {
@@ -125,6 +141,8 @@
           "downloads": 821,
           "num_instances": 821,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         },
         {
@@ -134,6 +152,8 @@
           "downloads": 439,
           "num_instances": 500,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         },
         {
@@ -143,6 +163,8 @@
           "downloads": 420,
           "num_instances": 500,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         }
       ],
@@ -152,7 +174,7 @@
     {
       "problem": "identify plant diseases from leaf images",
       "domain": "image",
-      "elapsed_s": 3.85,
+      "elapsed_s": 3.57,
       "source_counts": {
         "pwc": 0,
         "openml": 7,
@@ -166,6 +188,8 @@
         "downloads": 48779,
         "num_instances": 48779,
         "license": "unknown",
+        "size_categories": [],
+        "task_categories": [],
         "sota_accuracy": null
       },
       "top_candidates": [
@@ -176,6 +200,8 @@
           "downloads": 48779,
           "num_instances": 48779,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         },
         {
@@ -185,6 +211,8 @@
           "downloads": 4152,
           "num_instances": 4152,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         },
         {
@@ -194,6 +222,8 @@
           "downloads": 1953,
           "num_instances": 1953,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         },
         {
@@ -203,6 +233,8 @@
           "downloads": 742,
           "num_instances": 742,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         },
         {
@@ -212,6 +244,8 @@
           "downloads": 540,
           "num_instances": 540,
           "license": "unknown",
+          "size_categories": [],
+          "task_categories": [],
           "sota_accuracy": null
         }
       ],

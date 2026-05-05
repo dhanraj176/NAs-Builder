@@ -398,56 +398,110 @@ class DatasetIntelligence:
                 seen.add(ds_id)
                 downloads = ds.get("downloads", 0) or 0
                 card      = ds.get("cardData") or {}
-                license_  = card.get("license", "unknown") if isinstance(card, dict) else "unknown"
+                if isinstance(card, dict):
+                    license_   = card.get("license", "unknown")
+                    size_cats  = card.get("size_categories", []) or []
+                    task_cats  = card.get("task_categories", []) or []
+                else:
+                    license_ = "unknown"
+                    size_cats, task_cats = [], []
                 results.append({
-                    "source":        "huggingface",
-                    "name":          ds_id,
-                    "url":           f"https://huggingface.co/datasets/{ds_id}",
-                    "downloads":     downloads,
-                    "num_instances": max(downloads, 500),
-                    "license":       license_,
-                    "sota_accuracy": None,
+                    "source":          "huggingface",
+                    "name":            ds_id,
+                    "url":             f"https://huggingface.co/datasets/{ds_id}",
+                    "downloads":       downloads,
+                    "num_instances":   max(downloads, 500),
+                    "license":         license_,
+                    "size_categories": size_cats,
+                    "task_categories": task_cats,
+                    "sota_accuracy":   None,
                 })
         return results
 
+    # Keywords that indicate a dataset is NOT a simple image-classification set
+    _BAD_IMAGE_FORMAT_NAMES = (
+        "vqa", "caption", "captioning", "instruct", "instruction",
+        "llava", "chat", "conversation", "gpt", "llm", "text2image",
+        "image2text", "blip", "flamingo", "grounding",
+    )
+    _BAD_IMAGE_TASK_CATS = (
+        "visual-question-answering", "image-captioning", "image-to-text",
+        "text-to-image", "question-answering", "text-generation",
+    )
+    _IMAGE_PROBLEM_WORDS = (
+        "image", "photo", "picture", "visual", "detect", "scan",
+        "leaf", "plant", "disease", "xray", "medical", "defect",
+        "object", "classify", "recognition",
+    )
+
     def _rank_candidates(self, candidates: list, problem: str) -> list:
         """
-        Rank by: sample count (log scale, 10 pts max) → open license (3 pts) →
-        keyword overlap with problem (6 pts) → SOTA benchmark bonus (2 pts).
+        Rank by: sample count (max 5) + license (max 3) + keyword overlap (max 9)
+                 + SOTA bonus (2) − size penalty − shard penalty − format penalty.
         Candidates with < 500 samples are excluded.
         """
         import math
-        p_words = set(problem.lower().split())
+        p_lower = problem.lower()
+        p_words = set(p_lower.split())
+        is_image_task = any(w in p_lower for w in self._IMAGE_PROBLEM_WORDS)
 
         def score(c) -> float:
             n = max(int(c.get("num_instances", 0) or 0), 0)
             if n < 500:
                 return -1.0
 
-            # Sample count (max 5 pts) — capped so keyword relevance dominates
+            # 1. Sample count (max 5 pts) — capped so relevance dominates
             sample_score = min(math.log10(max(n, 1)) * 1.0, 5.0)
 
+            # 2. License (max 3 pts)
             lic = str(c.get("license", "")).lower()
             lic_score = 3.0 if any(
                 k in lic for k in ("mit", "cc", "apache", "public", "open")
             ) else (1.0 if lic in ("unknown", "") else 0.5)
 
+            # 3. Keyword overlap via prefix match (max 9 pts)
             name_words = set(
                 str(c.get("name", "")).lower()
                 .replace("/", " ").replace("-", " ").replace("_", " ").split()
             )
-            # Prefix match handles plurals/truncations (weapon≈weapons, detect≈detection)
             overlap = sum(
                 1 for pw in p_words
                 if any(len(pw) > 3 and len(nw) > 3 and
                        (pw.startswith(nw[:4]) or nw.startswith(pw[:4]))
                        for nw in name_words)
             )
-            bert_score = min(overlap * 3.0, 9.0)  # 3 pts/match, max 9
+            bert_score = min(overlap * 3.0, 9.0)
 
+            # 4. SOTA benchmark bonus (2 pts)
             benchmark = 2.0 if c.get("sota_accuracy") else 0.0
 
-            return sample_score + lic_score + bert_score + benchmark
+            # 5. Size penalty — prefer datasets under ~500 MB
+            size_cats = " ".join(str(s).lower()
+                                 for s in (c.get("size_categories") or []))
+            if any(x in size_cats for x in (">10gb", "10g<n", "1b<n", ">1b")):
+                size_penalty = -5.0   # multi-GB — likely many shards
+            elif any(x in size_cats for x in ("100m<n", "1m<n<10m", ">100m")):
+                size_penalty = -2.0   # 100 M+ rows — borderline large
+            else:
+                size_penalty = 0.0
+
+            # 6. Parquet shard penalty (>5 shards = slow / disk-heavy)
+            shards = int(c.get("parquet_shards", 0) or 0)
+            shard_penalty = -3.0 if shards > 5 else 0.0
+
+            # 7. Wrong-format penalty for image classification tasks
+            format_penalty = 0.0
+            if is_image_task:
+                name_lower = str(c.get("name", "")).lower()
+                task_cats  = " ".join(str(t).lower()
+                                      for t in (c.get("task_categories") or []))
+                if any(b in task_cats for b in self._BAD_IMAGE_TASK_CATS):
+                    format_penalty -= 4.0
+                if any(b in name_lower for b in self._BAD_IMAGE_FORMAT_NAMES):
+                    format_penalty -= 2.0
+
+            return (sample_score + lic_score + bert_score + benchmark
+                    + size_penalty + shard_penalty + format_penalty)
 
         return sorted(candidates, key=score, reverse=True)
 

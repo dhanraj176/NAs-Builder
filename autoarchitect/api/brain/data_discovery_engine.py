@@ -447,6 +447,25 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
 
     # ── HuggingFace loader ─────────────────────────────────────────────────
 
+    def _count_hf_parquet_shards(self, dataset_id: str) -> int:
+        """Count parquet shards via the HF API without downloading anything."""
+        try:
+            resp = requests.get(
+                f"https://huggingface.co/api/datasets/{dataset_id}",
+                params={"full": "true"},
+                timeout=5,
+            )
+            if resp.status_code != 200:
+                return 0
+            siblings = resp.json().get("siblings", [])
+            return sum(
+                1 for s in siblings
+                if isinstance(s, dict)
+                and s.get("rfilename", "").endswith(".parquet")
+            )
+        except Exception:
+            return 0
+
     def _load_hf_dataset(self, dataset_id: str, domain: str,
                           subset_size: int) -> dict:
         from datasets import load_dataset
@@ -455,6 +474,12 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
         # Validate first with streaming
         if not self._test_hf_loads(dataset_id):
             print(f"   ❌ {dataset_id} failed validation")
+            return None
+
+        # Skip datasets with too many parquet shards (likely >1 GB)
+        shard_count = self._count_hf_parquet_shards(dataset_id)
+        if shard_count > 10:
+            print(f"   ⚠️  {dataset_id} has {shard_count} parquet shards — too large, skipping")
             return None
 
         ds    = load_dataset(dataset_id, cache_dir=str(hf_cache),
