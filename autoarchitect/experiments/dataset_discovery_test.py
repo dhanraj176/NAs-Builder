@@ -51,11 +51,19 @@ def run_test():
         print(f"Domain  : {tc['domain']}")
         print(f"{'='*60}")
 
-        # Purge any poisoned ChromaDB entries before the plant disease case
+        # Purge stale caches before the plant disease case
         if "plant" in tc["problem"].lower():
-            purged = di.purge_problem_cache(["plant", "disease"])
-            if purged:
-                print(f"   [Cache] Purged {purged} stale entries for plant/disease")
+            purged_chroma = di.purge_problem_cache(["plant", "disease"])
+            if purged_chroma:
+                print(f"   [Cache] Purged {purged_chroma} stale ChromaDB entries")
+            try:
+                from api.brain.data_discovery_engine import DataDiscoveryEngine
+                engine = DataDiscoveryEngine()
+                purged_local = engine.purge_local_cache(["plant", "disease"])
+                if purged_local:
+                    print(f"   [Cache] Purged {purged_local} stale local cache entries")
+            except Exception as e:
+                print(f"   [Cache] Local purge error: {e}")
 
         t0 = time.time()
         try:

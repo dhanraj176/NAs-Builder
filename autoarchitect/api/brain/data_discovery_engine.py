@@ -60,6 +60,9 @@ VERIFIED_HF = {
     "toxic":         "SetFit/toxic_conversations_50k",
 }
 
+# Hard-excluded dataset name substrings — applied before Groq sees candidates
+_HARD_EXCLUDE_NAMES = ("vqa", "caption", "llava", "gpt", "chat", "merged")
+
 # OpenImages class map — 600 real labeled classes
 OPENIMAGES_CLASSES = {
     "pothole":      ["Road", "Asphalt"],
@@ -94,13 +97,13 @@ class DataDiscoveryEngine:
         self.cache_dir = CACHE_DIR
         self.meta_file = CACHE_DIR / "discovery_meta.json"
         self.meta      = self._load_meta()
-        print(f"🔍 DataDiscoveryEngine ready — {len(self.meta)} datasets cached")
+        print(f"[Search] DataDiscoveryEngine ready — {len(self.meta)} datasets cached")
 
     # ── Main entry ─────────────────────────────────────────────────────────
 
     def find(self, problem: str, domain: str,
             subset_size: int = 2000) -> dict:
-        print(f"\n🔍 Data Discovery: {problem[:60]}")
+        print(f"\n[Search] Data Discovery: {problem[:60]}")
 
         # 0. ChromaDB — instant recall from past successful runs
         try:
@@ -120,13 +123,13 @@ class DataDiscoveryEngine:
         # 1. Local cache
         cached = self._check_local_cache(problem, domain)
         if cached:
-            print(f"   ⚡ Local cache hit — no download needed")
+            print(f"   [Cache] Local cache hit — no download needed")
             return cached
 
         # 2. Verified registry — instant
         registry_id = self._check_verified_registry(problem)
         if registry_id:
-            print(f"   ✅ Verified registry: {registry_id}")
+            print(f"   [OK] Verified registry: {registry_id}")
             data = self._load_hf_dataset(registry_id, domain, subset_size)
             if data:
                 self._save_local_cache(problem, domain, data)
@@ -142,32 +145,42 @@ class DataDiscoveryEngine:
 
         # 3. Generate smart ML search terms
         terms = self._generate_ml_terms(problem, domain)
-        print(f"   🧠 ML search terms: {terms}")
+        print(f"   [Groq] ML search terms: {terms}")
 
         # 4. Search all sources in parallel
         all_candidates = []
 
         hf = self._search_huggingface(terms, domain)
         if hf:
-            print(f"   📦 HuggingFace: {len(hf)} found")
+            print(f"   [HF] HuggingFace: {len(hf)} found")
             all_candidates.extend(hf)
 
         kaggle = self._search_kaggle(terms, domain)
         if kaggle:
-            print(f"   🏆 Kaggle: {len(kaggle)} found")
+            print(f"   [Kaggle] Kaggle: {len(kaggle)} found")
             all_candidates.extend(kaggle)
 
         pwc = self._search_papers_with_code(terms, domain)
         if pwc:
-            print(f"   📄 Papers With Code: {len(pwc)} found")
+            print(f"   [PWC] Papers With Code: {len(pwc)} found")
             all_candidates.extend(pwc)
 
         github = self._search_github(terms, domain)
         if github:
-            print(f"   🐙 GitHub: {len(github)} found")
+            print(f"   [GitHub] GitHub: {len(github)} found")
             all_candidates.extend(github)
 
         print(f"   Total: {len(all_candidates)} candidates")
+
+        # Hard-exclude bad-format datasets before Groq sees them
+        before = len(all_candidates)
+        all_candidates = [
+            c for c in all_candidates
+            if not any(excl in str(c.get("name", "")).lower()
+                       for excl in _HARD_EXCLUDE_NAMES)
+        ]
+        if len(all_candidates) < before:
+            print(f"   [Filter] Hard-excluded {before - len(all_candidates)} bad-format candidate(s)")
 
         # 5. Groq picks best candidate
         best = self._groq_pick_best(problem, domain, all_candidates)
@@ -186,9 +199,9 @@ class DataDiscoveryEngine:
             return oi
 
         # 8. Honest last resort
-        print(f"   ⚠️  No real dataset found anywhere")
-        print(f"   🤖 Using CLIP zero-shot — 65-75% accuracy")
-        print(f"   💡 Upload your own data for 85%+")
+        print(f"   [WARN]  No real dataset found anywhere")
+        print(f"   [AI] Using CLIP zero-shot — 65-75% accuracy")
+        print(f"   [TIP] Upload your own data for 85%+")
         return self._clip_zero_shot(problem, domain)
 
     # ── Verified registry ──────────────────────────────────────────────────
@@ -233,7 +246,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
             if isinstance(terms, list) and terms:
                 return [str(t) for t in terms[:3]]
         except Exception as e:
-            print(f"   ⚠️  Groq term gen failed: {e}")
+            print(f"   [WARN]  Groq term gen failed: {e}")
         return self._fallback_terms(problem, domain)
 
     def _fallback_terms(self, problem: str, domain: str) -> list:
@@ -272,7 +285,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                             "url":       f"https://huggingface.co/datasets/{ds_id}",
                         })
             except Exception as e:
-                print(f"   ⚠️  HF search error: {e}")
+                print(f"   [WARN]  HF search error: {e}")
         results.sort(key=lambda x: x.get("downloads", 0), reverse=True)
         return results[:10]
 
@@ -302,7 +315,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                 })
             return results
         except Exception as e:
-            print(f"   ⚠️  Kaggle search failed: {e}")
+            print(f"   [WARN]  Kaggle search failed: {e}")
             return []
 
     # ── Source 3: Papers With Code ─────────────────────────────────────────
@@ -332,7 +345,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                     })
             return results
         except Exception as e:
-            print(f"   ⚠️  PWC search failed: {e}")
+            print(f"   [WARN]  PWC search failed: {e}")
             return []
 
     # ── Source 4: GitHub ───────────────────────────────────────────────────
@@ -359,7 +372,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                 })
             return results
         except Exception as e:
-            print(f"   ⚠️  GitHub search failed: {e}")
+            print(f"   [WARN]  GitHub search failed: {e}")
             return []
 
     # ── Groq picks best candidate ──────────────────────────────────────────
@@ -407,10 +420,10 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
             # Extract first digit safely
             idx = int("".join(c for c in raw if c.isdigit())[:1] or "0")
             idx = max(0, min(idx, len(candidates) - 1))
-            print(f"   🧠 Groq selected: {candidates[idx]['name']}")
+            print(f"   [Groq] Groq selected: {candidates[idx]['name']}")
             return candidates[idx]
         except Exception as e:
-            print(f"   ⚠️  Groq pick failed: {e}")
+            print(f"   [WARN]  Groq pick failed: {e}")
             return self._heuristic_pick(candidates)
 
     def _heuristic_pick(self, candidates: list) -> dict:
@@ -427,7 +440,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
     def _download_candidate(self, candidate: dict, domain: str,
                              subset_size: int) -> dict:
         src = candidate["source"]
-        print(f"   📥 Downloading [{src}]: {candidate['name'][:40]}")
+        print(f"   [Download] Downloading [{src}]: {candidate['name'][:40]}")
         try:
             if src == "huggingface":
                 return self._load_hf_dataset(
@@ -442,7 +455,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                     return self._load_hf_dataset(hf_id, domain, subset_size)
                 return None
         except Exception as e:
-            print(f"   ⚠️  Download failed: {e}")
+            print(f"   [WARN]  Download failed: {e}")
             return None
 
     # ── HuggingFace loader ─────────────────────────────────────────────────
@@ -473,13 +486,13 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
 
         # Validate first with streaming
         if not self._test_hf_loads(dataset_id):
-            print(f"   ❌ {dataset_id} failed validation")
+            print(f"   [FAIL] {dataset_id} failed validation")
             return None
 
         # Skip datasets with too many parquet shards (likely >1 GB)
         shard_count = self._count_hf_parquet_shards(dataset_id)
         if shard_count > 10:
-            print(f"   ⚠️  {dataset_id} has {shard_count} parquet shards — too large, skipping")
+            print(f"   [WARN]  {dataset_id} has {shard_count} parquet shards — too large, skipping")
             try:
                 from api.brain.dataset_intelligence import DatasetIntelligence
                 DatasetIntelligence.blacklist_dataset(dataset_id)
@@ -492,7 +505,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
         split = ds.get("train", list(ds.values())[0])
 
         if len(split) < 500:
-            print(f"   ⚠️  {dataset_id} has only {len(split)} samples "
+            print(f"   [WARN]  {dataset_id} has only {len(split)} samples "
                   f"— minimum 500 required, skipping")
             return None
 
@@ -507,7 +520,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                                    "category","target"]), None)
 
         if not label_col:
-            print(f"   ⚠️  No label column in {dataset_id}")
+            print(f"   [WARN]  No label column in {dataset_id}")
             return None
 
         n       = min(subset_size, len(split))
@@ -616,14 +629,14 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                 return self._build_image_loader_from_files(
                     images, candidate["name"], subset_size)
             elif images:
-                print(f"   ⚠️  Kaggle dataset has only {len(images)} images "
+                print(f"   [WARN]  Kaggle dataset has only {len(images)} images "
                       f"— minimum 500 required, skipping")
             elif csvs:
                 return self._build_tabular_from_csv(
                     csvs[0], candidate["name"], subset_size)
             return None
         except Exception as e:
-            print(f"   ⚠️  Kaggle load failed: {e}")
+            print(f"   [WARN]  Kaggle load failed: {e}")
             return None
 
     # ── Source 5: OpenImages ───────────────────────────────────────────────
@@ -644,7 +657,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
             return None
 
         matching = list(set(matching))[:3]
-        print(f"   🖼️  OpenImages classes: {matching}")
+        print(f"   [Image]  OpenImages classes: {matching}")
 
         try:
             # Get official class ID map
@@ -670,10 +683,10 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                     target_ids[cls] = class_map[cls]
 
             if not target_ids:
-                print(f"   ⚠️  No OpenImages class IDs found for {matching}")
+                print(f"   [WARN]  No OpenImages class IDs found for {matching}")
                 return None
 
-            print(f"   ✅ Found {len(target_ids)} OpenImages class IDs")
+            print(f"   [OK] Found {len(target_ids)} OpenImages class IDs")
 
             # Get image-level labels (validation set — smaller, faster)
             ann_resp = requests.get(
@@ -707,7 +720,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                     break
 
             if not img_to_labels:
-                print(f"   ⚠️  No OpenImages annotations found")
+                print(f"   [WARN]  No OpenImages annotations found")
                 return None
 
             # Build label index
@@ -733,7 +746,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                 img_list, class_names, problem)
 
         except Exception as e:
-            print(f"   ⚠️  OpenImages failed: {e}")
+            print(f"   [WARN]  OpenImages failed: {e}")
             return None
 
     def _build_openimages_loader(self, img_list: list,
@@ -769,7 +782,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
         val_ds   = OIDataset(img_list[n_train:n_train + n_val], IMAGE_TRANSFORM)
         test_ds  = OIDataset(img_list[n_train + n_val:],        IMAGE_TRANSFORM)
 
-        print(f"   ✅ OpenImages dataset: {len(train_ds)} train, "
+        print(f"   [OK] OpenImages dataset: {len(train_ds)} train, "
               f"{len(val_ds)} val, {len(test_ds)} test — REAL labels")
 
         return {
@@ -829,7 +842,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
         val_ds   = HFImgDs(val_data,   image_col, label_col, IMAGE_TRANSFORM)
         test_ds  = HFImgDs(test_data,  image_col, label_col, IMAGE_TRANSFORM)
 
-        print(f"   ✅ Real image dataset: {len(train_ds)} train, "
+        print(f"   [OK] Real image dataset: {len(train_ds)} train, "
               f"{len(val_ds)} val, {len(test_ds)} test")
         return {
             "name":              name,
@@ -899,7 +912,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
         val_ds   = TextDs(va_texts, va_labels, w2i=train_ds.w2i)
         test_ds  = TextDs(te_texts, te_labels, w2i=train_ds.w2i)
 
-        print(f"   ✅ Real text dataset: {len(train_ds)} train, "
+        print(f"   [OK] Real text dataset: {len(train_ds)} train, "
               f"{len(val_ds)} val, {len(test_ds)} test")
         return {
             "name":              name,
@@ -950,7 +963,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
         val_ds   = FileDs(files[n_train:n_train + n_val], labels[n_train:n_train + n_val], IMAGE_TRANSFORM)
         test_ds  = FileDs(files[n_train + n_val:],       labels[n_train + n_val:],       IMAGE_TRANSFORM)
 
-        print(f"   ✅ Kaggle image dataset: {len(train_ds)} train, "
+        print(f"   [OK] Kaggle image dataset: {len(train_ds)} train, "
               f"{len(val_ds)} val, {len(test_ds)} test")
         return {
             "name":              name,
@@ -1004,7 +1017,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
             val_ds   = TabDs(X[n_train:n_train + n_val], y[n_train:n_train + n_val])
             test_ds  = TabDs(X[n_train + n_val:],       y[n_train + n_val:])
 
-            print(f"   ✅ Kaggle tabular: {len(train_ds)} train, "
+            print(f"   [OK] Kaggle tabular: {len(train_ds)} train, "
                   f"{len(val_ds)} val, {len(test_ds)} test")
             return {
                 "name":              name,
@@ -1024,7 +1037,7 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
                 "source":            "kaggle",
             }
         except Exception as e:
-            print(f"   ⚠️  CSV load failed: {e}")
+            print(f"   [WARN]  CSV load failed: {e}")
             return None
 
     # ── CLIP zero-shot — honest last resort ────────────────────────────────
@@ -1083,7 +1096,31 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
             }
             self._save_meta()
         except Exception as e:
-            print(f"   ⚠️  Cache save failed: {e}")
+            print(f"   [WARN]  Cache save failed: {e}")
+
+    def purge_local_cache(self, keywords: list) -> int:
+        """Delete local JSON cache files whose stored name or problem matches any keyword."""
+        removed = 0
+        for path in list(self.cache_dir.glob("*.json")):
+            if path.name == "discovery_meta.json":
+                continue
+            try:
+                with open(path) as f:
+                    data = json.load(f)
+                name_text    = str(data.get("name", "")).lower()
+                problem_text = str(self.meta.get(path.stem, {}).get("problem", "")).lower()
+                if any(kw.lower() in name_text or kw.lower() in problem_text
+                       for kw in keywords):
+                    path.unlink()
+                    if path.stem in self.meta:
+                        del self.meta[path.stem]
+                    print(f"   [LocalCachePurge] Removed: {data.get('name', path.name)}")
+                    removed += 1
+            except Exception:
+                pass
+        if removed:
+            self._save_meta()
+        return removed
 
     def _cache_key(self, problem: str, domain: str) -> str:
         return hashlib.md5(

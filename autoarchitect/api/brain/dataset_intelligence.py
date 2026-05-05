@@ -30,6 +30,9 @@ BASE_DIR  = Path(__file__).parent.parent.parent
 CHROMA_DIR = BASE_DIR / "datasets" / "chromadb"
 CHROMA_DIR.mkdir(parents=True, exist_ok=True)
 
+# Module-level set — one instance per Python process, survives across all class instances
+_session_blacklist: set = set()
+
 
 class DatasetIntelligence:
     """
@@ -56,13 +59,10 @@ class DatasetIntelligence:
         count = self.collection.count()
         print(f"DatasetIntelligence ready — {count} proven solutions in memory")
 
-    # Session-level blacklist — populated when a dataset is blocked (e.g. too many shards)
-    _session_blacklist: set = set()
-
     @classmethod
     def blacklist_dataset(cls, name: str) -> None:
-        """Add a dataset to the session blacklist — won't be selected again this session."""
-        cls._session_blacklist.add(name)
+        """Add a dataset to the module-level session blacklist."""
+        _session_blacklist.add(name)
         print(f"   [Blacklist] {name}")
 
     def purge_problem_cache(self, keywords: list) -> int:
@@ -270,10 +270,10 @@ class DatasetIntelligence:
             all_candidates.extend(items)
 
         # Strip session-blacklisted datasets (blocked for shards etc. earlier this session)
-        if DatasetIntelligence._session_blacklist:
+        if _session_blacklist:
             before        = len(all_candidates)
             all_candidates = [c for c in all_candidates
-                              if c.get("name") not in DatasetIntelligence._session_blacklist]
+                              if c.get("name") not in _session_blacklist]
             removed = before - len(all_candidates)
             if removed:
                 print(f"   [Discover] {removed} blacklisted dataset(s) removed")
