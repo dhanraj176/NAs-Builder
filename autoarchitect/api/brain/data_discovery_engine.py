@@ -126,71 +126,72 @@ class DataDiscoveryEngine:
             print(f"   [Cache] Local cache hit — no download needed")
             return cached
 
-        # 2. Verified registry — instant
+        # 2. Verified registry — neurosymbolic hard bypass
+        #    If registry matches, Groq/search path is UNREACHABLE (pure if/else).
         registry_id = self._check_verified_registry(problem)
         if registry_id:
-            print(f"   [OK] Verified registry: {registry_id}")
+            print(f"   [Registry] Hard bypass — skipping discovery")
             data = self._load_hf_dataset(registry_id, domain, subset_size)
             if data:
                 self._save_local_cache(problem, domain, data)
-                # Store in ChromaDB for future recall
                 try:
                     from api.brain.dataset_intelligence import DatasetIntelligence
                     di = DatasetIntelligence(groq_api_key=self.groq_key)
                     di.store(problem, domain, data["name"],
-                            data.get("expected_accuracy", 80))
+                             data.get("expected_accuracy", 80))
                 except Exception:
                     pass
                 return data
+            # Registry matched but dataset failed to load — skip to fallbacks below
+        else:
+            # 3. Generate smart ML search terms (only reached when registry has no match)
+            terms = self._generate_ml_terms(problem, domain)
+            print(f"   [Groq] ML search terms: {terms}")
 
-        # 3. Generate smart ML search terms
-        terms = self._generate_ml_terms(problem, domain)
-        print(f"   [Groq] ML search terms: {terms}")
+            # 4. Search all sources in parallel
+            all_candidates = []
 
-        # 4. Search all sources in parallel
-        all_candidates = []
+            hf = self._search_huggingface(terms, domain)
+            if hf:
+                print(f"   [HF] HuggingFace: {len(hf)} found")
+                all_candidates.extend(hf)
 
-        hf = self._search_huggingface(terms, domain)
-        if hf:
-            print(f"   [HF] HuggingFace: {len(hf)} found")
-            all_candidates.extend(hf)
+            kaggle = self._search_kaggle(terms, domain)
+            if kaggle:
+                print(f"   [Kaggle] Kaggle: {len(kaggle)} found")
+                all_candidates.extend(kaggle)
 
-        kaggle = self._search_kaggle(terms, domain)
-        if kaggle:
-            print(f"   [Kaggle] Kaggle: {len(kaggle)} found")
-            all_candidates.extend(kaggle)
+            pwc = self._search_papers_with_code(terms, domain)
+            if pwc:
+                print(f"   [PWC] Papers With Code: {len(pwc)} found")
+                all_candidates.extend(pwc)
 
-        pwc = self._search_papers_with_code(terms, domain)
-        if pwc:
-            print(f"   [PWC] Papers With Code: {len(pwc)} found")
-            all_candidates.extend(pwc)
+            github = self._search_github(terms, domain)
+            if github:
+                print(f"   [GitHub] GitHub: {len(github)} found")
+                all_candidates.extend(github)
 
-        github = self._search_github(terms, domain)
-        if github:
-            print(f"   [GitHub] GitHub: {len(github)} found")
-            all_candidates.extend(github)
+            print(f"   Total: {len(all_candidates)} candidates")
 
-        print(f"   Total: {len(all_candidates)} candidates")
+            # Hard-exclude bad-format datasets before Groq sees them
+            before = len(all_candidates)
+            all_candidates = [
+                c for c in all_candidates
+                if not any(excl in str(c.get("name", "")).lower()
+                           for excl in _HARD_EXCLUDE_NAMES)
+            ]
+            if len(all_candidates) < before:
+                print(f"   [Filter] Hard-excluded {before - len(all_candidates)} bad-format candidate(s)")
 
-        # Hard-exclude bad-format datasets before Groq sees them
-        before = len(all_candidates)
-        all_candidates = [
-            c for c in all_candidates
-            if not any(excl in str(c.get("name", "")).lower()
-                       for excl in _HARD_EXCLUDE_NAMES)
-        ]
-        if len(all_candidates) < before:
-            print(f"   [Filter] Hard-excluded {before - len(all_candidates)} bad-format candidate(s)")
+            # 5. Groq picks best candidate
+            best = self._groq_pick_best(problem, domain, all_candidates)
 
-        # 5. Groq picks best candidate
-        best = self._groq_pick_best(problem, domain, all_candidates)
-
-        # 6. Download and validate
-        if best:
-            data = self._download_candidate(best, domain, subset_size)
-            if data:
-                self._save_local_cache(problem, domain, data)
-                return data
+            # 6. Download and validate
+            if best:
+                data = self._download_candidate(best, domain, subset_size)
+                if data:
+                    self._save_local_cache(problem, domain, data)
+                    return data
 
         # 7. OpenImages fallback — always available
         oi = self._get_openimages(problem, domain, subset_size)
@@ -512,9 +513,16 @@ Reply ONLY with JSON array: ["term1", "term2", "term3"]"""
         cols  = split.column_names
 
         image_col = next((c for c in cols if "image" in c.lower()), None)
-        text_col  = next((c for c in cols
-                          if c in ["text","sentence","content",
-                                   "body","message","review"]), None)
+        # Primary whitelist, then pattern fallback for datasets like sms_spam (column "sms")
+        _TEXT_EXACT = {"text", "sentence", "content", "body", "message",
+                       "review", "sms", "msg", "tweet", "comment",
+                       "document", "paragraph", "description", "question"}
+        _TEXT_PATTERNS = ("text", "msg", "sms", "message", "comment",
+                          "review", "document", "sentence", "content", "body")
+        text_col = next((c for c in cols if c in _TEXT_EXACT), None)
+        if not text_col:
+            text_col = next((c for c in cols
+                             if any(p in c.lower() for p in _TEXT_PATTERNS)), None)
         label_col = next((c for c in cols
                           if c in ["label","labels","class",
                                    "category","target"]), None)
