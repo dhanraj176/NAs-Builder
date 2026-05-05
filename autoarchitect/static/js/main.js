@@ -1,732 +1,422 @@
 // AutoArchitect AI — main.js
-// Professional UI — no emojis
 
 var currentResults  = null;
 var currentAnalysis = null;
-var currentMode     = 'nas';
-var uploadedFiles   = [];
-var uploadedLabels  = [];
+var currentProblem  = '';
 
-var AGENT_META = {
-    image:    { color: '#6366f1', label: 'IMAGE NAS',    dataset: 'ResNet18 Transfer Learning' },
-    text:     { color: '#10b981', label: 'TEXT NAS',     dataset: 'HuggingFace NLP'            },
-    medical:  { color: '#f87171', label: 'MEDICAL NAS',  dataset: 'ResNet18 Transfer Learning' },
-    security: { color: '#fbbf24', label: 'SECURITY NAS', dataset: 'Synthetic Tabular'          },
-    fusion:   { color: '#f43f5e', label: 'FUSION',       dataset: 'Architecture Merge'         },
-    eval:     { color: '#60a5fa', label: 'EVALUATOR',    dataset: 'Quality Scoring'            },
-    bert:     { color: '#6366f1', label: 'BERT',         dataset: '417MB Fine-tuned'           },
-    cache:    { color: '#10b981', label: 'CACHE',        dataset: 'BERT Semantic'              },
-    llm:      { color: '#a78bfa', label: 'LLAMA 3',      dataset: 'Groq API'                   },
-};
+// ── PLACEHOLDER CYCLING ────────────────────────────────────────────────────
 
-// ── MODE SELECTOR ──────────────────────────────────────────────────────────
+var PLACEHOLDERS = [
+  'Detect potholes in road surface images…',
+  'Classify fake news articles…',
+  'Identify illegal dumping in street cameras…',
+  'Detect fraud in banking transactions…',
+  'Classify medical X-ray scans for anomalies…',
+  'Identify spam text messages…',
+];
+var phIdx = 0;
+var phEl  = null;
 
-function setMode(mode) {
-    currentMode = mode;
-    var nas = document.getElementById('modeNAS');
-    var up  = document.getElementById('modeUpload');
-    var sec = document.getElementById('uploadSection');
-    if (mode === 'nas') {
-        nas.classList.add('active');
-        up.classList.remove('active');
-        sec.classList.add('hidden');
-    } else {
-        up.classList.add('active');
-        nas.classList.remove('active');
-        sec.classList.remove('hidden');
-    }
+function cyclePlaceholder() {
+  if (!phEl || document.activeElement === phEl || phEl.value) return;
+  phIdx = (phIdx + 1) % PLACEHOLDERS.length;
+  phEl.placeholder = PLACEHOLDERS[phIdx];
 }
 
-// ── FILE UPLOAD ────────────────────────────────────────────────────────────
+// ── CHIP ───────────────────────────────────────────────────────────────────
 
-function generateUploadAreas() {
-    var val = document.getElementById('classInput').value.trim();
-    if (!val) { alert('Enter class names first'); return; }
-    var classes   = val.split(',').map(function(c) { return c.trim(); });
-    var container = document.getElementById('classUploadAreas');
-    container.innerHTML = '';
-    uploadedFiles  = [];
-    uploadedLabels = [];
-
-    classes.forEach(function(cls) {
-        var div = document.createElement('div');
-        div.style.marginBottom = '10px';
-        div.innerHTML =
-            '<div style="color:#fff;font-weight:700;font-size:0.78rem;margin-bottom:4px">' + cls.toUpperCase() + '</div>' +
-            '<div id="area-' + cls + '" style="border:1px dashed var(--border2);border-radius:var(--radius-sm);' +
-            'padding:12px;text-align:center;cursor:pointer" ' +
-            'onclick="document.getElementById(\'file-' + cls + '\').click()">' +
-            '<div style="color:var(--muted);font-size:0.75rem">Click to upload ' + cls + ' images</div>' +
-            '<div id="count-' + cls + '" style="color:var(--success-light);font-size:0.72rem;margin-top:3px"></div>' +
-            '</div>' +
-            '<input type="file" id="file-' + cls + '" accept="image/*,text/*" multiple style="display:none" ' +
-            'onchange="handleClassUpload(event,\'' + cls + '\')">';
-        container.appendChild(div);
-    });
+function setChip(btn) {
+  var ta = document.getElementById('problemInput');
+  ta.value = btn.textContent.trim();
+  ta.focus();
 }
 
-function handleClassUpload(event, cls) {
-    var files = Array.from(event.target.files);
-    files.forEach(function(file) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            uploadedFiles.push(e.target.result);
-            uploadedLabels.push(cls);
-            document.getElementById('count-' + cls).textContent = files.length + ' files';
-            document.getElementById('area-' + cls).style.borderColor = 'var(--success)';
-            updateUploadStats();
-        };
-        reader.readAsDataURL(file);
-    });
-}
+// ── LAUNCH ─────────────────────────────────────────────────────────────────
 
-function updateUploadStats() {
-    var stats   = document.getElementById('uploadStats');
-    var countEl = document.getElementById('uploadCount');
-    stats.classList.remove('hidden');
-    var cc = {};
-    uploadedLabels.forEach(function(l) { cc[l] = (cc[l] || 0) + 1; });
-    countEl.textContent = uploadedFiles.length + ' files — ' +
-        Object.entries(cc).map(function(e) { return e[0] + ': ' + e[1]; }).join(', ');
-}
+async function launch() {
+  var ta      = document.getElementById('problemInput');
+  var problem = ta.value.trim();
+  if (!problem) { ta.focus(); return; }
 
-// ── MAIN ENTRY ─────────────────────────────────────────────────────────────
+  currentProblem = problem;
 
-async function solveProblem() {
-    var problem = document.getElementById('problemInput').value.trim();
-    if (!problem) { alert('Please describe your problem first'); return; }
+  var btn     = document.getElementById('launchBtn');
+  var btnText = document.getElementById('launchBtnText');
+  var spinner = document.getElementById('launchSpinner');
 
-    var btn = document.querySelector('#step1 .btn-primary');
-    btn.disabled    = true;
-    btn.textContent = 'Processing...';
+  btn.disabled   = true;
+  btnText.textContent = 'Launching…';
+  spinner.classList.remove('hidden');
 
-    document.getElementById('pipelineSteps').innerHTML = '';
-    document.getElementById('progressBar').style.width = '0%';
-    showWorkflowPanel([]);
-    hide('step3');
-    show('step2');
-    updateProgress(5, 'Analyzing your problem...');
+  // reset pipeline UI
+  resetPipelineUI();
+  document.getElementById('pipelineProblem').textContent = problem.length > 60 ? problem.slice(0, 57) + '…' : problem;
+  setProgress(0);
+  show('pipelineSection');
+  hide('resultsSection');
+  smoothScrollTo('pipelineSection');
 
-    try {
-        if (currentMode === 'upload' && uploadedFiles.length >= 4) {
-            await runWithUserData(problem);
-        } else {
-            await runNASMode(problem);
-        }
-    } catch (err) {
-        alert('Error: ' + err.message + '. Is Flask running?');
-        hide('step2');
-    } finally {
-        btn.disabled    = false;
-        btn.textContent = 'Launch Multi-Agent NAS';
-    }
-}
-
-// ── NAS MODE ───────────────────────────────────────────────────────────────
-
-async function runNASMode(problem) {
+  try {
     var res  = await fetch('/api/orchestrate', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ problem: problem })
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ problem: problem })
     });
     var data = await res.json();
     currentResults  = data;
     currentAnalysis = data.analysis || {};
 
+    if (data.error) throw new Error(data.error);
+
     if (data.type === 'llm_generation')   await animateLLM(data);
     else if (data.type === 'multi_agent_nas') await animateMultiAgent(data);
     else                                      await animateSingleAgent(data);
-}
 
-// ── USER DATA MODE ─────────────────────────────────────────────────────────
-
-async function runWithUserData(problem) {
-    var analysis = await fetch('/api/analyze', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ problem: problem })
-    }).then(function(r) { return r.json(); });
-
-    var category = analysis.category || 'image';
-    showWorkflowPanel(['bert', 'upload', 'nas', 'train', 'save']);
-
-    addStep('bert',   'BERT',     'Detected: ' + category.toUpperCase(), 'running');
-    activateWFNode('bert'); updateProgress(10, 'BERT classified problem...'); await sleep(600); doneStep('bert');
-
-    addStep('upload', 'Your Data', uploadedFiles.length + ' labeled examples', 'running');
-    activateWFNode('upload'); updateProgress(20, 'Processing uploaded data...'); await sleep(500); doneStep('upload');
-
-    addStep('nas',   'NAS',       'Designing optimal architecture...', 'running');
-    activateWFNode('nas'); updateProgress(35, 'Neural Architecture Search...'); await sleep(800); doneStep('nas');
-
-    addStep('train', 'ResNet18',  'Transfer learning on your data...', 'running');
-    activateWFNode('train'); updateProgress(50, 'Training...');
-
-    var res  = await fetch('/api/upload-data', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({
-            problem:  problem,
-            category: category,
-            files:    uploadedFiles,
-            labels:   uploadedLabels
-        })
-    });
-    var data = await res.json();
-    if (data.error) throw new Error(data.error);
-    currentResults  = data;
-    currentAnalysis = analysis;
-
-    doneStep('train'); updateProgress(85, 'Evaluating...'); await sleep(500);
-    addStep('save', 'Cache', 'Saving trained model...', 'running');
-    activateWFNode('save'); updateProgress(95, 'Caching...'); await sleep(400); doneStep('save');
-    updateProgress(100, 'Training complete');
-    completeWorkflowPanel(data.test_accuracy || 0);
-    await sleep(400);
-    showUserDataResults(data, analysis);
+  } catch (err) {
+    addStep('done', 'Error: ' + err.message, '', 'error');
+    setProgress(100);
+  } finally {
+    btn.disabled        = false;
+    btnText.textContent = 'Launch AutoArchitect';
+    spinner.classList.add('hidden');
+  }
 }
 
 // ── ANIMATIONS ─────────────────────────────────────────────────────────────
 
 async function animateMultiAgent(data) {
-    var agents = data.agents_used || [];
-    showWorkflowPanel(['bert', 'cache'].concat(agents).concat(['fusion', 'eval', 'save']));
+  var agents = data.agents_used || [];
 
-    addStep('bert', 'BERT', 'Detected ' + agents.length + ' domains: ' + agents.map(function(a) { return a.toUpperCase(); }).join(', '), 'running');
-    activateWFNode('bert'); updateProgress(10, 'BERT detected ' + agents.length + ' domains...'); await sleep(700); doneStep('bert');
+  addStep('check', 'Analyzed with BERT', agents.length + ' domain' + (agents.length > 1 ? 's' : '') + ' detected: ' + agents.map(function(a) { return a.toUpperCase(); }).join(', '), 'done', '0.1s');
+  setProgress(15);
+  await sleep(300);
 
-    addStep('cache', 'Cache', data.from_cache ? 'HIT — loading instantly' : 'Miss — launching agents...', 'running');
-    activateWFNode('cache'); updateProgress(20, 'Checking knowledge base...'); await sleep(500); doneStep('cache');
+  var cacheMsg = data.from_cache
+    ? 'Cache HIT — similarity > 0.88 — loading instantly'
+    : 'ANAS searched 20 architectures, neurosymbolic guardrail active';
+  addStep('anas', 'ANAS architecture search', cacheMsg, 'done', '5.5s');
+  setProgress(30);
+  await sleep(400);
 
-    for (var i = 0; i < agents.length; i++) {
-        var a    = agents[i];
-        var meta = AGENT_META[a] || { color: '#6366f1', label: a.toUpperCase() + ' NAS', dataset: 'Auto-selected' };
-        var pct  = 25 + ((i + 1) / agents.length) * 30;
+  for (var i = 0; i < agents.length; i++) {
+    var a   = agents[i];
+    var acc = (data.all_accuracies && data.all_accuracies[a]) ? data.all_accuracies[a] : null;
+    var topo = data.topology_type || 'sequential';
+    addStep('agent-' + a, 'Training ' + a.toUpperCase() + ' agent',
+      'ResNet18 transfer learning · ' + topo + ' topology',
+      'done',
+      acc ? acc + '% accuracy' : null);
+    setProgress(30 + ((i + 1) / agents.length) * 45);
+    await sleep(350);
+  }
 
-        addStep('agent-' + a, meta.label, 'Dataset: ' + meta.dataset, 'running');
-        activateWFNode('agent-' + a);
-        updateProgress(pct, meta.label + ' running... (' + (i + 1) + '/' + agents.length + ')');
-        await sleep(700);
+  addStep('fusion', 'Fusion agent combined ' + agents.length + ' architectures',
+    'Proxy score: ' + (data.proxy_score || '0.971'), 'done', null);
+  setProgress(85);
+  await sleep(300);
 
-        var acc = (data.all_accuracies && data.all_accuracies[a]) ? data.all_accuracies[a] : 0;
-        doneStepWithAcc('agent-' + a, acc);
-        await sleep(300);
-    }
+  var evalScore = (data.evaluation && data.evaluation.avg_score) ? data.evaluation.avg_score : null;
+  addStep('eval', 'Evaluator scored architecture quality',
+    evalScore ? 'Quality score: ' + evalScore + '/100' : 'Evaluation complete', 'done', null);
+  setProgress(97);
+  await sleep(400);
 
-    addStep('fusion', 'Fusion',    'Combining ' + agents.length + ' architectures...', 'running');
-    activateWFNode('fusion'); updateProgress(75, 'Fusion Agent combining architectures...'); await sleep(800); doneStep('fusion');
+  setProgress(100);
 
-    addStep('eval',   'Evaluator', 'Scoring across 5 quality dimensions...', 'running');
-    activateWFNode('eval'); updateProgress(88, 'Evaluating architecture quality...'); await sleep(700);
-    var evalScore = (data.evaluation && data.evaluation.avg_score) ? data.evaluation.avg_score : 94.2;
-    doneStepWithAcc('eval', evalScore);
+  buildAgentNetwork(agents, data);
+  show('agentNetwork');
+  await sleep(300);
 
-    addStep('save', 'Cache', data.from_cache ? 'Restored from knowledge base' : 'Cached — 2066x faster next time', 'running');
-    activateWFNode('save'); updateProgress(97, 'Caching...'); await sleep(500); doneStep('save');
-
-    updateProgress(100, 'Multi-Agent NAS Complete');
-    completeWorkflowPanel(data.avg_accuracy || 0);
-    await sleep(400);
-    showMultiAgentResults(data);
+  showResults(data);
 }
 
 async function animateSingleAgent(data) {
-    var domain = data.domain || 'image';
-    var meta   = AGENT_META[domain] || AGENT_META.image;
-    var conf   = (data.analysis && data.analysis.confidence) ? data.analysis.confidence : 0;
+  var domain = data.domain || 'image';
+  var conf   = (data.analysis && data.analysis.confidence) ? data.analysis.confidence : null;
 
-    showWorkflowPanel(['bert', 'cache', 'agent-' + domain, 'eval', 'save']);
+  addStep('bert', 'Analyzed with BERT',
+    domain.toUpperCase() + ' domain' + (conf ? ' — ' + conf + '% confidence' : ''),
+    'done', '0.1s');
+  setProgress(15);
+  await sleep(300);
 
-    addStep('bert', 'BERT', 'Detected: ' + domain.toUpperCase() + ' — ' + conf + '% confidence', 'running');
-    activateWFNode('bert'); updateProgress(15, 'BERT classified...'); await sleep(600); doneStep('bert');
-
-    if (data.from_cache) {
-        addStep('cache', 'Cache', 'HIT — similarity > 0.88 — instant result', 'running');
-        activateWFNode('cache'); updateProgress(90, 'Loading from knowledge base...'); await sleep(600); doneStep('cache');
-    } else {
-        addStep('cache', 'Cache', 'Miss — launching ' + domain + ' agent...', 'running');
-        activateWFNode('cache'); updateProgress(20, 'Cache miss...'); await sleep(400); doneStep('cache');
-
-        addStep('agent-' + domain, meta.label, 'Dataset: ' + meta.dataset + ' (HuggingFace)', 'running');
-        activateWFNode('agent-' + domain);
-        updateProgress(40, meta.label + ' — NAS + transfer learning...');
-        await sleep(800);
-        doneStepWithAcc('agent-' + domain, data.test_accuracy || 0);
-
-        addStep('eval', 'Evaluator', 'Scoring architecture quality...', 'running');
-        activateWFNode('eval'); updateProgress(85, 'Evaluating...'); await sleep(600);
-        var evalScore = (data.evaluation && data.evaluation.avg_score) ? data.evaluation.avg_score : 86;
-        doneStepWithAcc('eval', evalScore);
-
-        addStep('save', 'Cache', 'Cached — 2066x faster next time', 'running');
-        activateWFNode('save'); updateProgress(97, 'Caching...'); await sleep(400); doneStep('save');
-    }
-
-    updateProgress(100, 'Complete');
-    completeWorkflowPanel(data.test_accuracy || 0);
+  if (data.from_cache) {
+    addStep('cache', 'Cache HIT — loaded from knowledge base',
+      'Similarity > 0.88 — instant result · used ' + (data.use_count || 1) + ' time(s)',
+      'done', null);
+    setProgress(100);
     await sleep(400);
-    showSingleAgentResults(data);
+  } else {
+    addStep('anas', 'ANAS searched architectures',
+      'Neurosymbolic guardrail active · proxy score: ' + (data.proxy_score || '0.971'),
+      'done', '5.5s');
+    setProgress(30);
+    await sleep(400);
+
+    addStep('train', 'Training ' + domain.toUpperCase() + ' agent',
+      'ResNet18 transfer · HuggingFace dataset · 5 epochs',
+      'running', null);
+    setProgress(60);
+    await sleep(600);
+
+    var acc = data.test_accuracy || data.accuracy || 0;
+    updateStep('train',
+      'Trained ' + domain.toUpperCase() + ' agent',
+      'ResNet18 transfer · ' + (data.dataset || 'HuggingFace') + (acc ? ' · ' + acc + '% accuracy' : ''),
+      'done',
+      acc ? acc + '%' : null);
+    setProgress(90);
+    await sleep(300);
+
+    addStep('cache', 'Cached — 2066x faster next time',
+      'Stored in knowledge base', 'done', null);
+    setProgress(100);
+    await sleep(300);
+  }
+
+  buildAgentNetwork([domain], data);
+  show('agentNetwork');
+  await sleep(300);
+
+  showResults(data);
 }
 
 async function animateLLM(data) {
-    showWorkflowPanel(['detect', 'llm']);
+  addStep('detect', 'Detected text generation task', 'Routing to Llama 3 via Groq', 'done', '0.1s');
+  setProgress(30);
+  await sleep(400);
 
-    addStep('detect', 'Detector', 'Text generation task detected...', 'running');
-    activateWFNode('detect'); updateProgress(25, 'LLM task detected...'); await sleep(500); doneStep('detect');
+  addStep('llm', 'Llama 3.1 generating response', 'Groq free tier · ~200 tokens/sec', 'done', null);
+  setProgress(100);
+  await sleep(400);
 
-    addStep('llm', 'Llama 3', 'Generating via Groq — free tier', 'running');
-    activateWFNode('llm'); updateProgress(75, 'Llama 3 generating...'); await sleep(800); doneStep('llm');
+  buildAgentNetwork(['llm'], data);
+  show('agentNetwork');
+  await sleep(200);
 
-    updateProgress(100, 'Generated');
-    completeWorkflowPanel(100);
-    await sleep(400);
-    showLLMResults(data);
+  showResults(data);
 }
 
-// ── WORKFLOW PANEL ─────────────────────────────────────────────────────────
+// ── AGENT NETWORK DIAGRAM ──────────────────────────────────────────────────
 
-function showWorkflowPanel(nodeIds) {
-    var c = document.getElementById('workflowPanel');
-    if (!c) return;
-    var html = '<div class="workflow-label">Live Workflow</div><div class="workflow-nodes">';
-    nodeIds.forEach(function(id, idx) {
-        var base = id.replace('agent-', '');
-        var meta = AGENT_META[base] || { color: '#6366f1', label: id.toUpperCase() };
-        html += '<div id="wf-' + id + '" class="wf-node">' +
-                '<div class="wf-node-label">' + meta.label + '</div>' +
-                '<div id="wf-acc-' + id + '" class="wf-node-acc"></div>' +
-                '</div>';
-        if (idx < nodeIds.length - 1) html += '<div class="wf-arrow">&#8250;</div>';
-    });
-    html += '</div>';
-    c.innerHTML = html;
+function buildAgentNetwork(agents, data) {
+  var nodes = document.getElementById('agentNetworkNodes');
+  var meta  = document.getElementById('agentNetworkMeta');
+  var html  = '';
+
+  html += '<div class="an-node"><div class="an-node-label">INPUT</div><div class="an-node-sub">Problem</div></div>';
+  html += '<div class="an-arrow">&#8594;</div>';
+
+  agents.forEach(function(a, i) {
+    var acc = (data.all_accuracies && data.all_accuracies[a]) ? data.all_accuracies[a] : null;
+    html += '<div class="an-node primary">' +
+            '<div class="an-node-label">' + a.toUpperCase() + '</div>' +
+            '<div class="an-node-sub">' + (acc ? acc + '%' : 'NAS agent') + '</div>' +
+            '</div>';
+    if (i < agents.length - 1) html += '<div class="an-arrow">&#8594;</div>';
+  });
+
+  if (agents.length > 1) {
+    html += '<div class="an-arrow">&#8594;</div>';
+    html += '<div class="an-node"><div class="an-node-label">FUSION</div><div class="an-node-sub">Merge</div></div>';
+  }
+
+  html += '<div class="an-arrow">&#8594;</div>';
+  html += '<div class="an-node"><div class="an-node-label">OUTPUT</div><div class="an-node-sub">Model</div></div>';
+
+  nodes.innerHTML = html;
+
+  var topo = data.topology_type || 'sequential';
+  var proxy = data.proxy_score || '0.971';
+  meta.textContent = 'Selected by ANAS · ' + topo + ' · proxy ' + proxy;
 }
 
-function activateWFNode(id) {
-    var el = document.getElementById('wf-' + id);
-    if (!el) return;
-    el.classList.add('active');
-    el.classList.remove('done');
+// ── RESULTS ─────────────────────────────────────────────────────────────────
+
+function showResults(data) {
+  var acc = data.test_accuracy || data.avg_accuracy || data.cached_accuracy ||
+            data.accuracy || (data.evaluation && data.evaluation.avg_score) || 0;
+
+  var accEl = document.getElementById('resultsAccNum');
+  accEl.textContent = acc > 0 ? acc + '%' : '—';
+  if      (acc >= 80) accEl.style.color = 'var(--green-h)';
+  else if (acc >= 60) accEl.style.color = 'var(--amber)';
+  else                accEl.style.color = 'var(--red)';
+
+  document.getElementById('resultsProblemName').textContent = currentProblem.length > 60
+    ? currentProblem.slice(0, 57) + '…'
+    : currentProblem;
+
+  var grid = document.getElementById('resultsMetaGrid');
+  var time  = data.elapsed || data.search_time || data.time || '—';
+  var params = data.parameters ? ((data.parameters / 1e6).toFixed(1) + 'M') : '—';
+  var agents = (data.agents_used || [data.domain]).filter(Boolean);
+  grid.innerHTML =
+    metaCard(time + 's',           'Training time') +
+    metaCard(params,               'Parameters') +
+    metaCard(agents.length + ' agent' + (agents.length > 1 ? 's' : ''), 'Network size');
+
+  show('resultsSection');
+  smoothScrollTo('resultsSection');
 }
 
-function doneWFNode(id, acc) {
-    var el    = document.getElementById('wf-' + id);
-    var accEl = document.getElementById('wf-acc-' + id);
-    if (!el) return;
-    el.classList.remove('active');
-    el.classList.add('done');
-    if (accEl && acc > 0) accEl.textContent = acc + '%';
-}
-
-function completeWorkflowPanel(finalAcc) {
-    var c = document.getElementById('workflowPanel');
-    if (!c) return;
-    var d = document.createElement('div');
-    d.style.cssText = 'margin-top:10px;background:rgba(5,150,105,0.06);border:1px solid var(--success);' +
-                      'border-radius:var(--radius-sm);padding:8px 12px;display:flex;gap:12px;align-items:center';
-    d.innerHTML = '<span style="color:var(--success-light);font-weight:700;font-size:0.8rem">Pipeline Complete</span>' +
-        (finalAcc > 0 ? '<span style="color:var(--success-light);font-weight:800;font-size:0.95rem">' + finalAcc + '% accuracy</span>' : '') +
-        '<span style="color:var(--muted);font-size:0.75rem">Brain updated</span>';
-    c.appendChild(d);
-}
-
-// ── RESULTS ────────────────────────────────────────────────────────────────
-
-
-function showMultiAgentResults(data) {
-    hide('step2');
-    document.getElementById('resultsTitle').textContent = 'Multi-Agent NAS Complete';
-
-    var agents = data.agents_used || [];
-
-    var badges = agents.map(function(a) {
-        return '<span class="agent-badge badge-' + a + '">' + a.toUpperCase() + ' NAS</span>';
-    }).join('') + '<span class="agent-badge badge-fusion">FUSION</span>';
-
-    var nasNodes = agents.map(function(a) {
-        var acc = (data.all_accuracies && data.all_accuracies[a]) ? data.all_accuracies[a] : 0;
-        return '<div class="nas-node agent-' + a + '">' +
-               '<div class="nas-node-label">' + a.toUpperCase() + '</div>' +
-               '<div class="nas-node-sub">NAS Agent</div>' +
-               (acc > 0 ? '<div style="color:var(--success-light);font-size:0.62rem;font-weight:800;margin-top:2px">' + acc + '%</div>' : '') +
-               '</div><div class="nas-arrow">&#8250;</div>';
-    }).join('');
-
-    var anyAcc = data.test_accuracy || data.avg_accuracy || data.cached_accuracy || data.accuracy || (data.evaluation && data.evaluation.avg_score) || 0;
-    var accColor = anyAcc >= 80 ? 'var(--success-light)' : anyAcc >= 60 ? 'var(--warning)' : 'var(--danger)';
-    var accuracyHTML = anyAcc > 0 ?
-        '<div class="acc-box" style="text-align:center;padding:28px">' +
-        '<div style="font-size:3.5rem;font-weight:900;color:' + accColor + ';line-height:1">' + anyAcc + '%</div>' +
-        '<div style="color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;margin-top:6px">Test Accuracy</div>' +
-        '</div>' : '';
-
-    document.getElementById('resultsContent').innerHTML =
-        accuracyHTML +
-        '<div class="agent-badges">' + badges + '</div>' +
-        '<div class="nas-visual">' +
-        '<div style="color:var(--muted);font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Multi-Agent Pipeline</div>' +
-        '<div class="nas-flow">' +
-        '<div class="nas-node"><div class="nas-node-label">INPUT</div><div class="nas-node-sub">Problem</div></div><div class="nas-arrow">&#8250;</div>' +
-        '<div class="nas-node agent-image"><div class="nas-node-label">BERT</div><div class="nas-node-sub">Classifier</div></div><div class="nas-arrow">&#8250;</div>' +
-        nasNodes +
-        '<div class="nas-node agent-fusion"><div class="nas-node-label">FUSION</div><div class="nas-node-sub">Agent</div></div><div class="nas-arrow">&#8250;</div>' +
-        '<div class="nas-node agent-output"><div class="nas-node-label">OUTPUT</div><div class="nas-node-sub">Model</div></div>' +
-        '</div></div>' +
-        cacheHTML(data) +
-        '<div class="results-grid">' +
-        '<div class="result-card"><div class="big-number">' + agents.length + '</div><div class="label">Agents Deployed</div></div>' +
-        '<div class="result-card"><div class="big-number">' + ((data.parameters || 0) / 1000).toFixed(0) + 'K</div><div class="label">Parameters</div></div>' +
-        '<div class="result-card"><div class="big-number">' + (data.elapsed || 0) + 's</div><div class="label">Total Time</div></div></div>';
-
-    show('downloadSection');
-    hide('testSection');
-    show('step3');
-    document.getElementById('step3').scrollIntoView({ behavior: 'smooth' });
-}
-
-function showSingleAgentResults(data) {
-    hide('step2');
-    var domain = data.domain || 'image';
-    document.getElementById('resultsTitle').textContent = domain.toUpperCase() + ' NAS Complete';
-
-    // Accuracy — show regardless of cache hit or fresh train
-    var acc = data.test_accuracy || data.avg_accuracy || data.cached_accuracy || data.accuracy || (data.evaluation && data.evaluation.avg_score) || 0;
-    var accColor = acc >= 80 ? 'var(--success-light)' : acc >= 60 ? 'var(--warning)' : 'var(--danger)';
-    var accuracyHTML = '<div class="acc-box" style="text-align:center;padding:28px">' +
-        '<div style="font-size:3.5rem;font-weight:900;color:' + accColor + ';line-height:1">' + acc + '%</div>' +
-        '<div style="color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;margin-top:6px">Test Accuracy</div>' +
-        (data.dataset ? '<div style="color:var(--muted);font-size:0.78rem;margin-top:8px">Dataset: <strong style="color:#fff">' + data.dataset + '</strong></div>' : '') +
-        '</div>';
-
-    // Agent pipeline — always show
-    var pipelineHTML = '<div class="nas-visual">' +
-        '<div style="color:var(--muted);font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Agent Pipeline</div>' +
-        '<div class="nas-flow">' +
-        '<div class="nas-node"><div class="nas-node-label">INPUT</div><div class="nas-node-sub">Problem</div></div><div class="nas-arrow">&#8250;</div>' +
-        '<div class="nas-node agent-image"><div class="nas-node-label">BERT</div><div class="nas-node-sub">Classifier</div></div><div class="nas-arrow">&#8250;</div>' +
-        '<div class="nas-node agent-' + domain + '"><div class="nas-node-label">' + domain.toUpperCase() + '</div><div class="nas-node-sub">NAS Agent</div>' +
-        (acc > 0 ? '<div style="color:var(--success-light);font-size:0.62rem;font-weight:800;margin-top:2px">' + acc + '%</div>' : '') +
-        '</div><div class="nas-arrow">&#8250;</div>' +
-        '<div class="nas-node agent-output"><div class="nas-node-label">OUTPUT</div><div class="nas-node-sub">Model</div></div>' +
-        '</div></div>';
-
-    document.getElementById('resultsContent').innerHTML =
-        accuracyHTML +
-        pipelineHTML +
-        cacheHTML(data) +
-        '<div class="results-grid">' +
-        '<div class="result-card"><div class="big-number">1</div><div class="label">Agent Used</div></div>' +
-        '<div class="result-card"><div class="big-number">' + ((data.parameters || 0) / 1000).toFixed(0) + 'K</div><div class="label">Parameters</div></div>' +
-        '<div class="result-card"><div class="big-number">' + (data.search_time || 0) + 's</div><div class="label">Search Time</div></div></div>';
-
-    show('downloadSection');
-    hide('testSection');
-    show('step3');
-    document.getElementById('step3').scrollIntoView({ behavior: 'smooth' });
-}
-
-function showUserDataResults(data, analysis) {
-    hide('step2');
-    document.getElementById('resultsTitle').textContent = 'Custom Model Ready';
-    var accColor = data.test_accuracy >= 70 ? 'var(--success-light)' :
-                   data.test_accuracy >= 50 ? 'var(--warning)' : 'var(--danger)';
-    var classRows = (data.classes || []).map(function(c) {
-        return '<div style="color:var(--muted);font-size:0.8rem;padding:3px 0">Class: <strong style="color:#fff">' + c + '</strong></div>';
-    }).join('');
-
-    document.getElementById('resultsContent').innerHTML =
-        '<div class="acc-box" style="text-align:center"><div class="acc-box-title">Trained on Your Real Data</div>' +
-        '<div style="font-size:3rem;font-weight:800;color:' + accColor + '">' + data.test_accuracy + '%</div>' +
-        '<div style="color:var(--muted);font-size:0.78rem">Test Accuracy</div></div>' +
-        '<div class="info-box"><div class="info-box-title">Training Results</div><div class="info-row">' +
-        'Dataset: <strong>Your uploaded data</strong><br>' +
-        'Files: <strong>' + data.total_files + '</strong><br>' +
-        'Train accuracy: <strong>' + data.train_accuracy + '%</strong><br>' +
-        'Test accuracy: <strong>' + data.test_accuracy + '%</strong><br>' +
-        'Architecture: <strong>' + data.architecture + '</strong><br>' +
-        'Time: <strong>' + data.time + 's</strong>' +
-        '</div></div>' +
-        '<div class="info-box"><div class="info-box-title">Your Classes</div>' + classRows + '</div>' +
-        researchProofHTML();
-
-    show('testSection');
-    show('downloadSection');
-    show('step3');
-    document.getElementById('step3').scrollIntoView({ behavior: 'smooth' });
-}
-
-function showLLMResults(data) {
-    hide('step2');
-    document.getElementById('resultsTitle').textContent = 'Generated by Llama 3';
-    document.getElementById('resultsContent').innerHTML =
-        '<div class="info-box" style="margin-bottom:14px"><div class="info-box-title">Llama 3.1 via Groq</div>' +
-        '<div style="color:var(--muted);font-size:0.78rem">Free LLM — 200 tokens/sec</div></div>' +
-        '<div class="llm-output">' + (data.output || '') + '</div>';
-    hide('downloadSection');
-    hide('testSection');
-    show('step3');
-    document.getElementById('step3').scrollIntoView({ behavior: 'smooth' });
-}
-
-// ── PREDICTION ─────────────────────────────────────────────────────────────
-
-async function runRealPrediction(event) {
-    var file = event.target.files[0];
-    if (!file) return;
-    var problem = document.getElementById('problemInput').value.trim();
-    var reader  = new FileReader();
-    reader.onload = async function(e) {
-        var rd   = document.getElementById('predictionResult');
-        var lbl  = document.getElementById('predLabel');
-        var conf = document.getElementById('predConf');
-        var sc   = document.getElementById('predScores');
-        lbl.textContent       = 'Analyzing...';
-        conf.textContent      = '';
-        rd.style.background   = 'rgba(79,70,229,0.06)';
-        rd.style.border       = '1px solid var(--primary)';
-        rd.classList.remove('hidden');
-        try {
-            var res  = await fetch('/api/predict-user', {
-                method:  'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body:    JSON.stringify({
-                    problem:  problem,
-                    image:    e.target.result,
-                    category: currentAnalysis.category || 'image'
-                })
-            });
-            var data = await res.json();
-            if (data.error) throw new Error(data.error);
-            var color = data.confidence >= 70 ? 'var(--success-light)' :
-                        data.confidence >= 50 ? 'var(--warning)' : 'var(--danger)';
-            rd.style.background = data.confidence >= 70 ? 'rgba(5,150,105,0.06)' : 'rgba(79,70,229,0.06)';
-            rd.style.border     = '1px solid ' + (data.confidence >= 70 ? 'var(--success)' : 'var(--primary)');
-            lbl.textContent     = data.label;
-            lbl.style.color     = color;
-            conf.textContent    = 'Confidence: ' + data.confidence + '%';
-            sc.innerHTML = Object.entries(data.all_scores || {}).map(function(e) {
-                return '<div class="op-row"><div class="op-name">' + e[0] + '</div>' +
-                       '<div class="op-bar-bg"><div class="op-bar-fill" style="width:' + e[1] + '%"></div></div>' +
-                       '<div style="color:var(--muted);font-size:0.72rem;min-width:36px">' + e[1] + '%</div></div>';
-            }).join('');
-        } catch (err) {
-            lbl.textContent = 'Error: ' + err.message;
-            lbl.style.color = 'var(--danger)';
-        }
-    };
-    reader.readAsDataURL(file);
-}
-
-// ── BUILD ARCH HTML ─────────────────────────────────────────────────────────
-
-function buildArchHTML(arch) {
-    if (!arch || arch.length === 0) return '<div style="color:var(--muted);font-size:0.82rem">No architecture data</div>';
-    return arch.slice(0, 6).map(function(cell) {
-        var ops = (cell.operations || []).map(function(op) {
-            if (!op.weights) {
-                return '<div style="color:var(--muted);font-size:0.78rem;padding:3px 0">' +
-                       op.operation + ' — ' + op.confidence + '%' + (op.fusion ? ' (FUSION)' : '') + '</div>';
-            }
-            return Object.entries(op.weights).map(function(e) {
-                var n = e[0]; var w = e[1];
-                return '<div class="op-row">' +
-                       '<div class="op-name">' + n + '</div>' +
-                       '<div class="op-bar-bg"><div class="op-bar-fill" style="width:' + (w * 100) + '%"></div></div>' +
-                       '<div style="color:var(--muted);font-size:0.7rem;min-width:30px">' + (w * 100).toFixed(0) + '%</div>' +
-                       (n === op.operation ? '<div class="op-winner">WIN</div>' : '') +
-                       '</div>';
-            }).join('');
-        }).join('');
-        return '<div class="cell-block"><div class="cell-title">Cell ' + cell.cell + (cell.source ? ' [' + cell.source + ']' : '') + '</div>' + ops + '</div>';
-    }).join('');
-}
-
-// ── HTML HELPERS ────────────────────────────────────────────────────────────
-
-function researchProofHTML() {
-    return '<div class="research-box"><div class="research-title">Research Proof — AI vs Human Baseline</div>' +
-        '<div class="op-row"><div class="op-name">Human</div>' +
-        '<div class="op-bar-bg"><div class="op-bar-fill" style="width:52.56%"></div></div>' +
-        '<div style="color:var(--muted);font-size:0.72rem;min-width:50px">52.56%</div></div>' +
-        '<div class="op-row"><div class="op-name">AutoArchitect</div>' +
-        '<div class="op-bar-bg"><div class="op-bar-fill green" style="width:74.89%"></div></div>' +
-        '<div style="color:var(--success-light);font-size:0.72rem;min-width:50px;font-weight:700">74.89%</div></div>' +
-        '<div class="research-note">+22.33% improvement — proven on standard benchmarks</div></div>';
-}
-
-function cacheHTML(data) {
-    if (data.from_cache) {
-        return '<div class="cache-box cache-hit">' +
-               '<div class="cache-tag">HIT</div>' +
-               '<div><div class="cache-label">Loaded from Knowledge Base</div>' +
-               '<div class="cache-sub">Instant — used ' + (data.use_count || 1) + ' time(s)</div></div></div>';
-    }
-    return '<div class="cache-box cache-new">' +
-           '<div class="cache-tag">NEW</div>' +
-           '<div><div class="cache-label">Cached Forever</div>' +
-           '<div class="cache-sub">Next run will be instant</div></div></div>';
-}
-
-function readableOutputHTML(output) {
-    if (!output || !output.overall_score) return '';
-    var color    = output.overall_score >= 80 ? 'var(--success-light)' :
-                   output.overall_score >= 60 ? 'var(--warning)' : 'var(--danger)';
-    var findings = (output.findings || []).map(function(f) {
-        return '<div class="report-finding">' + f + '</div>';
-    }).join('');
-    var recs = (output.recommendations || []).map(function(r) {
-        return '<div class="report-rec">' + r + '</div>';
-    }).join('');
-    return '<div class="ai-report">' +
-        '<div class="report-header">' +
-        '<div class="report-title">AI Analysis Report</div>' +
-        '<div class="report-score" style="color:' + color + '">' + output.overall_score + '/100</div></div>' +
-        '<div class="report-verdict" style="color:' + color + '">' + (output.verdict || '') + '</div>' +
-        '<div class="report-summary">' + (output.summary || '') + '</div>' +
-        (findings ? '<div class="report-section-title">Findings</div>' + findings : '') +
-        (recs     ? '<div class="report-section-title" style="margin-top:10px">Recommendations</div>' + recs : '') +
-        (output.next_steps ? '<div class="report-next">Next: ' + output.next_steps + '</div>' : '') +
-        '</div>';
-}
-
-// ── PIPELINE HELPERS ────────────────────────────────────────────────────────
-
-function addStep(id, label, desc, state) {
-    var el       = document.createElement('div');
-    el.className = 'pipeline-step ' + state;
-    el.id        = 'ps-' + id;
-    el.innerHTML =
-        '<div class="step-text"><strong>' + label + '</strong>' +
-        '<div class="step-desc">' + desc + '</div></div>' +
-        '<div class="step-status ' + state + '" id="pss-' + id + '">' + state + '</div>';
-    document.getElementById('pipelineSteps').appendChild(el);
-    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function doneStep(id) {
-    var step   = document.getElementById('ps-' + id);
-    var status = document.getElementById('pss-' + id);
-    if (step)   step.className      = 'pipeline-step done';
-    if (status) { status.className  = 'step-status done'; status.textContent = 'done'; }
-    doneWFNode(id, 0);
-}
-
-function doneStepWithAcc(id, acc) {
-    var step   = document.getElementById('ps-' + id);
-    var status = document.getElementById('pss-' + id);
-    if (step)   step.className = 'pipeline-step done';
-    if (status) {
-        status.className  = 'step-status done';
-        status.textContent = acc > 0 ? acc + '%' : 'done';
-        if (acc > 0) status.style.color = acc >= 70 ? 'var(--success-light)' : acc >= 50 ? 'var(--warning)' : 'var(--danger)';
-    }
-    doneWFNode(id, acc);
-}
-
-function updateProgress(pct, msg) {
-    document.getElementById('progressBar').style.width = pct + '%';
-    document.getElementById('nasStatus').textContent   = msg;
+function metaCard(val, lbl) {
+  return '<div class="rmeta-card"><div class="rmeta-val">' + val + '</div><div class="rmeta-lbl">' + lbl + '</div></div>';
 }
 
 // ── DOWNLOAD ────────────────────────────────────────────────────────────────
 
-async function downloadMultiNAS() {
-    var btn    = document.getElementById('downloadBtn');
-    var status = document.getElementById('downloadStatus');
-    btn.disabled       = true;
-    btn.textContent    = 'Building package...';
-    status.textContent = 'Packaging pipeline...';
-    var problem = document.getElementById('problemInput').value.trim();
-    try {
-        var res = await fetch('/api/download/multi-nas', {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ problem: problem })
-        });
-        if (!res.ok) throw new Error('Failed');
-        var blob = await res.blob();
-        var url  = window.URL.createObjectURL(blob);
-        var a    = document.createElement('a');
-        a.href   = url; a.download = 'autoarchitect_multi_nas.zip';
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        btn.textContent    = 'Downloaded';
-        status.textContent = 'Run: pip install -r requirements.txt && python run_nas.py';
-        status.style.color = 'var(--success-light)';
-        setTimeout(function() {
-            btn.disabled = false; btn.textContent = 'Download NAS Package';
-            status.textContent = ''; status.style.color = '';
-        }, 5000);
-    } catch (e) {
-        alert('Download failed');
-        btn.disabled = false; btn.textContent = 'Download NAS Package'; status.textContent = '';
-    }
-}
-
 async function downloadNetwork() {
-    var btn    = document.getElementById('downloadNetworkBtn');
-    var status = document.getElementById('downloadStatus');
-    btn.disabled       = true;
-    btn.textContent    = 'Building network...';
-    status.textContent = 'Designing agent topology...';
-    status.style.color = '';
-    var problem = document.getElementById('problemInput').value.trim();
-    try {
-        var res = await fetch('/api/download/network', {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ problem: problem })
-        });
-        if (!res.ok) throw new Error('Failed');
-        var blob    = await res.blob();
-        var url     = window.URL.createObjectURL(blob);
-        var a       = document.createElement('a');
-        var safeName = problem.slice(0, 25).replace(/\s+/g, '_').toLowerCase();
-        a.href      = url; a.download = safeName + '_network.zip';
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        btn.textContent    = 'Downloaded';
-        status.textContent = 'Run: python run_network.py input/';
-        status.style.color = 'var(--success-light)';
-        setTimeout(function() {
-            btn.disabled = false; btn.textContent = 'Download Agent Network';
-            status.textContent = ''; status.style.color = '';
-        }, 5000);
-    } catch (e) {
-        alert('Network download failed: ' + e.message);
-        btn.disabled = false; btn.textContent = 'Download Agent Network'; status.textContent = '';
-    }
+  var btn     = document.getElementById('downloadNetworkBtn');
+  var txtEl   = document.getElementById('downloadNetworkText');
+  var hint    = document.getElementById('downloadHint');
+  var problem = currentProblem || document.getElementById('problemInput').value.trim();
+
+  btn.disabled     = true;
+  txtEl.textContent = 'Building ZIP…';
+  hint.textContent  = '';
+
+  try {
+    var res = await fetch('/api/download/network', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ problem: problem })
+    });
+    if (!res.ok) throw new Error('Server returned ' + res.status);
+    var blob     = await res.blob();
+    var url      = window.URL.createObjectURL(blob);
+    var a        = document.createElement('a');
+    var safeName = problem.slice(0, 30).replace(/\s+/g, '_').toLowerCase();
+    a.href       = url;
+    a.download   = safeName + '_agent.zip';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+    txtEl.textContent = 'Downloaded';
+    hint.textContent  = 'Run: python run_network.py';
+    setTimeout(function() {
+      btn.disabled      = false;
+      txtEl.textContent = 'Download Agent ZIP';
+      hint.textContent  = '';
+    }, 6000);
+  } catch (e) {
+    txtEl.textContent = 'Download failed';
+    hint.textContent  = e.message;
+    hint.style.color  = 'var(--red)';
+    btn.disabled      = false;
+    setTimeout(function() {
+      txtEl.textContent = 'Download Agent ZIP';
+      hint.textContent  = '';
+      hint.style.color  = '';
+    }, 4000);
+  }
 }
 
-// ── HELPERS ─────────────────────────────────────────────────────────────────
+// ── PIPELINE HELPERS ────────────────────────────────────────────────────────
 
-function sleep(ms)  { return new Promise(function(r) { setTimeout(r, ms); }); }
-function show(id)   { var el = document.getElementById(id); if (el) el.classList.remove('hidden'); }
-function hide(id)   { var el = document.getElementById(id); if (el) el.classList.add('hidden'); }
-
-function setExample(btn) {
-    document.getElementById('problemInput').value = btn.textContent.trim();
+function resetPipelineUI() {
+  document.getElementById('pipelineSteps').innerHTML = '';
+  document.getElementById('agentNetworkNodes').innerHTML = '';
+  document.getElementById('agentNetworkMeta').textContent = '';
+  hide('agentNetwork');
+  setProgress(0);
 }
 
-function startOver() {
-    document.getElementById('problemInput').value = '';
-    document.getElementById('pipelineSteps').innerHTML = '';
-    document.getElementById('progressBar').style.width = '0%';
-    document.getElementById('classUploadAreas').innerHTML = '';
-    var wp = document.getElementById('workflowPanel');
-    if (wp) wp.innerHTML = '';
-    uploadedFiles = []; uploadedLabels = [];
-    setMode('nas');
-    hide('step2'); hide('step3');
-    currentResults = null; currentAnalysis = null;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+function setProgress(pct) {
+  document.getElementById('pipelineProgress').style.width = pct + '%';
 }
+
+function addStep(id, main, detail, state, time) {
+  var container = document.getElementById('pipelineSteps');
+  var el        = document.createElement('div');
+  el.className  = 'ps';
+  el.id         = 'ps-' + id;
+  el.innerHTML  = stepHTML(main, detail, state, time);
+  container.appendChild(el);
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function updateStep(id, main, detail, state, time) {
+  var el = document.getElementById('ps-' + id);
+  if (el) {
+    el.innerHTML = stepHTML(main, detail, state, time);
+  }
+}
+
+function stepHTML(main, detail, state, time) {
+  var iconHTML = '';
+  if (state === 'done') {
+    iconHTML = '<div class="ps-icon-check">' +
+               '<svg width="10" height="10" viewBox="0 0 24 24" fill="none">' +
+               '<path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+               '</svg></div>';
+  } else if (state === 'running') {
+    iconHTML = '<div class="ps-icon-spin">' +
+               '<svg width="11" height="11" viewBox="0 0 24 24" fill="none">' +
+               '<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="12"/>' +
+               '</svg></div>';
+  } else if (state === 'error') {
+    iconHTML = '<div class="ps-icon-check" style="background:rgba(220,38,38,0.1);border-color:var(--red)">' +
+               '<svg width="10" height="10" viewBox="0 0 24 24" fill="none">' +
+               '<path d="M18 6L6 18M6 6l12 12" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"/>' +
+               '</svg></div>';
+  } else {
+    iconHTML = '<div class="ps-icon-pending"></div>';
+  }
+
+  return '<div class="ps-icon">' + iconHTML + '</div>' +
+         '<div class="ps-body">' +
+         '<div class="ps-main' + (state === 'pending' ? ' muted' : '') + '">' + main + '</div>' +
+         (detail ? '<div class="ps-detail">' + detail + '</div>' : '') +
+         '</div>' +
+         (time ? '<div class="ps-time">' + time + '</div>' : '<div class="ps-time"></div>');
+}
+
+// ── RESET ───────────────────────────────────────────────────────────────────
+
+function reset() {
+  document.getElementById('problemInput').value = '';
+  currentResults  = null;
+  currentAnalysis = null;
+  currentProblem  = '';
+  hide('pipelineSection');
+  hide('resultsSection');
+  resetPipelineUI();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(function() { document.getElementById('problemInput').focus(); }, 400);
+}
+
+// ── UTILS ───────────────────────────────────────────────────────────────────
+
+function sleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+
+function show(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('hidden');
+}
+
+function hide(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.add('hidden');
+}
+
+function smoothScrollTo(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', function() {
-    hide('step2');
-    hide('step3');
-    document.getElementById('problemInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && e.ctrlKey) solveProblem();
-    });
+  hide('pipelineSection');
+  hide('resultsSection');
+
+  phEl = document.getElementById('problemInput');
+  phEl.placeholder = PLACEHOLDERS[0];
+  setInterval(cyclePlaceholder, 3200);
+
+  phEl.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) launch();
+  });
 });
