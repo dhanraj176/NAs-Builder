@@ -438,6 +438,39 @@ def predict_user():
 
 
 # ============================================
+# RETRAIN ON NEW DATA
+# ============================================
+@app.route('/api/retrain', methods=['POST'])
+def retrain_model():
+    data          = request.json or {}
+    problem       = data.get('problem', '').strip()
+    domain        = data.get('domain', 'image')
+    new_data_path = data.get('new_data_path', '').strip()
+
+    if not problem:
+        return jsonify({'error': 'problem is required'}), 400
+    if not new_data_path:
+        return jsonify({'error': 'new_data_path is required'}), 400
+    if not os.path.exists(new_data_path):
+        return jsonify({'error': f'new_data_path not found: {new_data_path}'}), 400
+
+    print(f"\n[Retrain] Endpoint: {problem[:50]}")
+    try:
+        from api.brain.network_zip_generator import NetworkZipGenerator
+        result = NetworkZipGenerator().retrain(
+            problem       = problem,
+            domain        = domain,
+            new_data_path = new_data_path,
+        )
+        return jsonify(result)
+    except FileNotFoundError as e:
+        return jsonify({'error': str(e)}), 404
+    except Exception as e:
+        print(f"[Retrain] Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+# ============================================
 # DOWNLOAD MULTI-AGENT NAS PACKAGE
 # ============================================
 @app.route('/api/download/multi-nas', methods=['POST'])

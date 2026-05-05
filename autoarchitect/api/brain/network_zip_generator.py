@@ -190,6 +190,15 @@ class NetworkZipGenerator:
                     agent_class_map, classes_info))
             print(f"   ✅ README.md")
 
+            # 8. Retrain script — one command to fine-tune on new data
+            zf.writestr("retrain.py",
+                self._generate_retrain_script(
+                    problem    = problem,
+                    domain     = agents[0],
+                    model_file = f"{agent_file_map[agents[0]]}_model.pth",
+                ))
+            print(f"   ✅ retrain.py")
+
         print(f"\n✅ Network zip ready — "
               f"{len(agents)} agents, {topo_type} topology")
         return buf.getvalue()
@@ -1248,6 +1257,240 @@ print(result)
 ---
 *Built with AutoArchitect AI — The ChatGPT for AI Agents*
 """
+
+    def _generate_retrain_script(self, problem: str,
+                                  domain: str, model_file: str) -> str:
+        return f'''"""
+retrain.py — Fine-tune your AutoArchitect agent on new data
+
+Usage:
+    python retrain.py --data_path ./my_new_images/
+    python retrain.py --data_path ./my_new_images/ --server http://localhost:5000
+    python retrain.py --data_path ./my_new_images/ --local
+
+Image folder format (subfolder name = class label):
+    my_new_images/
+        class_a/
+            img1.jpg
+        class_b/
+            img2.jpg
+
+What happens:
+    Epochs 1-3  backbone frozen, only classifier trains (fast)
+    Epochs 4-5  layer4 + classifier unfrozen (deeper fine-tuning)
+    Best checkpoint saved back to models/{model_file}
+"""
+
+import argparse
+import os
+import sys
+import time
+from pathlib import Path
+
+PROBLEM    = "{problem[:60]}"
+DOMAIN     = "{domain}"
+MODEL_PATH = Path(__file__).parent / "models" / "{model_file}"
+SERVER     = "http://localhost:5000"
+
+
+def call_server(data_path: str, server: str) -> dict:
+    import requests
+    url = f"{{server}}/api/retrain"
+    print(f"[Retrain] Calling {{url}} ...")
+    resp = requests.post(url, json={{
+        "problem":       PROBLEM,
+        "domain":        DOMAIN,
+        "new_data_path": str(Path(data_path).resolve()),
+    }}, timeout=300)
+    resp.raise_for_status()
+    return resp.json()
+
+
+def retrain_local(data_path: str) -> dict:
+    import torch
+    import torch.nn as nn
+    import torchvision.models as models
+    import torchvision.transforms as T
+    from torch.utils.data import DataLoader, Dataset, Subset
+    from PIL import Image as PILImage
+
+    t0       = time.time()
+    IMG_EXTS = {{".jpg", ".jpeg", ".png", ".bmp", ".webp"}}
+
+    root, paths, raw_labels = Path(data_path), [], []
+    for f in root.rglob("*"):
+        if f.is_file() and f.suffix.lower() in IMG_EXTS:
+            raw_labels.append(f.parent.name if f.parent != root else "_root")
+            paths.append(f)
+
+    if not paths:
+        raise ValueError(f"No images found under {{data_path}}")
+
+    detected = sorted(set(raw_labels))
+    lmap     = {{c: i for i, c in enumerate(detected)}}
+    int_lbl  = [lmap[l] for l in raw_labels]
+    n        = len(paths)
+    n_train  = max(1, int(0.70 * n))
+    n_val    = max(1, int(0.15 * n)) if n >= 3 else 0
+    n_test   = n - n_train - n_val
+    n_train  = n - n_val - n_test
+
+    print(f"[Retrain] {{n}} images -> {{n_train}} train / {{n_val}} val / {{n_test}} test")
+    print(f"[Retrain] Classes: {{detected}}")
+
+    aug = T.Compose([T.Resize((224, 224)), T.RandomHorizontalFlip(),
+                     T.ColorJitter(0.2, 0.2), T.ToTensor(),
+                     T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+    val = T.Compose([T.Resize((224, 224)), T.ToTensor(),
+                     T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+
+    class _IL(Dataset):
+        def __init__(self, p, l, t): self.p, self.l, self.t = p, l, t
+        def __len__(self): return len(self.p)
+        def __getitem__(self, i):
+            return self.t(PILImage.open(self.p[i]).convert("RGB")), self.l[i]
+
+    g        = torch.Generator().manual_seed(42)
+    idx      = torch.randperm(n, generator=g).tolist()
+    aug_ds   = _IL(paths, int_lbl, aug)
+    eval_ds  = _IL(paths, int_lbl, val)
+    tr_ds    = Subset(aug_ds,  idx[:n_train])
+    va_ds    = Subset(eval_ds, idx[n_train:n_train + n_val])
+    te_ds    = Subset(eval_ds, idx[n_train + n_val:])
+    bs       = min(16, max(1, n_train))
+    tr_ld    = DataLoader(tr_ds, batch_size=bs, shuffle=True,  num_workers=0)
+    va_ld    = DataLoader(va_ds, batch_size=bs, shuffle=False, num_workers=0) if n_val  else None
+    te_ld    = DataLoader(te_ds, batch_size=bs, shuffle=False, num_workers=0) if n_test else None
+
+    num_cls = len(detected)
+    mdl     = models.resnet18(weights=None)
+    mdl.fc  = nn.Linear(mdl.fc.in_features, num_cls)
+    if MODEL_PATH.exists():
+        try:
+            mdl.load_state_dict(torch.load(str(MODEL_PATH),
+                map_location="cpu", weights_only=True), strict=False)
+            print("[Retrain] Loaded existing weights")
+        except Exception:
+            pass
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    mdl    = mdl.to(device)
+    crit   = nn.CrossEntropyLoss()
+
+    for nm, p in mdl.named_parameters():
+        p.requires_grad = nm.startswith("fc")
+    opt = torch.optim.Adam(
+        filter(lambda p: p.requires_grad, mdl.parameters()), lr=0.001)
+
+    def _ev(ld):
+        if ld is None:
+            return 0.0
+        mdl.eval()
+        c = tot = 0
+        with torch.no_grad():
+            for im, lb in ld:
+                im, lb = im.to(device), lb.to(device)
+                c   += (mdl(im).argmax(1) == lb).sum().item()
+                tot += lb.size(0)
+        return 100.0 * c / tot if tot else 0.0
+
+    best_val = 0.0
+    for ep in range(1, 6):
+        if ep == 4:
+            print("[Retrain] Unfreezing layer4 + fc")
+            for nm, p in mdl.named_parameters():
+                if nm.startswith("layer4") or nm.startswith("fc"):
+                    p.requires_grad = True
+            opt = torch.optim.Adam(
+                filter(lambda p: p.requires_grad, mdl.parameters()), lr=0.001)
+
+        mdl.train()
+        rl = c = tot = 0
+        for im, lb in tr_ld:
+            im, lb = im.to(device), lb.to(device)
+            opt.zero_grad()
+            out  = mdl(im)
+            loss = crit(out, lb)
+            loss.backward()
+            opt.step()
+            rl  += loss.item() * lb.size(0)
+            c   += (out.argmax(1) == lb).sum().item()
+            tot += lb.size(0)
+
+        va = _ev(va_ld)
+        print(f"[Retrain] Epoch {{ep}}/5 - "
+              f"loss: {{rl/tot if tot else 0:.4f}} - val_acc: {{va:.2f}}%")
+        if va >= best_val:
+            best_val = va
+            torch.save(mdl.state_dict(), str(MODEL_PATH))
+
+    if n_val == 0:
+        torch.save(mdl.state_dict(), str(MODEL_PATH))
+
+    ta      = _ev(te_ld)
+    elapsed = round(time.time() - t0, 1)
+    print(f"[Retrain] Done - test_acc: {{ta:.2f}}%  "
+          f"best_val: {{best_val:.2f}}%  time: {{elapsed}}s")
+    print(f"[Retrain] Saved -> {{MODEL_PATH}}")
+    return {{
+        "status":       "retrained",
+        "new_accuracy": round(ta, 2),
+        "epochs":       5,
+        "val_accuracy": round(best_val, 2),
+        "elapsed":      elapsed,
+    }}
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Retrain AutoArchitect agent on new data")
+    parser.add_argument("--data_path", required=True,
+                        help="Folder of new images (subfolders = class labels)")
+    parser.add_argument("--server", default=SERVER,
+                        help=f"AutoArchitect server URL (default: {{SERVER}})")
+    parser.add_argument("--local", action="store_true",
+                        help="Skip server, run fine-tuning locally")
+    args = parser.parse_args()
+
+    print("=" * 55)
+    print("  AutoArchitect Agent Retraining")
+    print(f"  Problem : {{PROBLEM[:50]}}")
+    print(f"  Domain  : {{DOMAIN}}")
+    print(f"  Data    : {{args.data_path}}")
+    print("=" * 55)
+
+    if not Path(args.data_path).exists():
+        print(f"ERROR: data_path not found: {{args.data_path}}")
+        sys.exit(1)
+
+    result = None
+    if not args.local:
+        try:
+            result = call_server(args.data_path, args.server)
+            print("[Retrain] Server retraining complete")
+        except Exception as e:
+            print(f"[Retrain] Server unavailable ({{e}}) -- running locally")
+
+    if result is None:
+        result = retrain_local(args.data_path)
+
+    print()
+    print("=" * 55)
+    print("  RESULT")
+    print("=" * 55)
+    for k, v in result.items():
+        print(f"  {{k:<16}}: {{v}}")
+    print("=" * 55)
+    print()
+    print("  Next: drop new images into input/ and run:")
+    print("  python run_network.py input/")
+    print("  The agent now uses the updated weights.")
+    print("=" * 55)
+
+
+if __name__ == "__main__":
+    main()
+'''
 
     def _requirements(self) -> str:
         return """torch>=2.0.0
