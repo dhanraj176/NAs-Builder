@@ -1,0 +1,604 @@
+{
+  "generated_at": "2026-05-05T23:46:17.268810",
+  "problem": "detect potholes in road surface",
+  "domain": "image",
+  "dataset": "taroii/pothole-detection",
+  "classes": [
+    "no_pothole",
+    "pothole"
+  ],
+  "split": {
+    "train_n": 305,
+    "val_n": 65,
+    "test_n": 67,
+    "train_pct": 70,
+    "val_pct": 15,
+    "test_pct": 15,
+    "seed": 42
+  },
+  "training": {
+    "method": "transfer_learning_resnet18",
+    "epochs": 5,
+    "train_accuracy": 97.7,
+    "val_accuracy": 84.62,
+    "epoch_history": [
+      {
+        "epoch": 1,
+        "train_acc": 79.02,
+        "val_acc": 80.0
+      },
+      {
+        "epoch": 2,
+        "train_acc": 87.87,
+        "val_acc": 81.54
+      },
+      {
+        "epoch": 3,
+        "train_acc": 94.43,
+        "val_acc": 84.62
+      },
+      {
+        "epoch": 4,
+        "train_acc": 98.36,
+        "val_acc": 86.15
+      },
+      {
+        "epoch": 5,
+        "train_acc": 97.7,
+        "val_acc": 84.62
+      }
+    ],
+    "time_seconds": 42.5
+  },
+  "verification": {
+    "test_accuracy": 86.6,
+    "correct": 58,
+    "total": 67,
+    "status": "VERIFIED",
+    "note": "Evaluated on holdout set. No overlap with training data."
+  },
+  "artifacts": {
+    "model_path": "D:\\AutoArichitech\\NAs Builder\\autoarchitect\\models\\trained\\f7a67cbd11_image.pth",
+    "zip_path": "D:\\AutoArichitech\\NAs Builder\\autoarchitect\\tests\\output\\pothole_agent.zip",
+    "holdout_json": "D:\\AutoArichitech\\NAs Builder\\autoarchitect\\tests\\results\\pothole_holdout.json",
+    "report_json": "D:\\AutoArichitech\\NAs Builder\\autoarchitect\\tests\\results\\pothole_verification.json"
+  },
+  "per_image_results": [
+    {
+      "idx": 1,
+      "filename": "img_436_jpg.rf.54278f66fd094601e96cd24288d9c17a.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.0,
+      "pass": true
+    },
+    {
+      "idx": 2,
+      "filename": "img_121_jpg.rf.ac07dfa3f00b6c2118723ec8504f78b3.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 3,
+      "filename": "img_544_jpg.rf.35df13f5bef2e561663f218dcd450c88.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 92.3,
+      "pass": true
+    },
+    {
+      "idx": 4,
+      "filename": "img_557_jpg.rf.330004989dbb37d595c9afc695b60d69.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 96.6,
+      "pass": true
+    },
+    {
+      "idx": 5,
+      "filename": "img_462_jpg.rf.dea1cc64c120ce32526e3849f6c08d62.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.7,
+      "pass": true
+    },
+    {
+      "idx": 6,
+      "filename": "img_332_jpg.rf.32a37574e17baf070d2aa859c08c8816.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.9,
+      "pass": true
+    },
+    {
+      "idx": 7,
+      "filename": "img_253_jpg.rf.f794e74a8cbd91e89a26f0e3b5fd2c52.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 8,
+      "filename": "img_138_jpg.rf.e60604e3c8ae6f8033c3ffd5eb31337c.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 9,
+      "filename": "img_61_jpg.rf.5d243e3d717954b01a85cbfaa1e3e64f.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 10,
+      "filename": "img_298_jpg.rf.6767d85a86562725069a80f97b26072b.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 11,
+      "filename": "img_203_jpg.rf.9bf7d4baeec6999390f9775c47bfe9e5.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 12,
+      "filename": "img_199_jpg.rf.2742415c8ffdcf3b7979775613b2dcf3.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 13,
+      "filename": "img_543_jpg.rf.a0da41ba197badf919f166e5ed9eab5f.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 14,
+      "filename": "img_426_jpg.rf.f482d7445f6e5d9f575ecad64175fc76.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 98.8,
+      "pass": true
+    },
+    {
+      "idx": 15,
+      "filename": "img_510_jpg.rf.825963543d85089cd2e2edcf2cc7f203.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.4,
+      "pass": true
+    },
+    {
+      "idx": 16,
+      "filename": "img_107_jpg.rf.046710bdb613042f7d779eb254c8f19c.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 17,
+      "filename": "img_119_jpg.rf.a870c892ce3c08ceb02752a832281e50.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 18,
+      "filename": "img_446_jpg.rf.77156787be60b6872a8e82e002c94580.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 89.8,
+      "pass": true
+    },
+    {
+      "idx": 19,
+      "filename": "img_139_jpg.rf.840f5a415dc811dae7da09ae16bda94d.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 20,
+      "filename": "img_413_jpg.rf.94b45ee3010f4983d61df4407fc472cc.jpg",
+      "true_class": "pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.9,
+      "pass": false
+    },
+    {
+      "idx": 21,
+      "filename": "img_479_jpg.rf.e89f517a2091df7b2fd85d0bea335d5d.jpg",
+      "true_class": "pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.9,
+      "pass": false
+    },
+    {
+      "idx": 22,
+      "filename": "img_100_jpg.rf.51da0aea97d42019368e0fa290d8c6c0.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 23,
+      "filename": "img_23_jpg.rf.5d1a19a18bf72c1ce6a43ae489c60217.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 24,
+      "filename": "img_371_jpg.rf.fd8945d121a7d74b59448c22eadd04f6.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.2,
+      "pass": true
+    },
+    {
+      "idx": 25,
+      "filename": "img_305_jpg.rf.ebbf7b489287d93e18cb97b7b77c73e9.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.8,
+      "pass": true
+    },
+    {
+      "idx": 26,
+      "filename": "img_284_jpg.rf.ab6276ee9dda745dd35fcb90ed599ea6.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 27,
+      "filename": "img_103_jpg.rf.f3c3cf246630777fc0c4637d23d3c8a2.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 80.7,
+      "pass": true
+    },
+    {
+      "idx": 28,
+      "filename": "img_439_jpg.rf.c238d2f97f545e79d515e022e3ee27b6.jpg",
+      "true_class": "pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.6,
+      "pass": false
+    },
+    {
+      "idx": 29,
+      "filename": "img_166_jpg.rf.eadb00c0ce1088edc4d9c5c09f62192d.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 30,
+      "filename": "img_309_jpg.rf.ee0138703f9cabd1cb5c7635aa0ed985.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 93.0,
+      "pass": true
+    },
+    {
+      "idx": 31,
+      "filename": "img_234_jpg.rf.bcaf292fb7155f254f83e49bcde49475.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 32,
+      "filename": "img_308_jpg.rf.f430da2fd403d89e846955f8f6a021e2.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 33,
+      "filename": "img_442_jpg.rf.4b4109ad34af0cd6f2b31df286e7c122.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.7,
+      "pass": true
+    },
+    {
+      "idx": 34,
+      "filename": "img_468_jpg.rf.881d38730143540e1c2b24a78db8f02a.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 35,
+      "filename": "img_197_jpg.rf.2fd0d7c279aaa92a1d7eeeb0ce3ad2e6.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 36,
+      "filename": "img_377_jpg.rf.f290c011ebcf4b0f8d687cc4138e9988.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.8,
+      "pass": true
+    },
+    {
+      "idx": 37,
+      "filename": "img_167_jpg.rf.d301ca6872fee435a9c38327a54f0d9a.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 38,
+      "filename": "img_456_jpg.rf.d42068957728fb87ddb87bc19b116347.jpg",
+      "true_class": "pothole",
+      "pred_class": "no_pothole",
+      "confidence": 96.4,
+      "pass": false
+    },
+    {
+      "idx": 39,
+      "filename": "img_171_jpg.rf.4a32f83bc6fb3d72a00b24e938f91e81.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 99.1,
+      "pass": true
+    },
+    {
+      "idx": 40,
+      "filename": "img_583_jpg.rf.b1697cd79a5db4640344f56d215f0094.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.9,
+      "pass": true
+    },
+    {
+      "idx": 41,
+      "filename": "img_181_jpg.rf.f8a6a4da5a650928d5f68cd09aa1d629.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 42,
+      "filename": "img_356_jpg.rf.53910c4823a988e81531e61d255dd4a3.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "pothole",
+      "confidence": 55.4,
+      "pass": false
+    },
+    {
+      "idx": 43,
+      "filename": "img_390_jpg.rf.85cd348ebc7f4d26b6c74524bfe8f811.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 98.7,
+      "pass": true
+    },
+    {
+      "idx": 44,
+      "filename": "img_388_jpg.rf.fdaf89d0c0be3d3713f1b24122cee803.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 98.4,
+      "pass": true
+    },
+    {
+      "idx": 45,
+      "filename": "img_509_jpg.rf.f0b0dc82a0db1c29a79f86cb426cc1c3.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "pothole",
+      "confidence": 61.2,
+      "pass": false
+    },
+    {
+      "idx": 46,
+      "filename": "img_248_jpg.rf.4e896f789ea9109cc1bae71a8f6d71b7.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 47,
+      "filename": "img_395_jpg.rf.f173f342897861f4b8013fca4c46cd46.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 98.1,
+      "pass": true
+    },
+    {
+      "idx": 48,
+      "filename": "img_376_jpg.rf.9636983fd7776a35e730f870dae92928.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 98.9,
+      "pass": true
+    },
+    {
+      "idx": 49,
+      "filename": "img_378_jpg.rf.4146729bd7b20fecdec13b6b568b51f4.jpg",
+      "true_class": "pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.7,
+      "pass": false
+    },
+    {
+      "idx": 50,
+      "filename": "img_452_jpg.rf.9b59cb9a920695896c9fffca853047ff.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 97.2,
+      "pass": true
+    },
+    {
+      "idx": 51,
+      "filename": "img_501_jpg.rf.2b2481c1286f8846c8deffe89c53e5a2.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.8,
+      "pass": true
+    },
+    {
+      "idx": 52,
+      "filename": "img_16_jpg.rf.9c9c7ccd8834620d335587280311d11d.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 53,
+      "filename": "img_469_jpg.rf.37adbc276953ad9798484d9a8b3e82f8.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 88.3,
+      "pass": true
+    },
+    {
+      "idx": 54,
+      "filename": "img_360_jpg.rf.fd0a988306c90fce8b35933f392a180b.jpg",
+      "true_class": "pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.8,
+      "pass": false
+    },
+    {
+      "idx": 55,
+      "filename": "img_317_jpg.rf.28fc5802b131d02b4794c6a6980353dd.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 55.5,
+      "pass": true
+    },
+    {
+      "idx": 56,
+      "filename": "img_52_jpg.rf.e978ed393aee1a5c622b33888603bb62.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 99.9,
+      "pass": true
+    },
+    {
+      "idx": 57,
+      "filename": "img_128_jpg.rf.015b60607b58dca8faac0d318f525f9d.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 99.8,
+      "pass": true
+    },
+    {
+      "idx": 58,
+      "filename": "img_47_jpg.rf.b2acf0229d1dc82309d48ce9f5ee1285.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 59,
+      "filename": "img_212_jpg.rf.0509ed4ee30415d8d3fe46f7a5f0deeb.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 60,
+      "filename": "img_98_jpg.rf.5bfedf96038ef3ffd17bceaa694ca715.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 61,
+      "filename": "img_384_jpg.rf.5b26de795e87f04d33f124b21f6a1552.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 76.4,
+      "pass": true
+    },
+    {
+      "idx": 62,
+      "filename": "img_403_jpg.rf.f183c394acb79302475f335cfde6520f.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.5,
+      "pass": true
+    },
+    {
+      "idx": 63,
+      "filename": "img_435_jpg.rf.7d1aa46dd9f0d21c73b029aff29e2b45.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.7,
+      "pass": true
+    },
+    {
+      "idx": 64,
+      "filename": "img_217_jpg.rf.d06cbd46fb94ff8befbf3f60b8d1af08.jpg",
+      "true_class": "pothole",
+      "pred_class": "pothole",
+      "confidence": 100.0,
+      "pass": true
+    },
+    {
+      "idx": 65,
+      "filename": "img_381_jpg.rf.2887c6daa0ef9c8f876a8634412bf585.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 96.6,
+      "pass": true
+    },
+    {
+      "idx": 66,
+      "filename": "img_547_jpg.rf.df88de3bd4d79bacfe7f9a6731ad2f22.jpg",
+      "true_class": "pothole",
+      "pred_class": "no_pothole",
+      "confidence": 99.8,
+      "pass": false
+    },
+    {
+      "idx": 67,
+      "filename": "img_569_jpg.rf.3f9ec03794efdefffc1e68721958d4f1.jpg",
+      "true_class": "no_pothole",
+      "pred_class": "no_pothole",
+      "confidence": 98.1,
+      "pass": true
+    }
+  ]
+}

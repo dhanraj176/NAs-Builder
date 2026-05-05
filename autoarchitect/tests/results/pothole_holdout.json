@@ -1,0 +1,482 @@
+{
+  "problem": "detect potholes in road surface",
+  "domain": "image",
+  "classes": [
+    "no_pothole",
+    "pothole"
+  ],
+  "saved_at": "2026-05-05T23:45:30.160760",
+  "note": "Saved BEFORE training. These images are never seen during training.",
+  "total": 67,
+  "images": [
+    {
+      "idx": 1,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_436_jpg.rf.54278f66fd094601e96cd24288d9c17a.jpg",
+      "filename": "img_436_jpg.rf.54278f66fd094601e96cd24288d9c17a.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 2,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\pothole\\img_121_jpg.rf.ac07dfa3f00b6c2118723ec8504f78b3.jpg",
+      "filename": "img_121_jpg.rf.ac07dfa3f00b6c2118723ec8504f78b3.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 3,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_544_jpg.rf.35df13f5bef2e561663f218dcd450c88.jpg",
+      "filename": "img_544_jpg.rf.35df13f5bef2e561663f218dcd450c88.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 4,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_557_jpg.rf.330004989dbb37d595c9afc695b60d69.jpg",
+      "filename": "img_557_jpg.rf.330004989dbb37d595c9afc695b60d69.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 5,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_462_jpg.rf.dea1cc64c120ce32526e3849f6c08d62.jpg",
+      "filename": "img_462_jpg.rf.dea1cc64c120ce32526e3849f6c08d62.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 6,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_332_jpg.rf.32a37574e17baf070d2aa859c08c8816.jpg",
+      "filename": "img_332_jpg.rf.32a37574e17baf070d2aa859c08c8816.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 7,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\pothole\\img_253_jpg.rf.f794e74a8cbd91e89a26f0e3b5fd2c52.jpg",
+      "filename": "img_253_jpg.rf.f794e74a8cbd91e89a26f0e3b5fd2c52.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 8,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\pothole\\img_138_jpg.rf.e60604e3c8ae6f8033c3ffd5eb31337c.jpg",
+      "filename": "img_138_jpg.rf.e60604e3c8ae6f8033c3ffd5eb31337c.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 9,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\pothole\\img_61_jpg.rf.5d243e3d717954b01a85cbfaa1e3e64f.jpg",
+      "filename": "img_61_jpg.rf.5d243e3d717954b01a85cbfaa1e3e64f.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 10,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_298_jpg.rf.6767d85a86562725069a80f97b26072b.jpg",
+      "filename": "img_298_jpg.rf.6767d85a86562725069a80f97b26072b.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 11,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\pothole\\img_203_jpg.rf.9bf7d4baeec6999390f9775c47bfe9e5.jpg",
+      "filename": "img_203_jpg.rf.9bf7d4baeec6999390f9775c47bfe9e5.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 12,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_199_jpg.rf.2742415c8ffdcf3b7979775613b2dcf3.jpg",
+      "filename": "img_199_jpg.rf.2742415c8ffdcf3b7979775613b2dcf3.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 13,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\no pothole\\img_543_jpg.rf.a0da41ba197badf919f166e5ed9eab5f.jpg",
+      "filename": "img_543_jpg.rf.a0da41ba197badf919f166e5ed9eab5f.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 14,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_426_jpg.rf.f482d7445f6e5d9f575ecad64175fc76.jpg",
+      "filename": "img_426_jpg.rf.f482d7445f6e5d9f575ecad64175fc76.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 15,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_510_jpg.rf.825963543d85089cd2e2edcf2cc7f203.jpg",
+      "filename": "img_510_jpg.rf.825963543d85089cd2e2edcf2cc7f203.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 16,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\pothole\\img_107_jpg.rf.046710bdb613042f7d779eb254c8f19c.jpg",
+      "filename": "img_107_jpg.rf.046710bdb613042f7d779eb254c8f19c.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 17,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\pothole\\img_119_jpg.rf.a870c892ce3c08ceb02752a832281e50.jpg",
+      "filename": "img_119_jpg.rf.a870c892ce3c08ceb02752a832281e50.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 18,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\pothole\\img_446_jpg.rf.77156787be60b6872a8e82e002c94580.jpg",
+      "filename": "img_446_jpg.rf.77156787be60b6872a8e82e002c94580.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 19,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\pothole\\img_139_jpg.rf.840f5a415dc811dae7da09ae16bda94d.jpg",
+      "filename": "img_139_jpg.rf.840f5a415dc811dae7da09ae16bda94d.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 20,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_413_jpg.rf.94b45ee3010f4983d61df4407fc472cc.jpg",
+      "filename": "img_413_jpg.rf.94b45ee3010f4983d61df4407fc472cc.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 21,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_479_jpg.rf.e89f517a2091df7b2fd85d0bea335d5d.jpg",
+      "filename": "img_479_jpg.rf.e89f517a2091df7b2fd85d0bea335d5d.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 22,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\pothole\\img_100_jpg.rf.51da0aea97d42019368e0fa290d8c6c0.jpg",
+      "filename": "img_100_jpg.rf.51da0aea97d42019368e0fa290d8c6c0.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 23,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_23_jpg.rf.5d1a19a18bf72c1ce6a43ae489c60217.jpg",
+      "filename": "img_23_jpg.rf.5d1a19a18bf72c1ce6a43ae489c60217.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 24,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_371_jpg.rf.fd8945d121a7d74b59448c22eadd04f6.jpg",
+      "filename": "img_371_jpg.rf.fd8945d121a7d74b59448c22eadd04f6.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 25,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_305_jpg.rf.ebbf7b489287d93e18cb97b7b77c73e9.jpg",
+      "filename": "img_305_jpg.rf.ebbf7b489287d93e18cb97b7b77c73e9.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 26,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_284_jpg.rf.ab6276ee9dda745dd35fcb90ed599ea6.jpg",
+      "filename": "img_284_jpg.rf.ab6276ee9dda745dd35fcb90ed599ea6.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 27,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\pothole\\img_103_jpg.rf.f3c3cf246630777fc0c4637d23d3c8a2.jpg",
+      "filename": "img_103_jpg.rf.f3c3cf246630777fc0c4637d23d3c8a2.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 28,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_439_jpg.rf.c238d2f97f545e79d515e022e3ee27b6.jpg",
+      "filename": "img_439_jpg.rf.c238d2f97f545e79d515e022e3ee27b6.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 29,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_166_jpg.rf.eadb00c0ce1088edc4d9c5c09f62192d.jpg",
+      "filename": "img_166_jpg.rf.eadb00c0ce1088edc4d9c5c09f62192d.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 30,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_309_jpg.rf.ee0138703f9cabd1cb5c7635aa0ed985.jpg",
+      "filename": "img_309_jpg.rf.ee0138703f9cabd1cb5c7635aa0ed985.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 31,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_234_jpg.rf.bcaf292fb7155f254f83e49bcde49475.jpg",
+      "filename": "img_234_jpg.rf.bcaf292fb7155f254f83e49bcde49475.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 32,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\no pothole\\img_308_jpg.rf.f430da2fd403d89e846955f8f6a021e2.jpg",
+      "filename": "img_308_jpg.rf.f430da2fd403d89e846955f8f6a021e2.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 33,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_442_jpg.rf.4b4109ad34af0cd6f2b31df286e7c122.jpg",
+      "filename": "img_442_jpg.rf.4b4109ad34af0cd6f2b31df286e7c122.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 34,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_468_jpg.rf.881d38730143540e1c2b24a78db8f02a.jpg",
+      "filename": "img_468_jpg.rf.881d38730143540e1c2b24a78db8f02a.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 35,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\pothole\\img_197_jpg.rf.2fd0d7c279aaa92a1d7eeeb0ce3ad2e6.jpg",
+      "filename": "img_197_jpg.rf.2fd0d7c279aaa92a1d7eeeb0ce3ad2e6.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 36,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_377_jpg.rf.f290c011ebcf4b0f8d687cc4138e9988.jpg",
+      "filename": "img_377_jpg.rf.f290c011ebcf4b0f8d687cc4138e9988.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 37,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\pothole\\img_167_jpg.rf.d301ca6872fee435a9c38327a54f0d9a.jpg",
+      "filename": "img_167_jpg.rf.d301ca6872fee435a9c38327a54f0d9a.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 38,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_456_jpg.rf.d42068957728fb87ddb87bc19b116347.jpg",
+      "filename": "img_456_jpg.rf.d42068957728fb87ddb87bc19b116347.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 39,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_171_jpg.rf.4a32f83bc6fb3d72a00b24e938f91e81.jpg",
+      "filename": "img_171_jpg.rf.4a32f83bc6fb3d72a00b24e938f91e81.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 40,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_583_jpg.rf.b1697cd79a5db4640344f56d215f0094.jpg",
+      "filename": "img_583_jpg.rf.b1697cd79a5db4640344f56d215f0094.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 41,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_181_jpg.rf.f8a6a4da5a650928d5f68cd09aa1d629.jpg",
+      "filename": "img_181_jpg.rf.f8a6a4da5a650928d5f68cd09aa1d629.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 42,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_356_jpg.rf.53910c4823a988e81531e61d255dd4a3.jpg",
+      "filename": "img_356_jpg.rf.53910c4823a988e81531e61d255dd4a3.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 43,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_390_jpg.rf.85cd348ebc7f4d26b6c74524bfe8f811.jpg",
+      "filename": "img_390_jpg.rf.85cd348ebc7f4d26b6c74524bfe8f811.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 44,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\no pothole\\img_388_jpg.rf.fdaf89d0c0be3d3713f1b24122cee803.jpg",
+      "filename": "img_388_jpg.rf.fdaf89d0c0be3d3713f1b24122cee803.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 45,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_509_jpg.rf.f0b0dc82a0db1c29a79f86cb426cc1c3.jpg",
+      "filename": "img_509_jpg.rf.f0b0dc82a0db1c29a79f86cb426cc1c3.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 46,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\pothole\\img_248_jpg.rf.4e896f789ea9109cc1bae71a8f6d71b7.jpg",
+      "filename": "img_248_jpg.rf.4e896f789ea9109cc1bae71a8f6d71b7.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 47,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_395_jpg.rf.f173f342897861f4b8013fca4c46cd46.jpg",
+      "filename": "img_395_jpg.rf.f173f342897861f4b8013fca4c46cd46.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 48,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_376_jpg.rf.9636983fd7776a35e730f870dae92928.jpg",
+      "filename": "img_376_jpg.rf.9636983fd7776a35e730f870dae92928.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 49,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\pothole\\img_378_jpg.rf.4146729bd7b20fecdec13b6b568b51f4.jpg",
+      "filename": "img_378_jpg.rf.4146729bd7b20fecdec13b6b568b51f4.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 50,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\no pothole\\img_452_jpg.rf.9b59cb9a920695896c9fffca853047ff.jpg",
+      "filename": "img_452_jpg.rf.9b59cb9a920695896c9fffca853047ff.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 51,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\no pothole\\img_501_jpg.rf.2b2481c1286f8846c8deffe89c53e5a2.jpg",
+      "filename": "img_501_jpg.rf.2b2481c1286f8846c8deffe89c53e5a2.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 52,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\pothole\\img_16_jpg.rf.9c9c7ccd8834620d335587280311d11d.jpg",
+      "filename": "img_16_jpg.rf.9c9c7ccd8834620d335587280311d11d.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 53,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_469_jpg.rf.37adbc276953ad9798484d9a8b3e82f8.jpg",
+      "filename": "img_469_jpg.rf.37adbc276953ad9798484d9a8b3e82f8.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 54,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\pothole\\img_360_jpg.rf.fd0a988306c90fce8b35933f392a180b.jpg",
+      "filename": "img_360_jpg.rf.fd0a988306c90fce8b35933f392a180b.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 55,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_317_jpg.rf.28fc5802b131d02b4794c6a6980353dd.jpg",
+      "filename": "img_317_jpg.rf.28fc5802b131d02b4794c6a6980353dd.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 56,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_52_jpg.rf.e978ed393aee1a5c622b33888603bb62.jpg",
+      "filename": "img_52_jpg.rf.e978ed393aee1a5c622b33888603bb62.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 57,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_128_jpg.rf.015b60607b58dca8faac0d318f525f9d.jpg",
+      "filename": "img_128_jpg.rf.015b60607b58dca8faac0d318f525f9d.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 58,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\pothole\\img_47_jpg.rf.b2acf0229d1dc82309d48ce9f5ee1285.jpg",
+      "filename": "img_47_jpg.rf.b2acf0229d1dc82309d48ce9f5ee1285.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 59,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_212_jpg.rf.0509ed4ee30415d8d3fe46f7a5f0deeb.jpg",
+      "filename": "img_212_jpg.rf.0509ed4ee30415d8d3fe46f7a5f0deeb.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 60,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\pothole\\img_98_jpg.rf.5bfedf96038ef3ffd17bceaa694ca715.jpg",
+      "filename": "img_98_jpg.rf.5bfedf96038ef3ffd17bceaa694ca715.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 61,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_384_jpg.rf.5b26de795e87f04d33f124b21f6a1552.jpg",
+      "filename": "img_384_jpg.rf.5b26de795e87f04d33f124b21f6a1552.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 62,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_403_jpg.rf.f183c394acb79302475f335cfde6520f.jpg",
+      "filename": "img_403_jpg.rf.f183c394acb79302475f335cfde6520f.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 63,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\train\\no pothole\\img_435_jpg.rf.7d1aa46dd9f0d21c73b029aff29e2b45.jpg",
+      "filename": "img_435_jpg.rf.7d1aa46dd9f0d21c73b029aff29e2b45.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 64,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\pothole\\img_217_jpg.rf.d06cbd46fb94ff8befbf3f60b8d1af08.jpg",
+      "filename": "img_217_jpg.rf.d06cbd46fb94ff8befbf3f60b8d1af08.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 65,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\no pothole\\img_381_jpg.rf.2887c6daa0ef9c8f876a8634412bf585.jpg",
+      "filename": "img_381_jpg.rf.2887c6daa0ef9c8f876a8634412bf585.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    },
+    {
+      "idx": 66,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\test\\pothole\\img_547_jpg.rf.df88de3bd4d79bacfe7f9a6731ad2f22.jpg",
+      "filename": "img_547_jpg.rf.df88de3bd4d79bacfe7f9a6731ad2f22.jpg",
+      "true_label": 1,
+      "true_class": "pothole"
+    },
+    {
+      "idx": 67,
+      "path": "C:\\Users\\Admin\\.cache\\huggingface\\hub\\datasets--taroii--pothole-detection\\snapshots\\930672a382fd1595efea309633e81d73166f1369\\valid\\no pothole\\img_569_jpg.rf.3f9ec03794efdefffc1e68721958d4f1.jpg",
+      "filename": "img_569_jpg.rf.3f9ec03794efdefffc1e68721958d4f1.jpg",
+      "true_label": 0,
+      "true_class": "no_pothole"
+    }
+  ]
+}
