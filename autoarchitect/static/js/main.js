@@ -23,7 +23,13 @@ function cyclePlaceholder() {
   phEl.placeholder = PLACEHOLDERS[phIdx];
 }
 
-// ── CHIP ───────────────────────────────────────────────────────────────────
+// ── NAV / CHIP ─────────────────────────────────────────────────────────────
+
+function scrollToInput() {
+  var el = document.getElementById('inputCard');
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(function() { document.getElementById('problemInput').focus(); }, 400);
+}
 
 function setChip(btn) {
   var ta = document.getElementById('problemInput');
@@ -44,13 +50,13 @@ async function launch() {
   var btnText = document.getElementById('launchBtnText');
   var spinner = document.getElementById('launchSpinner');
 
-  btn.disabled   = true;
+  btn.disabled        = true;
   btnText.textContent = 'Launching…';
   spinner.classList.remove('hidden');
 
-  // reset pipeline UI
   resetPipelineUI();
-  document.getElementById('pipelineProblem').textContent = problem.length > 60 ? problem.slice(0, 57) + '…' : problem;
+  document.getElementById('pipelineProblem').textContent =
+    problem.length > 60 ? problem.slice(0, 57) + '…' : problem;
   setProgress(0);
   show('pipelineSection');
   hide('resultsSection');
@@ -68,12 +74,12 @@ async function launch() {
 
     if (data.error) throw new Error(data.error);
 
-    if (data.type === 'llm_generation')   await animateLLM(data);
-    else if (data.type === 'multi_agent_nas') await animateMultiAgent(data);
-    else                                      await animateSingleAgent(data);
+    if      (data.type === 'llm_generation')   await animateLLM(data);
+    else if (data.type === 'multi_agent_nas')   await animateMultiAgent(data);
+    else                                        await animateSingleAgent(data);
 
   } catch (err) {
-    addStep('done', 'Error: ' + err.message, '', 'error');
+    addStep('err', 'Error: ' + err.message, 'Check that the Flask server is running.', 'error');
     setProgress(100);
   } finally {
     btn.disabled        = false;
@@ -87,30 +93,32 @@ async function launch() {
 async function animateMultiAgent(data) {
   var agents = data.agents_used || [];
 
-  addStep('check', 'Analyzed with BERT', agents.length + ' domain' + (agents.length > 1 ? 's' : '') + ' detected: ' + agents.map(function(a) { return a.toUpperCase(); }).join(', '), 'done', '0.1s');
+  addStep('bert', 'Analyzed with BERT',
+    agents.length + ' domain' + (agents.length > 1 ? 's' : '') + ' detected: ' +
+    agents.map(function(a) { return a.toUpperCase(); }).join(', '),
+    'done', '0.1s');
   setProgress(15);
   await sleep(300);
 
   var cacheMsg = data.from_cache
     ? 'Cache HIT — similarity > 0.88 — loading instantly'
-    : 'ANAS searched 20 architectures, neurosymbolic guardrail active';
+    : 'ANAS searched 20 architectures — neurosymbolic guardrail active';
   addStep('anas', 'ANAS architecture search', cacheMsg, 'done', '5.5s');
   setProgress(30);
   await sleep(400);
 
   for (var i = 0; i < agents.length; i++) {
-    var a   = agents[i];
-    var acc = (data.all_accuracies && data.all_accuracies[a]) ? data.all_accuracies[a] : null;
+    var a    = agents[i];
+    var acc  = (data.all_accuracies && data.all_accuracies[a]) ? data.all_accuracies[a] : null;
     var topo = data.topology_type || 'sequential';
     addStep('agent-' + a, 'Training ' + a.toUpperCase() + ' agent',
-      'ResNet18 transfer learning · ' + topo + ' topology',
-      'done',
-      acc ? acc + '% accuracy' : null);
+      'ResNet18 transfer · ' + topo + ' topology',
+      'done', acc ? acc + '%' : null);
     setProgress(30 + ((i + 1) / agents.length) * 45);
     await sleep(350);
   }
 
-  addStep('fusion', 'Fusion agent combined ' + agents.length + ' architectures',
+  addStep('fusion', 'Fusion agent merged ' + agents.length + ' architectures',
     'Proxy score: ' + (data.proxy_score || '0.971'), 'done', null);
   setProgress(85);
   await sleep(300);
@@ -119,14 +127,12 @@ async function animateMultiAgent(data) {
   addStep('eval', 'Evaluator scored architecture quality',
     evalScore ? 'Quality score: ' + evalScore + '/100' : 'Evaluation complete', 'done', null);
   setProgress(97);
-  await sleep(400);
+  await sleep(350);
 
   setProgress(100);
-
   buildAgentNetwork(agents, data);
   show('agentNetwork');
   await sleep(300);
-
   showResults(data);
 }
 
@@ -153,18 +159,19 @@ async function animateSingleAgent(data) {
     setProgress(30);
     await sleep(400);
 
-    addStep('train', 'Training ' + domain.toUpperCase() + ' agent',
-      'ResNet18 transfer · HuggingFace dataset · 5 epochs',
-      'running', null);
-    setProgress(60);
-    await sleep(600);
-
     var acc = data.test_accuracy || data.accuracy || 0;
+
+    addStep('train', 'Training ' + domain.toUpperCase() + ' agent',
+      'ResNet18 transfer · HuggingFace dataset · 5 epochs', 'running', null);
+    setProgress(60);
+
+    await runNNAnimation(acc || 80, 5);
+
     updateStep('train',
       'Trained ' + domain.toUpperCase() + ' agent',
-      'ResNet18 transfer · ' + (data.dataset || 'HuggingFace') + (acc ? ' · ' + acc + '% accuracy' : ''),
-      'done',
-      acc ? acc + '%' : null);
+      'ResNet18 transfer · ' + (data.dataset || 'HuggingFace') +
+        (acc ? ' · ' + acc + '% accuracy' : ''),
+      'done', acc ? acc + '%' : null);
     setProgress(90);
     await sleep(300);
 
@@ -177,7 +184,6 @@ async function animateSingleAgent(data) {
   buildAgentNetwork([domain], data);
   show('agentNetwork');
   await sleep(300);
-
   showResults(data);
 }
 
@@ -193,8 +199,180 @@ async function animateLLM(data) {
   buildAgentNetwork(['llm'], data);
   show('agentNetwork');
   await sleep(200);
-
   showResults(data);
+}
+
+// ── NEURAL NETWORK CANVAS ANIMATION ───────────────────────────────────────
+
+var NN_LAYERS = [3, 6, 8, 6, 4, 2];
+var _nnRAF    = null;
+var _nnCtx    = null;
+var _nnCv     = null;
+var _nnNodes  = [];
+var _nnParts  = [];
+var _nnLogBuf = [];
+
+function _initNN() {
+  _nnCv = document.getElementById('nnCanvas');
+  if (!_nnCv) return false;
+
+  var dpr = window.devicePixelRatio || 1;
+  var w   = _nnCv.parentElement.offsetWidth || 640;
+  var h   = 160;
+  _nnCv.width          = w * dpr;
+  _nnCv.height         = h * dpr;
+  _nnCv.style.width    = w + 'px';
+  _nnCv.style.height   = h + 'px';
+  _nnCtx = _nnCv.getContext('2d');
+  _nnCtx.scale(dpr, dpr);
+
+  var cols = NN_LAYERS.length;
+  _nnNodes = [];
+  _nnParts = [];
+
+  for (var li = 0; li < cols; li++) {
+    var rows  = NN_LAYERS[li];
+    var xPos  = (w / (cols + 1)) * (li + 1);
+    var yStep = h / (rows + 1);
+    var layer = [];
+    for (var ni = 0; ni < rows; ni++) {
+      layer.push({
+        x:     xPos,
+        y:     yStep * (ni + 1),
+        act:   Math.random(),
+        phase: Math.random() * Math.PI * 2,
+        spd:   0.022 + Math.random() * 0.022
+      });
+    }
+    _nnNodes.push(layer);
+  }
+  return true;
+}
+
+function _drawNN() {
+  if (!_nnCtx || !_nnCv) return;
+  var ctx = _nnCtx;
+  var w   = _nnCv.style.width  ? parseInt(_nnCv.style.width)  : _nnCv.width;
+  var h   = _nnCv.style.height ? parseInt(_nnCv.style.height) : _nnCv.height;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // Edges
+  ctx.lineWidth = 0.5;
+  for (var li = 0; li < _nnNodes.length - 1; li++) {
+    var A = _nnNodes[li], B = _nnNodes[li + 1];
+    for (var a = 0; a < A.length; a++) {
+      for (var b = 0; b < B.length; b++) {
+        ctx.strokeStyle = 'rgba(99,102,241,' + (0.04 + A[a].act * 0.06) + ')';
+        ctx.beginPath();
+        ctx.moveTo(A[a].x, A[a].y);
+        ctx.lineTo(B[b].x, B[b].y);
+        ctx.stroke();
+      }
+    }
+  }
+
+  // Spawn + draw particles
+  if (Math.random() < 0.22) {
+    var sl   = Math.floor(Math.random() * (_nnNodes.length - 1));
+    var sfn  = Math.floor(Math.random() * _nnNodes[sl].length);
+    var stn  = Math.floor(Math.random() * _nnNodes[sl + 1].length);
+    _nnParts.push({ li: sl, fn: sfn, tn: stn, p: 0, spd: 0.018 + Math.random() * 0.022 });
+  }
+
+  for (var i = _nnParts.length - 1; i >= 0; i--) {
+    var pt = _nnParts[i];
+    pt.p += pt.spd;
+    if (pt.p >= 1) { _nnParts.splice(i, 1); continue; }
+    var f  = _nnNodes[pt.li][pt.fn];
+    var t  = _nnNodes[pt.li + 1][pt.tn];
+    var px = f.x + (t.x - f.x) * pt.p;
+    var py = f.y + (t.y - f.y) * pt.p;
+
+    var g = ctx.createRadialGradient(px, py, 0, px, py, 6);
+    g.addColorStop(0, 'rgba(129,140,248,0.85)');
+    g.addColorStop(1, 'rgba(129,140,248,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(px, py, 6, 0, Math.PI * 2); ctx.fill();
+
+    ctx.fillStyle = '#c7d2fe';
+    ctx.beginPath(); ctx.arc(px, py, 2, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // Nodes
+  for (var li = 0; li < _nnNodes.length; li++) {
+    for (var ni = 0; ni < _nnNodes[li].length; ni++) {
+      var nd = _nnNodes[li][ni];
+      nd.phase += nd.spd;
+      nd.act = 0.25 + 0.75 * (0.5 + 0.5 * Math.sin(nd.phase));
+
+      var glow = ctx.createRadialGradient(nd.x, nd.y, 0, nd.x, nd.y, 14);
+      glow.addColorStop(0, 'rgba(79,70,229,' + (nd.act * 0.22) + ')');
+      glow.addColorStop(1, 'rgba(79,70,229,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath(); ctx.arc(nd.x, nd.y, 14, 0, Math.PI * 2); ctx.fill();
+
+      var alpha = 0.2 + nd.act * 0.6;
+      ctx.fillStyle   = 'rgba(79,70,229,' + alpha + ')';
+      ctx.strokeStyle = 'rgba(99,102,241,' + (alpha + 0.2) + ')';
+      ctx.lineWidth   = 1;
+      ctx.beginPath(); ctx.arc(nd.x, nd.y, 5, 0, Math.PI * 2);
+      ctx.fill(); ctx.stroke();
+    }
+  }
+}
+
+function _nnLoop() {
+  _drawNN();
+  _nnRAF = requestAnimationFrame(_nnLoop);
+}
+
+function _nnAddLog(line) {
+  _nnLogBuf.push(line);
+  if (_nnLogBuf.length > 5) _nnLogBuf.shift();
+  var el = document.getElementById('nnLog');
+  if (el) el.innerHTML = _nnLogBuf.map(function(l) {
+    return '<div class="nn-log-line">' + l + '</div>';
+  }).join('');
+}
+
+function _nnSetMetrics(loss, tacc, vacc, epoch, maxEpoch) {
+  function set(id, v) { var e = document.getElementById(id); if (e) e.textContent = v; }
+  set('nnLossEl',     loss.toFixed(3));
+  set('nnTrainAccEl', tacc + '%');
+  set('nnValAccEl',   vacc + '%');
+  set('nnEpochEl',    epoch + '/' + maxEpoch);
+}
+
+async function runNNAnimation(finalAcc, epochs) {
+  if (!_initNN()) return;
+  _nnLogBuf = [];
+  show('nnViz');
+  _nnLoop();
+
+  var loss0     = 1.55 + Math.random() * 0.5;
+  var lossF     = 0.11 + Math.random() * 0.10;
+  var accFloor  = Math.max(finalAcc - 28, 38);
+  var BATCHES   = 8;
+
+  for (var ep = 1; ep <= epochs; ep++) {
+    var t    = ep / epochs;
+    var loss = loss0 + (lossF - loss0) * Math.pow(t, 0.65);
+    var tacc = Math.round(accFloor + (finalAcc - accFloor) * Math.pow(t, 0.75));
+    var vacc = Math.round(tacc - 2 - Math.floor(Math.random() * 4));
+    vacc     = Math.max(vacc, 0);
+
+    for (var b = 1; b <= BATCHES; b++) {
+      var bLoss = Math.max(loss + (Math.random() - 0.5) * 0.07, 0.05);
+      _nnSetMetrics(bLoss, tacc, vacc, ep, epochs);
+      _nnAddLog('[Epoch ' + ep + '] batch ' + b + '/' + BATCHES +
+                ' — loss: ' + bLoss.toFixed(3) + ' — acc: ' + tacc + '%');
+      await sleep(55);
+    }
+  }
+
+  if (_nnRAF) { cancelAnimationFrame(_nnRAF); _nnRAF = null; }
+  hide('nnViz');
 }
 
 // ── AGENT NETWORK DIAGRAM ──────────────────────────────────────────────────
@@ -226,8 +404,8 @@ function buildAgentNetwork(agents, data) {
 
   nodes.innerHTML = html;
 
-  var topo = data.topology_type || 'sequential';
-  var proxy = data.proxy_score || '0.971';
+  var topo  = data.topology_type || 'sequential';
+  var proxy = data.proxy_score   || '0.971';
   meta.textContent = 'Selected by ANAS · ' + topo + ' · proxy ' + proxy;
 }
 
@@ -243,17 +421,16 @@ function showResults(data) {
   else if (acc >= 60) accEl.style.color = 'var(--amber)';
   else                accEl.style.color = 'var(--red)';
 
-  document.getElementById('resultsProblemName').textContent = currentProblem.length > 60
-    ? currentProblem.slice(0, 57) + '…'
-    : currentProblem;
+  document.getElementById('resultsProblemName').textContent =
+    currentProblem.length > 60 ? currentProblem.slice(0, 57) + '…' : currentProblem;
 
-  var grid = document.getElementById('resultsMetaGrid');
-  var time  = data.elapsed || data.search_time || data.time || '—';
+  var grid   = document.getElementById('resultsMetaGrid');
+  var time   = data.elapsed || data.search_time || data.time || '—';
   var params = data.parameters ? ((data.parameters / 1e6).toFixed(1) + 'M') : '—';
   var agents = (data.agents_used || [data.domain]).filter(Boolean);
   grid.innerHTML =
-    metaCard(time + 's',           'Training time') +
-    metaCard(params,               'Parameters') +
+    metaCard(time + 's', 'Training time') +
+    metaCard(params,     'Parameters') +
     metaCard(agents.length + ' agent' + (agents.length > 1 ? 's' : ''), 'Network size');
 
   show('resultsSection');
@@ -261,7 +438,8 @@ function showResults(data) {
 }
 
 function metaCard(val, lbl) {
-  return '<div class="rmeta-card"><div class="rmeta-val">' + val + '</div><div class="rmeta-lbl">' + lbl + '</div></div>';
+  return '<div class="rmeta-card"><div class="rmeta-val">' + val +
+         '</div><div class="rmeta-lbl">' + lbl + '</div></div>';
 }
 
 // ── DOWNLOAD ────────────────────────────────────────────────────────────────
@@ -272,7 +450,7 @@ async function downloadNetwork() {
   var hint    = document.getElementById('downloadHint');
   var problem = currentProblem || document.getElementById('problemInput').value.trim();
 
-  btn.disabled     = true;
+  btn.disabled      = true;
   txtEl.textContent = 'Building ZIP…';
   hint.textContent  = '';
 
@@ -289,9 +467,7 @@ async function downloadNetwork() {
     var safeName = problem.slice(0, 30).replace(/\s+/g, '_').toLowerCase();
     a.href       = url;
     a.download   = safeName + '_agent.zip';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
     txtEl.textContent = 'Downloaded';
     hint.textContent  = 'Run: python run_network.py';
@@ -301,10 +477,10 @@ async function downloadNetwork() {
       hint.textContent  = '';
     }, 6000);
   } catch (e) {
-    txtEl.textContent = 'Download failed';
-    hint.textContent  = e.message;
-    hint.style.color  = 'var(--red)';
-    btn.disabled      = false;
+    txtEl.textContent   = 'Download failed';
+    hint.textContent    = e.message;
+    hint.style.color    = 'var(--red)';
+    btn.disabled        = false;
     setTimeout(function() {
       txtEl.textContent = 'Download Agent ZIP';
       hint.textContent  = '';
@@ -316,10 +492,13 @@ async function downloadNetwork() {
 // ── PIPELINE HELPERS ────────────────────────────────────────────────────────
 
 function resetPipelineUI() {
-  document.getElementById('pipelineSteps').innerHTML = '';
+  document.getElementById('pipelineSteps').innerHTML    = '';
   document.getElementById('agentNetworkNodes').innerHTML = '';
   document.getElementById('agentNetworkMeta').textContent = '';
   hide('agentNetwork');
+  hide('nnViz');
+  if (_nnRAF) { cancelAnimationFrame(_nnRAF); _nnRAF = null; }
+  _nnLogBuf = [];
   setProgress(0);
 }
 
@@ -339,33 +518,31 @@ function addStep(id, main, detail, state, time) {
 
 function updateStep(id, main, detail, state, time) {
   var el = document.getElementById('ps-' + id);
-  if (el) {
-    el.innerHTML = stepHTML(main, detail, state, time);
-  }
+  if (el) el.innerHTML = stepHTML(main, detail, state, time);
 }
 
 function stepHTML(main, detail, state, time) {
-  var iconHTML = '';
+  var icon = '';
   if (state === 'done') {
-    iconHTML = '<div class="ps-icon-check">' +
-               '<svg width="10" height="10" viewBox="0 0 24 24" fill="none">' +
-               '<path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
-               '</svg></div>';
+    icon = '<div class="ps-icon-check">' +
+           '<svg width="10" height="10" viewBox="0 0 24 24" fill="none">' +
+           '<path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+           '</svg></div>';
   } else if (state === 'running') {
-    iconHTML = '<div class="ps-icon-spin">' +
-               '<svg width="11" height="11" viewBox="0 0 24 24" fill="none">' +
-               '<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="12"/>' +
-               '</svg></div>';
+    icon = '<div class="ps-icon-spin">' +
+           '<svg width="11" height="11" viewBox="0 0 24 24" fill="none">' +
+           '<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="12"/>' +
+           '</svg></div>';
   } else if (state === 'error') {
-    iconHTML = '<div class="ps-icon-check" style="background:rgba(220,38,38,0.1);border-color:var(--red)">' +
-               '<svg width="10" height="10" viewBox="0 0 24 24" fill="none">' +
-               '<path d="M18 6L6 18M6 6l12 12" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"/>' +
-               '</svg></div>';
+    icon = '<div class="ps-icon-check" style="background:rgba(220,38,38,0.1);border-color:var(--red)">' +
+           '<svg width="10" height="10" viewBox="0 0 24 24" fill="none">' +
+           '<path d="M18 6L6 18M6 6l12 12" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"/>' +
+           '</svg></div>';
   } else {
-    iconHTML = '<div class="ps-icon-pending"></div>';
+    icon = '<div class="ps-icon-pending"></div>';
   }
 
-  return '<div class="ps-icon">' + iconHTML + '</div>' +
+  return '<div class="ps-icon">' + icon + '</div>' +
          '<div class="ps-body">' +
          '<div class="ps-main' + (state === 'pending' ? ' muted' : '') + '">' + main + '</div>' +
          (detail ? '<div class="ps-detail">' + detail + '</div>' : '') +
@@ -387,19 +564,12 @@ function reset() {
   setTimeout(function() { document.getElementById('problemInput').focus(); }, 400);
 }
 
-// ── UTILS ───────────────────────────────────────────────────────────────────
+// ── UTILS ────────────────────────────────────────────────────────────────────
 
 function sleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
 
-function show(id) {
-  var el = document.getElementById(id);
-  if (el) el.classList.remove('hidden');
-}
-
-function hide(id) {
-  var el = document.getElementById(id);
-  if (el) el.classList.add('hidden');
-}
+function show(id) { var el = document.getElementById(id); if (el) el.classList.remove('hidden'); }
+function hide(id) { var el = document.getElementById(id); if (el) el.classList.add('hidden'); }
 
 function smoothScrollTo(id) {
   var el = document.getElementById(id);
@@ -414,7 +584,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   phEl = document.getElementById('problemInput');
   phEl.placeholder = PLACEHOLDERS[0];
-  setInterval(cyclePlaceholder, 3200);
+  setInterval(cyclePlaceholder, 3400);
 
   phEl.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) launch();

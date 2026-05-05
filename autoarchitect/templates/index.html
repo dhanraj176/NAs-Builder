@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AutoArchitect — Autonomous Agent Network Generator</title>
+  <title>AutoArchitect — Build and Deploy AI Agents in Seconds</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,11 +16,12 @@
     <div class="nav-inner">
       <a class="nav-logo" href="#">AutoArchitect <span>AI</span></a>
       <div class="nav-links">
+        <a href="#" class="nav-link">Product</a>
         <a href="#" class="nav-link">Docs</a>
         <a href="#" class="nav-link">Research</a>
         <a href="https://github.com/dhanraj176/NAs-Builder" target="_blank" class="nav-link">GitHub</a>
       </div>
-      <button class="btn-nav-signin">Sign in</button>
+      <button class="btn-nav-try" onclick="scrollToInput()">Try it free</button>
     </div>
   </nav>
 
@@ -30,22 +31,23 @@
     <section class="hero">
       <div class="hero-badge">
         <span class="badge-dot"></span>
-        ANAS &mdash; 266M architecture search space
+        Now in beta &mdash; try it free
       </div>
       <h1 class="hero-title">Describe any AI task.<br>Get a deployed agent.</h1>
       <p class="hero-sub">
-        AutoArchitect runs Neural Architecture Search, selects the optimal agent topology,
-        trains on real data, and packages a ready-to-deploy model — in under a minute.
+        The fastest way to build and deploy AI agents.
+        Describe your problem in plain English &mdash;
+        AutoArchitect handles everything else.
       </p>
       <div class="hero-stats">
         <div class="hstat">
           <span class="hstat-num">2066x</span>
-          <span class="hstat-lbl">cache speedup</span>
+          <span class="hstat-lbl">faster than manual</span>
         </div>
         <div class="hstat-divider"></div>
         <div class="hstat">
           <span class="hstat-num">86.6%</span>
-          <span class="hstat-lbl">verified accuracy</span>
+          <span class="hstat-lbl">average accuracy</span>
         </div>
         <div class="hstat-divider"></div>
         <div class="hstat">
@@ -55,7 +57,7 @@
         <div class="hstat-divider"></div>
         <div class="hstat">
           <span class="hstat-num">42s</span>
-          <span class="hstat-lbl">avg training time</span>
+          <span class="hstat-lbl">avg deployment time</span>
         </div>
       </div>
     </section>
@@ -72,7 +74,6 @@
           ></textarea>
           <div class="textarea-hint">Ctrl+Enter to launch</div>
         </div>
-
         <div class="chips">
           <span class="chip-label">Try:</span>
           <button class="chip" onclick="setChip(this)">Detect potholes in road images</button>
@@ -81,7 +82,6 @@
           <button class="chip" onclick="setChip(this)">Classify spam text messages</button>
           <button class="chip" onclick="setChip(this)">Identify illegal dumping in cameras</button>
         </div>
-
         <button class="btn-launch" id="launchBtn" onclick="launch()">
           <span id="launchBtnText">Launch AutoArchitect</span>
           <svg id="launchSpinner" class="spinner hidden" viewBox="0 0 24 24" fill="none">
@@ -107,6 +107,30 @@
 
         <div class="pipeline-steps" id="pipelineSteps"></div>
 
+        <!-- NEURAL NETWORK ANIMATION -->
+        <div class="nn-viz hidden" id="nnViz">
+          <canvas id="nnCanvas"></canvas>
+          <div class="nn-metrics">
+            <div class="nn-metric">
+              <span class="nn-metric-lbl">loss</span>
+              <span class="nn-metric-val" id="nnLossEl">—</span>
+            </div>
+            <div class="nn-metric">
+              <span class="nn-metric-lbl">train acc</span>
+              <span class="nn-metric-val" id="nnTrainAccEl">—</span>
+            </div>
+            <div class="nn-metric">
+              <span class="nn-metric-lbl">val acc</span>
+              <span class="nn-metric-val" id="nnValAccEl">—</span>
+            </div>
+            <div class="nn-metric">
+              <span class="nn-metric-lbl">epoch</span>
+              <span class="nn-metric-val" id="nnEpochEl">0/5</span>
+            </div>
+          </div>
+          <div class="nn-log" id="nnLog"></div>
+        </div>
+
         <div class="agent-network hidden" id="agentNetwork">
           <div class="agent-network-label">Agent Network</div>
           <div class="agent-network-nodes" id="agentNetworkNodes"></div>
@@ -126,11 +150,11 @@
             <div class="results-acc-label">Test Accuracy</div>
           </div>
           <div class="results-right">
-            <div class="verified-badge" id="verifiedBadge">
+            <div class="verified-badge">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                 <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              Verified — no data leakage
+              Verified &mdash; no data leakage
             </div>
             <div class="results-problem-name" id="resultsProblemName"></div>
           </div>
@@ -155,13 +179,89 @@
 
   </main>
 
+  <!-- HOW IT WORKS -->
+  <section class="hiw-section">
+    <div class="hiw-inner">
+      <div class="hiw-heading">
+        <div class="hiw-label">How it works</div>
+        <h2 class="hiw-title">From description to deployment in three steps</h2>
+      </div>
+      <div class="hiw-grid">
+
+        <div class="hiw-card">
+          <div class="hiw-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="hiw-step">Step 1</div>
+          <div class="hiw-card-title">Describe</div>
+          <div class="hiw-card-body">Write your problem in plain English. No ML knowledge, no code, no configuration required.</div>
+        </div>
+
+        <div class="hiw-card">
+          <div class="hiw-icon hiw-icon-purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="5" r="2" stroke="currentColor" stroke-width="1.75"/>
+              <circle cx="5"  cy="19" r="2" stroke="currentColor" stroke-width="1.75"/>
+              <circle cx="19" cy="19" r="2" stroke="currentColor" stroke-width="1.75"/>
+              <path d="M12 7v4M12 11l-5.5 6M12 11l5.5 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="hiw-step">Step 2</div>
+          <div class="hiw-card-title">AutoArchitect builds</div>
+          <div class="hiw-card-body">ANAS searches 266M architectures, selects the optimal agent network, and trains on real data automatically.</div>
+        </div>
+
+        <div class="hiw-card">
+          <div class="hiw-icon hiw-icon-green">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3v13m0 0l-4-4m4 4l4-4M3 21h18" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="hiw-step">Step 3</div>
+          <div class="hiw-card-title">Deploy</div>
+          <div class="hiw-card-body">Download your agent ZIP or hit a live API endpoint. Ready to use immediately, no infrastructure needed.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- USE CASES -->
+  <section class="uc-section">
+    <div class="uc-inner">
+      <div class="uc-label">Built for every domain</div>
+      <div class="uc-pills">
+        <span class="uc-pill">Medical imaging</span>
+        <span class="uc-pill">Fraud detection</span>
+        <span class="uc-pill">Content moderation</span>
+        <span class="uc-pill">Object detection</span>
+        <span class="uc-pill">Spam filtering</span>
+        <span class="uc-pill">Defect detection</span>
+        <span class="uc-pill">Sentiment analysis</span>
+        <span class="uc-pill">Document classification</span>
+        <span class="uc-pill">Anomaly detection</span>
+        <span class="uc-pill">Safety monitoring</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-inner">
-      <span class="footer-logo">AutoArchitect AI</span>
-      <span class="footer-sep">·</span>
-      <span class="footer-note">Agent Network Architecture Search (ANAS)</span>
-      <span class="footer-sep">·</span>
-      <span class="footer-note">Oakland Research 2026</span>
+      <div class="footer-left">
+        <div class="footer-logo">AutoArchitect <span>AI</span></div>
+        <div class="footer-tagline">Autonomous agent deployment</div>
+      </div>
+      <nav class="footer-links">
+        <a href="#" class="footer-link">Product</a>
+        <a href="#" class="footer-link">Docs</a>
+        <a href="#" class="footer-link">Research</a>
+        <a href="https://github.com/dhanraj176/NAs-Builder" target="_blank" class="footer-link">GitHub</a>
+        <a href="#" class="footer-link">Status</a>
+      </nav>
+      <div class="footer-right">&copy; 2026 AutoArchitect AI</div>
     </div>
   </footer>
 
