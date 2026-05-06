@@ -289,7 +289,7 @@ class AgentNetwork:
     # ── COLLABORATE: parallel execution with timeouts and error isolation ────
 
     def collaborate(self, agents_list: list, task: str, data,
-                    timeout_per_agent: int = 10) -> dict:
+                    timeout_per_agent: int = 10, domain: str = None) -> dict:
         """
         Run multiple agents in parallel, fuse their outputs.
         Each agent gets timeout_per_agent seconds max.
@@ -360,7 +360,7 @@ class AgentNetwork:
                 "agent_used":    "none",   # backward compat
             }
 
-        fused = self.fusion_agent.fuse(valid_results)
+        fused = self.fusion_agent.fuse(valid_results, domain=domain)
 
         fused["task"]              = task
         fused["total_agents"]      = len(agents_list)

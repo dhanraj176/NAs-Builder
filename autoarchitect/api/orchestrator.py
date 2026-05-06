@@ -328,6 +328,12 @@ class AutoArchitectOrchestrator:
                 )
                 if self.topology_enabled and accuracy:
                     self.topology_designer.update_accuracy(problem, accuracy / 100)
+                if accuracy:
+                    try:
+                        from api.agents.fusion_agent import refresh_fusion_weights
+                        refresh_fusion_weights()
+                    except Exception:
+                        pass
             except Exception as e:
                 print(f"[Orchestrator] Brain learn skipped: {e}")
 

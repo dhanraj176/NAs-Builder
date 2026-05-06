@@ -1,7 +1,32 @@
 # ============================================
 # fusion_agent.py
 # ============================================
+import os
+import json
+import re
 import time
+
+BRAIN_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+    "brain_data",
+)
+_TOPOLOGY_HISTORY_FILE = os.path.join(BRAIN_DIR, "topology_history.json")
+_FUSION_WEIGHTS_FILE   = os.path.join(BRAIN_DIR, "fusion_weights.json")
+
+# Utility/terminal agent types — excluded when determining domain or assigning
+# per-agent reliability credit (they don't classify, they transform or output).
+_TERMINAL_AGENTS = {"report", "severity", "optimizer"}
+
+
+def _class_to_weight_key(class_name: str) -> str:
+    """Convert CamelCase class name to snake_case weight key.
+
+    'ImageAgent'     -> 'image_agent'
+    'MultimodalAgent'-> 'multimodal_agent'
+    'DynamicAgent'   -> 'dynamic_agent'
+    """
+    s = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "_", class_name)
+    return s.lower()
 
 
 class FusionAgent:
@@ -9,24 +34,166 @@ class FusionAgent:
 
     def __init__(self):
         # Per-agent weight cache; updated externally when accuracy feedback arrives
-        self._weight_cache = {}
+        self._weight_cache  = {}
+        # Learned per-domain weights loaded from fusion_weights.json
+        self._weights_cache: dict = {}
         print("  FusionAgent loaded")
+        self.learn_weights_from_cache()
+
+    # ── Learned weight management ─────────────────────────────────────────────
+
+    def learn_weights_from_cache(
+        self,
+        history_path: str = None,
+        weights_path: str = None,
+    ) -> dict:
+        """
+        Scan brain_data/topology_history.json and compute per-domain,
+        per-agent reliability weights from every entry whose accuracy > 0.7.
+
+        For each qualifying entry:
+          - domain  = first non-terminal agent in topology.agents
+          - credit  = every non-terminal agent in that topology receives the
+                      entry's accuracy score, accumulated as a running mean
+
+        Result is written to brain_data/fusion_weights.json and cached
+        in self._weights_cache.
+
+        Parameters
+        ----------
+        history_path : override path to topology_history.json (for tests)
+        weights_path : override path to fusion_weights.json (for tests)
+        """
+        h_path = history_path or _TOPOLOGY_HISTORY_FILE
+        w_path = weights_path or _FUSION_WEIGHTS_FILE
+
+        if not os.path.exists(h_path):
+            return {}
+
+        try:
+            with open(h_path, "r", encoding="utf-8") as f:
+                history = json.load(f)
+        except Exception:
+            return {}
+
+        # Accumulate: {domain: {agent_weight_key: [acc, ...]}}
+        acc_by_domain: dict = {}
+
+        for entry in history:
+            accuracy = entry.get("accuracy")
+            if accuracy is None or float(accuracy) < 0.7:
+                continue
+
+            topology = entry.get("topology", {})
+            agents   = topology.get("agents", [])
+            if not agents:
+                continue
+
+            primary = [a for a in agents if a not in _TERMINAL_AGENTS]
+            if not primary:
+                continue
+
+            domain = primary[0]
+            acc_val = float(accuracy)
+
+            for agent_short in primary:
+                key = f"{agent_short}_agent"
+                acc_by_domain.setdefault(domain, {}).setdefault(key, [])
+                acc_by_domain[domain][key].append(acc_val)
+
+        weights: dict = {}
+        for domain, agent_accs in acc_by_domain.items():
+            weights[domain] = {
+                key: round(sum(accs) / len(accs), 4)
+                for key, accs in agent_accs.items()
+            }
+
+        os.makedirs(os.path.dirname(w_path), exist_ok=True)
+        try:
+            with open(w_path, "w", encoding="utf-8") as f:
+                json.dump(weights, f, indent=2)
+        except Exception:
+            pass
+
+        self._weights_cache = weights
+        n_agents = sum(len(v) for v in weights.values())
+        print(f"  [FusionAgent] Learned weights: {n_agents} agent weights "
+              f"across {len(weights)} domains "
+              f"(from {len(history)} history entries)")
+        return weights
+
+    def get_weights_for_domain(
+        self,
+        domain: str,
+        agent_names: list,
+        weights_path: str = None,
+    ) -> tuple:
+        """
+        Return normalized fusion weights for a list of agent class names,
+        looked up in the learned weights for domain.
+
+        Agents not found in the learned weights receive a neutral prior of 0.5.
+
+        Parameters
+        ----------
+        domain      : primary domain (e.g. 'image', 'text', 'tabular')
+        agent_names : list of class names (e.g. ['ImageAgent', 'TextAgent'])
+        weights_path: override path (for tests)
+
+        Returns
+        -------
+        (weights_dict, weights_source) where weights_source is
+        'learned' if at least one agent had a learned weight, else 'default'.
+        """
+        weights_map = self._weights_cache
+        if not weights_map:
+            w_path = weights_path or _FUSION_WEIGHTS_FILE
+            if os.path.exists(w_path):
+                try:
+                    with open(w_path, "r", encoding="utf-8") as f:
+                        weights_map = json.load(f)
+                except Exception:
+                    weights_map = {}
+
+        domain_weights = weights_map.get(domain, {})
+        result: dict = {}
+        has_learned   = False
+
+        for name in agent_names:
+            wk = _class_to_weight_key(name)
+            if wk in domain_weights:
+                result[name] = domain_weights[wk]
+                has_learned  = True
+            else:
+                result[name] = 0.5
+
+        total = sum(result.values())
+        if total > 0:
+            result = {k: round(v / total, 6) for k, v in result.items()}
+
+        return result, ("learned" if has_learned else "default")
 
     # ── NEW: prediction-level weighted confidence fusion ──────────────────────
 
-    def fuse(self, agent_results: list, weights: dict = None) -> dict:
+    def fuse(self, agent_results: list, weights: dict = None,
+             domain: str = None) -> dict:
         """
         Fuse classification predictions from multiple agents.
 
-        agent_results: [{label, confidence, agent_name}, ...]
-        weights:       optional {agent_name: float} — uses cache then equal fallback
+        agent_results : [{label, confidence, agent_name}, ...]
+        weights       : explicit {agent_name: float} — skips weight lookup
+        domain        : if provided and weights is None, look up learned
+                        weights for this domain from fusion_weights.json
+
+        Output includes 'weights_source': 'provided' | 'learned' | 'default'
         """
         if not agent_results:
             return {"error": "No agent results to fuse"}
 
         if len(agent_results) == 1:
             r = dict(agent_results[0])
-            r["fusion_method"] = "passthrough"
+            r["fusion_method"]  = "passthrough"
+            r["weights_source"] = "passthrough"
             r.setdefault("contributing_agents", [r.get("agent_name", "unknown")])
             r.setdefault("weights_used", {})
             return r
@@ -34,10 +201,18 @@ class FusionAgent:
         agent_names = [r.get("agent_name", f"agent_{i}")
                        for i, r in enumerate(agent_results)]
 
-        # Resolve weights: explicit > cache > equal
-        if weights is None:
-            equal = 1.0 / len(agent_results)
-            weights = {n: self._weight_cache.get(n, equal) for n in agent_names}
+        # Resolve weights: explicit > domain-learned > cache > equal
+        if weights is not None:
+            weights_source = "provided"
+        elif domain:
+            weights, weights_source = self.get_weights_for_domain(
+                domain, agent_names)
+        else:
+            equal  = 1.0 / len(agent_results)
+            raw    = {n: self._weight_cache.get(n, equal) for n in agent_names}
+            total  = sum(raw.values()) or 1.0
+            weights = {k: v / total for k, v in raw.items()}
+            weights_source = "default"
 
         total_w = sum(weights.get(n, 1.0) for n in agent_names)
         if total_w == 0:
@@ -64,13 +239,15 @@ class FusionAgent:
                          (sorted_scores[0] - sorted_scores[1]) < 0.05)
 
         print(f"  Fusion: winner='{winner}' conf={winner_score}"
-              f"{' [UNCERTAIN]' if uncertain else ''}")
+              f"{' [UNCERTAIN]' if uncertain else ''}"
+              f" [{weights_source} weights]")
 
         return {
             "label":               winner,
             "confidence":          winner_score,
             "contributing_agents": label_agents.get(winner, []),
             "weights_used":        weights,
+            "weights_source":      weights_source,
             "fusion_method":       "weighted_confidence",
             "uncertain":           uncertain,
             "all_label_scores":    {k: round(v, 3) for k, v in label_scores.items()},
@@ -205,3 +382,16 @@ class FusionAgent:
 
         total = sum(op_totals.values())
         return {k: round(v / total, 3) for k, v in op_totals.items()}
+
+
+# ── Module-level convenience ──────────────────────────────────────────────────
+
+def refresh_fusion_weights(
+    history_path: str = None,
+    weights_path: str = None,
+) -> dict:
+    """Rebuild fusion_weights.json from topology history. Safe to call anytime."""
+    return FusionAgent().learn_weights_from_cache(
+        history_path=history_path,
+        weights_path=weights_path,
+    )
