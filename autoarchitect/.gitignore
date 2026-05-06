@@ -7,6 +7,8 @@ brain_cache/
 *.pt
 *.pkl
 *.zip
+*.safetensors
+models/brain_cores/*/tokenizer.json
 __pycache__/
 *.pyc
 datasets/
