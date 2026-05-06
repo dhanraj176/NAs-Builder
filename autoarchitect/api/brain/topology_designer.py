@@ -121,6 +121,25 @@ AGENT_CATALOG = {
                      "spreadsheet", "features", "columns", "rows", "numeric",
                      "categorical", "regression", "score", "propensity"],
     },
+    "audio": {
+        "description": "MFCC + Whisper for audio classification and transcription",
+        "input":  "audio file (.wav/.mp3/.flac) or audio folder",
+        "output": "label + confidence + transcript",
+        "keywords": ["audio", "sound", "speech", "voice", "call", "transcribe",
+                     "music", "noise", "spoken", "recording", "microphone",
+                     "acoustic", "wav", "mp3", "phone call", "podcast",
+                     "speaker", "utterance", "tone", "frequency"],
+    },
+    "multimodal": {
+        "description": "CLIP for zero-shot image+text understanding",
+        "input":  "image file + text labels or query",
+        "output": "label + confidence + similarity scores",
+        "keywords": ["image and text", "visual question", "product description",
+                     "scene text", "caption", "multimodal", "combined",
+                     "image with text", "clip", "zero shot", "visual qa",
+                     "image search", "zero-shot", "visual classification",
+                     "cross-modal", "image-text"],
+    },
 }
 
 
@@ -200,6 +219,27 @@ TOPOLOGY_TEMPLATES = {
         "topology": SEQUENTIAL,
         "keywords": ["risk score", "credit risk", "fraud risk", "churn risk",
                      "transaction risk", "anomaly detection"],
+    },
+    "audio_pipeline": {
+        "description": "Classify audio → report result",
+        "agents":   ["audio", "report"],
+        "topology": SEQUENTIAL,
+        "keywords": ["audio", "sound", "speech", "voice", "call", "recording",
+                     "transcribe", "wav", "mp3", "podcast"],
+    },
+    "audio_text_pipeline": {
+        "description": "Transcribe audio → classify text → report",
+        "agents":   ["audio", "text", "report"],
+        "topology": SEQUENTIAL,
+        "keywords": ["transcribe and classify", "speech to text classification",
+                     "spoken content", "call analysis", "voice message"],
+    },
+    "multimodal_pipeline": {
+        "description": "Image + text zero-shot classification → report",
+        "agents":   ["multimodal", "report"],
+        "topology": SEQUENTIAL,
+        "keywords": ["multimodal", "image and text", "visual qa", "zero shot",
+                     "clip", "visual question", "image search", "zero-shot"],
     },
 }
 
@@ -457,6 +497,12 @@ class TopologyDesigner:
             elif agent == "tabular":
                 task   = f"Train XGBoost/LightGBM on CSV data for: {problem[:50]}"
                 action = "classify_row"
+            elif agent == "audio":
+                task   = f"Classify audio / transcribe speech for: {problem[:50]}"
+                action = "classify_audio"
+            elif agent == "multimodal":
+                task   = f"Zero-shot CLIP image+text classification for: {problem[:50]}"
+                action = "classify_multimodal"
             else:
                 task   = info.get("description", agent)
                 action = "process"
