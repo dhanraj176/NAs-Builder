@@ -635,7 +635,7 @@ class AutoArchitectOrchestrator:
         print("  [Orchestrator] Fusing architectures...")
         from api.agents.fusion_agent import FusionAgent
         fusion = FusionAgent()
-        fused  = fusion.fuse(agent_results, problem)
+        fused  = fusion.fuse_architectures(agent_results, problem)
 
         print("  [Orchestrator] Evaluating fused model...")
         evaluator  = self._wake_evaluator()

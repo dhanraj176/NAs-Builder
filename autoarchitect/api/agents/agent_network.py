@@ -61,7 +61,11 @@ class AgentNetwork:
         self.collaboration_log = []
 
         os.makedirs(AGENTS_DIR, exist_ok=True)
-        print(f"🕸️  Agent Network [{self.network_id}] "
+
+        from api.agents.fusion_agent import FusionAgent
+        self.fusion_agent = FusionAgent()
+
+        print(f"[Network] Agent Network [{self.network_id}] "
               f"created: {self.name}")
 
     # ── BUILD NETWORK ────────────────────────
@@ -88,6 +92,12 @@ class AgentNetwork:
         if not hasattr(agent, '_memory'):
             from api.agents.base_agent import AgentMemory
             agent._memory = AgentMemory(agent.agent_id)
+        # act(result) — single-arg signature; ignore extra positional args
+        if not hasattr(agent, 'act'):
+            agent.act = lambda result, *_a, **_k: result
+        # remember(input, prediction, action) — no-op for agents without memory
+        if not hasattr(agent, 'remember'):
+            agent.remember = lambda *_a, **_k: None
 
         agent_id = agent.agent_id
         self.agents[agent_id] = {
@@ -95,9 +105,9 @@ class AgentNetwork:
             "role":   role or agent.category,
             "added":  datetime.now().isoformat(),
         }
-        print(f"  ➕ Agent [{agent_id}] added to network"
-              f" [{self.network_id}] "
-              f"as '{role or agent.category}'")
+        print(f"  [Network+] Agent [{agent_id}] added to"
+              f" [{self.network_id}]"
+              f" as '{role or agent.category}'")
 
     def add_pipeline(self, agent_ids: list,
                       name: str = "") -> None:
@@ -110,8 +120,8 @@ class AgentNetwork:
             "agents":    agent_ids,
             "created":   datetime.now().isoformat(),
         })
-        print(f"  🔗 Pipeline '{name}' added: "
-              f"{' → '.join(agent_ids)}")
+        print(f"  [Pipeline+] '{name}' added: "
+              f"{' -> '.join(agent_ids)}")
 
     # ── RUN NETWORK ──────────────────────────
 
@@ -149,7 +159,7 @@ class AgentNetwork:
              interval: int = 60) -> None:
         """Run entire network autonomously."""
         self.is_running = True
-        print(f"\n🚀 Network [{self.network_id}] running!")
+        print(f"\n[Network] Network [{self.network_id}] running!")
         print(f"   Agents: {len(self.agents)}")
         print(f"   Source: {source or 'manual'}")
 
@@ -189,7 +199,7 @@ class AgentNetwork:
         self.is_running = False
         for aid, a_info in self.agents.items():
             a_info["agent"].stop()
-        print(f"⏹️  Network [{self.network_id}] stopped")
+        print(f"[Network] Network [{self.network_id}] stopped")
 
     # ── PIPELINE EXECUTION ───────────────────
 
@@ -203,17 +213,16 @@ class AgentNetwork:
         all_predictions = []
         pipeline_name  = pipeline["name"]
 
-        print(f"\n  🔗 Running pipeline: {pipeline_name}")
+        print(f"\n  [Pipeline] Running pipeline: {pipeline_name}")
 
         for agent_id in pipeline["agents"]:
             if agent_id not in self.agents:
-                print(f"  ⚠️ Agent [{agent_id}] "
-                      f"not in network — skipping")
+                print(f"  [Pipeline] Agent [{agent_id}] not in network -- skipping")
                 continue
 
             agent      = self.agents[agent_id]["agent"]
             prediction = agent.predict(current_input)
-            action     = agent.act(prediction, current_input)
+            action     = agent.act(prediction)          # single-arg signature
             agent.remember(current_input, prediction, action)
 
             all_predictions.append({
@@ -223,9 +232,9 @@ class AgentNetwork:
                 "action":     action,
             })
 
-            print(f"    [{agent_id}] → "
+            print(f"    [{agent_id}] -> "
                   f"{prediction.get('label')} "
-                  f"({prediction.get('confidence')}%)")
+                  f"({prediction.get('confidence')})")
 
             # Pass enriched context to next agent
             current_input = self._enrich_input(
@@ -247,14 +256,14 @@ class AgentNetwork:
         Run all agents in parallel, combine votes.
         Majority vote with confidence weighting.
         """
-        print(f"\n  🗳️  Running ensemble vote...")
+        print(f"\n  [Ensemble] Running ensemble vote...")
         all_predictions = []
 
         for aid, a_info in self.agents.items():
-            agent      = a_info["agent"]
+            agent = a_info["agent"]
             try:
                 prediction = agent.predict(input_data)
-                action     = agent.act(prediction, input_data)
+                action     = agent.act(prediction)      # single-arg signature
                 agent.remember(input_data, prediction, action)
                 all_predictions.append({
                     "agent_id":   aid,
@@ -262,11 +271,11 @@ class AgentNetwork:
                     "prediction": prediction,
                     "action":     action,
                 })
-                print(f"    [{aid}] → "
+                print(f"    [{aid}] -> "
                       f"{prediction.get('label')} "
-                      f"({prediction.get('confidence')}%)")
+                      f"({prediction.get('confidence')})")
             except Exception as e:
-                print(f"  ⚠️ Agent [{aid}] failed: {e}")
+                print(f"  [Ensemble] Agent [{aid}] failed: {e}")
 
         final = self._combine_predictions(all_predictions)
         final["ensemble"] = True
@@ -275,6 +284,41 @@ class AgentNetwork:
 
         self._log_collaboration(all_predictions, final)
         return final
+
+    # ── COLLABORATE: combine predictions from an ad-hoc agent list ───────────
+
+    def collaborate(self, agents_list: list, task: str, data) -> dict:
+        """
+        Run data through each agent in agents_list, filter errors,
+        then fuse valid results with FusionAgent.
+
+        Returns fused prediction dict, or {"error": "..."} if all fail.
+        """
+        results = []
+        for agent in agents_list:
+            try:
+                result = agent.predict(data)
+                result["agent_name"] = agent.__class__.__name__
+                results.append(result)
+                print(f"  [Collaborate] {agent.__class__.__name__} -> "
+                      f"{result.get('label')} ({result.get('confidence')})")
+            except Exception as e:
+                results.append({
+                    "agent_name": agent.__class__.__name__,
+                    "error":      str(e),
+                    "confidence": 0.0,
+                })
+                print(f"  [Collaborate] {agent.__class__.__name__} failed: {e}")
+
+        valid = [r for r in results if "error" not in r]
+        if not valid:
+            return {"error": "all agents failed", "agent_used": "none"}
+
+        fused = self.fusion_agent.fuse(valid)
+        fused["task"]        = task
+        fused["agent_count"] = len(agents_list)
+        fused["valid_count"] = len(valid)
+        return fused
 
     # ── COLLABORATION CYCLE ──────────────────
 
@@ -288,7 +332,7 @@ class AgentNetwork:
         if len(agents_list) < 2:
             return
 
-        print(f"\n  🤝 Network collaboration cycle...")
+        print(f"\n  [Network] Collaboration cycle...")
         collab_results = []
 
         for i in range(len(agents_list)):
@@ -304,7 +348,7 @@ class AgentNetwork:
                 self._feed_brain_collaboration(
                     a1, a2, result)
 
-        print(f"  ✅ {len(collab_results)} collaborations")
+        print(f"  [Network] {len(collab_results)} collaborations complete")
 
     # ── COMBINE PREDICTIONS ──────────────────
 
@@ -442,7 +486,7 @@ class AgentNetwork:
             f.write(json.dumps(entry) + '\n')
 
     def _network_status_report(self) -> None:
-        print(f"\n  📊 Network [{self.network_id}] Status:")
+        print(f"\n  [Network] Status [{self.network_id}]:")
         print(f"     Agents:      {len(self.agents)}")
         print(f"     Total runs:  {self.total_runs}")
         print(f"     Success:     {self.successful_runs}")
@@ -523,7 +567,7 @@ def build_network_from_problem(problem: str,
             name="main_pipeline"
         )
 
-    print(f"\n✅ Agent network built for: {problem}")
+    print(f"\n[Network] Agent network built for: {problem}")
     print(f"   Agents: {agents_used}")
     print(f"   Network ID: {network.network_id}")
     print(f"\nUsage:")
