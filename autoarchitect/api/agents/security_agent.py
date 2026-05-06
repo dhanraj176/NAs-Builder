@@ -2,10 +2,14 @@
 # ============================================
 # security_agent.py
 # ============================================
+import os
+import json
 import time
 import torch
 import torch.nn as nn
 from api.nas_engine import run_quick_nas
+
+VOCAB_SIZE = 1000
 
 
 class SecurityAgent:
@@ -43,8 +47,20 @@ class SecurityAgent:
             self.trained_model   = model
             self.trained_classes = classes
             print(f"  SecurityAgent model loaded — {num_classes} classes")
+
+            # Load matching vocab: {hash}_text_vocab.json
+            h          = os.path.splitext(os.path.basename(model_path))[0].split('_')[0]
+            vocab_path = os.path.join(os.path.dirname(os.path.abspath(model_path)),
+                                      f"{h}_text_vocab.json")
+            if os.path.exists(vocab_path):
+                with open(vocab_path) as vf:
+                    self.vocab = json.load(vf)
+                print(f"  SecurityAgent vocab loaded — {len(self.vocab)} words")
+            else:
+                self.vocab = {}
+                print(f"  SecurityAgent vocab not found: {vocab_path}")
         except Exception as e:
-            print(f"  ⚠️  SecurityAgent model load failed: {e}")
+            print(f"  SecurityAgent model load failed: {e}")
 
     def run(self, problem: str, image_data: str = "") -> dict:
         start = time.time()
@@ -67,13 +83,26 @@ class SecurityAgent:
     def predict_threat(self, text: str) -> dict:
         """Real threat detection using trained DARTS model."""
         if self.trained_model is None:
-            return {"label": "unknown", "confidence": 0.0}
+            return {
+                "label":      "error",
+                "confidence": 0.0,
+                "error":      "No trained model. Run training first.",
+                "fake":       False,
+            }
+        if len(self.vocab) == 0:
+            return {
+                "label":      "error",
+                "confidence": 0.0,
+                "error":      "Vocabulary not loaded. Run training first.",
+                "fake":       False,
+            }
         try:
-            VOCAB_SIZE = 1000
             vec = torch.zeros(VOCAB_SIZE)
             for w in str(text).lower().split():
                 if w in self.vocab:
-                    vec[self.vocab[w]] += 1
+                    idx = self.vocab[w]
+                    if idx < VOCAB_SIZE:
+                        vec[idx] += 1
             if vec.sum() > 0:
                 vec = vec / vec.sum()
             pad = torch.zeros(3 * 32 * 32)
@@ -88,4 +117,5 @@ class SecurityAgent:
                      if idx < len(self.trained_classes) else str(idx))
             return {"label": label, "confidence": round(conf, 3)}
         except Exception as e:
-            return {"label": "error", "confidence": 0.0, "error": str(e)}
+            return {"label": "error", "confidence": 0.0,
+                    "error": str(e), "fake": False}

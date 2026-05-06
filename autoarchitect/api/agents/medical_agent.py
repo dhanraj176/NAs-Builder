@@ -19,28 +19,30 @@ class MedicalAgent:
     def __init__(self):
         self.trained_model   = None
         self.trained_classes = self.CLASSES
-        print("  🏥  MedicalAgent loaded")
+        print("  MedicalAgent loaded")
 
     def load_trained_model(self, model_path: str,
                             classes: list, num_classes: int):
         """Called after self_trainer finishes."""
         try:
             import torchvision.models as models
-            model    = models.resnet18(weights=None)
-            model.fc = nn.Linear(model.fc.in_features, num_classes)
-            state    = torch.load(model_path, map_location="cpu",
-                                  weights_only=True)
+            state = torch.load(model_path, map_location="cpu",
+                               weights_only=True)
+            # Derive actual num_classes from saved weights; metadata may lag
+            actual_nc = state["fc.weight"].shape[0]
+            model     = models.resnet18(weights=None)
+            model.fc  = nn.Linear(model.fc.in_features, actual_nc)
             model.load_state_dict(state)
             model.eval()
             self.trained_model   = model
             self.trained_classes = classes
-            print(f"  🏥  MedicalAgent model loaded — {num_classes} classes")
+            print(f"  MedicalAgent model loaded — {actual_nc} classes")
         except Exception as e:
-            print(f"  ⚠️  MedicalAgent model load failed: {e}")
+            print(f"  MedicalAgent model load failed: {e}")
 
     def run(self, problem: str, image_data: str = "") -> dict:
         start = time.time()
-        print(f"  🏥  Running medical NAS for: {problem[:40]}")
+        print(f"  Running medical NAS for: {problem[:40]}")
         nas = run_quick_nas(num_classes=10)
         result = {
             "status":       "success",
@@ -59,12 +61,18 @@ class MedicalAgent:
 
     def _predict_scan(self, image_data: str) -> dict:
         if self.trained_model is None:
-            return {"label": "Analysis complete", "confidence": 85.0}
+            return {
+                "label":      "error",
+                "confidence": 0.0,
+                "error":      "No trained model. Run training first.",
+                "fake":       False,
+            }
         try:
             import base64, io
             import torchvision.transforms as T
             from PIL import Image
-            img_bytes = base64.b64decode(image_data.split(',')[1])
+            parts     = image_data.split(',', 1)
+            img_bytes = base64.b64decode(parts[1] if len(parts) > 1 else parts[0])
             img       = Image.open(io.BytesIO(img_bytes)).convert('RGB')
             tfm = T.Compose([
                 T.Resize((224, 224)),
@@ -82,4 +90,37 @@ class MedicalAgent:
                      if idx < len(self.trained_classes) else str(idx))
             return {"label": label, "confidence": conf}
         except Exception as e:
-            return {"label": "Analysis complete", "confidence": 85.0}
+            return {"label": "error", "confidence": 0.0,
+                    "error": str(e), "fake": False}
+
+    def predict_image(self, image_path: str) -> dict:
+        """Predict from a filesystem image path."""
+        if self.trained_model is None:
+            return {
+                "label":      "error",
+                "confidence": 0.0,
+                "error":      "No trained model. Run training first.",
+                "fake":       False,
+            }
+        try:
+            import torchvision.transforms as T
+            from PIL import Image
+            img = Image.open(image_path).convert('RGB')
+            tfm = T.Compose([
+                T.Resize((224, 224)),
+                T.ToTensor(),
+                T.Normalize([0.485, 0.456, 0.406],
+                            [0.229, 0.224, 0.225]),
+            ])
+            tensor = tfm(img).unsqueeze(0)
+            with torch.no_grad():
+                out   = self.trained_model(tensor)
+                probs = torch.softmax(out, dim=1)
+                idx   = int(probs.argmax())
+                conf  = round(float(probs.max()) * 100, 1)
+            label = (self.trained_classes[idx]
+                     if idx < len(self.trained_classes) else str(idx))
+            return {"label": label, "confidence": conf}
+        except Exception as e:
+            return {"label": "error", "confidence": 0.0,
+                    "error": str(e), "fake": False}
