@@ -107,6 +107,37 @@ def _infer_topology(agents: List[str]) -> str:
     return SEQUENTIAL
 
 
+# ── Parallel ensemble definitions ─────────────────────────────────────────────
+
+# Keyword → complementary parallel combo.  When a problem contains the keyword,
+# inject this pair as a PARALLEL candidate (in addition to sequential templates).
+_ENSEMBLE_PAIRS: Dict[str, List[str]] = {
+    "image":    ["image", "multimodal"],
+    "visual":   ["image", "multimodal"],
+    "video":    ["image", "multimodal"],
+    "text":     ["text", "sentiment"],
+    "nlp":      ["text", "sentiment"],
+    "spam":     ["text", "sentiment"],
+    "review":   ["text", "sentiment"],
+    "medical":  ["medical", "image"],
+    "clinical": ["medical", "image"],
+    "xray":     ["medical", "image"],
+    "audio":    ["audio", "text"],
+    "speech":   ["audio", "text"],
+    "voice":    ["audio", "text"],
+}
+
+# Frozensets of agent pairs that are semantically complementary.
+# Used by _is_complementary_parallel() to decide whether to apply +0.05 bonus.
+_COMPLEMENTARY_SETS = {
+    frozenset(["image", "multimodal"]),
+    frozenset(["text", "sentiment"]),
+    frozenset(["medical", "image"]),
+    frozenset(["audio", "text"]),
+    frozenset(["image", "text"]),
+}
+
+
 # ═════════════════════════════════════════════════════════════════════════════
 # ANASSearchEngine
 # ═════════════════════════════════════════════════════════════════════════════
@@ -204,6 +235,7 @@ class ANASSearchEngine:
         # ── Phase 1: candidate pool ───────────────────────────────────────
         bert_emb    = self._get_embedding(problem)
         candidates  = space.warm_start_candidates(domain_hints)
+        candidates += self._ensemble_candidates(problem, domain_hints, space)
         candidates  = self._meta_guided_search(problem, bert_emb, candidates, space)
 
         # ── Phase 2 & 3: immune check + proxy score ───────────────────────
@@ -310,6 +342,9 @@ class ANASSearchEngine:
         c4 = self._topology_fitness(arch)
         score = (_W_COMPAT * c1 + _W_DOMAIN * c2 +
                  _W_SUCCESS * c3 + _W_TOPOLOGY * c4)
+        # Small bonus for parallel ensembles with complementary agent roles.
+        if self._is_complementary_parallel(arch):
+            score += 0.05
         return float(np.clip(score, 0.0, 1.0))
 
     def _domain_alignment(
@@ -446,6 +481,73 @@ class ANASSearchEngine:
 
         return candidates
 
+    # ── Ensemble candidate generation ────────────────────────────────────────
+
+    def _ensemble_candidates(
+        self,
+        problem:      str,
+        domain_hints: Optional[List[str]],
+        space:        ANASSearchSpace,
+    ) -> List[NetworkArchitecture]:
+        """
+        Inject parallel ensemble candidates for domains where two complementary
+        agents running simultaneously outperform a single sequential agent.
+
+        Triggered by keyword presence in problem or domain_hints.  Only agents
+        that are both in AGENT_CATALOG and allowed by constraints are included.
+        Candidates that fail is_valid() are silently dropped.
+        """
+        c = space.constraints
+        tokens: set = set(problem.lower().split())
+        if domain_hints:
+            for h in domain_hints:
+                tokens |= set(h.lower().split())
+
+        candidates: List[NetworkArchitecture] = []
+        seen_combos: set = set()
+
+        for keyword, combo in _ENSEMBLE_PAIRS.items():
+            if keyword not in tokens:
+                continue
+            agents = [a for a in combo
+                      if a in c.allowed_agents and a in AGENT_CATALOG]
+            if len(agents) < 2:
+                continue
+            key = frozenset(agents)
+            if key in seen_combos:
+                continue
+            seen_combos.add(key)
+
+            arch = NetworkArchitecture(
+                agents      = agents,
+                topology    = PARALLEL,
+                hyperparams = {a: {} for a in agents},
+                metadata    = {
+                    "source":         "ensemble_parallel",
+                    "execution_mode": "parallel",
+                    "trigger_kw":     keyword,
+                },
+            )
+            if arch.is_valid(c):
+                candidates.append(arch)
+                print(f"  [ANAS] ensemble candidate: {agents} / PARALLEL "
+                      f"(kw={keyword!r})")
+
+        return candidates
+
+    def _is_complementary_parallel(self, arch: NetworkArchitecture) -> bool:
+        """
+        True when arch is PARALLEL and its agent set contains a known
+        complementary pair (different modalities that benefit from fusion).
+        """
+        if arch.topology != PARALLEL:
+            return False
+        agent_set = frozenset(arch.agents)
+        for pair in _COMPLEMENTARY_SETS:
+            if pair.issubset(agent_set):
+                return True
+        return False
+
     # ── Learning ──────────────────────────────────────────────────────────────
 
     def learn(
@@ -518,17 +620,23 @@ class ANASSearchEngine:
         td          = self._get_topology_designer()
         connections = td._build_connections(arch.agents, arch.topology)
         agent_roles = td._assign_roles(problem, arch.agents)
+        execution_mode = arch.metadata.get("execution_mode") or (
+            "parallel" if arch.topology == PARALLEL else
+            "hybrid"   if arch.topology in (CONDITIONAL, HIERARCHICAL) else
+            "sequential"
+        )
         return {
-            "agents":      arch.agents,
-            "topology":    arch.topology,
-            "connections": connections,
-            "agent_roles": agent_roles,
-            "confidence":  round(proxy_score or 0.80, 3),
-            "template":    arch.metadata.get("source"),
-            "problem":     problem,
-            "designed_at": datetime.now().isoformat(),
-            "anas_id":     arch.architecture_id(),
-            "source":      "anas_search_engine",
+            "agents":         arch.agents,
+            "topology":       arch.topology,
+            "connections":    connections,
+            "agent_roles":    agent_roles,
+            "confidence":     round(proxy_score or 0.80, 3),
+            "template":       arch.metadata.get("source"),
+            "problem":        problem,
+            "designed_at":    datetime.now().isoformat(),
+            "anas_id":        arch.architecture_id(),
+            "source":         "anas_search_engine",
+            "execution_mode": execution_mode,
         }
 
     # ── Paper statistics ──────────────────────────────────────────────────────
