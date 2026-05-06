@@ -232,9 +232,13 @@ class SelfTrainingAgent:
             method_used = "unknown"
 
             try:
-                from api.agents.image_agent import ImageAgent as _IA
-                _agent = _IA()
-                h      = _problem_hash(problem)
+                h = _problem_hash(problem)
+                if category == 'medical':
+                    from api.agents.medical_agent import MedicalAgent as _MA
+                    _agent = _MA()
+                else:
+                    from api.agents.image_agent import ImageAgent as _IA
+                    _agent = _IA()
                 dinov2_result = _agent.train_with_dinov2(
                     data['train_loader'], data['test_loader'],
                     num_classes, h, classes=data['classes'])
