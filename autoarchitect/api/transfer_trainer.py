@@ -71,14 +71,14 @@ def train_transfer(problem: str, data: dict,
     start      = time.time()
     num_classes = data['num_classes']
 
-    print(f"   🔥 Transfer learning: ResNet18 → {num_classes} classes")
-    print(f"   📦 Dataset: {data['name']} ({data['train_size']} samples)")
+    print(f"   Transfer learning: ResNet18 -> {num_classes} classes")
+    print(f"   Dataset: {data['name']} ({data['train_size']} samples)")
 
     # Build pretrained model
     model     = build_transfer_model(num_classes, device)
     params    = sum(p.numel() for p in model.parameters())
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f"   🧠 ResNet18: {params:,} total, {trainable:,} trainable")
+    print(f"   ResNet18: {params:,} total, {trainable:,} trainable")
 
     optimizer = optim.Adam(
         filter(lambda p: p.requires_grad, model.parameters()),
@@ -119,7 +119,7 @@ def train_transfer(problem: str, data: dict,
 
         acc = round(100 * correct / total, 2)
         epoch_results.append(acc)
-        print(f"   Epoch {epoch+1}/{epochs} → Accuracy: {acc}%")
+        print(f"   Epoch {epoch+1}/{epochs} -> Accuracy: {acc}%")
         scheduler.step()
 
         if progress_callback:
@@ -146,9 +146,9 @@ def train_transfer(problem: str, data: dict,
     test_acc = round(100 * correct / total, 2)
     duration = round(time.time() - start, 1)
 
-    print(f"   ✅ Transfer learning complete!")
+    print(f"   Transfer learning complete!")
     print(f"   Train accuracy: {epoch_results[-1]}%")
-    print(f"   Test accuracy:  {test_acc}%  ← ResNet18 boost!")
+    print(f"   Test accuracy:  {test_acc}%")
     print(f"   Time: {duration}s")
 
     return {

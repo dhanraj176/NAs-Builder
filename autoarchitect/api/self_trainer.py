@@ -226,27 +226,52 @@ class SelfTrainingAgent:
             f"Training on {data['train_size']} samples...")
 
         if use_transfer:
-            from api.transfer_trainer import train_transfer
-            tr = train_transfer(
-                problem, data,
-                epochs=epochs,
-                progress_callback=progress_callback,
-                device=self.device
-            )
+            # -- Try DINOv2 foundation model first ----------------------------
+            tr         = None
+            save_model = None
+            method_used = "unknown"
+
+            try:
+                from api.agents.image_agent import ImageAgent as _IA
+                _agent = _IA()
+                h      = _problem_hash(problem)
+                dinov2_result = _agent.train_with_dinov2(
+                    data['train_loader'], data['test_loader'],
+                    num_classes, h, classes=data['classes'])
+                tr = dinov2_result
+                save_model  = _agent._dinov2_linear
+                method_used = "dinov2_linear"
+                print(f"   [SelfTrainer] DINOv2 training complete: "
+                      f"test={dinov2_result['test_accuracy']}%  "
+                      f"time={dinov2_result['training_time']}s")
+            except Exception as e:
+                print(f"   [SelfTrainer] DINOv2 failed: {e}, "
+                      f"falling back to ResNet18 transfer learning")
+
+            if tr is None:
+                from api.transfer_trainer import train_transfer
+                tr = train_transfer(
+                    problem, data,
+                    epochs=epochs,
+                    progress_callback=progress_callback,
+                    device=self.device)
+                save_model  = tr['model']
+                method_used = tr['method']
+
             results['train_accuracy']    = tr['train_accuracy']
             results['test_accuracy']     = tr['test_accuracy']
-            results['epoch_history']     = tr['epoch_history']
-            results['method']            = tr['method']
+            results['epoch_history']     = tr.get('epoch_history', [])
+            results['method']            = method_used
             results['expected_accuracy'] = data.get('expected_accuracy', 75)
 
             # Save model to known location
             self._update(results, progress_callback, 6, 6,
                 "Saving to knowledge base...")
             model_path, classes_path = self._save_trained_model(
-                tr['model'], problem, category, data['classes'], results)
+                save_model, problem, category, data['classes'], results)
             results['model_path']   = model_path
             results['classes_path'] = classes_path
-            self._save_cache(tr['model'], problem, results, data)
+            self._save_cache(save_model, problem, results, data)
 
             duration              = round(time.time() - start, 1)
             results['time']       = duration
@@ -256,7 +281,7 @@ class SelfTrainingAgent:
             print(f"\n[SelfTrainer] Self-training complete!")
             print(f"   Dataset: {data['name']} "
                   f"({'REAL' if data.get('real_dataset') else 'synthetic'})")
-            print(f"   Method:  ResNet18 Transfer Learning")
+            print(f"   Method:  {method_used}")
             print(f"   Train:   {results['train_accuracy']}%")
             print(f"   Test:    {results['test_accuracy']}%")
             print(f"   Model:   {model_path}")
