@@ -111,6 +111,16 @@ AGENT_CATALOG = {
                      "recommend", "adjust", "better", "enhance", "tune",
                      "best", "maximize", "boost"],
     },
+    "tabular": {
+        "description": "Trains and predicts on structured CSV/tabular data",
+        "input":  "CSV file or row dict of features",
+        "output": "label + confidence + feature importances",
+        "keywords": ["fraud", "churn", "predict", "forecast", "csv", "tabular",
+                     "customer", "sales", "transaction", "banking", "credit",
+                     "risk", "classification", "structured", "dataset",
+                     "spreadsheet", "features", "columns", "rows", "numeric",
+                     "categorical", "regression", "score", "propensity"],
+    },
 }
 
 
@@ -175,6 +185,21 @@ TOPOLOGY_TEMPLATES = {
         "topology": HIERARCHICAL,
         "keywords": ["grow business", "network marketing", "automate marketing",
                      "leads", "sales automation"],
+    },
+    "tabular_pipeline": {
+        "description": "Train on CSV data → classify rows → report results",
+        "agents":   ["tabular", "report"],
+        "topology": SEQUENTIAL,
+        "keywords": ["csv", "tabular", "churn", "fraud detection", "credit",
+                     "banking", "transaction", "forecast", "propensity",
+                     "structured data"],
+    },
+    "tabular_risk_pipeline": {
+        "description": "Tabular risk scoring → severity → alert",
+        "agents":   ["tabular", "severity", "report"],
+        "topology": SEQUENTIAL,
+        "keywords": ["risk score", "credit risk", "fraud risk", "churn risk",
+                     "transaction risk", "anomaly detection"],
     },
 }
 
@@ -429,6 +454,9 @@ class TopologyDesigner:
             elif agent == "optimizer":
                 task   = "Analyze results and recommend strategy improvements"
                 action = "optimize_strategy"
+            elif agent == "tabular":
+                task   = f"Train XGBoost/LightGBM on CSV data for: {problem[:50]}"
+                action = "classify_row"
             else:
                 task   = info.get("description", agent)
                 action = "process"
