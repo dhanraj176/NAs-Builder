@@ -87,7 +87,7 @@ class AgentFactory:
             if auto_path:
                 agent.load_model(auto_path)
 
-        print(f"  🤖 Created: {class_name} "
+        print(f"  [+] Created: {class_name} "
               f"({'model loaded' if agent.model_loaded else 'no model yet'})")
         return agent
 

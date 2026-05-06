@@ -1,0 +1,420 @@
+{
+  "generated_at": "2026-05-06T10:09:52.298965",
+  "elapsed_seconds": 21.7,
+  "total_agents": 12,
+  "production_ready": 12,
+  "failed_checks": 0,
+  "overall_status": "READY",
+  "agents": [
+    {
+      "name": "DynamicAgent",
+      "production_ready": true,
+      "checks_raw": {
+        "import": true,
+        "init": true,
+        "no_model": true,
+        "with_model": true,
+        "catalog_match": "NA"
+      },
+      "passed": [
+        "import",
+        "init",
+        "no_model",
+        "with_model"
+      ],
+      "failed": [],
+      "skipped": [],
+      "na": [
+        "catalog_match"
+      ],
+      "notes": {
+        "no_model": {
+          "confidence": 0.0,
+          "mode": "fallback_no_model"
+        },
+        "with_model": {
+          "label": "A",
+          "confidence": 0.571
+        },
+        "catalog_match": "infrastructure agent"
+      }
+    },
+    {
+      "name": "AgentFactory",
+      "production_ready": true,
+      "checks_raw": {
+        "import": true,
+        "init": true,
+        "no_model": true,
+        "with_model": true,
+        "catalog_match": "NA"
+      },
+      "passed": [
+        "import",
+        "init",
+        "no_model",
+        "with_model"
+      ],
+      "failed": [],
+      "skipped": [],
+      "na": [
+        "catalog_match"
+      ],
+      "notes": {
+        "no_model": {
+          "confidence": 0.0,
+          "mode": "fallback_no_model"
+        },
+        "with_model": {
+          "label": "A",
+          "confidence": 0.571
+        },
+        "catalog_match": "infrastructure agent"
+      }
+    },
+    {
+      "name": "ImageAgent",
+      "production_ready": true,
+      "checks_raw": {
+        "import": true,
+        "init": true,
+        "no_model": true,
+        "with_model": true,
+        "catalog_match": true
+      },
+      "passed": [
+        "import",
+        "init",
+        "no_model",
+        "with_model",
+        "catalog_match"
+      ],
+      "failed": [],
+      "skipped": [],
+      "na": [],
+      "notes": {
+        "no_model": {
+          "label": "error",
+          "confidence": 0.0,
+          "error": "No trained model. Run training first.",
+          "fake": false
+        },
+        "with_model": {
+          "label": "ClassB",
+          "confidence": 0.517,
+          "model_arch": "resnet18_fallback"
+        },
+        "catalog_match": "routed -> ['image', 'severity', 'report'] (src=cache)"
+      }
+    },
+    {
+      "name": "TextAgent",
+      "production_ready": true,
+      "checks_raw": {
+        "import": true,
+        "init": true,
+        "no_model": true,
+        "with_model": true,
+        "catalog_match": true
+      },
+      "passed": [
+        "import",
+        "init",
+        "no_model",
+        "with_model",
+        "catalog_match"
+      ],
+      "failed": [],
+      "skipped": [],
+      "na": [],
+      "notes": {
+        "no_model": {
+          "label": "error",
+          "confidence": 0.0,
+          "error": "No trained model. Run training first.",
+          "fake": false
+        },
+        "with_model": {
+          "label": "B",
+          "confidence": 0.598
+        },
+        "catalog_match": "routed -> ['text', 'report'] (src=cache)"
+      }
+    },
+    {
+      "name": "MedicalAgent",
+      "production_ready": true,
+      "checks_raw": {
+        "import": true,
+        "init": true,
+        "no_model": true,
+        "with_model": true,
+        "catalog_match": true
+      },
+      "passed": [
+        "import",
+        "init",
+        "no_model",
+        "with_model",
+        "catalog_match"
+      ],
+      "failed": [],
+      "skipped": [],
+      "na": [],
+      "notes": {
+        "no_model": {
+          "label": "error",
+          "confidence": 0.0,
+          "error": "No trained model. Run training first.",
+          "fake": false
+        },
+        "with_model": {
+          "label": "Abnormal",
+          "confidence": 51.7
+        },
+        "catalog_match": "routed -> ['medical', 'severity', 'report'] (src=cache)"
+      }
+    },
+    {
+      "name": "SecurityAgent",
+      "production_ready": true,
+      "checks_raw": {
+        "import": true,
+        "init": true,
+        "no_model": true,
+        "with_model": true,
+        "catalog_match": true
+      },
+      "passed": [
+        "import",
+        "init",
+        "no_model",
+        "with_model",
+        "catalog_match"
+      ],
+      "failed": [],
+      "skipped": [],
+      "na": [],
+      "notes": {
+        "no_model": {
+          "label": "error",
+          "confidence": 0.0,
+          "error": "No trained model. Run training first.",
+          "fake": false
+        },
+        "with_model": {
+          "label": "Safe",
+          "confidence": 0.513
+        },
+        "catalog_match": "routed -> ['security', 'text', 'report'] (src=cache)"
+      }
+    },
+    {
+      "name": "TabularAgent",
+      "production_ready": true,
+      "checks_raw": {
+        "import": true,
+        "init": true,
+        "no_model": true,
+        "with_model": true,
+        "catalog_match": true
+      },
+      "passed": [
+        "import",
+        "init",
+        "no_model",
+        "with_model",
+        "catalog_match"
+      ],
+      "failed": [],
+      "skipped": [],
+      "na": [],
+      "notes": {
+        "no_model": {
+          "label": "error",
+          "confidence": 0.0,
+          "error": "No trained model. Run training first.",
+          "fake": false
+        },
+        "with_model": {
+          "label": "yes",
+          "confidence": 0.944
+        },
+        "catalog_match": "routed -> ['tabular', 'report'] (src=cache)"
+      }
+    },
+    {
+      "name": "AudioAgent",
+      "production_ready": true,
+      "checks_raw": {
+        "import": true,
+        "init": true,
+        "no_model": true,
+        "with_model": true,
+        "catalog_match": true
+      },
+      "passed": [
+        "import",
+        "init",
+        "no_model",
+        "with_model",
+        "catalog_match"
+      ],
+      "failed": [],
+      "skipped": [],
+      "na": [],
+      "notes": {
+        "no_model": {
+          "label": "error",
+          "confidence": 0.0,
+          "error": "No trained model. Run training first.",
+          "fake": false
+        },
+        "with_model": {
+          "label": "high_freq",
+          "confidence": 0.59
+        },
+        "catalog_match": "routed -> ['audio', 'report'] (src=cache)"
+      }
+    },
+    {
+      "name": "MultimodalAgent",
+      "production_ready": true,
+      "checks_raw": {
+        "import": true,
+        "init": true,
+        "no_model": true,
+        "with_model": true,
+        "catalog_match": true
+      },
+      "passed": [
+        "import",
+        "init",
+        "no_model",
+        "with_model",
+        "catalog_match"
+      ],
+      "failed": [],
+      "skipped": [],
+      "na": [],
+      "notes": {
+        "no_model": {
+          "label": "error",
+          "confidence": 0.0,
+          "error": "CLIP unavailable (no internet or transformers not installed)",
+          "fake": false
+        },
+        "with_model": {
+          "label": "red image",
+          "confidence": 0.6519
+        },
+        "catalog_match": "routed -> ['multimodal', 'report'] (src=cache)"
+      }
+    },
+    {
+      "name": "FusionAgent",
+      "production_ready": true,
+      "checks_raw": {
+        "import": true,
+        "init": true,
+        "no_model": true,
+        "with_model": true,
+        "catalog_match": "NA"
+      },
+      "passed": [
+        "import",
+        "init",
+        "no_model",
+        "with_model"
+      ],
+      "failed": [],
+      "skipped": [],
+      "na": [
+        "catalog_match"
+      ],
+      "notes": {
+        "no_model": {
+          "error": "No agent results to fuse"
+        },
+        "with_model": {
+          "label": "positive",
+          "confidence": 0.85,
+          "fusion_method": "weighted_confidence"
+        },
+        "catalog_match": "support agent"
+      }
+    },
+    {
+      "name": "EvaluatorAgent",
+      "production_ready": true,
+      "checks_raw": {
+        "import": true,
+        "init": true,
+        "no_model": true,
+        "with_model": true,
+        "catalog_match": "NA"
+      },
+      "passed": [
+        "import",
+        "init",
+        "no_model",
+        "with_model"
+      ],
+      "failed": [],
+      "skipped": [],
+      "na": [
+        "catalog_match"
+      ],
+      "notes": {
+        "no_model": {
+          "label": "spam",
+          "confidence": 0.3,
+          "quality": "low",
+          "flag_for_review": true,
+          "reason": "Low confidence \u2014 human review recommended"
+        },
+        "with_model": {
+          "accuracy": 1.0,
+          "f1": 1.0,
+          "quality_score": 0.965,
+          "verdict": "excellent"
+        },
+        "catalog_match": "support agent"
+      }
+    },
+    {
+      "name": "AgentNetwork",
+      "production_ready": true,
+      "checks_raw": {
+        "import": true,
+        "init": true,
+        "no_model": true,
+        "with_model": true,
+        "catalog_match": "NA"
+      },
+      "passed": [
+        "import",
+        "init",
+        "no_model",
+        "with_model"
+      ],
+      "failed": [],
+      "skipped": [],
+      "na": [
+        "catalog_match"
+      ],
+      "notes": {
+        "no_model": {
+          "error": "all agents failed",
+          "agent_used": "none"
+        },
+        "with_model": {
+          "label": "ok",
+          "valid_count": 2,
+          "task": "unit_test"
+        },
+        "catalog_match": "support agent"
+      }
+    }
+  ]
+}
