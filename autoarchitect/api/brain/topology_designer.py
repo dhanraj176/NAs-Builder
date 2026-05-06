@@ -156,13 +156,14 @@ TOPOLOGY_TEMPLATES = {
         "description": "Detect → classify severity → report",
         "agents":   ["image", "severity", "report"],
         "topology": SEQUENTIAL,
-        "keywords": ["detect", "classify", "severity", "illegal", "dumping", "pothole"],
+        "keywords": ["detect", "severity", "illegal", "dumping", "pothole"],
     },
     "text_analyze_report": {
         "description": "Analyze text → classify → report",
         "agents":   ["text", "report"],
         "topology": SEQUENTIAL,
-        "keywords": ["spam", "fake news", "classify text", "email"],
+        "keywords": ["spam", "fake news", "classify text", "email", "classify message",
+                     "classify document", "message classification"],
     },
     "sentiment_audience_report": {
         "description": "Sentiment + audience scoring for marketing",
@@ -542,6 +543,12 @@ class TopologyDesigner:
         return len(wa & wb) / len(wa | wb)
 
     def _store(self, problem: str, topology: dict):
+        # Sanity check: reject storage if agents clearly contradict the problem domain.
+        # Prevents stale ANAS entries from poisoning future cache lookups.
+        agents = topology.get("agents", [])
+        if not self._domain_consistent(problem.lower(), agents):
+            print(f"  [TopologyDesigner] Skipped storing (domain mismatch): {problem[:50]}")
+            return
         entry = {
             "problem":   problem,
             "topology":  topology,
@@ -551,6 +558,28 @@ class TopologyDesigner:
         self.history.append(entry)
         self._save_history()
         print(f"  [TopologyDesigner] topology stored -- brain now knows {len(self.history)} topologies")
+
+    def _domain_consistent(self, problem_lower: str, agents: list) -> bool:
+        """Return False when a text-domain problem is about to be stored with
+        image-only agents (and vice versa), which is always wrong."""
+        if not agents:
+            return True
+        _text_kws  = {"spam","email","message","fake news","document",
+                      "review","comment","post","nlp","language","transcript",
+                      "classify text","chat","sentiment"}
+        _audio_kws = {"audio","speech","voice","call","recording",
+                      "transcribe","wav","mp3","podcast","spoken"}
+        _tab_kws   = {"csv","tabular","churn","transaction","spreadsheet",
+                      "numeric","categorical","fraud detection","structured"}
+        has_image_only = set(agents) <= {"image","severity","report"}
+
+        if any(k in problem_lower for k in _text_kws) and has_image_only:
+            return False
+        if any(k in problem_lower for k in _audio_kws) and has_image_only:
+            return False
+        if any(k in problem_lower for k in _tab_kws) and has_image_only:
+            return False
+        return True
 
     def update_accuracy(self, problem: str, accuracy: float):
         for entry in reversed(self.history):

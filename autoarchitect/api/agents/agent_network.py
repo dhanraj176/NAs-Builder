@@ -531,10 +531,13 @@ def build_network_from_problem(problem: str,
     agents_used: ["image", "text", "security", ...]
     model_paths: {"image": "path/to/model.pth", ...}
     """
-    from api.agents.image_agent    import ImageAgent
-    from api.agents.text_agent     import TextAgent
-    from api.agents.medical_agent  import MedicalAgent
-    from api.agents.security_agent import SecurityAgent
+    from api.agents.image_agent       import ImageAgent
+    from api.agents.text_agent        import TextAgent
+    from api.agents.medical_agent     import MedicalAgent
+    from api.agents.security_agent    import SecurityAgent
+    from api.agents.tabular_agent     import TabularAgent
+    from api.agents.audio_agent       import AudioAgent
+    from api.agents.multimodal_agent  import MultimodalAgent
 
     network = AgentNetwork(
         name        = problem[:30],
@@ -542,10 +545,13 @@ def build_network_from_problem(problem: str,
     )
 
     agent_classes = {
-        "image":    ImageAgent,
-        "text":     TextAgent,
-        "medical":  MedicalAgent,
-        "security": SecurityAgent,
+        "image":     ImageAgent,
+        "text":      TextAgent,
+        "medical":   MedicalAgent,
+        "security":  SecurityAgent,
+        "tabular":   TabularAgent,
+        "audio":     AudioAgent,
+        "multimodal": MultimodalAgent,
     }
 
     for domain in agents_used:

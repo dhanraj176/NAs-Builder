@@ -18,6 +18,15 @@ import torch.nn as nn
 from pathlib import Path
 from api.agents.dynamic_agent import DynamicAgent
 
+# Specialized agents — imported here so factory can dispatch directly.
+# These bypass DynamicAgent/DARTSNet for their domains.
+from api.agents.tabular_agent    import TabularAgent
+from api.agents.audio_agent      import AudioAgent
+from api.agents.multimodal_agent import MultimodalAgent
+
+# Domains that have a real specialized agent (not DynamicAgent).
+_SPECIALIZED = {"tabular", "audio", "multimodal"}
+
 BASE_DIR    = Path(__file__).parent.parent.parent
 TRAINED_DIR = BASE_DIR / "models" / "trained"
 TRAINED_DIR.mkdir(parents=True, exist_ok=True)
@@ -57,11 +66,17 @@ class AgentFactory:
     def create(self, problem: str, domain: str,
                model_path: str = None,
                classes: list = None,
-               num_classes: int = None) -> "DynamicAgent":
+               num_classes: int = None):
         """
         Create a purpose-built agent for this exact problem.
-        Loads trained model if model_path provided.
+        Returns a specialized agent (TabularAgent / AudioAgent /
+        MultimodalAgent) for those domains; DynamicAgent for all others.
         """
+        # ── Specialized domain dispatch ────────────────────────────────────
+        if domain in _SPECIALIZED:
+            return self._create_specialized(domain, problem, model_path)
+
+        # ── DynamicAgent path (image / text / medical / security / etc.) ───
         agent_name  = self.generate_name(problem)
         class_name  = self.generate_class_name(problem)
         model_type  = self._model_type_for_domain(domain)
@@ -82,36 +97,69 @@ class AgentFactory:
         if model_path and Path(model_path).exists():
             agent.load_model(model_path)
         else:
-            # Try to find trained model automatically
             auto_path = self._find_model(problem, domain)
             if auto_path:
                 agent.load_model(auto_path)
 
-        print(f"  [+] Created: {class_name} "
-              f"({'model loaded' if agent.model_loaded else 'no model yet'})")
+        print(f"  [Factory] Creating {class_name} for type={domain}")
         return agent
 
+    def _create_specialized(self, domain: str, problem: str,
+                             model_path: str = None):
+        """
+        Instantiate TabularAgent / AudioAgent / MultimodalAgent and
+        attempt to auto-load a pre-trained pkl model when one exists.
+        """
+        if domain == "tabular":
+            agent = TabularAgent()
+            pkl = model_path or self._find_model(problem, "tabular")
+            if pkl and Path(pkl).exists():
+                agent.load_trained_model(pkl)
+            print(f"  [Factory] Creating TabularAgent for type=tabular")
+            return agent
+
+        if domain == "audio":
+            agent = AudioAgent()
+            pkl = model_path or self._find_model(problem, "audio")
+            if pkl and Path(pkl).exists():
+                agent.load_trained_model(pkl)
+            print(f"  [Factory] Creating AudioAgent for type=audio")
+            return agent
+
+        if domain == "multimodal":
+            agent = MultimodalAgent()
+            print(f"  [Factory] Creating MultimodalAgent for type=multimodal")
+            return agent
+
+        # Should not reach here given _SPECIALIZED guard, but be safe
+        raise ValueError(f"Unknown specialized domain: {domain}")
+
     def create_from_trained(self, problem: str, domain: str,
-                             trained_result: dict) -> "DynamicAgent":
+                             trained_result: dict):
         """
-        Create agent directly from self_trainer result.
-        This is the main connection point.
+        Create agent directly from a training result dict.
+        For specialized domains, loads the saved pkl model.
+        For DynamicAgent domains, wires the pth model.
         """
-        model_path  = trained_result.get("model_path")
-        classes     = trained_result.get("classes", [])
-        num_classes = len(classes) or 2
-        accuracy    = trained_result.get("test_accuracy", 0)
+        model_path = trained_result.get("model_path")
+        classes    = trained_result.get("classes", [])
+        accuracy   = trained_result.get("test_accuracy", 0)
 
         agent = self.create(
             problem     = problem,
             domain      = domain,
             model_path  = model_path,
             classes     = classes,
-            num_classes = num_classes,
+            num_classes = len(classes) or 2,
         )
-        agent.accuracy   = accuracy
-        agent.dataset    = trained_result.get("dataset", "unknown")
-        agent.method     = trained_result.get("method", "unknown")
+        # Attach metadata — specialized agents may not have these attrs
+        # so use setattr to avoid overwriting real logic
+        if not hasattr(agent, "accuracy"):
+            agent.accuracy = accuracy
+        if not hasattr(agent, "dataset"):
+            agent.dataset  = trained_result.get("dataset", "unknown")
+        if not hasattr(agent, "method"):
+            agent.method   = trained_result.get("method", "unknown")
         return agent
 
     # ── Agent naming ───────────────────────────────────────────────────────
@@ -162,7 +210,14 @@ class AgentFactory:
         normalized = ' '.join(cleaned.lower().split())
         h          = hashlib.md5(normalized.encode()).hexdigest()[:10]
 
-        # New save location
+        # Specialized agents save as .pkl
+        if domain in _SPECIALIZED:
+            p_pkl = TRAINED_DIR / f"{h}_{domain}.pkl"
+            if p_pkl.exists():
+                return str(p_pkl)
+            return None
+
+        # DynamicAgent/DARTSNet models save as .pth
         p = TRAINED_DIR / f"{h}_{domain}.pth"
         if p.exists():
             return str(p)
