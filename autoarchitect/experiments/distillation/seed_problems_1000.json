@@ -1,0 +1,3362 @@
+[
+  {
+    "id": 1,
+    "category": "image",
+    "problem": "Detect surface cracks in metal sheets on a production line using overhead camera images"
+  },
+  {
+    "id": 2,
+    "category": "image",
+    "problem": "Detect paint scratches in plastic components on a production line using overhead camera images"
+  },
+  {
+    "id": 3,
+    "category": "image",
+    "problem": "Detect assembly misalignment in PCB boards on a production line using overhead camera images"
+  },
+  {
+    "id": 4,
+    "category": "image",
+    "problem": "Detect dents in textile fabric on a production line using overhead camera images"
+  },
+  {
+    "id": 5,
+    "category": "image",
+    "problem": "Detect rust spots in ceramic tiles on a production line using overhead camera images"
+  },
+  {
+    "id": 6,
+    "category": "image",
+    "problem": "Detect chip defects in glass panels on a production line using overhead camera images"
+  },
+  {
+    "id": 7,
+    "category": "image",
+    "problem": "Detect colour deviation in rubber seals on a production line using overhead camera images"
+  },
+  {
+    "id": 8,
+    "category": "image",
+    "problem": "Detect weld seam anomalies in wooden boards on a production line using overhead camera images"
+  },
+  {
+    "id": 9,
+    "category": "image",
+    "problem": "Detect hole misplacement in food packaging on a production line using overhead camera images"
+  },
+  {
+    "id": 10,
+    "category": "image",
+    "problem": "Detect burrs in solar panels on a production line using overhead camera images"
+  },
+  {
+    "id": 11,
+    "category": "image",
+    "problem": "Detect and count cars in factory floor cameras and trigger an alert when count exceeds threshold"
+  },
+  {
+    "id": 12,
+    "category": "image",
+    "problem": "Detect and count motorcycles in warehouse CCTV footage and trigger an alert when count exceeds threshold"
+  },
+  {
+    "id": 13,
+    "category": "image",
+    "problem": "Detect and count trucks in construction site cameras and trigger an alert when count exceeds threshold"
+  },
+  {
+    "id": 14,
+    "category": "image",
+    "problem": "Detect and count bicycles in parking lot feeds and trigger an alert when count exceeds threshold"
+  },
+  {
+    "id": 15,
+    "category": "image",
+    "problem": "Detect and count pedestrians in airport runway cameras and trigger an alert when count exceeds threshold"
+  },
+  {
+    "id": 16,
+    "category": "image",
+    "problem": "Detect and count hard hats in port crane cameras and trigger an alert when count exceeds threshold"
+  },
+  {
+    "id": 17,
+    "category": "image",
+    "problem": "Detect and count fire extinguishers in mining site footage and trigger an alert when count exceeds threshold"
+  },
+  {
+    "id": 18,
+    "category": "image",
+    "problem": "Detect and count packages in farm field images and trigger an alert when count exceeds threshold"
+  },
+  {
+    "id": 19,
+    "category": "image",
+    "problem": "Detect and count pallets in retail store cameras and trigger an alert when count exceeds threshold"
+  },
+  {
+    "id": 20,
+    "category": "image",
+    "problem": "Detect and count animals in hospital corridor cameras and trigger an alert when count exceeds threshold"
+  },
+  {
+    "id": 21,
+    "category": "image",
+    "problem": "Identify leaf disease in maize field images taken by drone for precision agriculture"
+  },
+  {
+    "id": 22,
+    "category": "image",
+    "problem": "Identify pest infestation in wheat field images taken by drone for precision agriculture"
+  },
+  {
+    "id": 23,
+    "category": "image",
+    "problem": "Identify nutrient deficiency in rice field images taken by drone for precision agriculture"
+  },
+  {
+    "id": 24,
+    "category": "image",
+    "problem": "Identify ripeness stage in tomato field images taken by drone for precision agriculture"
+  },
+  {
+    "id": 25,
+    "category": "image",
+    "problem": "Identify crop yield estimation in potato field images taken by drone for precision agriculture"
+  },
+  {
+    "id": 26,
+    "category": "image",
+    "problem": "Identify weed presence in apple field images taken by drone for precision agriculture"
+  },
+  {
+    "id": 27,
+    "category": "image",
+    "problem": "Identify irrigation stress in grape field images taken by drone for precision agriculture"
+  },
+  {
+    "id": 28,
+    "category": "image",
+    "problem": "Identify frost damage in coffee field images taken by drone for precision agriculture"
+  },
+  {
+    "id": 29,
+    "category": "image",
+    "problem": "Identify fungal infection in cotton field images taken by drone for precision agriculture"
+  },
+  {
+    "id": 30,
+    "category": "image",
+    "problem": "Identify insect damage in soybean field images taken by drone for precision agriculture"
+  },
+  {
+    "id": 31,
+    "category": "image",
+    "problem": "Detect pothole in road inspection photographs and classify severity for maintenance crews"
+  },
+  {
+    "id": 32,
+    "category": "image",
+    "problem": "Detect road crack in road inspection photographs and classify severity for maintenance crews"
+  },
+  {
+    "id": 33,
+    "category": "image",
+    "problem": "Detect lane marking fade in road inspection photographs and classify severity for maintenance crews"
+  },
+  {
+    "id": 34,
+    "category": "image",
+    "problem": "Detect debris in road inspection photographs and classify severity for maintenance crews"
+  },
+  {
+    "id": 35,
+    "category": "image",
+    "problem": "Detect damaged guardrail in road inspection photographs and classify severity for maintenance crews"
+  },
+  {
+    "id": 36,
+    "category": "image",
+    "problem": "Detect missing sign in road inspection photographs and classify severity for maintenance crews"
+  },
+  {
+    "id": 37,
+    "category": "image",
+    "problem": "Detect flooded section in road inspection photographs and classify severity for maintenance crews"
+  },
+  {
+    "id": 38,
+    "category": "image",
+    "problem": "Detect illegal parking in road inspection photographs and classify severity for maintenance crews"
+  },
+  {
+    "id": 39,
+    "category": "image",
+    "problem": "Detect traffic congestion level in road inspection photographs and classify severity for maintenance crews"
+  },
+  {
+    "id": 40,
+    "category": "image",
+    "problem": "Detect bridge crack in road inspection photographs and classify severity for maintenance crews"
+  },
+  {
+    "id": 41,
+    "category": "image",
+    "problem": "Classify clothing category from product listing photographs to auto-populate e-commerce catalog"
+  },
+  {
+    "id": 42,
+    "category": "image",
+    "problem": "Classify shoe type from product listing photographs to auto-populate e-commerce catalog"
+  },
+  {
+    "id": 43,
+    "category": "image",
+    "problem": "Classify handbag style from product listing photographs to auto-populate e-commerce catalog"
+  },
+  {
+    "id": 44,
+    "category": "image",
+    "problem": "Classify jewelry type from product listing photographs to auto-populate e-commerce catalog"
+  },
+  {
+    "id": 45,
+    "category": "image",
+    "problem": "Classify furniture style from product listing photographs to auto-populate e-commerce catalog"
+  },
+  {
+    "id": 46,
+    "category": "image",
+    "problem": "Classify electronic device from product listing photographs to auto-populate e-commerce catalog"
+  },
+  {
+    "id": 47,
+    "category": "image",
+    "problem": "Classify book genre from cover from product listing photographs to auto-populate e-commerce catalog"
+  },
+  {
+    "id": 48,
+    "category": "image",
+    "problem": "Classify art style from product listing photographs to auto-populate e-commerce catalog"
+  },
+  {
+    "id": 49,
+    "category": "image",
+    "problem": "Classify logo brand from product listing photographs to auto-populate e-commerce catalog"
+  },
+  {
+    "id": 50,
+    "category": "image",
+    "problem": "Classify product freshness from product listing photographs to auto-populate e-commerce catalog"
+  },
+  {
+    "id": 51,
+    "category": "image",
+    "problem": "Detect deforestation in satellite imagery for environmental monitoring"
+  },
+  {
+    "id": 52,
+    "category": "image",
+    "problem": "Detect crop type in satellite imagery for environmental monitoring"
+  },
+  {
+    "id": 53,
+    "category": "image",
+    "problem": "Detect building footprint in satellite imagery for environmental monitoring"
+  },
+  {
+    "id": 54,
+    "category": "image",
+    "problem": "Detect flood extent in satellite imagery for environmental monitoring"
+  },
+  {
+    "id": 55,
+    "category": "image",
+    "problem": "Detect wildfire boundary in satellite imagery for environmental monitoring"
+  },
+  {
+    "id": 56,
+    "category": "image",
+    "problem": "Detect urban sprawl in satellite imagery for environmental monitoring"
+  },
+  {
+    "id": 57,
+    "category": "image",
+    "problem": "Detect illegal construction in satellite imagery for environmental monitoring"
+  },
+  {
+    "id": 58,
+    "category": "image",
+    "problem": "Detect road extraction in satellite imagery for environmental monitoring"
+  },
+  {
+    "id": 59,
+    "category": "image",
+    "problem": "Detect cloud cover classification in satellite imagery for environmental monitoring"
+  },
+  {
+    "id": 60,
+    "category": "image",
+    "problem": "Detect sea ice extent in satellite imagery for environmental monitoring"
+  },
+  {
+    "id": 61,
+    "category": "image",
+    "problem": "Identify face identity from camera feed in real time for smart retail / access control"
+  },
+  {
+    "id": 62,
+    "category": "image",
+    "problem": "Identify face emotion from camera feed in real time for smart retail / access control"
+  },
+  {
+    "id": 63,
+    "category": "image",
+    "problem": "Identify age group from face from camera feed in real time for smart retail / access control"
+  },
+  {
+    "id": 64,
+    "category": "image",
+    "problem": "Identify gesture command from camera feed in real time for smart retail / access control"
+  },
+  {
+    "id": 65,
+    "category": "image",
+    "problem": "Identify eye gaze direction from camera feed in real time for smart retail / access control"
+  },
+  {
+    "id": 66,
+    "category": "image",
+    "problem": "Identify driver drowsiness from camera feed in real time for smart retail / access control"
+  },
+  {
+    "id": 67,
+    "category": "image",
+    "problem": "Identify customer expression in store from camera feed in real time for smart retail / access control"
+  },
+  {
+    "id": 68,
+    "category": "image",
+    "problem": "Identify pose estimation from camera feed in real time for smart retail / access control"
+  },
+  {
+    "id": 69,
+    "category": "image",
+    "problem": "Identify hand sign language from camera feed in real time for smart retail / access control"
+  },
+  {
+    "id": 70,
+    "category": "image",
+    "problem": "Identify crowd density from camera feed in real time for smart retail / access control"
+  },
+  {
+    "id": 71,
+    "category": "image",
+    "problem": "Build a real-time pothole detection system from dashcam footage for city road maintenance"
+  },
+  {
+    "id": 72,
+    "category": "image",
+    "problem": "Classify medical device components for quality control on the assembly line"
+  },
+  {
+    "id": 73,
+    "category": "image",
+    "problem": "Detect smoke and fire in forest surveillance images before it spreads"
+  },
+  {
+    "id": 74,
+    "category": "image",
+    "problem": "Identify counterfeit banknotes from high-resolution scanner images"
+  },
+  {
+    "id": 75,
+    "category": "image",
+    "problem": "Classify skin lesion types (benign vs malignant) from smartphone photos for triage"
+  },
+  {
+    "id": 76,
+    "category": "image",
+    "problem": "Detect personal protective equipment compliance on a construction site"
+  },
+  {
+    "id": 77,
+    "category": "image",
+    "problem": "Identify bird species from wildlife camera trap images for ecological surveys"
+  },
+  {
+    "id": 78,
+    "category": "image",
+    "problem": "Count fish in underwater camera footage for aquaculture yield estimation"
+  },
+  {
+    "id": 79,
+    "category": "image",
+    "problem": "Detect tampered documents by classifying forged signatures in scanned forms"
+  },
+  {
+    "id": 80,
+    "category": "image",
+    "problem": "Classify satellite images of agricultural fields into crop type for insurance assessment"
+  },
+  {
+    "id": 81,
+    "category": "image",
+    "problem": "Detect lightning rods and power line damage from aerial drone inspections"
+  },
+  {
+    "id": 82,
+    "category": "image",
+    "problem": "Build a system to classify coral reef health from underwater survey photographs"
+  },
+  {
+    "id": 83,
+    "category": "image",
+    "problem": "Identify pipeline corrosion level from inspection robot camera images"
+  },
+  {
+    "id": 84,
+    "category": "image",
+    "problem": "Detect graffiti on public infrastructure from city camera networks"
+  },
+  {
+    "id": 85,
+    "category": "image",
+    "problem": "Classify chest X-ray as normal or showing signs of pulmonary nodules"
+  },
+  {
+    "id": 86,
+    "category": "image",
+    "problem": "Detect unauthorized vehicles in restricted parking zones from CCTV"
+  },
+  {
+    "id": 87,
+    "category": "image",
+    "problem": "Identify tire tread wear level from workshop inspection images"
+  },
+  {
+    "id": 88,
+    "category": "image",
+    "problem": "Classify satellite images to detect illegal open-cast mining activity"
+  },
+  {
+    "id": 89,
+    "category": "image",
+    "problem": "Detect fall events in elderly care home cameras to alert nursing staff"
+  },
+  {
+    "id": 90,
+    "category": "image",
+    "problem": "Build an automated visual inspection system for bottled beverage fill level"
+  },
+  {
+    "id": 91,
+    "category": "image",
+    "problem": "Identify vehicle license plates in low-light parking lot images"
+  },
+  {
+    "id": 92,
+    "category": "image",
+    "problem": "Detect oil spills in coastal aerial drone photographs"
+  },
+  {
+    "id": 93,
+    "category": "image",
+    "problem": "Classify solar panel defect types (crack, soiling, delamination) from thermal images"
+  },
+  {
+    "id": 94,
+    "category": "image",
+    "problem": "Identify weapon presence in crowded public space surveillance footage"
+  },
+  {
+    "id": 95,
+    "category": "image",
+    "problem": "Detect concrete spalling and rebar exposure in bridge inspection images"
+  },
+  {
+    "id": 96,
+    "category": "image",
+    "problem": "Classify microplastic types in microscope images for environmental research"
+  },
+  {
+    "id": 97,
+    "category": "image",
+    "problem": "Detect smoke anomalies in steel plant stack emissions for environmental compliance"
+  },
+  {
+    "id": 98,
+    "category": "image",
+    "problem": "Identify packaging seal integrity failures from high-speed production line cameras"
+  },
+  {
+    "id": 99,
+    "category": "image",
+    "problem": "Classify retail shelf planogram compliance from store walkthrough images"
+  },
+  {
+    "id": 100,
+    "category": "image",
+    "problem": "Build a document orientation and classification system for scanned invoices"
+  },
+  {
+    "id": 101,
+    "category": "text",
+    "problem": "Analyze sentiment in Yelp reviews for our restaurant business to track customer satisfaction trends"
+  },
+  {
+    "id": 102,
+    "category": "text",
+    "problem": "Analyze sentiment in Booking.com reviews for our hotel business to track customer satisfaction trends"
+  },
+  {
+    "id": 103,
+    "category": "text",
+    "problem": "Analyze sentiment in customer feedback forms for our airline business to track customer satisfaction trends"
+  },
+  {
+    "id": 104,
+    "category": "text",
+    "problem": "Analyze sentiment in app store reviews for our software product business to track customer satisfaction trends"
+  },
+  {
+    "id": 105,
+    "category": "text",
+    "problem": "Analyze sentiment in net promoter score surveys for our bank business to track customer satisfaction trends"
+  },
+  {
+    "id": 106,
+    "category": "text",
+    "problem": "Analyze sentiment in patient satisfaction forms for our hospital business to track customer satisfaction trends"
+  },
+  {
+    "id": 107,
+    "category": "text",
+    "problem": "Analyze sentiment in learner reviews for our online course business to track customer satisfaction trends"
+  },
+  {
+    "id": 108,
+    "category": "text",
+    "problem": "Analyze sentiment in subscriber feedback for our streaming service business to track customer satisfaction trends"
+  },
+  {
+    "id": 109,
+    "category": "text",
+    "problem": "Analyze sentiment in member surveys for our gym business to track customer satisfaction trends"
+  },
+  {
+    "id": 110,
+    "category": "text",
+    "problem": "Analyze sentiment in post-purchase reviews for our e-commerce business to track customer satisfaction trends"
+  },
+  {
+    "id": 111,
+    "category": "text",
+    "problem": "Classify email in a inbox as spam or legitimate with confidence score"
+  },
+  {
+    "id": 112,
+    "category": "text",
+    "problem": "Classify SMS in a mobile as spam or legitimate with confidence score"
+  },
+  {
+    "id": 113,
+    "category": "text",
+    "problem": "Classify push notification in a app as spam or legitimate with confidence score"
+  },
+  {
+    "id": 114,
+    "category": "text",
+    "problem": "Classify forum post in a community as spam or legitimate with confidence score"
+  },
+  {
+    "id": 115,
+    "category": "text",
+    "problem": "Classify product review in a marketplace as spam or legitimate with confidence score"
+  },
+  {
+    "id": 116,
+    "category": "text",
+    "problem": "Classify job posting in a recruitment portal as spam or legitimate with confidence score"
+  },
+  {
+    "id": 117,
+    "category": "text",
+    "problem": "Classify comment in a news site as spam or legitimate with confidence score"
+  },
+  {
+    "id": 118,
+    "category": "text",
+    "problem": "Classify social media post in a platform as spam or legitimate with confidence score"
+  },
+  {
+    "id": 119,
+    "category": "text",
+    "problem": "Classify chatbot message in a customer service as spam or legitimate with confidence score"
+  },
+  {
+    "id": 120,
+    "category": "text",
+    "problem": "Classify API call payload in a backend service as spam or legitimate with confidence score"
+  },
+  {
+    "id": 121,
+    "category": "text",
+    "problem": "Classify user intent in a banking chatbot into categories: transfer money, check balance, report fraud"
+  },
+  {
+    "id": 122,
+    "category": "text",
+    "problem": "Classify user intent in a e-commerce assistant into categories: track order, return item, find product"
+  },
+  {
+    "id": 123,
+    "category": "text",
+    "problem": "Classify user intent in a HR chatbot into categories: request leave, check payslip, raise ticket"
+  },
+  {
+    "id": 124,
+    "category": "text",
+    "problem": "Classify user intent in a healthcare bot into categories: book appointment, refill prescription, get test results"
+  },
+  {
+    "id": 125,
+    "category": "text",
+    "problem": "Classify user intent in a travel agent bot into categories: book flight, cancel trip, change seat"
+  },
+  {
+    "id": 126,
+    "category": "text",
+    "problem": "Classify news articles by topic into: politics, sports, technology, finance, entertainment"
+  },
+  {
+    "id": 127,
+    "category": "text",
+    "problem": "Classify support tickets by department into: billing, technical, shipping, returns, account"
+  },
+  {
+    "id": 128,
+    "category": "text",
+    "problem": "Classify legal contracts by type into: NDA, employment, service agreement, lease, partnership"
+  },
+  {
+    "id": 129,
+    "category": "text",
+    "problem": "Classify research papers by field into: ML, biology, physics, economics, medicine"
+  },
+  {
+    "id": 130,
+    "category": "text",
+    "problem": "Classify job descriptions by seniority into: intern, junior, mid, senior, executive"
+  },
+  {
+    "id": 131,
+    "category": "text",
+    "problem": "Detect toxic comments in online gaming chat platform and output severity level"
+  },
+  {
+    "id": 132,
+    "category": "text",
+    "problem": "Detect fake product reviews in e-commerce marketplace and output confidence score"
+  },
+  {
+    "id": 133,
+    "category": "text",
+    "problem": "Detect hate speech in social media posts and output violation category"
+  },
+  {
+    "id": 134,
+    "category": "text",
+    "problem": "Detect PII data in customer emails and output data type found"
+  },
+  {
+    "id": 135,
+    "category": "text",
+    "problem": "Detect plagiarised paragraphs in academic submissions and output similarity score"
+  },
+  {
+    "id": 136,
+    "category": "text",
+    "problem": "Identify the language of customer queries to route them to the right support team"
+  },
+  {
+    "id": 137,
+    "category": "text",
+    "problem": "Detect code-switching (language mixing) in social media posts for NLP preprocessing"
+  },
+  {
+    "id": 138,
+    "category": "text",
+    "problem": "Classify dialect variant of Arabic texts for regional content moderation"
+  },
+  {
+    "id": 139,
+    "category": "text",
+    "problem": "Extract named entities (company, person, date, location) from financial news articles"
+  },
+  {
+    "id": 140,
+    "category": "text",
+    "problem": "Classify patient discharge summaries into primary diagnosis categories for hospital billing"
+  },
+  {
+    "id": 141,
+    "category": "text",
+    "problem": "Detect urgency level in customer complaint emails to prioritise response queue"
+  },
+  {
+    "id": 142,
+    "category": "text",
+    "problem": "Classify regulatory document sections as compliant or non-compliant with GDPR"
+  },
+  {
+    "id": 143,
+    "category": "text",
+    "problem": "Identify the emotional tone (anger, joy, sadness, fear) in social media posts"
+  },
+  {
+    "id": 144,
+    "category": "text",
+    "problem": "Classify Reddit posts into mental health concern categories for early intervention study"
+  },
+  {
+    "id": 145,
+    "category": "text",
+    "problem": "Detect clickbait headlines in news aggregator feeds"
+  },
+  {
+    "id": 146,
+    "category": "text",
+    "problem": "Classify scientific abstracts by methodology type (experimental, observational, review)"
+  },
+  {
+    "id": 147,
+    "category": "text",
+    "problem": "Identify political bias (left, center, right) in news article text"
+  },
+  {
+    "id": 148,
+    "category": "text",
+    "problem": "Classify legal case descriptions by jurisdiction and case type automatically"
+  },
+  {
+    "id": 149,
+    "category": "text",
+    "problem": "Detect misinformation claims in health-related social media posts"
+  },
+  {
+    "id": 150,
+    "category": "text",
+    "problem": "Route incoming customer emails to the correct agent team based on content"
+  },
+  {
+    "id": 151,
+    "category": "text",
+    "problem": "Classify insurance claim descriptions as fraudulent, suspicious, or legitimate"
+  },
+  {
+    "id": 152,
+    "category": "text",
+    "problem": "Detect aggressive or threatening language in employee communications for HR compliance"
+  },
+  {
+    "id": 153,
+    "category": "text",
+    "problem": "Identify intent signals in e-commerce search queries to personalise results"
+  },
+  {
+    "id": 154,
+    "category": "text",
+    "problem": "Classify financial analyst reports by market sentiment (bullish, bearish, neutral)"
+  },
+  {
+    "id": 155,
+    "category": "text",
+    "problem": "Detect off-topic comments in a focused online community forum"
+  },
+  {
+    "id": 156,
+    "category": "text",
+    "problem": "Classify government policy documents into spending categories automatically"
+  },
+  {
+    "id": 157,
+    "category": "text",
+    "problem": "Extract and classify medication names and dosages from clinical notes"
+  },
+  {
+    "id": 158,
+    "category": "text",
+    "problem": "Identify escalation-worthy messages in live customer support chat transcripts"
+  },
+  {
+    "id": 159,
+    "category": "text",
+    "problem": "Build a system to categorise customer reviews as feature request, bug report, or general praise"
+  },
+  {
+    "id": 160,
+    "category": "text",
+    "problem": "Detect urgency in supply chain disruption news articles for procurement alerts"
+  },
+  {
+    "id": 161,
+    "category": "text",
+    "problem": "Classify Reddit posts about mental health into support-needed vs general discussion"
+  },
+  {
+    "id": 162,
+    "category": "text",
+    "problem": "Identify and classify rhetorical devices in political speeches for media analysis"
+  },
+  {
+    "id": 163,
+    "category": "text",
+    "problem": "Detect and classify phishing email attempts from corporate inbox metadata and body text"
+  },
+  {
+    "id": 164,
+    "category": "text",
+    "problem": "Classify legal deposition transcripts into question type categories for paralegal workflow"
+  },
+  {
+    "id": 165,
+    "category": "text",
+    "problem": "Identify the formality level of written text to assist proofreading tools"
+  },
+  {
+    "id": 166,
+    "category": "text",
+    "problem": "Classify movie scripts by genre from the first act dialogue"
+  },
+  {
+    "id": 167,
+    "category": "text",
+    "problem": "Detect and flag PII in customer service transcripts for GDPR compliance"
+  },
+  {
+    "id": 168,
+    "category": "text",
+    "problem": "Build a multi-label classifier for scientific paper abstracts — one paper can span multiple topics"
+  },
+  {
+    "id": 169,
+    "category": "text",
+    "problem": "Classify customer churn reason from exit survey free-text responses"
+  },
+  {
+    "id": 170,
+    "category": "text",
+    "problem": "Detect code quality issues in GitHub issue descriptions (bug, enhancement, question)"
+  },
+  {
+    "id": 171,
+    "category": "text",
+    "problem": "Identify sarcasm and irony in tweets to improve sentiment analysis accuracy"
+  },
+  {
+    "id": 172,
+    "category": "text",
+    "problem": "Classify employee performance review texts into strengths and improvement areas"
+  },
+  {
+    "id": 173,
+    "category": "text",
+    "problem": "Detect language used to manipulate or coerce in online communications"
+  },
+  {
+    "id": 174,
+    "category": "text",
+    "problem": "Classify medical forum posts by medical specialty for routing to expert responders"
+  },
+  {
+    "id": 175,
+    "category": "text",
+    "problem": "Identify emotional support seeking in text messages for mental wellness app"
+  },
+  {
+    "id": 176,
+    "category": "text",
+    "problem": "Classify startup pitch deck descriptions by market category for VC portfolio matching"
+  },
+  {
+    "id": 177,
+    "category": "text",
+    "problem": "Detect and categorize financial jargon in analyst calls for retail investor summaries"
+  },
+  {
+    "id": 178,
+    "category": "text",
+    "problem": "Classify podcast transcript segments by topic for auto-chapter generation"
+  },
+  {
+    "id": 179,
+    "category": "text",
+    "problem": "Detect product defect mentions in app store reviews and link to product SKU"
+  },
+  {
+    "id": 180,
+    "category": "text",
+    "problem": "Classify insurance policy documents into coverage type for premium calculation"
+  },
+  {
+    "id": 181,
+    "category": "text",
+    "problem": "Identify anti-competitive language in business contracts for legal review"
+  },
+  {
+    "id": 182,
+    "category": "text",
+    "problem": "Detect market-moving claims in financial news for trading alert systems"
+  },
+  {
+    "id": 183,
+    "category": "text",
+    "problem": "Build a system that identifies the emotional need behind a user message in a therapy app"
+  },
+  {
+    "id": 184,
+    "category": "text",
+    "problem": "Classify news comment threads by toxicity level and reason for moderation queue"
+  },
+  {
+    "id": 185,
+    "category": "text",
+    "problem": "Detect and extract deadline mentions from project management emails"
+  },
+  {
+    "id": 186,
+    "category": "text",
+    "problem": "Classify social media posts about a brand crisis by type: complaint, support, neutral"
+  },
+  {
+    "id": 187,
+    "category": "text",
+    "problem": "Identify the difficulty level of math problems from their text description"
+  },
+  {
+    "id": 188,
+    "category": "text",
+    "problem": "Build a multi-class fake news detector that outputs category: satire, misleading, fabricated"
+  },
+  {
+    "id": 189,
+    "category": "tabular",
+    "problem": "Detect credit card fraud from tabular features: transaction amount, merchant category, time of day, location mismatch"
+  },
+  {
+    "id": 190,
+    "category": "tabular",
+    "problem": "Detect insurance claim fraud from tabular features: claim amount, policy duration, claimant history, incident type"
+  },
+  {
+    "id": 191,
+    "category": "tabular",
+    "problem": "Detect account takeover fraud from tabular features: login location, device fingerprint, session duration, action sequence"
+  },
+  {
+    "id": 192,
+    "category": "tabular",
+    "problem": "Detect mortgage application fraud from tabular features: income statements, credit score, employment history, property value"
+  },
+  {
+    "id": 193,
+    "category": "tabular",
+    "problem": "Detect tax filing fraud from tabular features: declared income, expense categories, filing history, dependant count"
+  },
+  {
+    "id": 194,
+    "category": "tabular",
+    "problem": "Predict telecom customer churn from usage features: call volume, data usage, contract type, support calls, payment history"
+  },
+  {
+    "id": 195,
+    "category": "tabular",
+    "problem": "Predict SaaS B2B customer churn from usage features: login frequency, feature usage, support tickets, contract value, NPS score"
+  },
+  {
+    "id": 196,
+    "category": "tabular",
+    "problem": "Predict retail subscription box customer churn from usage features: order frequency, returns rate, discount usage, engagement score"
+  },
+  {
+    "id": 197,
+    "category": "tabular",
+    "problem": "Predict streaming platform customer churn from usage features: watch hours, content diversity, inactivity periods, billing method"
+  },
+  {
+    "id": 198,
+    "category": "tabular",
+    "problem": "Predict online banking customer churn from usage features: transaction frequency, product count, tenure, digital engagement score"
+  },
+  {
+    "id": 199,
+    "category": "tabular",
+    "problem": "Predict residential properties prices from features: square footage, postcode, bedrooms, year built, proximity to schools"
+  },
+  {
+    "id": 200,
+    "category": "tabular",
+    "problem": "Predict used car prices prices from features: mileage, make, model, year, service history, number of owners"
+  },
+  {
+    "id": 201,
+    "category": "tabular",
+    "problem": "Predict airline tickets prices from features: route, days before departure, seat class, day of week, baggage"
+  },
+  {
+    "id": 202,
+    "category": "tabular",
+    "problem": "Predict hotel rooms prices from features: star rating, location, season, event proximity, booking lead time"
+  },
+  {
+    "id": 203,
+    "category": "tabular",
+    "problem": "Predict agricultural commodities prices from features: weather index, crop yield forecast, futures contracts, storage costs"
+  },
+  {
+    "id": 204,
+    "category": "tabular",
+    "problem": "Predict employee attrition risk from HR metrics (salary, tenure, performance, satisfaction)"
+  },
+  {
+    "id": 205,
+    "category": "tabular",
+    "problem": "Classify job applicants by hire likelihood from resume features and assessment scores"
+  },
+  {
+    "id": 206,
+    "category": "tabular",
+    "problem": "Predict time-to-fill for open job requisitions from historical hiring data"
+  },
+  {
+    "id": 207,
+    "category": "tabular",
+    "problem": "Segment employees into performance tiers from engagement survey and KPI data"
+  },
+  {
+    "id": 208,
+    "category": "tabular",
+    "problem": "Predict absenteeism rate from workforce demographic and schedule features"
+  },
+  {
+    "id": 209,
+    "category": "tabular",
+    "problem": "Forecast weekly demand for 10,000 SKUs in a retail chain from historical POS data"
+  },
+  {
+    "id": 210,
+    "category": "tabular",
+    "problem": "Predict delivery delays from order features, carrier performance, and weather data"
+  },
+  {
+    "id": 211,
+    "category": "tabular",
+    "problem": "Classify supplier risk level from payment history, financial ratios, and audit scores"
+  },
+  {
+    "id": 212,
+    "category": "tabular",
+    "problem": "Optimise reorder point for warehouse inventory from lead time and demand variability"
+  },
+  {
+    "id": 213,
+    "category": "tabular",
+    "problem": "Detect anomalous shipment events from GPS tracking and weight sensor data"
+  },
+  {
+    "id": 214,
+    "category": "tabular",
+    "problem": "Predict energy consumption per building from occupancy schedule and weather forecasts"
+  },
+  {
+    "id": 215,
+    "category": "tabular",
+    "problem": "Detect abnormal power usage patterns in smart meter data indicating energy theft"
+  },
+  {
+    "id": 216,
+    "category": "tabular",
+    "problem": "Forecast solar panel output from historical irradiance, temperature, and panel age"
+  },
+  {
+    "id": 217,
+    "category": "tabular",
+    "problem": "Classify industrial equipment health from vibration, temperature, and current readings"
+  },
+  {
+    "id": 218,
+    "category": "tabular",
+    "problem": "Predict grid load for the next 24 hours from historical demand and weather data"
+  },
+  {
+    "id": 219,
+    "category": "tabular",
+    "problem": "Predict 30-day hospital readmission risk from patient vitals, diagnosis codes, and LOS"
+  },
+  {
+    "id": 220,
+    "category": "tabular",
+    "problem": "Classify patient risk tier for chronic disease management from EHR structured data"
+  },
+  {
+    "id": 221,
+    "category": "tabular",
+    "problem": "Predict ICU length of stay from admission lab results and patient demographics"
+  },
+  {
+    "id": 222,
+    "category": "tabular",
+    "problem": "Detect sepsis onset early from nurse observation charts and vital sign time series"
+  },
+  {
+    "id": 223,
+    "category": "tabular",
+    "problem": "Identify patients at high risk of medication non-adherence from pharmacy fill history"
+  },
+  {
+    "id": 224,
+    "category": "tabular",
+    "problem": "Predict loan default probability from credit bureau features and application data"
+  },
+  {
+    "id": 225,
+    "category": "tabular",
+    "problem": "Score customer creditworthiness for BNPL approval from transaction behaviour"
+  },
+  {
+    "id": 226,
+    "category": "tabular",
+    "problem": "Detect money laundering patterns in wire transfer network graph features"
+  },
+  {
+    "id": 227,
+    "category": "tabular",
+    "problem": "Forecast monthly revenue for SME clients from bank transaction history"
+  },
+  {
+    "id": 228,
+    "category": "tabular",
+    "problem": "Classify investment portfolio risk from holding allocation and market beta features"
+  },
+  {
+    "id": 229,
+    "category": "tabular",
+    "problem": "Predict customer lifetime value from first-30-day behaviour features in e-commerce"
+  },
+  {
+    "id": 230,
+    "category": "tabular",
+    "problem": "Classify email campaign send-time for maximum open rate per subscriber segment"
+  },
+  {
+    "id": 231,
+    "category": "tabular",
+    "problem": "Predict cross-sell probability for product bundles from purchase history"
+  },
+  {
+    "id": 232,
+    "category": "tabular",
+    "problem": "Segment users into persona groups from app behaviour and demographic features"
+  },
+  {
+    "id": 233,
+    "category": "tabular",
+    "problem": "Build a propensity model to predict which free trial users convert to paid"
+  },
+  {
+    "id": 234,
+    "category": "tabular",
+    "problem": "Detect anomalous sensor readings in a water treatment plant from IoT time-series data"
+  },
+  {
+    "id": 235,
+    "category": "tabular",
+    "problem": "Predict equipment failure 7 days in advance from turbine sensor readings"
+  },
+  {
+    "id": 236,
+    "category": "tabular",
+    "problem": "Classify restaurant health inspection outcomes from feature data before on-site visit"
+  },
+  {
+    "id": 237,
+    "category": "tabular",
+    "problem": "Forecast foot traffic for retail stores from weather, local events, and seasonality features"
+  },
+  {
+    "id": 238,
+    "category": "tabular",
+    "problem": "Build a pricing model for dynamic room allocation in co-working spaces"
+  },
+  {
+    "id": 239,
+    "category": "tabular",
+    "problem": "Predict student dropout risk from LMS engagement features and grade history"
+  },
+  {
+    "id": 240,
+    "category": "tabular",
+    "problem": "Classify crop insurance claim validity from remote sensing and weather station features"
+  },
+  {
+    "id": 241,
+    "category": "tabular",
+    "problem": "Rank job candidates by role fit score from structured interview scorecard data"
+  },
+  {
+    "id": 242,
+    "category": "tabular",
+    "problem": "Detect early signs of financial distress in SMEs from accounting ratio time series"
+  },
+  {
+    "id": 243,
+    "category": "tabular",
+    "problem": "Predict taxi demand by zone and hour from historical trip and weather data"
+  },
+  {
+    "id": 244,
+    "category": "tabular",
+    "problem": "I have a CSV of 500,000 mortgage applications — predict which ones will default within 2 years"
+  },
+  {
+    "id": 245,
+    "category": "tabular",
+    "problem": "Build a model to classify customer support tickets by priority from structured metadata"
+  },
+  {
+    "id": 246,
+    "category": "tabular",
+    "problem": "Predict which B2B leads will close in the next 30 days from CRM activity features"
+  },
+  {
+    "id": 247,
+    "category": "tabular",
+    "problem": "Detect fraudulent expense claims from employee reimbursement submission features"
+  },
+  {
+    "id": 248,
+    "category": "tabular",
+    "problem": "Build a model to rank products by expected sell-through rate for inventory planning"
+  },
+  {
+    "id": 249,
+    "category": "tabular",
+    "problem": "Predict patient no-show rate for outpatient clinic appointments from historical data"
+  },
+  {
+    "id": 250,
+    "category": "tabular",
+    "problem": "Forecast hotel occupancy rate for the next 90 days from booking pace and market data"
+  },
+  {
+    "id": 251,
+    "category": "tabular",
+    "problem": "Classify construction projects by on-time delivery risk from bid and contractor features"
+  },
+  {
+    "id": 252,
+    "category": "tabular",
+    "problem": "Predict battery degradation rate from electric vehicle usage telemetry"
+  },
+  {
+    "id": 253,
+    "category": "tabular",
+    "problem": "Build a model to classify social housing applications by urgency from structured form data"
+  },
+  {
+    "id": 254,
+    "category": "tabular",
+    "problem": "Predict which warehouse pick orders will require manual intervention from routing features"
+  },
+  {
+    "id": 255,
+    "category": "tabular",
+    "problem": "Detect network equipment that is likely to fail in the next 48 hours from SNMP polling data"
+  },
+  {
+    "id": 256,
+    "category": "tabular",
+    "problem": "Build a model to score compliance risk of financial advisers from activity log features"
+  },
+  {
+    "id": 257,
+    "category": "tabular",
+    "problem": "Predict the outcome of clinical trials Phase II from early biomarker data"
+  },
+  {
+    "id": 258,
+    "category": "tabular",
+    "problem": "Classify online marketplace sellers by fraud risk from account and listing features"
+  },
+  {
+    "id": 259,
+    "category": "tabular",
+    "problem": "Detect tax evasion patterns from structured company financial filings data"
+  },
+  {
+    "id": 260,
+    "category": "tabular",
+    "problem": "Predict production yield for semiconductor wafers from process parameter CSV data"
+  },
+  {
+    "id": 261,
+    "category": "tabular",
+    "problem": "Build a predictive maintenance model for HVAC systems from service history and sensor data"
+  },
+  {
+    "id": 262,
+    "category": "tabular",
+    "problem": "Classify bank transactions into spending categories for personal finance app"
+  },
+  {
+    "id": 263,
+    "category": "tabular",
+    "problem": "Predict concert ticket demand for new artists from streaming and social media features"
+  },
+  {
+    "id": 264,
+    "category": "tabular",
+    "problem": "Detect billing errors in telecom invoices from call detail record CSV data"
+  },
+  {
+    "id": 265,
+    "category": "tabular",
+    "problem": "Build a model to predict job offer acceptance rate from candidate profile features"
+  },
+  {
+    "id": 266,
+    "category": "tabular",
+    "problem": "Classify customer complaints by root cause category from structured CRM fields"
+  },
+  {
+    "id": 267,
+    "category": "tabular",
+    "problem": "Predict crop irrigation need for the next week from soil moisture sensor time series"
+  },
+  {
+    "id": 268,
+    "category": "tabular",
+    "problem": "Detect anomalous trading activity from equity order book features in real time"
+  },
+  {
+    "id": 269,
+    "category": "tabular",
+    "problem": "Build a price elasticity model for subscription plans from historical pricing experiments"
+  },
+  {
+    "id": 270,
+    "category": "tabular",
+    "problem": "Predict time to resolution for IT support tickets from queue and agent features"
+  },
+  {
+    "id": 271,
+    "category": "tabular",
+    "problem": "Classify manufacturing batches as pass or fail from process control chart metrics"
+  },
+  {
+    "id": 272,
+    "category": "tabular",
+    "problem": "Predict the net revenue impact of promotional discounts from customer segment features"
+  },
+  {
+    "id": 273,
+    "category": "tabular",
+    "problem": "Detect insurance policy premium leakage from underwriting attribute features"
+  },
+  {
+    "id": 274,
+    "category": "audio",
+    "problem": "Transcribe and classify customer service call recordings by issue type and urgency"
+  },
+  {
+    "id": 275,
+    "category": "audio",
+    "problem": "Detect machine failure sounds from factory floor audio streams and alert maintenance"
+  },
+  {
+    "id": 276,
+    "category": "audio",
+    "problem": "Classify music genres from 30-second audio clips for streaming recommendation engine"
+  },
+  {
+    "id": 277,
+    "category": "audio",
+    "problem": "Identify speaker identity from voice recordings for call-centre authentication"
+  },
+  {
+    "id": 278,
+    "category": "audio",
+    "problem": "Detect baby crying vs background noise in smart baby monitor audio"
+  },
+  {
+    "id": 279,
+    "category": "audio",
+    "problem": "Classify environmental sounds (traffic, rain, construction, birdsong) in city audio sensors"
+  },
+  {
+    "id": 280,
+    "category": "audio",
+    "problem": "Detect language spoken in a customer call to route to the correct language support team"
+  },
+  {
+    "id": 281,
+    "category": "audio",
+    "problem": "Identify emotion in call centre agent voice (frustrated, calm, happy) for coaching"
+  },
+  {
+    "id": 282,
+    "category": "audio",
+    "problem": "Detect gunshot sounds vs fireworks in urban surveillance audio for safety alerts"
+  },
+  {
+    "id": 283,
+    "category": "audio",
+    "problem": "Classify engine sounds in automotive diagnostics to predict mechanical faults"
+  },
+  {
+    "id": 284,
+    "category": "audio",
+    "problem": "Build a keyword spotting system to detect 'help' and 'emergency' in elderly care audio"
+  },
+  {
+    "id": 285,
+    "category": "audio",
+    "problem": "Detect anomalous sounds in wind turbine audio recordings for predictive maintenance"
+  },
+  {
+    "id": 286,
+    "category": "audio",
+    "problem": "Identify animal species from field recording audio for biodiversity surveys"
+  },
+  {
+    "id": 287,
+    "category": "audio",
+    "problem": "Classify snoring patterns from bedroom microphone audio for sleep apnea screening"
+  },
+  {
+    "id": 288,
+    "category": "audio",
+    "problem": "Detect cough events in public space audio to monitor respiratory illness spread"
+  },
+  {
+    "id": 289,
+    "category": "audio",
+    "problem": "Build a voice activity detection system to filter silence from conference call recordings"
+  },
+  {
+    "id": 290,
+    "category": "audio",
+    "problem": "Classify music instrument types from isolated audio tracks for session musician matching"
+  },
+  {
+    "id": 291,
+    "category": "audio",
+    "problem": "Detect pipeline leak sounds from underground acoustic sensor data"
+  },
+  {
+    "id": 292,
+    "category": "audio",
+    "problem": "Identify and classify DTMF tones in call recordings for IVR quality analysis"
+  },
+  {
+    "id": 293,
+    "category": "audio",
+    "problem": "Build an audio fingerprinting system to detect pirated music in uploaded content"
+  },
+  {
+    "id": 294,
+    "category": "audio",
+    "problem": "Detect stress levels in pilot voice communication from air traffic control recordings"
+  },
+  {
+    "id": 295,
+    "category": "audio",
+    "problem": "Classify the type of crowd noise (chanting, booing, cheering) in sports event audio"
+  },
+  {
+    "id": 296,
+    "category": "audio",
+    "problem": "Identify speaker age group and gender from short voice sample for demographics study"
+  },
+  {
+    "id": 297,
+    "category": "audio",
+    "problem": "Detect vehicle type (motorcycle, truck, bus, car) from urban traffic audio sensors"
+  },
+  {
+    "id": 298,
+    "category": "audio",
+    "problem": "Build a system to detect and classify respiratory wheeze and crackle in lung auscultation audio"
+  },
+  {
+    "id": 299,
+    "category": "audio",
+    "problem": "Classify alarm types (fire, intrusion, medical) in building management system audio feeds"
+  },
+  {
+    "id": 300,
+    "category": "audio",
+    "problem": "Detect deception cues in voice stress analysis for interview screening"
+  },
+  {
+    "id": 301,
+    "category": "audio",
+    "problem": "Identify accent region from English speech sample for market research segmentation"
+  },
+  {
+    "id": 302,
+    "category": "audio",
+    "problem": "Build a music mood classifier (energetic, calm, sad, happy) for playlist generation"
+  },
+  {
+    "id": 303,
+    "category": "audio",
+    "problem": "Detect voice commands in noisy kitchen environment for smart appliance control"
+  },
+  {
+    "id": 304,
+    "category": "audio",
+    "problem": "Classify industrial pump audio as normal, cavitation, or bearing failure"
+  },
+  {
+    "id": 305,
+    "category": "audio",
+    "problem": "Build a system to identify when a child is being bullied from playground audio"
+  },
+  {
+    "id": 306,
+    "category": "audio",
+    "problem": "Detect music tempo and key from raw audio for DJ mixing software"
+  },
+  {
+    "id": 307,
+    "category": "audio",
+    "problem": "Classify HVAC system noise as normal operation or fault condition"
+  },
+  {
+    "id": 308,
+    "category": "audio",
+    "problem": "Identify language code-switching events in multilingual classroom audio recordings"
+  },
+  {
+    "id": 309,
+    "category": "audio",
+    "problem": "Build a system to detect unauthorised recording devices in meeting rooms from audio sweep"
+  },
+  {
+    "id": 310,
+    "category": "audio",
+    "problem": "Classify TV programme genre from audio-only broadcast stream"
+  },
+  {
+    "id": 311,
+    "category": "audio",
+    "problem": "Detect and count overlapping speakers in podcast recordings for transcript alignment"
+  },
+  {
+    "id": 312,
+    "category": "audio",
+    "problem": "Build a sound event detection system for smart home that identifies doorbell, phone, baby"
+  },
+  {
+    "id": 313,
+    "category": "audio",
+    "problem": "Classify bird song types from citizen science audio recordings for ornithology dataset"
+  },
+  {
+    "id": 314,
+    "category": "audio",
+    "problem": "Detect cardiac murmur vs normal heart sounds from digital stethoscope audio"
+  },
+  {
+    "id": 315,
+    "category": "audio",
+    "problem": "Identify drill bit wear state from CNC machine audio in real time"
+  },
+  {
+    "id": 316,
+    "category": "audio",
+    "problem": "Build an audio anomaly detector for server room cooling systems"
+  },
+  {
+    "id": 317,
+    "category": "audio",
+    "problem": "Classify music era (60s, 70s, 80s, 90s, 2000s) from short audio clip for DJ tools"
+  },
+  {
+    "id": 318,
+    "category": "audio",
+    "problem": "Detect spoken numbers in noisy environments for real-time score keeping"
+  },
+  {
+    "id": 319,
+    "category": "audio",
+    "problem": "Identify and classify audio events in a restaurant (laughter, dishes, music) for ambiance study"
+  },
+  {
+    "id": 320,
+    "category": "audio",
+    "problem": "Build a voice quality scoring model for VOIP call monitoring"
+  },
+  {
+    "id": 321,
+    "category": "audio",
+    "problem": "Classify speech intelligibility level from audio samples for hearing aid calibration"
+  },
+  {
+    "id": 322,
+    "category": "audio",
+    "problem": "Detect road surface type (asphalt, gravel, cobblestone) from vehicle suspension microphone"
+  },
+  {
+    "id": 323,
+    "category": "audio",
+    "problem": "Build a wake-word detection system for embedded IoT devices with low false-positive rate"
+  },
+  {
+    "id": 324,
+    "category": "audio",
+    "problem": "Classify the emotional state of an audience from applause and reaction audio"
+  },
+  {
+    "id": 325,
+    "category": "audio",
+    "problem": "Detect and classify aircraft engine anomalies from cockpit audio recordings"
+  },
+  {
+    "id": 326,
+    "category": "audio",
+    "problem": "Build a system to detect when a musician is out of tune from ensemble recording audio"
+  },
+  {
+    "id": 327,
+    "category": "audio",
+    "problem": "Classify SONAR pings in underwater acoustic data for submarine detection"
+  },
+  {
+    "id": 328,
+    "category": "audio",
+    "problem": "Detect and alert on door slamming, glass breaking, and shouting in domestic audio"
+  },
+  {
+    "id": 329,
+    "category": "audio",
+    "problem": "Build a model to predict speech recognition error rate from acoustic environment features"
+  },
+  {
+    "id": 330,
+    "category": "audio",
+    "problem": "Classify Foley sound effects in film production by category for asset management"
+  },
+  {
+    "id": 331,
+    "category": "audio",
+    "problem": "Detect infant speech milestones from caregiver recordings for developmental screening"
+  },
+  {
+    "id": 332,
+    "category": "audio",
+    "problem": "Build an automatic speech recognition fine-tuning dataset from domain-specific audio"
+  },
+  {
+    "id": 333,
+    "category": "audio",
+    "problem": "Classify audio quality issues (clipping, noise, echo) from recorded podcast episodes"
+  },
+  {
+    "id": 334,
+    "category": "audio",
+    "problem": "Detect and segment speaker turns in long-form interview recordings for transcript generation"
+  },
+  {
+    "id": 335,
+    "category": "audio",
+    "problem": "Build a music cover song identification system from audio fingerprints"
+  },
+  {
+    "id": 336,
+    "category": "audio",
+    "problem": "Classify electroencephalogram (EEG) audio representations by brain state"
+  },
+  {
+    "id": 337,
+    "category": "audio",
+    "problem": "Detect poaching activity from gunshot sounds in protected forest audio sensors"
+  },
+  {
+    "id": 338,
+    "category": "audio",
+    "problem": "Build a system that classifies music difficulty level from instrument audio for learning apps"
+  },
+  {
+    "id": 339,
+    "category": "audio",
+    "problem": "Identify and track individual whale calls in ocean acoustic monitoring data"
+  },
+  {
+    "id": 340,
+    "category": "audio",
+    "problem": "Detect breathing irregularities in ICU patient audio for early warning system"
+  },
+  {
+    "id": 341,
+    "category": "audio",
+    "problem": "Classify language fluency level from speech sample for language learning platform"
+  },
+  {
+    "id": 342,
+    "category": "audio",
+    "problem": "Build a real-time audio event detection pipeline for smart city infrastructure"
+  },
+  {
+    "id": 343,
+    "category": "audio",
+    "problem": "Identify spoken product model numbers from customer service call audio"
+  },
+  {
+    "id": 344,
+    "category": "audio",
+    "problem": "Detect audio spoofing attacks (replay, TTS synthesis) for anti-spoofing voice biometrics"
+  },
+  {
+    "id": 345,
+    "category": "audio",
+    "problem": "Classify underwater noise sources (ship, sonar, biological) in maritime sensor data"
+  },
+  {
+    "id": 346,
+    "category": "audio",
+    "problem": "Build a system to score pronunciation accuracy in language learning app from audio"
+  },
+  {
+    "id": 347,
+    "category": "audio",
+    "problem": "Detect and classify audio-based social engineering attacks in call centre recordings"
+  },
+  {
+    "id": 348,
+    "category": "audio",
+    "problem": "Identify vocal health issues (nodules, polyps) from voice recording features"
+  },
+  {
+    "id": 349,
+    "category": "audio",
+    "problem": "Build an emergency siren detector for autonomous vehicle audio perception system"
+  },
+  {
+    "id": 350,
+    "category": "audio",
+    "problem": "Classify music listener engagement level from audio interaction data"
+  },
+  {
+    "id": 351,
+    "category": "audio",
+    "problem": "Detect alcohol intoxication from voice characteristics in roadside sobriety screening"
+  },
+  {
+    "id": 352,
+    "category": "audio",
+    "problem": "Build a model to predict music chart performance from audio features at release"
+  },
+  {
+    "id": 353,
+    "category": "audio",
+    "problem": "Classify factory noise zones by decibel level and frequency profile for worker safety"
+  },
+  {
+    "id": 354,
+    "category": "audio",
+    "problem": "Detect infant colic patterns from crying audio for parenting support app"
+  },
+  {
+    "id": 355,
+    "category": "audio",
+    "problem": "Build a speaker diarisation system for multi-party podcast episode transcription"
+  },
+  {
+    "id": 356,
+    "category": "audio",
+    "problem": "Classify climate conditions from insect sound recordings for entomological study"
+  },
+  {
+    "id": 357,
+    "category": "audio",
+    "problem": "Detect and extract speech from cockpit voice recorder under heavy background noise"
+  },
+  {
+    "id": 358,
+    "category": "audio",
+    "problem": "Build an audio-based gate control system that opens only for authorised voice commands"
+  },
+  {
+    "id": 359,
+    "category": "audio",
+    "problem": "Classify public transport announcement audio by urgency and information type"
+  },
+  {
+    "id": 360,
+    "category": "audio",
+    "problem": "Identify the instrument playing melody in polyphonic music for music education tools"
+  },
+  {
+    "id": 361,
+    "category": "audio",
+    "problem": "Detect structural resonance anomalies from vibration audio in bridge monitoring"
+  },
+  {
+    "id": 362,
+    "category": "audio",
+    "problem": "Build a speech emotion recognition model robust to background noise in call centres"
+  },
+  {
+    "id": 363,
+    "category": "audio",
+    "problem": "Classify cooking sounds (sizzling, boiling, chopping) from kitchen microphone for smart recipes"
+  },
+  {
+    "id": 364,
+    "category": "audio",
+    "problem": "Detect and count individual voices in crowd audio for event capacity management"
+  },
+  {
+    "id": 365,
+    "category": "audio",
+    "problem": "Build a real-time laughing vs crying classifier for infant care nursery camera audio"
+  },
+  {
+    "id": 366,
+    "category": "audio",
+    "problem": "Classify breathing effort level from respiratory audio for post-operative patient monitoring"
+  },
+  {
+    "id": 367,
+    "category": "audio",
+    "problem": "Detect firearm type from gunshot audio in law enforcement ballistic analysis"
+  },
+  {
+    "id": 368,
+    "category": "audio",
+    "problem": "Build a music synchronisation system that aligns audio to video using beat detection"
+  },
+  {
+    "id": 369,
+    "category": "audio",
+    "problem": "Classify HVAC compressor state from acoustic emission sensor data"
+  },
+  {
+    "id": 370,
+    "category": "audio",
+    "problem": "Detect mispronounced words in student reading aloud sessions for literacy apps"
+  },
+  {
+    "id": 371,
+    "category": "audio",
+    "problem": "Build a system to identify speaking turns and interruptions in negotiation recordings"
+  },
+  {
+    "id": 372,
+    "category": "audio",
+    "problem": "Classify sports game highlight moments from broadcast audio for automated video editing"
+  },
+  {
+    "id": 373,
+    "category": "audio",
+    "problem": "Detect transformer hum anomalies from power grid audio monitoring for fault prediction"
+  },
+  {
+    "id": 374,
+    "category": "multimodal",
+    "problem": "Classify product listings as genuine or misleading using both title text and product image"
+  },
+  {
+    "id": 375,
+    "category": "multimodal",
+    "problem": "Generate and validate image captions for accessibility compliance on a news website"
+  },
+  {
+    "id": 376,
+    "category": "multimodal",
+    "problem": "Verify that clothing product images match their size, colour, and material text description"
+  },
+  {
+    "id": 377,
+    "category": "multimodal",
+    "problem": "Detect hateful content in social media posts combining image and caption together"
+  },
+  {
+    "id": 378,
+    "category": "multimodal",
+    "problem": "Classify restaurant menu item as vegan-friendly using dish photo and ingredient text"
+  },
+  {
+    "id": 379,
+    "category": "multimodal",
+    "problem": "Identify medical condition from patient-submitted photo plus symptom description text"
+  },
+  {
+    "id": 380,
+    "category": "multimodal",
+    "problem": "Build a visual question answering system for customer product queries on e-commerce site"
+  },
+  {
+    "id": 381,
+    "category": "multimodal",
+    "problem": "Classify job advertisement legitimacy using company logo image and text description"
+  },
+  {
+    "id": 382,
+    "category": "multimodal",
+    "problem": "Detect brand logo usage violations by comparing image with registered trademark text data"
+  },
+  {
+    "id": 383,
+    "category": "multimodal",
+    "problem": "Classify academic paper relevance from both abstract text and figure images"
+  },
+  {
+    "id": 384,
+    "category": "multimodal",
+    "problem": "Build a content safety filter that analyses image and accompanying tweet text together"
+  },
+  {
+    "id": 385,
+    "category": "multimodal",
+    "problem": "Classify fashion outfit style from clothing item images and styling notes text"
+  },
+  {
+    "id": 386,
+    "category": "multimodal",
+    "problem": "Identify counterfeit product listings by comparing product image with known authentic item"
+  },
+  {
+    "id": 387,
+    "category": "multimodal",
+    "problem": "Build a recipe recommendation system using dish photo and ingredient list text"
+  },
+  {
+    "id": 388,
+    "category": "multimodal",
+    "problem": "Classify real estate listings by price tier using property photos and description text"
+  },
+  {
+    "id": 389,
+    "category": "multimodal",
+    "problem": "Detect plagiarised scientific figures by matching image content with source paper text"
+  },
+  {
+    "id": 390,
+    "category": "multimodal",
+    "problem": "Build a visual sentiment analysis system using product unboxing video frames and review text"
+  },
+  {
+    "id": 391,
+    "category": "multimodal",
+    "problem": "Classify vehicle damage severity from photo and written incident report for insurance"
+  },
+  {
+    "id": 392,
+    "category": "multimodal",
+    "problem": "Identify political advertisement bias using image content and text overlay together"
+  },
+  {
+    "id": 393,
+    "category": "multimodal",
+    "problem": "Build a document classification system using scanned form image and extracted OCR text"
+  },
+  {
+    "id": 394,
+    "category": "multimodal",
+    "problem": "Detect fake profile accounts by analysing profile photo and bio text together"
+  },
+  {
+    "id": 395,
+    "category": "multimodal",
+    "problem": "Classify event photos by event type using image and caption metadata"
+  },
+  {
+    "id": 396,
+    "category": "multimodal",
+    "problem": "Build a travel recommendation system using destination photos and user preference text"
+  },
+  {
+    "id": 397,
+    "category": "multimodal",
+    "problem": "Identify unsafe food using photo and ingredient label text for allergy detection"
+  },
+  {
+    "id": 398,
+    "category": "multimodal",
+    "problem": "Classify art pieces by period and style using painting image and museum description text"
+  },
+  {
+    "id": 399,
+    "category": "multimodal",
+    "problem": "Build an automated document verification system matching ID photo with form text"
+  },
+  {
+    "id": 400,
+    "category": "multimodal",
+    "problem": "Detect misleading news by comparing article headline text with embedded image content"
+  },
+  {
+    "id": 401,
+    "category": "multimodal",
+    "problem": "Classify social media influencer content category using post image and caption text"
+  },
+  {
+    "id": 402,
+    "category": "multimodal",
+    "problem": "Build a smart home product search using sketch image and natural language description"
+  },
+  {
+    "id": 403,
+    "category": "multimodal",
+    "problem": "Identify insurance claim fraud using accident scene photo and claimant statement text"
+  },
+  {
+    "id": 404,
+    "category": "multimodal",
+    "problem": "Classify satellite imagery with accompanying weather data text for disaster response triage"
+  },
+  {
+    "id": 405,
+    "category": "multimodal",
+    "problem": "Build a recruitment screening system using candidate headshot photo and CV text"
+  },
+  {
+    "id": 406,
+    "category": "multimodal",
+    "problem": "Detect unsafe products by matching product photo with safety data sheet text"
+  },
+  {
+    "id": 407,
+    "category": "multimodal",
+    "problem": "Classify medical imaging reports by urgency using scan image and radiologist note text"
+  },
+  {
+    "id": 408,
+    "category": "multimodal",
+    "problem": "Build a vehicle inspection system using damage photo and mechanic assessment text report"
+  },
+  {
+    "id": 409,
+    "category": "multimodal",
+    "problem": "Identify crop disease using field drone image and agronomist notes text"
+  },
+  {
+    "id": 410,
+    "category": "multimodal",
+    "problem": "Classify social commerce product quality using user-submitted photo and description text"
+  },
+  {
+    "id": 411,
+    "category": "multimodal",
+    "problem": "Detect brand inconsistencies in marketing materials using image and brand guideline text"
+  },
+  {
+    "id": 412,
+    "category": "multimodal",
+    "problem": "Build a packaging compliance checker using label photo and regulatory requirement text"
+  },
+  {
+    "id": 413,
+    "category": "multimodal",
+    "problem": "Classify hotel room condition from check-in photo and guest complaint text"
+  },
+  {
+    "id": 414,
+    "category": "multimodal",
+    "problem": "Build a system that recommends outfit combinations from wardrobe images and weather text"
+  },
+  {
+    "id": 415,
+    "category": "multimodal",
+    "problem": "Classify petition as genuine or coordinated campaign using signatory photo and text pattern"
+  },
+  {
+    "id": 416,
+    "category": "multimodal",
+    "problem": "Detect copyright infringement in content using uploaded image and licence text metadata"
+  },
+  {
+    "id": 417,
+    "category": "multimodal",
+    "problem": "Build a virtual try-on matching system using user face photo and product description text"
+  },
+  {
+    "id": 418,
+    "category": "multimodal",
+    "problem": "Classify a company pitch deck by sector using slide images and pitch text together"
+  },
+  {
+    "id": 419,
+    "category": "multimodal",
+    "problem": "Detect inconsistencies between product specification text and product photo in listings"
+  },
+  {
+    "id": 420,
+    "category": "multimodal",
+    "problem": "Build a meme toxicity classifier using image template and overlaid text together"
+  },
+  {
+    "id": 421,
+    "category": "multimodal",
+    "problem": "Identify architecture style from building photo and geographic location text data"
+  },
+  {
+    "id": 422,
+    "category": "multimodal",
+    "problem": "Classify prescription drug packaging compliance using label image and drug registration text"
+  },
+  {
+    "id": 423,
+    "category": "multimodal",
+    "problem": "Build an automated fact-checking pipeline using news article image evidence and claim text"
+  },
+  {
+    "id": 424,
+    "category": "multimodal",
+    "problem": "Classify emotion expressed in social media post by combining image emoji and written text"
+  },
+  {
+    "id": 425,
+    "category": "multimodal",
+    "problem": "Detect agricultural land use violations using satellite image and land registry text"
+  },
+  {
+    "id": 426,
+    "category": "multimodal",
+    "problem": "Build a quality control system for printed circuit boards using macro image and BOM text"
+  },
+  {
+    "id": 427,
+    "category": "multimodal",
+    "problem": "Classify product return reason using returned item photo and customer explanation text"
+  },
+  {
+    "id": 428,
+    "category": "multimodal",
+    "problem": "Identify art forgery by comparing artwork image with provenance text documentation"
+  },
+  {
+    "id": 429,
+    "category": "multimodal",
+    "problem": "Build a recommendation engine for second-hand goods using listing photo and description text"
+  },
+  {
+    "id": 430,
+    "category": "multimodal",
+    "problem": "Classify patient wellness using wearable sensor data alongside mood diary text entries"
+  },
+  {
+    "id": 431,
+    "category": "multimodal",
+    "problem": "Detect age-inappropriate content using image scene and associated text captions together"
+  },
+  {
+    "id": 432,
+    "category": "multimodal",
+    "problem": "Build a smart nutrition tracker using meal photo and dietary goal text from user profile"
+  },
+  {
+    "id": 433,
+    "category": "multimodal",
+    "problem": "Classify real vs AI-generated images by combining pixel features with metadata text"
+  },
+  {
+    "id": 434,
+    "category": "multimodal",
+    "problem": "Detect driver distraction using dashcam image frame and CAN bus telemetry text data"
+  },
+  {
+    "id": 435,
+    "category": "multimodal",
+    "problem": "Build a competitive intelligence tool using competitor product image and pricing text"
+  },
+  {
+    "id": 436,
+    "category": "multimodal",
+    "problem": "Classify urban infrastructure damage using street-level image and maintenance request text"
+  },
+  {
+    "id": 437,
+    "category": "multimodal",
+    "problem": "Detect invasive species in nature photos using image and GPS location metadata text"
+  },
+  {
+    "id": 438,
+    "category": "multimodal",
+    "problem": "Build a sign language to text translation system using hand gesture video frames"
+  },
+  {
+    "id": 439,
+    "category": "multimodal",
+    "problem": "Classify wine quality using bottle label photo and sommelier tasting notes text"
+  },
+  {
+    "id": 440,
+    "category": "multimodal",
+    "problem": "Detect animal welfare concerns using farm image and farm management report text"
+  },
+  {
+    "id": 441,
+    "category": "multimodal",
+    "problem": "Build a medical chart understanding system using handwritten form scan and structured EHR text"
+  },
+  {
+    "id": 442,
+    "category": "multimodal",
+    "problem": "Classify safety hazard level using construction site photo and incident report text"
+  },
+  {
+    "id": 443,
+    "category": "multimodal",
+    "problem": "Identify plagiarised design using product image and original designer trademark text"
+  },
+  {
+    "id": 444,
+    "category": "multimodal",
+    "problem": "Build a personalised learning system using student work photo and teacher feedback text"
+  },
+  {
+    "id": 445,
+    "category": "multimodal",
+    "problem": "Classify social media crisis by impact level using trending image and press release text"
+  },
+  {
+    "id": 446,
+    "category": "multimodal",
+    "problem": "Detect manufacturing compliance using product image and engineering specification text"
+  },
+  {
+    "id": 447,
+    "category": "multimodal",
+    "problem": "Build an e-commerce search ranker using product image, title text, and user query text"
+  },
+  {
+    "id": 448,
+    "category": "multimodal",
+    "problem": "Classify graffiti type using photo and neighbourhood demographics text for city planning"
+  },
+  {
+    "id": 449,
+    "category": "multimodal",
+    "problem": "Detect parking violations using CCTV image and parking permit text records"
+  },
+  {
+    "id": 450,
+    "category": "multimodal",
+    "problem": "Build an intelligent form completion system using document scan image and OCR extracted text"
+  },
+  {
+    "id": 451,
+    "category": "multimodal",
+    "problem": "Classify furniture assembly instruction clarity using diagram image and written step text"
+  },
+  {
+    "id": 452,
+    "category": "multimodal",
+    "problem": "Identify suspicious package delivery using doorbell camera image and shipping label text"
+  },
+  {
+    "id": 453,
+    "category": "multimodal",
+    "problem": "Build an automated news photo caption generator with factual accuracy check against article"
+  },
+  {
+    "id": 454,
+    "category": "multimodal",
+    "problem": "Classify disease outbreak reports using epidemiology map image and statistical text summary"
+  },
+  {
+    "id": 455,
+    "category": "multimodal",
+    "problem": "Detect financial chart manipulation using graph image and reported metrics text"
+  },
+  {
+    "id": 456,
+    "category": "multimodal",
+    "problem": "Build a smart warranty claim system using product damage photo and purchase receipt text"
+  },
+  {
+    "id": 457,
+    "category": "multimodal",
+    "problem": "Classify security incident from CCTV image combined with access log text records"
+  },
+  {
+    "id": 458,
+    "category": "multimodal",
+    "problem": "Detect false advertising by matching product image against claimed specifications text"
+  },
+  {
+    "id": 459,
+    "category": "multimodal",
+    "problem": "Build a biodiversity assessment tool using citizen science photo and species description text"
+  },
+  {
+    "id": 460,
+    "category": "multimodal",
+    "problem": "Classify real estate property condition using exterior photo and inspection report text"
+  },
+  {
+    "id": 461,
+    "category": "multimodal",
+    "problem": "Detect vehicle accident fraud using crash site image and police report text together"
+  },
+  {
+    "id": 462,
+    "category": "multimodal",
+    "problem": "Build a personalised recipe difficulty ranker using dish image and chef instructions text"
+  },
+  {
+    "id": 463,
+    "category": "multimodal",
+    "problem": "Classify archaeological artefact period using dig site photo and fieldwork notes text"
+  },
+  {
+    "id": 464,
+    "category": "multimodal",
+    "problem": "Detect deep fake videos by analysing frame image quality and audio transcript text"
+  },
+  {
+    "id": 465,
+    "category": "multimodal",
+    "problem": "Build a smart home security system using camera frame image and motion sensor data text"
+  },
+  {
+    "id": 466,
+    "category": "multimodal",
+    "problem": "Classify environmental pollution level using water sample image and lab report text"
+  },
+  {
+    "id": 467,
+    "category": "multimodal",
+    "problem": "Detect workplace PPE violations using safety camera image and employee shift record text"
+  },
+  {
+    "id": 468,
+    "category": "multimodal",
+    "problem": "Build a market trend predictor using product image trends and search volume text data"
+  },
+  {
+    "id": 469,
+    "category": "multimodal",
+    "problem": "Classify smart meter tamper evidence using meter image and consumption history text"
+  },
+  {
+    "id": 470,
+    "category": "multimodal",
+    "problem": "Detect fraudulent insurance damage claims using photo evidence and claimant statement text"
+  },
+  {
+    "id": 471,
+    "category": "multimodal",
+    "problem": "Build a retail planogram compliance verifier using shelf image and layout specification text"
+  },
+  {
+    "id": 472,
+    "category": "multimodal",
+    "problem": "Classify social media post authenticity using image metadata and posting behaviour text"
+  },
+  {
+    "id": 473,
+    "category": "multimodal",
+    "problem": "Detect counterfeit currency using high-resolution banknote scan and security feature text"
+  },
+  {
+    "id": 474,
+    "category": "medical",
+    "problem": "Detect pneumonia from chest X-ray images with confidence score for radiologist triage"
+  },
+  {
+    "id": 475,
+    "category": "medical",
+    "problem": "Classify brain tumour type (glioma, meningioma, pituitary) from MRI scans"
+  },
+  {
+    "id": 476,
+    "category": "medical",
+    "problem": "Detect malignant melanoma from dermoscopy skin lesion photographs"
+  },
+  {
+    "id": 477,
+    "category": "medical",
+    "problem": "Identify diabetic retinopathy severity grade from retinal fundus photographs"
+  },
+  {
+    "id": 478,
+    "category": "medical",
+    "problem": "Detect COVID-19 from CT scan slices and classify vs other pneumonia"
+  },
+  {
+    "id": 479,
+    "category": "medical",
+    "problem": "Classify bone fracture type and location from X-ray images for orthopaedic triage"
+  },
+  {
+    "id": 480,
+    "category": "medical",
+    "problem": "Detect early-stage lung cancer nodules in low-dose CT scan images"
+  },
+  {
+    "id": 481,
+    "category": "medical",
+    "problem": "Identify glaucoma from optic disc and retinal nerve fibre layer OCT scans"
+  },
+  {
+    "id": 482,
+    "category": "medical",
+    "problem": "Classify histopathology slide tissue as cancerous or benign for pathology lab"
+  },
+  {
+    "id": 483,
+    "category": "medical",
+    "problem": "Detect intracranial haemorrhage in non-contrast head CT for emergency radiology"
+  },
+  {
+    "id": 484,
+    "category": "medical",
+    "problem": "Identify appendicitis from abdominal ultrasound images to reduce unnecessary surgery"
+  },
+  {
+    "id": 485,
+    "category": "medical",
+    "problem": "Classify ECG signals as normal vs arrhythmia type for cardiac monitoring"
+  },
+  {
+    "id": 486,
+    "category": "medical",
+    "problem": "Detect dental cavity and periodontal disease from panoramic dental X-rays"
+  },
+  {
+    "id": 487,
+    "category": "medical",
+    "problem": "Identify prostate cancer Gleason grade from biopsy histology slide images"
+  },
+  {
+    "id": 488,
+    "category": "medical",
+    "problem": "Detect macular degeneration from fundus photographs for ophthalmology screening"
+  },
+  {
+    "id": 489,
+    "category": "medical",
+    "problem": "Classify skin rash type (eczema, psoriasis, rosacea) from dermatology photos"
+  },
+  {
+    "id": 490,
+    "category": "medical",
+    "problem": "Detect spinal cord compression from MRI for neurosurgery prioritisation"
+  },
+  {
+    "id": 491,
+    "category": "medical",
+    "problem": "Identify colon polyp type (adenoma, hyperplastic) from colonoscopy video frames"
+  },
+  {
+    "id": 492,
+    "category": "medical",
+    "problem": "Classify thyroid nodule malignancy risk from ultrasound images"
+  },
+  {
+    "id": 493,
+    "category": "medical",
+    "problem": "Detect breast cancer from mammography images for population screening programme"
+  },
+  {
+    "id": 494,
+    "category": "medical",
+    "problem": "Identify COVID-19 severity from chest X-ray to predict ICU admission need"
+  },
+  {
+    "id": 495,
+    "category": "medical",
+    "problem": "Classify knee cartilage damage grade from MRI for orthopaedic surgery planning"
+  },
+  {
+    "id": 496,
+    "category": "medical",
+    "problem": "Detect retinal detachment from fundus image in diabetic patient screening"
+  },
+  {
+    "id": 497,
+    "category": "medical",
+    "problem": "Classify liver disease stage (fibrosis, cirrhosis) from abdominal ultrasound"
+  },
+  {
+    "id": 498,
+    "category": "medical",
+    "problem": "Detect aortic aneurysm in abdominal CT scan for vascular surgery triage"
+  },
+  {
+    "id": 499,
+    "category": "medical",
+    "problem": "Identify Alzheimer's disease stage from brain PET scan images"
+  },
+  {
+    "id": 500,
+    "category": "medical",
+    "problem": "Classify skin lesion ABCDE features from dermoscopy for melanoma risk scoring"
+  },
+  {
+    "id": 501,
+    "category": "medical",
+    "problem": "Detect pulmonary embolism from CTPA scan in emergency radiology"
+  },
+  {
+    "id": 502,
+    "category": "medical",
+    "problem": "Identify diabetic foot ulcer severity from wound photograph for podiatry"
+  },
+  {
+    "id": 503,
+    "category": "medical",
+    "problem": "Classify sleep apnea severity from polysomnography signal features"
+  },
+  {
+    "id": 504,
+    "category": "medical",
+    "problem": "Detect corneal ulcer from slit-lamp photograph for ophthalmic emergency"
+  },
+  {
+    "id": 505,
+    "category": "medical",
+    "problem": "Identify hip dysplasia in infant X-ray for paediatric orthopaedics"
+  },
+  {
+    "id": 506,
+    "category": "medical",
+    "problem": "Classify cervical cell abnormality type from Pap smear cytology images"
+  },
+  {
+    "id": 507,
+    "category": "medical",
+    "problem": "Detect atelectasis, cardiomegaly, effusion, and pneumonia in chest X-ray multi-label"
+  },
+  {
+    "id": 508,
+    "category": "medical",
+    "problem": "Identify hand bone age from paediatric X-ray for growth assessment"
+  },
+  {
+    "id": 509,
+    "category": "medical",
+    "problem": "Classify liver tumour type from multiphasic CT scan images"
+  },
+  {
+    "id": 510,
+    "category": "medical",
+    "problem": "Detect gallstones from abdominal ultrasound for gastroenterology triage"
+  },
+  {
+    "id": 511,
+    "category": "medical",
+    "problem": "Identify Barrett's oesophagus from endoscopy images for cancer surveillance"
+  },
+  {
+    "id": 512,
+    "category": "medical",
+    "problem": "Classify ADHD vs control from functional MRI connectivity patterns"
+  },
+  {
+    "id": 513,
+    "category": "medical",
+    "problem": "Detect age-related macular degeneration dry vs wet type from OCT scans"
+  },
+  {
+    "id": 514,
+    "category": "medical",
+    "problem": "Identify wound healing stage from serial photograph documentation"
+  },
+  {
+    "id": 515,
+    "category": "medical",
+    "problem": "Classify schizophrenia vs healthy control from structural brain MRI features"
+  },
+  {
+    "id": 516,
+    "category": "medical",
+    "problem": "Detect intracranial aneurysm in MRA scan for neurovascular triage"
+  },
+  {
+    "id": 517,
+    "category": "medical",
+    "problem": "Identify diabetic nephropathy stage from kidney biopsy pathology images"
+  },
+  {
+    "id": 518,
+    "category": "medical",
+    "problem": "Classify bladder cancer invasion depth from cystoscopy images"
+  },
+  {
+    "id": 519,
+    "category": "medical",
+    "problem": "Detect scoliosis and measure Cobb angle from full-spine standing X-ray"
+  },
+  {
+    "id": 520,
+    "category": "medical",
+    "problem": "Identify tuberculosis lesion pattern from chest X-ray in high-burden settings"
+  },
+  {
+    "id": 521,
+    "category": "medical",
+    "problem": "Classify cardiac hypertrophy type from echocardiogram video frames"
+  },
+  {
+    "id": 522,
+    "category": "medical",
+    "problem": "Detect Parkinson's disease from DaTscan nuclear medicine imaging"
+  },
+  {
+    "id": 523,
+    "category": "medical",
+    "problem": "Identify protein expression level in immunohistochemistry slide images"
+  },
+  {
+    "id": 524,
+    "category": "medical",
+    "problem": "Classify benign vs malignant thyroid nodule from fine needle aspiration cytology"
+  },
+  {
+    "id": 525,
+    "category": "medical",
+    "problem": "Detect early cataract formation from anterior segment slit-lamp images"
+  },
+  {
+    "id": 526,
+    "category": "medical",
+    "problem": "Identify placental abnormality from obstetric ultrasound for obstetric triage"
+  },
+  {
+    "id": 527,
+    "category": "medical",
+    "problem": "Classify wound infection vs healing from serial wound photograph analysis"
+  },
+  {
+    "id": 528,
+    "category": "medical",
+    "problem": "Detect ventricular wall motion abnormality from cardiac MRI cine images"
+  },
+  {
+    "id": 529,
+    "category": "medical",
+    "problem": "Identify rib fracture from chest CT for forensic radiology"
+  },
+  {
+    "id": 530,
+    "category": "medical",
+    "problem": "Classify anterior cruciate ligament tear grade from knee MRI images"
+  },
+  {
+    "id": 531,
+    "category": "medical",
+    "problem": "Detect ovarian cyst type from transvaginal ultrasound for gynaecology"
+  },
+  {
+    "id": 532,
+    "category": "medical",
+    "problem": "Identify bone metastasis in skeletal scintigraphy scan for oncology staging"
+  },
+  {
+    "id": 533,
+    "category": "medical",
+    "problem": "Classify fungal skin infection type from clinical dermatology photographs"
+  },
+  {
+    "id": 534,
+    "category": "medical",
+    "problem": "Detect nasal polyp from endoscopic sinus images for ENT surgery planning"
+  },
+  {
+    "id": 535,
+    "category": "medical",
+    "problem": "Identify emphysema severity pattern from HRCT chest scan"
+  },
+  {
+    "id": 536,
+    "category": "medical",
+    "problem": "Classify mitotic figures in histopathology images for tumour grading"
+  },
+  {
+    "id": 537,
+    "category": "medical",
+    "problem": "Detect retinal vein occlusion from fundus photograph for ophthalmology alert"
+  },
+  {
+    "id": 538,
+    "category": "medical",
+    "problem": "Identify abdominal aortic calcification from X-ray for cardiovascular risk scoring"
+  },
+  {
+    "id": 539,
+    "category": "medical",
+    "problem": "Classify vocal fold pathology from laryngoscopy video frames"
+  },
+  {
+    "id": 540,
+    "category": "medical",
+    "problem": "Detect splenic laceration from abdominal CT in trauma emergency imaging"
+  },
+  {
+    "id": 541,
+    "category": "medical",
+    "problem": "Identify neonatal jaundice severity from skin colour photograph"
+  },
+  {
+    "id": 542,
+    "category": "medical",
+    "problem": "Classify chronic obstructive pulmonary disease severity from spirometry features"
+  },
+  {
+    "id": 543,
+    "category": "medical",
+    "problem": "Detect meningioma location and size from gadolinium-enhanced brain MRI"
+  },
+  {
+    "id": 544,
+    "category": "medical",
+    "problem": "Identify subclinical hypothyroidism from thyroid ultrasound and blood test features"
+  },
+  {
+    "id": 545,
+    "category": "medical",
+    "problem": "Classify cartilage lesion grade in shoulder MRI for sports medicine"
+  },
+  {
+    "id": 546,
+    "category": "medical",
+    "problem": "Detect venous thromboembolism risk from lower limb Doppler ultrasound"
+  },
+  {
+    "id": 547,
+    "category": "medical",
+    "problem": "Identify cerebral palsy motor pattern from gait analysis video frames"
+  },
+  {
+    "id": 548,
+    "category": "medical",
+    "problem": "Classify cholangiocarcinoma from MRCP biliary imaging"
+  },
+  {
+    "id": 549,
+    "category": "medical",
+    "problem": "Detect sacral stress fracture from MRI in distance runner for sports medicine"
+  },
+  {
+    "id": 550,
+    "category": "medical",
+    "problem": "Identify retinopathy of prematurity stage from infant fundus images"
+  },
+  {
+    "id": 551,
+    "category": "medical",
+    "problem": "Classify adrenal mass type from CT scan for endocrinology workup"
+  },
+  {
+    "id": 552,
+    "category": "medical",
+    "problem": "Detect facial nerve palsy severity from standardised facial photograph"
+  },
+  {
+    "id": 553,
+    "category": "medical",
+    "problem": "Identify rotator cuff tear from shoulder MRI for orthopaedic planning"
+  },
+  {
+    "id": 554,
+    "category": "medical",
+    "problem": "Classify non-alcoholic fatty liver disease grade from liver biopsy images"
+  },
+  {
+    "id": 555,
+    "category": "medical",
+    "problem": "Detect ovarian hyperstimulation syndrome from pelvic ultrasound"
+  },
+  {
+    "id": 556,
+    "category": "medical",
+    "problem": "Identify temporal lobe epilepsy focus from ictal SPECT brain scan"
+  },
+  {
+    "id": 557,
+    "category": "medical",
+    "problem": "Classify oral cancer stage from clinical photograph for head and neck oncology"
+  },
+  {
+    "id": 558,
+    "category": "medical",
+    "problem": "Detect achilles tendon tear from MRI for sports injury management"
+  },
+  {
+    "id": 559,
+    "category": "medical",
+    "problem": "Identify pulmonary fibrosis pattern type from HRCT for ILD clinic"
+  },
+  {
+    "id": 560,
+    "category": "medical",
+    "problem": "Classify thyroid cancer subtype from surgical resection histopathology images"
+  },
+  {
+    "id": 561,
+    "category": "medical",
+    "problem": "Detect early Parkinson's tremor from wrist accelerometer signal data"
+  },
+  {
+    "id": 562,
+    "category": "medical",
+    "problem": "Identify periventricular leukomalacia in neonatal brain ultrasound"
+  },
+  {
+    "id": 563,
+    "category": "medical",
+    "problem": "Classify haematoma type from head CT for trauma neurosurgery"
+  },
+  {
+    "id": 564,
+    "category": "medical",
+    "problem": "Detect metastatic lymph node involvement from neck CT scan in head-neck cancer"
+  },
+  {
+    "id": 565,
+    "category": "medical",
+    "problem": "Identify Crohn's disease vs ulcerative colitis from colon biopsy histology"
+  },
+  {
+    "id": 566,
+    "category": "medical",
+    "problem": "Classify optic neuritis vs normal from visual evoked potential signals"
+  },
+  {
+    "id": 567,
+    "category": "medical",
+    "problem": "Detect peripheral arterial disease from ankle-brachial index waveform data"
+  },
+  {
+    "id": 568,
+    "category": "medical",
+    "problem": "Identify spinal cord tumour type from whole-spine MRI"
+  },
+  {
+    "id": 569,
+    "category": "medical",
+    "problem": "Classify psoriasis severity PASI score from standardised body photograph"
+  },
+  {
+    "id": 570,
+    "category": "medical",
+    "problem": "Detect ectopic pregnancy from transvaginal ultrasound in emergency gynaecology"
+  },
+  {
+    "id": 571,
+    "category": "medical",
+    "problem": "Identify pneumothorax size from chest X-ray for emergency respiratory triage"
+  },
+  {
+    "id": 572,
+    "category": "medical",
+    "problem": "Classify lymphoma subtype from PET-CT scan for haematology treatment planning"
+  },
+  {
+    "id": 573,
+    "category": "security",
+    "problem": "Detect network intrusion patterns in firewall log data for SOC alert generation"
+  },
+  {
+    "id": 574,
+    "category": "security",
+    "problem": "Classify malware type (ransomware, spyware, trojan) from binary feature extraction"
+  },
+  {
+    "id": 575,
+    "category": "security",
+    "problem": "Detect phishing URLs from URL lexical and host features in real time"
+  },
+  {
+    "id": 576,
+    "category": "security",
+    "problem": "Identify credential stuffing attacks from login event sequence patterns"
+  },
+  {
+    "id": 577,
+    "category": "security",
+    "problem": "Detect DDoS attack patterns from network traffic flow features"
+  },
+  {
+    "id": 578,
+    "category": "security",
+    "problem": "Classify insider threat risk level from employee digital behaviour features"
+  },
+  {
+    "id": 579,
+    "category": "security",
+    "problem": "Detect SQL injection attempts from web application log feature patterns"
+  },
+  {
+    "id": 580,
+    "category": "security",
+    "problem": "Identify cross-site scripting attack payloads from HTTP request features"
+  },
+  {
+    "id": 581,
+    "category": "security",
+    "problem": "Detect anomalous API calls that indicate data exfiltration attempts"
+  },
+  {
+    "id": 582,
+    "category": "security",
+    "problem": "Classify social engineering email types (CEO fraud, invoice scam, HR impersonation)"
+  },
+  {
+    "id": 583,
+    "category": "security",
+    "problem": "Detect bot traffic from user session behavioural biometrics features"
+  },
+  {
+    "id": 584,
+    "category": "security",
+    "problem": "Identify zero-day exploit patterns from sandbox execution log features"
+  },
+  {
+    "id": 585,
+    "category": "security",
+    "problem": "Detect port scanning and reconnaissance activity from NetFlow data"
+  },
+  {
+    "id": 586,
+    "category": "security",
+    "problem": "Classify vulnerability severity from CVE description text for patch prioritisation"
+  },
+  {
+    "id": 587,
+    "category": "security",
+    "problem": "Detect account takeover in real time from login location and device features"
+  },
+  {
+    "id": 588,
+    "category": "security",
+    "problem": "Identify cryptomining malware from CPU and network usage telemetry features"
+  },
+  {
+    "id": 589,
+    "category": "security",
+    "problem": "Detect data breach in progress from egress volume anomaly in DLP log data"
+  },
+  {
+    "id": 590,
+    "category": "security",
+    "problem": "Classify dark web forum posts by threat type for cyber threat intelligence"
+  },
+  {
+    "id": 591,
+    "category": "security",
+    "problem": "Detect brute force password attacks from authentication log features"
+  },
+  {
+    "id": 592,
+    "category": "security",
+    "problem": "Identify malicious PowerShell script behaviour from command-line feature extraction"
+  },
+  {
+    "id": 593,
+    "category": "security",
+    "problem": "Detect lateral movement in enterprise network from authentication graph features"
+  },
+  {
+    "id": 594,
+    "category": "security",
+    "problem": "Classify suspicious email attachment type from file metadata features without opening"
+  },
+  {
+    "id": 595,
+    "category": "security",
+    "problem": "Detect fake news content designed for political manipulation in social media text"
+  },
+  {
+    "id": 596,
+    "category": "security",
+    "problem": "Identify compromised IoT device behaviour from network traffic anomaly features"
+  },
+  {
+    "id": 597,
+    "category": "security",
+    "problem": "Detect command-and-control beacon traffic in DNS query log patterns"
+  },
+  {
+    "id": 598,
+    "category": "security",
+    "problem": "Classify supply chain attack indicators in software build log features"
+  },
+  {
+    "id": 599,
+    "category": "security",
+    "problem": "Detect privilege escalation attempts from Windows event log sequences"
+  },
+  {
+    "id": 600,
+    "category": "security",
+    "problem": "Identify deepfake video from facial landmark and compression artefact features"
+  },
+  {
+    "id": 601,
+    "category": "security",
+    "problem": "Detect keystroke logging malware from typing rhythm biometric features"
+  },
+  {
+    "id": 602,
+    "category": "security",
+    "problem": "Classify ransomware encrypted file extension patterns from file system events"
+  },
+  {
+    "id": 603,
+    "category": "security",
+    "problem": "Detect physical access tailgating events from door sensor and badge log data"
+  },
+  {
+    "id": 604,
+    "category": "security",
+    "problem": "Identify stolen credit card testing patterns from payment gateway transaction features"
+  },
+  {
+    "id": 605,
+    "category": "security",
+    "problem": "Detect vulnerability scanner activity from server log response pattern features"
+  },
+  {
+    "id": 606,
+    "category": "security",
+    "problem": "Classify security alert severity from SIEM event feature aggregation"
+  },
+  {
+    "id": 607,
+    "category": "security",
+    "problem": "Detect SIM swap fraud from mobile network event features in real time"
+  },
+  {
+    "id": 608,
+    "category": "security",
+    "problem": "Identify watering-hole attack indicators from browser telemetry features"
+  },
+  {
+    "id": 609,
+    "category": "security",
+    "problem": "Detect call centre fraud from voice biometrics and account query pattern features"
+  },
+  {
+    "id": 610,
+    "category": "security",
+    "problem": "Classify malicious domain name generation algorithm patterns from DNS query text"
+  },
+  {
+    "id": 611,
+    "category": "security",
+    "problem": "Detect insider data theft from file access pattern and email attachment features"
+  },
+  {
+    "id": 612,
+    "category": "security",
+    "problem": "Identify stolen API key usage from request origin and rate anomaly features"
+  },
+  {
+    "id": 613,
+    "category": "security",
+    "problem": "Detect business email compromise attack patterns from email metadata features"
+  },
+  {
+    "id": 614,
+    "category": "security",
+    "problem": "Classify network traffic as encrypted tunnel evasion vs legitimate VPN usage"
+  },
+  {
+    "id": 615,
+    "category": "security",
+    "problem": "Detect formjacking attack indicators from JavaScript execution behaviour features"
+  },
+  {
+    "id": 616,
+    "category": "security",
+    "problem": "Identify compromised cloud storage bucket from access log anomaly features"
+  },
+  {
+    "id": 617,
+    "category": "security",
+    "problem": "Detect ATM skimmer activation from transaction timing and card read anomaly"
+  },
+  {
+    "id": 618,
+    "category": "security",
+    "problem": "Classify adversarial machine learning attack type from model query pattern features"
+  },
+  {
+    "id": 619,
+    "category": "security",
+    "problem": "Detect rogue wireless access point from network scan and beacon frame features"
+  },
+  {
+    "id": 620,
+    "category": "security",
+    "problem": "Identify synthetic identity fraud from credit application feature inconsistencies"
+  },
+  {
+    "id": 621,
+    "category": "security",
+    "problem": "Detect web scraping bots from request timing, header, and navigation pattern features"
+  },
+  {
+    "id": 622,
+    "category": "security",
+    "problem": "Classify nation-state APT group by attack technique fingerprint from IOC features"
+  },
+  {
+    "id": 623,
+    "category": "edge_case",
+    "problem": "Build a system that makes my business smarter using AI"
+  },
+  {
+    "id": 624,
+    "category": "edge_case",
+    "problem": "Analyze my data and tell me what is interesting in it"
+  },
+  {
+    "id": 625,
+    "category": "edge_case",
+    "problem": "I need a model that works on everything I throw at it"
+  },
+  {
+    "id": 626,
+    "category": "edge_case",
+    "problem": "Detect problems and fix them automatically in real time at massive scale"
+  },
+  {
+    "id": 627,
+    "category": "edge_case",
+    "problem": "Classify everything my users upload whether it is images, text, voice, or files"
+  },
+  {
+    "id": 628,
+    "category": "edge_case",
+    "problem": "Build me the best AI for my startup — I have some user data"
+  },
+  {
+    "id": 629,
+    "category": "edge_case",
+    "problem": "I want AI that understands context and gives smart recommendations"
+  },
+  {
+    "id": 630,
+    "category": "edge_case",
+    "problem": "Create a model that predicts things based on historical patterns"
+  },
+  {
+    "id": 631,
+    "category": "edge_case",
+    "problem": "Build an autonomous agent that monitors my system and takes action"
+  },
+  {
+    "id": 632,
+    "category": "edge_case",
+    "problem": "I need to process large amounts of unstructured data quickly"
+  },
+  {
+    "id": 633,
+    "category": "edge_case",
+    "problem": "Detect anomalies in whatever data my sensors produce"
+  },
+  {
+    "id": 634,
+    "category": "edge_case",
+    "problem": "Build an intelligent assistant that helps users achieve their goals"
+  },
+  {
+    "id": 635,
+    "category": "edge_case",
+    "problem": "Classify incoming data streams in real time with high accuracy"
+  },
+  {
+    "id": 636,
+    "category": "edge_case",
+    "problem": "I need AI that can handle edge cases better than rule-based systems"
+  },
+  {
+    "id": 637,
+    "category": "edge_case",
+    "problem": "Build a recommendation engine that works across all my product lines"
+  },
+  {
+    "id": 638,
+    "category": "edge_case",
+    "problem": "Detect fraud in my system — I have transactional and behavioural data"
+  },
+  {
+    "id": 639,
+    "category": "edge_case",
+    "problem": "I need something that understands my domain and gets smarter over time"
+  },
+  {
+    "id": 640,
+    "category": "edge_case",
+    "problem": "Build an AI system that can explain its decisions to non-technical users"
+  },
+  {
+    "id": 641,
+    "category": "edge_case",
+    "problem": "Classify and route incoming requests from multiple channels automatically"
+  },
+  {
+    "id": 642,
+    "category": "edge_case",
+    "problem": "I need an AI model I can deploy on a low-power edge device"
+  },
+  {
+    "id": 643,
+    "category": "edge_case",
+    "problem": "Build a model that works well even with very limited labelled training data"
+  },
+  {
+    "id": 644,
+    "category": "edge_case",
+    "problem": "Detect and classify events in real-time streaming data from IoT sensors"
+  },
+  {
+    "id": 645,
+    "category": "edge_case",
+    "problem": "I need a general-purpose text plus image understanding model for my platform"
+  },
+  {
+    "id": 646,
+    "category": "edge_case",
+    "problem": "Build a conversational AI that also does structured data analysis"
+  },
+  {
+    "id": 647,
+    "category": "edge_case",
+    "problem": "Predict future outcomes in a complex system with many interacting variables"
+  },
+  {
+    "id": 648,
+    "category": "edge_case",
+    "problem": "I need AI that works across English, Spanish, French, and Mandarin equally well"
+  },
+  {
+    "id": 649,
+    "category": "edge_case",
+    "problem": "Detect unusual behaviour across both user actions and network traffic simultaneously"
+  },
+  {
+    "id": 650,
+    "category": "edge_case",
+    "problem": "Build a model that performs well on both desktop and mobile data sources"
+  },
+  {
+    "id": 651,
+    "category": "edge_case",
+    "problem": "I have mixed structured and unstructured data — build a unified classification model"
+  },
+  {
+    "id": 652,
+    "category": "edge_case",
+    "problem": "Create an AI system that handles missing data gracefully and still gives good predictions"
+  },
+  {
+    "id": 653,
+    "category": "edge_case",
+    "problem": "Build something that monitors multiple data types and generates a single risk score"
+  },
+  {
+    "id": 654,
+    "category": "edge_case",
+    "problem": "I need a model that is accurate during the day and robust at night when patterns change"
+  },
+  {
+    "id": 655,
+    "category": "edge_case",
+    "problem": "Detect and classify content across text, images, and audio in a single pipeline"
+  },
+  {
+    "id": 656,
+    "category": "edge_case",
+    "problem": "Build an AI model that can be retrained overnight with new data without human help"
+  },
+  {
+    "id": 657,
+    "category": "edge_case",
+    "problem": "I need to classify thousands of categories — the taxonomy keeps growing"
+  },
+  {
+    "id": 658,
+    "category": "edge_case",
+    "problem": "Predict which of my users will do something important in the next 7 days"
+  },
+  {
+    "id": 659,
+    "category": "edge_case",
+    "problem": "Build a quality gate AI that works across all manufacturing lines regardless of product"
+  },
+  {
+    "id": 660,
+    "category": "edge_case",
+    "problem": "I need a real-time and batch processing AI that gives consistent results in both modes"
+  },
+  {
+    "id": 661,
+    "category": "edge_case",
+    "problem": "Detect problems across my entire platform — I have logs, metrics, and user events"
+  },
+  {
+    "id": 662,
+    "category": "edge_case",
+    "problem": "Build an AI that handles domain shift — my data distribution changes every quarter"
+  },
+  {
+    "id": 663,
+    "category": "edge_case",
+    "problem": "I want a model that can learn from 5 examples per new class without full retraining"
+  },
+  {
+    "id": 664,
+    "category": "edge_case",
+    "problem": "Build a system that classifies events that span multiple modalities simultaneously"
+  },
+  {
+    "id": 665,
+    "category": "edge_case",
+    "problem": "I need AI that is both interpretable for regulators and accurate for business"
+  },
+  {
+    "id": 666,
+    "category": "edge_case",
+    "problem": "Detect safety risks in an environment where false negatives are extremely costly"
+  },
+  {
+    "id": 667,
+    "category": "edge_case",
+    "problem": "Build a model that performs consistently across different geographic regions"
+  },
+  {
+    "id": 668,
+    "category": "edge_case",
+    "problem": "I need AI that works in a privacy-preserving way without sending data to the cloud"
+  },
+  {
+    "id": 669,
+    "category": "edge_case",
+    "problem": "Detect patterns across time series, images, and text data in a single unified model"
+  },
+  {
+    "id": 670,
+    "category": "edge_case",
+    "problem": "Build a system that handles concept drift and updates its predictions automatically"
+  },
+  {
+    "id": 671,
+    "category": "edge_case",
+    "problem": "I need a model that can classify inputs it has never seen before without retraining"
+  },
+  {
+    "id": 672,
+    "category": "edge_case",
+    "problem": "Build an AI system that works reliably with adversarial or noisy input data"
+  }
+]

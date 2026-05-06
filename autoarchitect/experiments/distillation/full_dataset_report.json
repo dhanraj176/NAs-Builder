@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-05-06T12:38:29.985548",
+  "teacher_model": "deepseek-chat",
+  "total_problems": 672,
+  "total_calls": 2016,
+  "total_passed": 2016,
+  "pass_rate_pct": 100.0,
+  "total_cost_usd": 0.2193,
+  "total_elapsed_min": 63.19,
+  "avg_latency_ms": 1780,
+  "per_core": [
+    {
+      "core": "task",
+      "friendly_name": "Task Understander",
+      "total": 672,
+      "passed": 672,
+      "failed": 0,
+      "pass_rate_pct": 100.0,
+      "input_tokens": 92417,
+      "output_tokens": 43764,
+      "cost_usd": 0.0731,
+      "elapsed_s": 1176.56,
+      "avg_latency_ms": 1650,
+      "jsonl_path": "D:\\AutoArichitech\\NAs Builder\\autoarchitect\\experiments\\distillation\\dataset_task_understander.jsonl"
+    },
+    {
+      "core": "domain",
+      "friendly_name": "Domain Classifier",
+      "total": 672,
+      "passed": 672,
+      "failed": 0,
+      "pass_rate_pct": 100.0,
+      "input_tokens": 93761,
+      "output_tokens": 42701,
+      "cost_usd": 0.0723,
+      "elapsed_s": 1188.1,
+      "avg_latency_ms": 1667,
+      "jsonl_path": "D:\\AutoArichitech\\NAs Builder\\autoarchitect\\experiments\\distillation\\dataset_domain_classifier.jsonl"
+    },
+    {
+      "core": "arch",
+      "friendly_name": "Architecture Advisor",
+      "total": 672,
+      "passed": 672,
+      "failed": 0,
+      "pass_rate_pct": 100.0,
+      "input_tokens": 79649,
+      "output_tokens": 47626,
+      "cost_usd": 0.0739,
+      "elapsed_s": 1426.67,
+      "avg_latency_ms": 2022,
+      "jsonl_path": "D:\\AutoArichitech\\NAs Builder\\autoarchitect\\experiments\\distillation\\dataset_architecture_advisor.jsonl"
+    }
+  ],
+  "datasets": {
+    "task": "D:\\AutoArichitech\\NAs Builder\\autoarchitect\\experiments\\distillation\\dataset_task_understander.jsonl",
+    "domain": "D:\\AutoArichitech\\NAs Builder\\autoarchitect\\experiments\\distillation\\dataset_domain_classifier.jsonl",
+    "arch": "D:\\AutoArichitech\\NAs Builder\\autoarchitect\\experiments\\distillation\\dataset_architecture_advisor.jsonl"
+  }
+}
