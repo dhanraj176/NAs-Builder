@@ -71,7 +71,7 @@ class DynamicAgent:
         # Memory file
         self.memory_file  = AGENTS_DIR / f"{agent_name}_memory.jsonl"
 
-        print(f"  🤖 {class_name} initialized")
+        print(f"  [Agent] {class_name} initialized")
 
     # ── Model loading ──────────────────────────────────────────────────────
 
@@ -88,11 +88,11 @@ class DynamicAgent:
             self.model.load_state_dict(state)
             self.model.eval()
             self.model_loaded = True
-            print(f"  ✅ {self.class_name} model loaded "
+            print(f"  [OK] {self.class_name} model loaded "
                   f"({self.accuracy}% accuracy)")
             return True
         except Exception as e:
-            print(f"  ⚠️  {self.class_name} model load failed: {e}")
+            print(f"  [WARN] {self.class_name} model load failed: {e}")
             self.model_loaded = False
             return False
 
@@ -116,7 +116,7 @@ class DynamicAgent:
         """
         from api.nas_engine import run_quick_nas
         start = time.time()
-        print(f"  🤖 {self.class_name} running NAS for: {problem[:40]}")
+        print(f"  [Agent] {self.class_name} running NAS for: {problem[:40]}")
         nas = run_quick_nas(num_classes=self.num_classes or 10)
         return {
             "status":        "success",
@@ -156,6 +156,7 @@ class DynamicAgent:
                 "agent":      self.agent_name,
                 "class_name": self.class_name,
                 "domain":     self.domain,
+                "agent_used": self.class_name,
                 "latency_ms": round((time.time() - t0) * 1000),
                 "timestamp":  datetime.now().isoformat(),
             })
@@ -244,6 +245,7 @@ class DynamicAgent:
             "label":      self.classes[0] if self.classes else "unknown",
             "confidence": 0.0,
             "mode":       "fallback_no_model",
+            "agent_used": self.class_name,
             "latency_ms": round((time.time() - t0) * 1000),
             "timestamp":  datetime.now().isoformat(),
         }
@@ -256,16 +258,16 @@ class DynamicAgent:
         label = result.get("label", "unknown")
 
         if conf > 0.85:
-            print(f"  🚨 [{self.class_name}] "
-                  f"HIGH: {label} ({conf:.0%})")
+            print(f"  [HIGH] [{self.class_name}] "
+                  f"{label} ({conf:.0%})")
             result["action"] = "alert"
         elif conf > 0.6:
-            print(f"  ⚠️  [{self.class_name}] "
-                  f"MEDIUM: {label} ({conf:.0%})")
+            print(f"  [WARN] [{self.class_name}] "
+                  f"{label} ({conf:.0%})")
             result["action"] = "log"
         else:
-            print(f"  ✅ [{self.class_name}] "
-                  f"LOW: {label} ({conf:.0%})")
+            print(f"  [LOW] [{self.class_name}] "
+                  f"{label} ({conf:.0%})")
             result["action"] = "monitor"
 
         return result
@@ -292,7 +294,7 @@ class DynamicAgent:
         print(f"  [{self.class_name}] "
               f"Retraining on {len(self.memory)} examples...")
         # In production: fine-tune model on self.memory
-        print(f"  [{self.class_name}] ✅ Retrain complete")
+        print(f"  [{self.class_name}] Retrain complete")
         return True
 
     # ── Brain feeding ───────────────────────────────────────────────────────
@@ -330,6 +332,50 @@ class DynamicAgent:
 
     def info(self) -> dict:
         return self.status()
+
+    # ── Domain routing ──────────────────────────────────────────────────────
+
+    def route_to_agent(self, domain: str):
+        """
+        Return the specialized agent for domain, an error dict for
+        unsupported domains, or self for unknown domains (self_trainer path).
+
+        Returns:
+            agent instance   — for medical / security / image / text
+            dict (error)     — for tabular / audio / multimodal (coming soon)
+            self             — for any other domain (falls back to self_trainer)
+        """
+        COMING_SOON = {"tabular", "audio", "multimodal"}
+
+        if domain in COMING_SOON:
+            msg = f"'{domain}' agent coming soon"
+            print(f"  [Router] {msg}")
+            return {
+                "label":      "error",
+                "confidence": 0.0,
+                "error":      msg,
+                "agent_used": domain,
+                "fake":       False,
+            }
+
+        if domain == "medical":
+            from api.agents.medical_agent import MedicalAgent
+            agent = MedicalAgent()
+        elif domain == "security":
+            from api.agents.security_agent import SecurityAgent
+            agent = SecurityAgent()
+        elif domain == "image":
+            from api.agents.image_agent import ImageAgent
+            agent = ImageAgent()
+        elif domain == "text":
+            from api.agents.text_agent import TextAgent
+            agent = TextAgent()
+        else:
+            print(f"  [Router] Unknown domain '{domain}' — using self_trainer path")
+            return self
+
+        print(f"  [Router] domain='{domain}' -> {agent.__class__.__name__}")
+        return agent
 
     # ── Compatibility with old agent interface ─────────────────────────────
 
