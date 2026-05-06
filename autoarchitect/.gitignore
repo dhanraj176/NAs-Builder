@@ -1,4 +1,8 @@
 .env
+.claude/
+brain_cache/
+*.sqlite3
+*.sqlite
 *.pth
 *.pt
 *.pkl
