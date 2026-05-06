@@ -18,10 +18,11 @@ ADAPTER_DEFAULT = os.path.join(
 
 SYSTEM_PROMPT = (
     "You are AutoArchitect's Domain Classifier. Given an ML "
-    "problem, recommend the best agent from: ImageAgent, "
+    "problem, output structured JSON routing. The primary_agent "
+    "field MUST be exactly one of these 7 values: ImageAgent, "
     "TextAgent, TabularAgent, AudioAgent, MultimodalAgent, "
-    "MedicalAgent, SecurityAgent. Output JSON with fields: "
-    "primary_agent, secondary_agents, confidence, reasoning."
+    "MedicalAgent, SecurityAgent. Required fields: primary_agent, "
+    "secondary_agents, confidence, reasoning."
 )
 
 REQUIRED_FIELDS = [
