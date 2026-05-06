@@ -17,6 +17,7 @@ import json
 import time
 import uuid
 import threading
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
 from datetime import datetime
 
 AGENTS_DIR = os.path.join(
@@ -285,39 +286,92 @@ class AgentNetwork:
         self._log_collaboration(all_predictions, final)
         return final
 
-    # ── COLLABORATE: combine predictions from an ad-hoc agent list ───────────
+    # ── COLLABORATE: parallel execution with timeouts and error isolation ────
 
-    def collaborate(self, agents_list: list, task: str, data) -> dict:
+    def collaborate(self, agents_list: list, task: str, data,
+                    timeout_per_agent: int = 10) -> dict:
         """
-        Run data through each agent in agents_list, filter errors,
-        then fuse valid results with FusionAgent.
+        Run multiple agents in parallel, fuse their outputs.
+        Each agent gets timeout_per_agent seconds max.
+        Skipped or failed agents don't block successful ones.
 
-        Returns fused prediction dict, or {"error": "..."} if all fail.
+        Total wall time ≈ slowest successful agent (not sum of all agents).
         """
-        results = []
-        for agent in agents_list:
+        submit_time = time.time()
+
+        def run_agent(agent):
+            start = time.time()
             try:
                 result = agent.predict(data)
-                result["agent_name"] = agent.__class__.__name__
-                results.append(result)
-                print(f"  [Collaborate] {agent.__class__.__name__} -> "
-                      f"{result.get('label')} ({result.get('confidence')})")
+                result["agent_name"]     = agent.__class__.__name__
+                result["execution_time"] = round(time.time() - start, 3)
+                return result
             except Exception as e:
-                results.append({
-                    "agent_name": agent.__class__.__name__,
-                    "error":      str(e),
-                    "confidence": 0.0,
-                })
-                print(f"  [Collaborate] {agent.__class__.__name__} failed: {e}")
+                return {
+                    "agent_name":     agent.__class__.__name__,
+                    "error":          str(e),
+                    "confidence":     0.0,
+                    "execution_time": round(time.time() - start, 3),
+                }
 
-        valid = [r for r in results if "error" not in r]
-        if not valid:
-            return {"error": "all agents failed", "agent_used": "none"}
+        results = []
 
-        fused = self.fusion_agent.fuse(valid)
-        fused["task"]        = task
-        fused["agent_count"] = len(agents_list)
-        fused["valid_count"] = len(valid)
+        # Submit all agents at once — real parallelism starts here.
+        executor = ThreadPoolExecutor(max_workers=len(agents_list))
+        try:
+            future_to_agent = {
+                executor.submit(run_agent, agent): agent
+                for agent in agents_list
+            }
+            for future, agent in future_to_agent.items():
+                # Remaining budget relative to batch submission so that
+                # the ENTIRE batch completes within timeout_per_agent, not
+                # each individual future.
+                elapsed   = time.time() - submit_time
+                remaining = max(0.01, timeout_per_agent - elapsed)
+                try:
+                    result = future.result(timeout=remaining)
+                    results.append(result)
+                    print(f"  [Collaborate] {agent.__class__.__name__} -> "
+                          f"{result.get('label')} ({result.get('confidence')}) "
+                          f"[{result['execution_time']}s]")
+                except FutureTimeoutError:
+                    results.append({
+                        "agent_name":     agent.__class__.__name__,
+                        "error":          "timeout",
+                        "confidence":     0.0,
+                        "execution_time": timeout_per_agent,
+                    })
+                    print(f"  [Collaborate] {agent.__class__.__name__} timed out "
+                          f"(>{timeout_per_agent}s)")
+        finally:
+            # Don't block on threads that are still running after their
+            # timeout budget expired — they continue as background threads.
+            executor.shutdown(wait=False)
+
+        valid_results = [r for r in results if "error" not in r]
+
+        if not valid_results:
+            return {
+                "error":         "all agents failed",
+                "details":       results,
+                "fusion_method": "none",
+                "task":          task,
+                "agent_used":    "none",   # backward compat
+            }
+
+        fused = self.fusion_agent.fuse(valid_results)
+
+        fused["task"]              = task
+        fused["total_agents"]      = len(agents_list)
+        fused["successful_agents"] = len(valid_results)
+        fused["valid_count"]       = len(valid_results)   # backward compat
+        fused["agent_count"]       = len(agents_list)     # backward compat
+        fused["failed_agents"]     = len(results) - len(valid_results)
+        fused["agent_timings"]     = {
+            r["agent_name"]: r.get("execution_time", 0) for r in results
+        }
+        fused["wall_time"]         = round(time.time() - submit_time, 3)
         return fused
 
     # ── COLLABORATION CYCLE ──────────────────

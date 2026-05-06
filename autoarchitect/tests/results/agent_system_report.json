@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-06T10:31:40.159942",
-  "elapsed_seconds": 29.7,
+  "generated_at": "2026-05-06T10:39:33.538221",
+  "elapsed_seconds": 31.3,
   "total_agents": 12,
   "production_ready": 12,
   "failed_checks": 0,
@@ -406,6 +406,22 @@
       "notes": {
         "no_model": {
           "error": "all agents failed",
+          "details": [
+            {
+              "agent_name": "_Fail",
+              "error": "intentional test failure",
+              "confidence": 0.0,
+              "execution_time": 0.0
+            },
+            {
+              "agent_name": "_Fail",
+              "error": "intentional test failure",
+              "confidence": 0.0,
+              "execution_time": 0.0
+            }
+          ],
+          "fusion_method": "none",
+          "task": "test",
           "agent_used": "none"
         },
         "with_model": {
