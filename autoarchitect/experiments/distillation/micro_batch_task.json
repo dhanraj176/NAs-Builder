@@ -1,0 +1,930 @@
+[
+  {
+    "id": 1,
+    "category": "image",
+    "problem": "Detect potholes in road images from dashcam footage",
+    "response": {
+      "primary_intent": "object detection",
+      "domain": "image",
+      "complexity": "medium",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "pothole",
+        "road",
+        "dashcam"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"object detection\",\n  \"domain\": \"image\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"pothole\", \"road\", \"dashcam\"]\n}",
+    "latency_ms": 2675
+  },
+  {
+    "id": 2,
+    "category": "image",
+    "problem": "Classify surface defects in steel manufacturing images",
+    "response": {
+      "primary_intent": "defect_detection",
+      "domain": "image",
+      "complexity": "complex",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "steel surface",
+        "defects"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"defect_detection\",\n  \"domain\": \"image\",\n  \"complexity\": \"complex\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"steel surface\", \"defects\"]\n}",
+    "latency_ms": 1475
+  },
+  {
+    "id": 3,
+    "category": "image",
+    "problem": "Identify plant diseases from leaf photographs",
+    "response": {
+      "primary_intent": "image_classification",
+      "domain": "image",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "leaf",
+        "plant disease"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"image_classification\",\n  \"domain\": \"image\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"leaf\", \"plant disease\"]\n}",
+    "latency_ms": 1533
+  },
+  {
+    "id": 4,
+    "category": "image",
+    "problem": "Detect and count pedestrians in busy intersection surveillance videos",
+    "response": {
+      "primary_intent": "object detection and counting",
+      "domain": "security",
+      "complexity": "complex",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "pedestrian",
+        "surveillance video",
+        "intersection"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"object detection and counting\",\n  \"domain\": \"security\",\n  \"complexity\": \"complex\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"pedestrian\", \"surveillance video\", \"intersection\"]\n}",
+    "latency_ms": 1379
+  },
+  {
+    "id": 5,
+    "category": "image",
+    "problem": "Classify vehicle types in parking lot camera feed",
+    "response": {
+      "primary_intent": "vehicle classification",
+      "domain": "image",
+      "complexity": "medium",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "vehicle",
+        "parking lot",
+        "camera feed"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"vehicle classification\",\n  \"domain\": \"image\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"vehicle\", \"parking lot\", \"camera feed\"]\n}",
+    "latency_ms": 1448
+  },
+  {
+    "id": 6,
+    "category": "image",
+    "problem": "Detect wildfire smoke in forest camera images",
+    "response": {
+      "primary_intent": "wildfire smoke detection",
+      "domain": "image",
+      "complexity": "medium",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "wildfire smoke",
+        "forest camera images"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"wildfire smoke detection\",\n  \"domain\": \"image\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"wildfire smoke\", \"forest camera images\"]\n}",
+    "latency_ms": 1422
+  },
+  {
+    "id": 7,
+    "category": "image",
+    "problem": "Identify fashion clothing items from e-commerce product photos",
+    "response": {
+      "primary_intent": "image_classification",
+      "domain": "image",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "fashion clothing",
+        "e-commerce product photos"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"image_classification\",\n  \"domain\": \"image\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"fashion clothing\", \"e-commerce product photos\"]\n}",
+    "latency_ms": 1433
+  },
+  {
+    "id": 8,
+    "category": "image",
+    "problem": "Detect illegal dumping in street camera images and classify severity",
+    "response": {
+      "primary_intent": "detect illegal dumping and classify severity",
+      "domain": "image",
+      "complexity": "medium",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "street camera images",
+        "illegal dumping",
+        "severity"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"detect illegal dumping and classify severity\",\n  \"domain\": \"image\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"street camera images\", \"illegal dumping\", \"severity\"]\n}",
+    "latency_ms": 1493
+  },
+  {
+    "id": 9,
+    "category": "image",
+    "problem": "Count fruit on trees from drone imagery for harvest planning",
+    "response": {
+      "primary_intent": "object counting",
+      "domain": "image",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "fruit",
+        "trees",
+        "drone imagery"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"object counting\",\n  \"domain\": \"image\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"fruit\", \"trees\", \"drone imagery\"]\n}",
+    "latency_ms": 1359
+  },
+  {
+    "id": 10,
+    "category": "image",
+    "problem": "Classify face emotions in real time from webcam for mental health monitoring",
+    "response": {
+      "primary_intent": "emotion recognition",
+      "domain": "image",
+      "complexity": "complex",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "face",
+        "emotion",
+        "webcam",
+        "mental health"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"emotion recognition\",\n  \"domain\": \"image\",\n  \"complexity\": \"complex\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"face\", \"emotion\", \"webcam\", \"mental health\"]\n}",
+    "latency_ms": 1487
+  },
+  {
+    "id": 11,
+    "category": "text",
+    "problem": "Classify spam emails from customer inboxes",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "text",
+      "complexity": "simple",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "spam",
+        "email"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"text\",\n  \"complexity\": \"simple\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"spam\", \"email\"]\n}",
+    "latency_ms": 1323
+  },
+  {
+    "id": 12,
+    "category": "text",
+    "problem": "Detect sentiment in product reviews for an e-commerce platform",
+    "response": {
+      "primary_intent": "sentiment analysis",
+      "domain": "text",
+      "complexity": "simple",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "product reviews",
+        "sentiment"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"sentiment analysis\",\n  \"domain\": \"text\",\n  \"complexity\": \"simple\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"product reviews\", \"sentiment\"]\n}",
+    "latency_ms": 1357
+  },
+  {
+    "id": 13,
+    "category": "text",
+    "problem": "Classify fake news articles from social media posts",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "text",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "fake news",
+        "social media posts"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"text\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"fake news\", \"social media posts\"]\n}",
+    "latency_ms": 1410
+  },
+  {
+    "id": 14,
+    "category": "text",
+    "problem": "Categorize customer support tickets into departments automatically",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "text",
+      "complexity": "simple",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "customer support tickets",
+        "departments"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"text\",\n  \"complexity\": \"simple\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"customer support tickets\", \"departments\"]\n}",
+    "latency_ms": 1338
+  },
+  {
+    "id": 15,
+    "category": "text",
+    "problem": "Detect toxic comments in online forums",
+    "response": {
+      "primary_intent": "toxic comment detection",
+      "domain": "text",
+      "complexity": "medium",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "toxic comments",
+        "online forums"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"toxic comment detection\",\n  \"domain\": \"text\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"toxic comments\", \"online forums\"]\n}",
+    "latency_ms": 1507
+  },
+  {
+    "id": 16,
+    "category": "text",
+    "problem": "Classify intent in chatbot user messages for banking assistant",
+    "response": {
+      "primary_intent": "intent_classification",
+      "domain": "text",
+      "complexity": "simple",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "user_message",
+        "intent"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"intent_classification\",\n  \"domain\": \"text\",\n  \"complexity\": \"simple\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"user_message\", \"intent\"]\n}",
+    "latency_ms": 1990
+  },
+  {
+    "id": 17,
+    "category": "text",
+    "problem": "Detect plagiarism in student essay submissions",
+    "response": {
+      "primary_intent": "plagiarism detection",
+      "domain": "text",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "student essay",
+        "plagiarism"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"plagiarism detection\",\n  \"domain\": \"text\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"student essay\", \"plagiarism\"]\n}",
+    "latency_ms": 1482
+  },
+  {
+    "id": 18,
+    "category": "text",
+    "problem": "Classify news articles into topics: politics, sports, tech, finance",
+    "response": {
+      "primary_intent": "text_classification",
+      "domain": "text",
+      "complexity": "simple",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "news articles",
+        "topics",
+        "politics",
+        "sports",
+        "tech",
+        "finance"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"text_classification\",\n  \"domain\": \"text\",\n  \"complexity\": \"simple\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"news articles\", \"topics\", \"politics\", \"sports\", \"tech\", \"finance\"]\n}",
+    "latency_ms": 1639
+  },
+  {
+    "id": 19,
+    "category": "text",
+    "problem": "Identify language of user queries in multilingual customer service",
+    "response": {
+      "primary_intent": "language_identification",
+      "domain": "text",
+      "complexity": "simple",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "user queries",
+        "language"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"language_identification\",\n  \"domain\": \"text\",\n  \"complexity\": \"simple\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"user queries\", \"language\"]\n}",
+    "latency_ms": 1521
+  },
+  {
+    "id": 20,
+    "category": "text",
+    "problem": "Classify legal contract clauses as standard, risky, or missing",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "text",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "legal contract clauses",
+        "standard",
+        "risky",
+        "missing"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"text\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"legal contract clauses\", \"standard\", \"risky\", \"missing\"]\n}",
+    "latency_ms": 1392
+  },
+  {
+    "id": 21,
+    "category": "tabular",
+    "problem": "Predict customer churn for a telecom company from transaction data",
+    "response": {
+      "primary_intent": "customer churn prediction",
+      "domain": "tabular",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "customer",
+        "transaction",
+        "churn"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"customer churn prediction\",\n  \"domain\": \"tabular\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"customer\", \"transaction\", \"churn\"]\n}",
+    "latency_ms": 1316
+  },
+  {
+    "id": 22,
+    "category": "tabular",
+    "problem": "Detect credit card fraud from transaction features",
+    "response": {
+      "primary_intent": "fraud_detection",
+      "domain": "tabular",
+      "complexity": "medium",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "transaction",
+        "credit_card",
+        "fraud"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"fraud_detection\",\n  \"domain\": \"tabular\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"transaction\", \"credit_card\", \"fraud\"]\n}",
+    "latency_ms": 1475
+  },
+  {
+    "id": 23,
+    "category": "tabular",
+    "problem": "Predict house prices from neighborhood and property features",
+    "response": {
+      "primary_intent": "regression",
+      "domain": "tabular",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "house prices",
+        "neighborhood",
+        "property features"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"regression\",\n  \"domain\": \"tabular\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"house prices\", \"neighborhood\", \"property features\"]\n}",
+    "latency_ms": 1509
+  },
+  {
+    "id": 24,
+    "category": "tabular",
+    "problem": "Classify loan default risk from applicant financial profile",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "tabular",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "loan default",
+        "applicant financial profile"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"tabular\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"loan default\", \"applicant financial profile\"]\n}",
+    "latency_ms": 1416
+  },
+  {
+    "id": 25,
+    "category": "tabular",
+    "problem": "Predict monthly sales volume for retail stores from historical data",
+    "response": {
+      "primary_intent": "time series forecasting",
+      "domain": "tabular",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "retail stores",
+        "monthly sales volume",
+        "historical data"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"time series forecasting\",\n  \"domain\": \"tabular\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"retail stores\", \"monthly sales volume\", \"historical data\"]\n}",
+    "latency_ms": 1426
+  },
+  {
+    "id": 26,
+    "category": "tabular",
+    "problem": "Identify anomalous sensor readings in manufacturing equipment",
+    "response": {
+      "primary_intent": "anomaly_detection",
+      "domain": "tabular",
+      "complexity": "medium",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "sensor readings",
+        "manufacturing equipment"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"anomaly_detection\",\n  \"domain\": \"tabular\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"sensor readings\", \"manufacturing equipment\"]\n}",
+    "latency_ms": 1362
+  },
+  {
+    "id": 27,
+    "category": "tabular",
+    "problem": "Predict employee attrition from HR metrics",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "tabular",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "employee",
+        "attrition",
+        "HR metrics"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"tabular\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"employee\", \"attrition\", \"HR metrics\"]\n}",
+    "latency_ms": 1419
+  },
+  {
+    "id": 28,
+    "category": "tabular",
+    "problem": "Classify insurance claim severity from policy features",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "tabular",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "insurance claim",
+        "policy features",
+        "severity"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"tabular\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"insurance claim\", \"policy features\", \"severity\"]\n}",
+    "latency_ms": 1422
+  },
+  {
+    "id": 29,
+    "category": "tabular",
+    "problem": "Predict energy consumption for buildings from weather and occupancy",
+    "response": {
+      "primary_intent": "regression",
+      "domain": "tabular",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "energy consumption",
+        "weather",
+        "occupancy"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"regression\",\n  \"domain\": \"tabular\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"energy consumption\", \"weather\", \"occupancy\"]\n}",
+    "latency_ms": 1514
+  },
+  {
+    "id": 30,
+    "category": "tabular",
+    "problem": "Rank product recommendations from user purchase history CSV",
+    "response": {
+      "primary_intent": "recommendation",
+      "domain": "tabular",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "product",
+        "user",
+        "purchase history"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"recommendation\",\n  \"domain\": \"tabular\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"product\", \"user\", \"purchase history\"]\n}",
+    "latency_ms": 1502
+  },
+  {
+    "id": 31,
+    "category": "audio",
+    "problem": "Transcribe and classify customer service call recordings",
+    "response": {
+      "primary_intent": "transcription and classification",
+      "domain": "audio",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "customer service call",
+        "transcription",
+        "classification"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"transcription and classification\",\n  \"domain\": \"audio\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"customer service call\", \"transcription\", \"classification\"]\n}",
+    "latency_ms": 1301
+  },
+  {
+    "id": 32,
+    "category": "audio",
+    "problem": "Detect machine failure sounds in factory audio streams",
+    "response": {
+      "primary_intent": "anomaly detection",
+      "domain": "audio",
+      "complexity": "medium",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "machine failure",
+        "factory audio"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"anomaly detection\",\n  \"domain\": \"audio\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"machine failure\", \"factory audio\"]\n}",
+    "latency_ms": 1533
+  },
+  {
+    "id": 33,
+    "category": "audio",
+    "problem": "Classify music genres from short audio clips",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "audio",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "music genre",
+        "audio clips"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"audio\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"music genre\", \"audio clips\"]\n}",
+    "latency_ms": 1306
+  },
+  {
+    "id": 34,
+    "category": "audio",
+    "problem": "Identify speaker identity from voice recordings for authentication",
+    "response": {
+      "primary_intent": "speaker_identification",
+      "domain": "audio",
+      "complexity": "medium",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "voice recordings",
+        "speaker identity",
+        "authentication"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"speaker_identification\",\n  \"domain\": \"audio\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"voice recordings\", \"speaker identity\", \"authentication\"]\n}",
+    "latency_ms": 1426
+  },
+  {
+    "id": 35,
+    "category": "audio",
+    "problem": "Detect baby crying vs background noise in smart baby monitor",
+    "response": {
+      "primary_intent": "audio_classification",
+      "domain": "audio",
+      "complexity": "medium",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "baby crying",
+        "background noise"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"audio_classification\",\n  \"domain\": \"audio\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"baby crying\", \"background noise\"]\n}",
+    "latency_ms": 1623
+  },
+  {
+    "id": 36,
+    "category": "multimodal",
+    "problem": "Classify product listings using both title text and thumbnail image",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "multimodal",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": true,
+      "key_entities": [
+        "product title",
+        "thumbnail image"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"multimodal\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": true,\n  \"key_entities\": [\"product title\", \"thumbnail image\"]\n}",
+    "latency_ms": 1625
+  },
+  {
+    "id": 37,
+    "category": "multimodal",
+    "problem": "Generate image captions and detect brand logos in marketing materials",
+    "response": {
+      "primary_intent": "image_captioning_and_logo_detection",
+      "domain": "image",
+      "complexity": "complex",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "brand logos",
+        "marketing materials"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"image_captioning_and_logo_detection\",\n  \"domain\": \"image\",\n  \"complexity\": \"complex\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"brand logos\", \"marketing materials\"]\n}",
+    "latency_ms": 1437
+  },
+  {
+    "id": 38,
+    "category": "multimodal",
+    "problem": "Verify that product images match their text descriptions for listing quality",
+    "response": {
+      "primary_intent": "image-text matching verification",
+      "domain": "multimodal",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": true,
+      "key_entities": [
+        "product images",
+        "text descriptions"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"image-text matching verification\",\n  \"domain\": \"multimodal\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": true,\n  \"key_entities\": [\"product images\", \"text descriptions\"]\n}",
+    "latency_ms": 1730
+  },
+  {
+    "id": 39,
+    "category": "multimodal",
+    "problem": "Detect hateful content in social media posts that combine image and text",
+    "response": {
+      "primary_intent": "hate speech detection",
+      "domain": "multimodal",
+      "complexity": "complex",
+      "real_time_required": true,
+      "multi_modal": true,
+      "key_entities": [
+        "social media posts",
+        "image",
+        "text"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"hate speech detection\",\n  \"domain\": \"multimodal\",\n  \"complexity\": \"complex\",\n  \"real_time_required\": true,\n  \"multi_modal\": true,\n  \"key_entities\": [\"social media posts\", \"image\", \"text\"]\n}",
+    "latency_ms": 1534
+  },
+  {
+    "id": 40,
+    "category": "multimodal",
+    "problem": "Classify restaurant reviews using both photos and written text",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "multimodal",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": true,
+      "key_entities": [
+        "restaurant reviews",
+        "photos",
+        "written text"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"multimodal\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": true,\n  \"key_entities\": [\"restaurant reviews\", \"photos\", \"written text\"]\n}",
+    "latency_ms": 1393
+  },
+  {
+    "id": 41,
+    "category": "medical",
+    "problem": "Detect pneumonia from chest X-ray images",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "medical",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "pneumonia",
+        "chest X-ray"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"medical\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"pneumonia\", \"chest X-ray\"]\n}",
+    "latency_ms": 1379
+  },
+  {
+    "id": 42,
+    "category": "medical",
+    "problem": "Classify brain tumor type from MRI scans",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "medical",
+      "complexity": "complex",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "brain tumor",
+        "MRI scans"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"medical\",\n  \"complexity\": \"complex\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"brain tumor\", \"MRI scans\"]\n}",
+    "latency_ms": 1284
+  },
+  {
+    "id": 43,
+    "category": "medical",
+    "problem": "Detect malignant melanoma from dermoscopy skin lesion images",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "medical",
+      "complexity": "complex",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "malignant melanoma",
+        "dermoscopy",
+        "skin lesion"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"medical\",\n  \"complexity\": \"complex\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"malignant melanoma\", \"dermoscopy\", \"skin lesion\"]\n}",
+    "latency_ms": 1436
+  },
+  {
+    "id": 44,
+    "category": "medical",
+    "problem": "Identify diabetic retinopathy grade from retinal fundus photographs",
+    "response": {
+      "primary_intent": "image_classification",
+      "domain": "medical",
+      "complexity": "complex",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "retinal fundus photograph",
+        "diabetic retinopathy grade"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"image_classification\",\n  \"domain\": \"medical\",\n  \"complexity\": \"complex\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"retinal fundus photograph\", \"diabetic retinopathy grade\"]\n}",
+    "latency_ms": 1474
+  },
+  {
+    "id": 45,
+    "category": "medical",
+    "problem": "Detect COVID-19 vs other pneumonia from CT scan slices",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "medical",
+      "complexity": "complex",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "COVID-19",
+        "pneumonia",
+        "CT scan"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"medical\",\n  \"complexity\": \"complex\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"COVID-19\", \"pneumonia\", \"CT scan\"]\n}",
+    "latency_ms": 1572
+  },
+  {
+    "id": 46,
+    "category": "edge_case",
+    "problem": "Build a system that makes things better",
+    "response": {
+      "primary_intent": "optimization",
+      "domain": "tabular",
+      "complexity": "simple",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "system"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"optimization\",\n  \"domain\": \"tabular\",\n  \"complexity\": \"simple\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"system\"]\n}",
+    "latency_ms": 1356
+  },
+  {
+    "id": 47,
+    "category": "edge_case",
+    "problem": "Analyze my data and find patterns",
+    "response": {
+      "primary_intent": "pattern_detection",
+      "domain": "tabular",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": false,
+      "key_entities": [
+        "data",
+        "patterns"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"pattern_detection\",\n  \"domain\": \"tabular\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": false,\n  \"key_entities\": [\"data\", \"patterns\"]\n}",
+    "latency_ms": 1564
+  },
+  {
+    "id": 48,
+    "category": "edge_case",
+    "problem": "I need AI for my app",
+    "response": {
+      "primary_intent": "general_ai_integration",
+      "domain": "multimodal",
+      "complexity": "medium",
+      "real_time_required": false,
+      "multi_modal": true,
+      "key_entities": [
+        "app"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"general_ai_integration\",\n  \"domain\": \"multimodal\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": false,\n  \"multi_modal\": true,\n  \"key_entities\": [\"app\"]\n}",
+    "latency_ms": 1320
+  },
+  {
+    "id": 49,
+    "category": "edge_case",
+    "problem": "Detect problems and fix them automatically in real time at scale",
+    "response": {
+      "primary_intent": "anomaly_detection_and_automated_fix",
+      "domain": "security",
+      "complexity": "complex",
+      "real_time_required": true,
+      "multi_modal": false,
+      "key_entities": [
+        "anomaly",
+        "automated_fix",
+        "real_time",
+        "scale"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"anomaly_detection_and_automated_fix\",\n  \"domain\": \"security\",\n  \"complexity\": \"complex\",\n  \"real_time_required\": true,\n  \"multi_modal\": false,\n  \"key_entities\": [\"anomaly\", \"automated_fix\", \"real_time\", \"scale\"]\n}",
+    "latency_ms": 1542
+  },
+  {
+    "id": 50,
+    "category": "edge_case",
+    "problem": "Classify everything my users send whether it is images, text, or voice",
+    "response": {
+      "primary_intent": "classification",
+      "domain": "multimodal",
+      "complexity": "medium",
+      "real_time_required": true,
+      "multi_modal": true,
+      "key_entities": [
+        "image",
+        "text",
+        "voice"
+      ]
+    },
+    "raw": "{\n  \"primary_intent\": \"classification\",\n  \"domain\": \"multimodal\",\n  \"complexity\": \"medium\",\n  \"real_time_required\": true,\n  \"multi_modal\": true,\n  \"key_entities\": [\"image\", \"text\", \"voice\"]\n}",
+    "latency_ms": 1436
+  }
+]

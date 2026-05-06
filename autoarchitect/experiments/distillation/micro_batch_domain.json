@@ -1,0 +1,723 @@
+[
+  {
+    "id": 1,
+    "category": "image",
+    "problem": "Detect potholes in road images from dashcam footage",
+    "response": {
+      "primary_agent": "ImageAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "The problem involves analyzing road images from dashcam footage to detect potholes, which is a visual recognition task best suited for an image agent."
+    },
+    "raw": "{\n  \"primary_agent\": \"ImageAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The problem involves analyzing road images from dashcam footage to detect potholes, which is a visual recognition task best suited for an image agent.\"\n}",
+    "latency_ms": 1533
+  },
+  {
+    "id": 2,
+    "category": "image",
+    "problem": "Classify surface defects in steel manufacturing images",
+    "response": {
+      "primary_agent": "ImageAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "The problem involves classifying defects in images, which is a visual task best handled by an image-focused agent."
+    },
+    "raw": "{\n  \"primary_agent\": \"ImageAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The problem involves classifying defects in images, which is a visual task best handled by an image-focused agent.\"\n}",
+    "latency_ms": 1339
+  },
+  {
+    "id": 3,
+    "category": "image",
+    "problem": "Identify plant diseases from leaf photographs",
+    "response": {
+      "primary_agent": "ImageAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "The problem involves analyzing leaf photographs, which is a visual task best suited for an image-based agent."
+    },
+    "raw": "{\n  \"primary_agent\": \"ImageAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The problem involves analyzing leaf photographs, which is a visual task best suited for an image-based agent.\"\n}",
+    "latency_ms": 1330
+  },
+  {
+    "id": 4,
+    "category": "image",
+    "problem": "Detect and count pedestrians in busy intersection surveillance videos",
+    "response": {
+      "primary_agent": "ImageAgent",
+      "secondary_agents": [
+        "SecurityAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "Pedestrian detection and counting in video frames is primarily a computer vision task best handled by ImageAgent, with SecurityAgent providing surveillance-specific context."
+    },
+    "raw": "{\n  \"primary_agent\": \"ImageAgent\",\n  \"secondary_agents\": [\"SecurityAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Pedestrian detection and counting in video frames is primarily a computer vision task best handled by ImageAgent, with SecurityAgent providing surveillance-specific context.\"\n}",
+    "latency_ms": 1689
+  },
+  {
+    "id": 5,
+    "category": "image",
+    "problem": "Classify vehicle types in parking lot camera feed",
+    "response": {
+      "primary_agent": "ImageAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "The problem involves classifying vehicle types from camera feed, which is a visual recognition task best handled by an image agent."
+    },
+    "raw": "{\n  \"primary_agent\": \"ImageAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The problem involves classifying vehicle types from camera feed, which is a visual recognition task best handled by an image agent.\"\n}",
+    "latency_ms": 1633
+  },
+  {
+    "id": 6,
+    "category": "image",
+    "problem": "Detect wildfire smoke in forest camera images",
+    "response": {
+      "primary_agent": "ImageAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "The problem involves detecting wildfire smoke in images, which is a visual recognition task best handled by an ImageAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"ImageAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The problem involves detecting wildfire smoke in images, which is a visual recognition task best handled by an ImageAgent.\"\n}",
+    "latency_ms": 1544
+  },
+  {
+    "id": 7,
+    "category": "image",
+    "problem": "Identify fashion clothing items from e-commerce product photos",
+    "response": {
+      "primary_agent": "ImageAgent",
+      "secondary_agents": [
+        "TextAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "The task involves visual recognition of clothing items from photos, which is best handled by ImageAgent, with TextAgent potentially aiding in analyzing any accompanying text labels or descriptions."
+    },
+    "raw": "{\n  \"primary_agent\": \"ImageAgent\",\n  \"secondary_agents\": [\"TextAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The task involves visual recognition of clothing items from photos, which is best handled by ImageAgent, with TextAgent potentially aiding in analyzing any accompanying text labels or descriptions.\"\n}",
+    "latency_ms": 1474
+  },
+  {
+    "id": 8,
+    "category": "image",
+    "problem": "Detect illegal dumping in street camera images and classify severity",
+    "response": {
+      "primary_agent": "ImageAgent",
+      "secondary_agents": [
+        "SecurityAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "The problem involves analyzing street camera images to detect illegal dumping, which is best handled by an image agent, with security agent support for severity classification."
+    },
+    "raw": "{\n  \"primary_agent\": \"ImageAgent\",\n  \"secondary_agents\": [\"SecurityAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The problem involves analyzing street camera images to detect illegal dumping, which is best handled by an image agent, with security agent support for severity classification.\"\n}",
+    "latency_ms": 1649
+  },
+  {
+    "id": 9,
+    "category": "image",
+    "problem": "Count fruit on trees from drone imagery for harvest planning",
+    "response": {
+      "primary_agent": "ImageAgent",
+      "secondary_agents": [
+        "TabularAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "Drone imagery requires visual analysis to count fruit, and tabular data can store counts for planning."
+    },
+    "raw": "{\n  \"primary_agent\": \"ImageAgent\",\n  \"secondary_agents\": [\"TabularAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Drone imagery requires visual analysis to count fruit, and tabular data can store counts for planning.\"\n}",
+    "latency_ms": 1562
+  },
+  {
+    "id": 10,
+    "category": "image",
+    "problem": "Classify face emotions in real time from webcam for mental health monitoring",
+    "response": {
+      "primary_agent": "MultimodalAgent",
+      "secondary_agents": [
+        "ImageAgent",
+        "MedicalAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "Real-time face emotion classification from webcam requires video/image processing (ImageAgent) and mental health context (MedicalAgent), best handled by a MultimodalAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"MultimodalAgent\",\n  \"secondary_agents\": [\"ImageAgent\", \"MedicalAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Real-time face emotion classification from webcam requires video/image processing (ImageAgent) and mental health context (MedicalAgent), best handled by a MultimodalAgent.\"\n}",
+    "latency_ms": 1815
+  },
+  {
+    "id": 11,
+    "category": "text",
+    "problem": "Classify spam emails from customer inboxes",
+    "response": {
+      "primary_agent": "TextAgent",
+      "secondary_agents": [
+        "SecurityAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "Spam classification is a text-based NLP task, with SecurityAgent providing additional threat detection for malicious content."
+    },
+    "raw": "{\n  \"primary_agent\": \"TextAgent\",\n  \"secondary_agents\": [\"SecurityAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Spam classification is a text-based NLP task, with SecurityAgent providing additional threat detection for malicious content.\"\n}",
+    "latency_ms": 1611
+  },
+  {
+    "id": 12,
+    "category": "text",
+    "problem": "Detect sentiment in product reviews for an e-commerce platform",
+    "response": {
+      "primary_agent": "TextAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "Sentiment analysis on product reviews is a text classification task best handled by a TextAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"TextAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Sentiment analysis on product reviews is a text classification task best handled by a TextAgent.\"\n}",
+    "latency_ms": 1566
+  },
+  {
+    "id": 13,
+    "category": "text",
+    "problem": "Classify fake news articles from social media posts",
+    "response": {
+      "primary_agent": "TextAgent",
+      "secondary_agents": [
+        "MultimodalAgent"
+      ],
+      "confidence": 0.9,
+      "reasoning": "Fake news classification primarily relies on text analysis, but images and metadata in social media posts may also provide useful signals."
+    },
+    "raw": "{\n  \"primary_agent\": \"TextAgent\",\n  \"secondary_agents\": [\"MultimodalAgent\"],\n  \"confidence\": 0.9,\n  \"reasoning\": \"Fake news classification primarily relies on text analysis, but images and metadata in social media posts may also provide useful signals.\"\n}",
+    "latency_ms": 1438
+  },
+  {
+    "id": 14,
+    "category": "text",
+    "problem": "Categorize customer support tickets into departments automatically",
+    "response": {
+      "primary_agent": "TextAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "Customer support tickets are text documents, and categorization is a text classification task best handled by a TextAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"TextAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Customer support tickets are text documents, and categorization is a text classification task best handled by a TextAgent.\"\n}",
+    "latency_ms": 1692
+  },
+  {
+    "id": 15,
+    "category": "text",
+    "problem": "Detect toxic comments in online forums",
+    "response": {
+      "primary_agent": "TextAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "Toxic comment detection is a text classification task best handled by a TextAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"TextAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Toxic comment detection is a text classification task best handled by a TextAgent.\"\n}",
+    "latency_ms": 1378
+  },
+  {
+    "id": 16,
+    "category": "text",
+    "problem": "Classify intent in chatbot user messages for banking assistant",
+    "response": {
+      "primary_agent": "TextAgent",
+      "secondary_agents": [
+        "SecurityAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "Intent classification in banking chatbot messages is a text classification task, with potential need for security checks on sensitive queries."
+    },
+    "raw": "{\n  \"primary_agent\": \"TextAgent\",\n  \"secondary_agents\": [\"SecurityAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Intent classification in banking chatbot messages is a text classification task, with potential need for security checks on sensitive queries.\"\n}",
+    "latency_ms": 1391
+  },
+  {
+    "id": 17,
+    "category": "text",
+    "problem": "Detect plagiarism in student essay submissions",
+    "response": {
+      "primary_agent": "TextAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "Plagiarism detection in student essays primarily involves analyzing text for similarity and originality, which is best handled by a TextAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"TextAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Plagiarism detection in student essays primarily involves analyzing text for similarity and originality, which is best handled by a TextAgent.\"\n}",
+    "latency_ms": 1423
+  },
+  {
+    "id": 18,
+    "category": "text",
+    "problem": "Classify news articles into topics: politics, sports, tech, finance",
+    "response": {
+      "primary_agent": "TextAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "News article classification is a text-based NLP task, best handled by TextAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"TextAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"News article classification is a text-based NLP task, best handled by TextAgent.\"\n}",
+    "latency_ms": 1509
+  },
+  {
+    "id": 19,
+    "category": "text",
+    "problem": "Identify language of user queries in multilingual customer service",
+    "response": {
+      "primary_agent": "TextAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "Language identification from text queries is a text classification task best handled by a TextAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"TextAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Language identification from text queries is a text classification task best handled by a TextAgent.\"\n}",
+    "latency_ms": 1444
+  },
+  {
+    "id": 20,
+    "category": "text",
+    "problem": "Classify legal contract clauses as standard, risky, or missing",
+    "response": {
+      "primary_agent": "TextAgent",
+      "secondary_agents": [
+        "SecurityAgent"
+      ],
+      "confidence": 0.9,
+      "reasoning": "Legal contract clauses are text documents, so TextAgent is best for classification, with SecurityAgent to ensure data privacy and compliance."
+    },
+    "raw": "{\n  \"primary_agent\": \"TextAgent\",\n  \"secondary_agents\": [\"SecurityAgent\"],\n  \"confidence\": 0.9,\n  \"reasoning\": \"Legal contract clauses are text documents, so TextAgent is best for classification, with SecurityAgent to ensure data privacy and compliance.\"\n}",
+    "latency_ms": 1584
+  },
+  {
+    "id": 21,
+    "category": "tabular",
+    "problem": "Predict customer churn for a telecom company from transaction data",
+    "response": {
+      "primary_agent": "TabularAgent",
+      "secondary_agents": [
+        "TextAgent"
+      ],
+      "confidence": 0.9,
+      "reasoning": "Customer churn prediction from transaction data is a tabular problem, but text data like customer feedback may also be useful."
+    },
+    "raw": "{\n  \"primary_agent\": \"TabularAgent\",\n  \"secondary_agents\": [\"TextAgent\"],\n  \"confidence\": 0.9,\n  \"reasoning\": \"Customer churn prediction from transaction data is a tabular problem, but text data like customer feedback may also be useful.\"\n}",
+    "latency_ms": 1512
+  },
+  {
+    "id": 22,
+    "category": "tabular",
+    "problem": "Detect credit card fraud from transaction features",
+    "response": {
+      "primary_agent": "TabularAgent",
+      "secondary_agents": [
+        "SecurityAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "Credit card fraud detection typically involves analyzing structured transaction data, making TabularAgent the primary choice, with SecurityAgent for threat-specific insights."
+    },
+    "raw": "{\n  \"primary_agent\": \"TabularAgent\",\n  \"secondary_agents\": [\"SecurityAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Credit card fraud detection typically involves analyzing structured transaction data, making TabularAgent the primary choice, with SecurityAgent for threat-specific insights.\"\n}",
+    "latency_ms": 1572
+  },
+  {
+    "id": 23,
+    "category": "tabular",
+    "problem": "Predict house prices from neighborhood and property features",
+    "response": {
+      "primary_agent": "TabularAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "House price prediction from structured features like neighborhood and property attributes is a classic tabular regression task."
+    },
+    "raw": "{\n  \"primary_agent\": \"TabularAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"House price prediction from structured features like neighborhood and property attributes is a classic tabular regression task.\"\n}",
+    "latency_ms": 1193
+  },
+  {
+    "id": 24,
+    "category": "tabular",
+    "problem": "Classify loan default risk from applicant financial profile",
+    "response": {
+      "primary_agent": "TabularAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "Loan default risk classification is a classic tabular data problem involving structured financial features."
+    },
+    "raw": "{\n  \"primary_agent\": \"TabularAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Loan default risk classification is a classic tabular data problem involving structured financial features.\"\n}",
+    "latency_ms": 1276
+  },
+  {
+    "id": 25,
+    "category": "tabular",
+    "problem": "Predict monthly sales volume for retail stores from historical data",
+    "response": {
+      "primary_agent": "TabularAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "The problem involves predicting a numeric value from structured historical data, which is a classic tabular regression task."
+    },
+    "raw": "{\n  \"primary_agent\": \"TabularAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The problem involves predicting a numeric value from structured historical data, which is a classic tabular regression task.\"\n}",
+    "latency_ms": 1416
+  },
+  {
+    "id": 26,
+    "category": "tabular",
+    "problem": "Identify anomalous sensor readings in manufacturing equipment",
+    "response": {
+      "primary_agent": "TabularAgent",
+      "secondary_agents": [
+        "SecurityAgent"
+      ],
+      "confidence": 0.9,
+      "reasoning": "Sensor readings are tabular data, and anomaly detection is a core capability of TabularAgent, with SecurityAgent providing additional context for potential security-related anomalies."
+    },
+    "raw": "{\n  \"primary_agent\": \"TabularAgent\",\n  \"secondary_agents\": [\"SecurityAgent\"],\n  \"confidence\": 0.9,\n  \"reasoning\": \"Sensor readings are tabular data, and anomaly detection is a core capability of TabularAgent, with SecurityAgent providing additional context for potential security-related anomalies.\"\n}",
+    "latency_ms": 1557
+  },
+  {
+    "id": 27,
+    "category": "tabular",
+    "problem": "Predict employee attrition from HR metrics",
+    "response": {
+      "primary_agent": "TabularAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "Employee attrition prediction involves structured HR metrics like tenure, salary, and performance scores, which are best handled by a tabular data agent."
+    },
+    "raw": "{\n  \"primary_agent\": \"TabularAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Employee attrition prediction involves structured HR metrics like tenure, salary, and performance scores, which are best handled by a tabular data agent.\"\n}",
+    "latency_ms": 1459
+  },
+  {
+    "id": 28,
+    "category": "tabular",
+    "problem": "Classify insurance claim severity from policy features",
+    "response": {
+      "primary_agent": "TabularAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "Insurance claim severity prediction from policy features is a structured data problem best handled by TabularAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"TabularAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Insurance claim severity prediction from policy features is a structured data problem best handled by TabularAgent.\"\n}",
+    "latency_ms": 1852
+  },
+  {
+    "id": 29,
+    "category": "tabular",
+    "problem": "Predict energy consumption for buildings from weather and occupancy",
+    "response": {
+      "primary_agent": "TabularAgent",
+      "secondary_agents": [],
+      "confidence": 0.9,
+      "reasoning": "Energy consumption prediction from weather and occupancy data is a regression task on structured tabular data."
+    },
+    "raw": "{\n  \"primary_agent\": \"TabularAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.9,\n  \"reasoning\": \"Energy consumption prediction from weather and occupancy data is a regression task on structured tabular data.\"\n}",
+    "latency_ms": 1505
+  },
+  {
+    "id": 30,
+    "category": "tabular",
+    "problem": "Rank product recommendations from user purchase history CSV",
+    "response": {
+      "primary_agent": "TabularAgent",
+      "secondary_agents": [
+        "TextAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "The problem involves analyzing tabular purchase history data, with potential text features like product descriptions that a TextAgent can process."
+    },
+    "raw": "{\n  \"primary_agent\": \"TabularAgent\",\n  \"secondary_agents\": [\"TextAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The problem involves analyzing tabular purchase history data, with potential text features like product descriptions that a TextAgent can process.\"\n}",
+    "latency_ms": 1566
+  },
+  {
+    "id": 31,
+    "category": "audio",
+    "problem": "Transcribe and classify customer service call recordings",
+    "response": {
+      "primary_agent": "AudioAgent",
+      "secondary_agents": [
+        "TextAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "AudioAgent handles transcription and initial audio processing, while TextAgent can classify the transcribed text."
+    },
+    "raw": "{\n  \"primary_agent\": \"AudioAgent\",\n  \"secondary_agents\": [\"TextAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"AudioAgent handles transcription and initial audio processing, while TextAgent can classify the transcribed text.\"\n}",
+    "latency_ms": 1299
+  },
+  {
+    "id": 32,
+    "category": "audio",
+    "problem": "Detect machine failure sounds in factory audio streams",
+    "response": {
+      "primary_agent": "AudioAgent",
+      "secondary_agents": [
+        "SecurityAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "AudioAgent can analyze factory audio streams for machine failure sounds, while SecurityAgent can alert on anomalies."
+    },
+    "raw": "{\n  \"primary_agent\": \"AudioAgent\",\n  \"secondary_agents\": [\"SecurityAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"AudioAgent can analyze factory audio streams for machine failure sounds, while SecurityAgent can alert on anomalies.\"\n}",
+    "latency_ms": 1392
+  },
+  {
+    "id": 33,
+    "category": "audio",
+    "problem": "Classify music genres from short audio clips",
+    "response": {
+      "primary_agent": "AudioAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "The problem involves classifying music genres from audio clips, which is a core task for an AudioAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"AudioAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The problem involves classifying music genres from audio clips, which is a core task for an AudioAgent.\"\n}",
+    "latency_ms": 1373
+  },
+  {
+    "id": 34,
+    "category": "audio",
+    "problem": "Identify speaker identity from voice recordings for authentication",
+    "response": {
+      "primary_agent": "AudioAgent",
+      "secondary_agents": [
+        "SecurityAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "Voice-based speaker identification is primarily an audio task, with security implications for authentication."
+    },
+    "raw": "{\n  \"primary_agent\": \"AudioAgent\",\n  \"secondary_agents\": [\"SecurityAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Voice-based speaker identification is primarily an audio task, with security implications for authentication.\"\n}",
+    "latency_ms": 1270
+  },
+  {
+    "id": 35,
+    "category": "audio",
+    "problem": "Detect baby crying vs background noise in smart baby monitor",
+    "response": {
+      "primary_agent": "AudioAgent",
+      "secondary_agents": [],
+      "confidence": 0.95,
+      "reasoning": "The problem involves distinguishing between baby crying and background noise, which is an audio classification task best handled by an AudioAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"AudioAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The problem involves distinguishing between baby crying and background noise, which is an audio classification task best handled by an AudioAgent.\"\n}",
+    "latency_ms": 1303
+  },
+  {
+    "id": 36,
+    "category": "multimodal",
+    "problem": "Classify product listings using both title text and thumbnail image",
+    "response": {
+      "primary_agent": "MultimodalAgent",
+      "secondary_agents": [
+        "TextAgent",
+        "ImageAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "The task requires processing both text and image data, which is best handled by a multimodal agent with support from specialized text and image agents."
+    },
+    "raw": "{\n  \"primary_agent\": \"MultimodalAgent\",\n  \"secondary_agents\": [\"TextAgent\", \"ImageAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The task requires processing both text and image data, which is best handled by a multimodal agent with support from specialized text and image agents.\"\n}",
+    "latency_ms": 1428
+  },
+  {
+    "id": 37,
+    "category": "multimodal",
+    "problem": "Generate image captions and detect brand logos in marketing materials",
+    "response": {
+      "primary_agent": "MultimodalAgent",
+      "secondary_agents": [
+        "ImageAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "The task involves both generating captions from images and detecting logos, which requires multimodal understanding and image analysis."
+    },
+    "raw": "{\n  \"primary_agent\": \"MultimodalAgent\",\n  \"secondary_agents\": [\"ImageAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The task involves both generating captions from images and detecting logos, which requires multimodal understanding and image analysis.\"\n}",
+    "latency_ms": 1470
+  },
+  {
+    "id": 38,
+    "category": "multimodal",
+    "problem": "Verify that product images match their text descriptions for listing quality",
+    "response": {
+      "primary_agent": "MultimodalAgent",
+      "secondary_agents": [
+        "ImageAgent",
+        "TextAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "The task requires comparing image and text data, which is best handled by a multimodal agent, with support from specialized image and text agents for feature extraction."
+    },
+    "raw": "{\n  \"primary_agent\": \"MultimodalAgent\",\n  \"secondary_agents\": [\"ImageAgent\", \"TextAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The task requires comparing image and text data, which is best handled by a multimodal agent, with support from specialized image and text agents for feature extraction.\"\n}",
+    "latency_ms": 1687
+  },
+  {
+    "id": 39,
+    "category": "multimodal",
+    "problem": "Detect hateful content in social media posts that combine image and text",
+    "response": {
+      "primary_agent": "MultimodalAgent",
+      "secondary_agents": [
+        "TextAgent",
+        "ImageAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "The task requires analyzing both image and text modalities to detect hateful content, which is best handled by a multimodal agent with support from text and image agents for feature extraction."
+    },
+    "raw": "{\n  \"primary_agent\": \"MultimodalAgent\",\n  \"secondary_agents\": [\"TextAgent\", \"ImageAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The task requires analyzing both image and text modalities to detect hateful content, which is best handled by a multimodal agent with support from text and image agents for feature extraction.\"\n}",
+    "latency_ms": 1629
+  },
+  {
+    "id": 40,
+    "category": "multimodal",
+    "problem": "Classify restaurant reviews using both photos and written text",
+    "response": {
+      "primary_agent": "MultimodalAgent",
+      "secondary_agents": [
+        "TextAgent",
+        "ImageAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "The problem requires processing both images and text, which is the core capability of MultimodalAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"MultimodalAgent\",\n  \"secondary_agents\": [\"TextAgent\", \"ImageAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The problem requires processing both images and text, which is the core capability of MultimodalAgent.\"\n}",
+    "latency_ms": 1605
+  },
+  {
+    "id": 41,
+    "category": "medical",
+    "problem": "Detect pneumonia from chest X-ray images",
+    "response": {
+      "primary_agent": "MedicalAgent",
+      "secondary_agents": [
+        "ImageAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "Chest X-ray analysis for pneumonia is a medical imaging task best handled by a specialized MedicalAgent, with ImageAgent supporting image processing."
+    },
+    "raw": "{\n  \"primary_agent\": \"MedicalAgent\",\n  \"secondary_agents\": [\"ImageAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"Chest X-ray analysis for pneumonia is a medical imaging task best handled by a specialized MedicalAgent, with ImageAgent supporting image processing.\"\n}",
+    "latency_ms": 1590
+  },
+  {
+    "id": 42,
+    "category": "medical",
+    "problem": "Classify brain tumor type from MRI scans",
+    "response": {
+      "primary_agent": "MedicalAgent",
+      "secondary_agents": [
+        "ImageAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "MedicalAgent specializes in medical imaging tasks like tumor classification, with ImageAgent supporting image processing."
+    },
+    "raw": "{\n  \"primary_agent\": \"MedicalAgent\",\n  \"secondary_agents\": [\"ImageAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"MedicalAgent specializes in medical imaging tasks like tumor classification, with ImageAgent supporting image processing.\"\n}",
+    "latency_ms": 1586
+  },
+  {
+    "id": 43,
+    "category": "medical",
+    "problem": "Detect malignant melanoma from dermoscopy skin lesion images",
+    "response": {
+      "primary_agent": "MedicalAgent",
+      "secondary_agents": [
+        "ImageAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "MedicalAgent is specialized for medical imaging tasks like detecting melanoma, with ImageAgent supporting image processing."
+    },
+    "raw": "{\n  \"primary_agent\": \"MedicalAgent\",\n  \"secondary_agents\": [\"ImageAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"MedicalAgent is specialized for medical imaging tasks like detecting melanoma, with ImageAgent supporting image processing.\"\n}",
+    "latency_ms": 1354
+  },
+  {
+    "id": 44,
+    "category": "medical",
+    "problem": "Identify diabetic retinopathy grade from retinal fundus photographs",
+    "response": {
+      "primary_agent": "MedicalAgent",
+      "secondary_agents": [
+        "ImageAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "MedicalAgent specializes in medical imaging analysis, and ImageAgent supports image processing for retinal fundus photographs."
+    },
+    "raw": "{\n  \"primary_agent\": \"MedicalAgent\",\n  \"secondary_agents\": [\"ImageAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"MedicalAgent specializes in medical imaging analysis, and ImageAgent supports image processing for retinal fundus photographs.\"\n}",
+    "latency_ms": 1352
+  },
+  {
+    "id": 45,
+    "category": "medical",
+    "problem": "Detect COVID-19 vs other pneumonia from CT scan slices",
+    "response": {
+      "primary_agent": "MedicalAgent",
+      "secondary_agents": [
+        "ImageAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "MedicalAgent specializes in medical imaging tasks like COVID-19 detection from CT scans, with ImageAgent supporting image processing."
+    },
+    "raw": "{\n  \"primary_agent\": \"MedicalAgent\",\n  \"secondary_agents\": [\"ImageAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"MedicalAgent specializes in medical imaging tasks like COVID-19 detection from CT scans, with ImageAgent supporting image processing.\"\n}",
+    "latency_ms": 1474
+  },
+  {
+    "id": 46,
+    "category": "edge_case",
+    "problem": "Build a system that makes things better",
+    "response": {
+      "primary_agent": "MultimodalAgent",
+      "secondary_agents": [
+        "TextAgent",
+        "ImageAgent",
+        "AudioAgent"
+      ],
+      "confidence": 0.7,
+      "reasoning": "The problem is vague but suggests improvement across multiple modalities, so a multimodal approach with supporting agents for text, image, and audio is appropriate."
+    },
+    "raw": "{\n  \"primary_agent\": \"MultimodalAgent\",\n  \"secondary_agents\": [\"TextAgent\", \"ImageAgent\", \"AudioAgent\"],\n  \"confidence\": 0.7,\n  \"reasoning\": \"The problem is vague but suggests improvement across multiple modalities, so a multimodal approach with supporting agents for text, image, and audio is appropriate.\"\n}",
+    "latency_ms": 1602
+  },
+  {
+    "id": 47,
+    "category": "edge_case",
+    "problem": "Analyze my data and find patterns",
+    "response": {
+      "primary_agent": "TabularAgent",
+      "secondary_agents": [],
+      "confidence": 0.9,
+      "reasoning": "The request to analyze data and find patterns typically involves structured data, which is best handled by TabularAgent."
+    },
+    "raw": "{\n  \"primary_agent\": \"TabularAgent\",\n  \"secondary_agents\": [],\n  \"confidence\": 0.9,\n  \"reasoning\": \"The request to analyze data and find patterns typically involves structured data, which is best handled by TabularAgent.\"\n}",
+    "latency_ms": 1649
+  },
+  {
+    "id": 48,
+    "category": "edge_case",
+    "problem": "I need AI for my app",
+    "response": {
+      "primary_agent": "MultimodalAgent",
+      "secondary_agents": [
+        "TextAgent",
+        "ImageAgent"
+      ],
+      "confidence": 0.7,
+      "reasoning": "The request is vague, but a multimodal agent can handle various data types commonly found in apps."
+    },
+    "raw": "{\n  \"primary_agent\": \"MultimodalAgent\",\n  \"secondary_agents\": [\"TextAgent\", \"ImageAgent\"],\n  \"confidence\": 0.7,\n  \"reasoning\": \"The request is vague, but a multimodal agent can handle various data types commonly found in apps.\"\n}",
+    "latency_ms": 1511
+  },
+  {
+    "id": 49,
+    "category": "edge_case",
+    "problem": "Detect problems and fix them automatically in real time at scale",
+    "response": {
+      "primary_agent": "SecurityAgent",
+      "secondary_agents": [
+        "TextAgent",
+        "ImageAgent"
+      ],
+      "confidence": 0.9,
+      "reasoning": "SecurityAgent is best for detecting and fixing problems in real time at scale, with support from TextAgent and ImageAgent for analyzing logs and visual anomalies."
+    },
+    "raw": "{\n  \"primary_agent\": \"SecurityAgent\",\n  \"secondary_agents\": [\"TextAgent\", \"ImageAgent\"],\n  \"confidence\": 0.9,\n  \"reasoning\": \"SecurityAgent is best for detecting and fixing problems in real time at scale, with support from TextAgent and ImageAgent for analyzing logs and visual anomalies.\"\n}",
+    "latency_ms": 1659
+  },
+  {
+    "id": 50,
+    "category": "edge_case",
+    "problem": "Classify everything my users send whether it is images, text, or voice",
+    "response": {
+      "primary_agent": "MultimodalAgent",
+      "secondary_agents": [
+        "ImageAgent",
+        "TextAgent",
+        "AudioAgent"
+      ],
+      "confidence": 0.95,
+      "reasoning": "The problem requires handling multiple input types (images, text, voice), making a MultimodalAgent the best choice, supported by specialized agents for each modality."
+    },
+    "raw": "{\n  \"primary_agent\": \"MultimodalAgent\",\n  \"secondary_agents\": [\"ImageAgent\", \"TextAgent\", \"AudioAgent\"],\n  \"confidence\": 0.95,\n  \"reasoning\": \"The problem requires handling multiple input types (images, text, voice), making a MultimodalAgent the best choice, supported by specialized agents for each modality.\"\n}",
+    "latency_ms": 1981
+  }
+]

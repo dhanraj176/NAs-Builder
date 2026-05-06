@@ -1,0 +1,836 @@
+[
+  {
+    "id": 1,
+    "category": "image",
+    "problem": "Detect potholes in road images from dashcam footage",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "image_processor",
+        "pothole_detector"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution of image processing and pothole detection agents can handle multiple frames simultaneously, improving throughput for real-time dashcam footage."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"image_processor\", \"pothole_detector\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution of image processing and pothole detection agents can handle multiple frames simultaneously, improving throughput for real-time dashcam footage.\"\n}",
+    "latency_ms": 1627
+  },
+  {
+    "id": 2,
+    "category": "image",
+    "problem": "Classify surface defects in steel manufacturing images",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "image_processor",
+        "defect_classifier"
+      ],
+      "expected_accuracy": 0.92,
+      "rationale": "Parallel execution of image preprocessing and defect classification maximizes throughput for real-time steel inspection."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"image_processor\", \"defect_classifier\"],\n  \"expected_accuracy\": 0.92,\n  \"rationale\": \"Parallel execution of image preprocessing and defect classification maximizes throughput for real-time steel inspection.\"\n}",
+    "latency_ms": 1413
+  },
+  {
+    "id": 3,
+    "category": "image",
+    "problem": "Identify plant diseases from leaf photographs",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "image_processor",
+        "disease_classifier"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Sequential processing allows the image processor to extract features before the classifier identifies the disease, which is a standard pipeline for image-based diagnosis."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"image_processor\", \"disease_classifier\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Sequential processing allows the image processor to extract features before the classifier identifies the disease, which is a standard pipeline for image-based diagnosis.\"\n}",
+    "latency_ms": 1560
+  },
+  {
+    "id": 4,
+    "category": "image",
+    "problem": "Detect and count pedestrians in busy intersection surveillance videos",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "object_detection_agent",
+        "tracking_agent",
+        "counting_agent"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution of detection and tracking agents improves throughput for real-time video analysis, with a dedicated counting agent for accurate pedestrian counts."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"object_detection_agent\", \"tracking_agent\", \"counting_agent\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution of detection and tracking agents improves throughput for real-time video analysis, with a dedicated counting agent for accurate pedestrian counts.\"\n}",
+    "latency_ms": 1667
+  },
+  {
+    "id": 5,
+    "category": "image",
+    "problem": "Classify vehicle types in parking lot camera feed",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "VehicleDetector",
+        "VehicleClassifier"
+      ],
+      "expected_accuracy": 0.92,
+      "rationale": "Parallel execution of detection and classification agents improves throughput for real-time video analysis."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"VehicleDetector\", \"VehicleClassifier\"],\n  \"expected_accuracy\": 0.92,\n  \"rationale\": \"Parallel execution of detection and classification agents improves throughput for real-time video analysis.\"\n}",
+    "latency_ms": 1426
+  },
+  {
+    "id": 6,
+    "category": "image",
+    "problem": "Detect wildfire smoke in forest camera images",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "image_preprocessor",
+        "smoke_detector",
+        "alert_generator"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution of preprocessing and detection speeds up analysis, while alert generation is sequential after detection."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"image_preprocessor\", \"smoke_detector\", \"alert_generator\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution of preprocessing and detection speeds up analysis, while alert generation is sequential after detection.\"\n}",
+    "latency_ms": 1588
+  },
+  {
+    "id": 7,
+    "category": "image",
+    "problem": "Identify fashion clothing items from e-commerce product photos",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "ImageClassifier",
+        "ObjectDetector",
+        "AttributeExtractor"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution of image classification, object detection, and attribute extraction maximizes efficiency for identifying fashion items from photos."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"ImageClassifier\", \"ObjectDetector\", \"AttributeExtractor\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution of image classification, object detection, and attribute extraction maximizes efficiency for identifying fashion items from photos.\"\n}",
+    "latency_ms": 1899
+  },
+  {
+    "id": 8,
+    "category": "image",
+    "problem": "Detect illegal dumping in street camera images and classify severity",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "detection_agent",
+        "classification_agent"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "First detect dumping events, then classify severity in a pipeline to ensure accurate severity assessment based on detection results."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"detection_agent\", \"classification_agent\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"First detect dumping events, then classify severity in a pipeline to ensure accurate severity assessment based on detection results.\"\n}",
+    "latency_ms": 1859
+  },
+  {
+    "id": 9,
+    "category": "image",
+    "problem": "Count fruit on trees from drone imagery for harvest planning",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "image_processor",
+        "object_detector",
+        "counter",
+        "planner"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel processing of drone images speeds up fruit detection and counting, enabling timely harvest planning."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"image_processor\", \"object_detector\", \"counter\", \"planner\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel processing of drone images speeds up fruit detection and counting, enabling timely harvest planning.\"\n}",
+    "latency_ms": 1512
+  },
+  {
+    "id": 10,
+    "category": "image",
+    "problem": "Classify face emotions in real time from webcam for mental health monitoring",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "FaceDetector",
+        "EmotionClassifier",
+        "MentalHealthMonitor"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution of face detection and emotion classification enables real-time performance, while the mental health monitor aggregates results for continuous assessment."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"FaceDetector\", \"EmotionClassifier\", \"MentalHealthMonitor\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution of face detection and emotion classification enables real-time performance, while the mental health monitor aggregates results for continuous assessment.\"\n}",
+    "latency_ms": 1603
+  },
+  {
+    "id": 11,
+    "category": "text",
+    "problem": "Classify spam emails from customer inboxes",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "SpamClassifierAgent"
+      ],
+      "expected_accuracy": 0.95,
+      "rationale": "A single classification agent is sufficient for spam detection, as it can be trained on labeled email data to achieve high accuracy."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"SpamClassifierAgent\"],\n  \"expected_accuracy\": 0.95,\n  \"rationale\": \"A single classification agent is sufficient for spam detection, as it can be trained on labeled email data to achieve high accuracy.\"\n}",
+    "latency_ms": 1696
+  },
+  {
+    "id": 12,
+    "category": "text",
+    "problem": "Detect sentiment in product reviews for an e-commerce platform",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "sentiment_analysis_agent"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Sentiment detection is a single task that can be performed independently on each review, making parallel execution efficient."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"sentiment_analysis_agent\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Sentiment detection is a single task that can be performed independently on each review, making parallel execution efficient.\"\n}",
+    "latency_ms": 1474
+  },
+  {
+    "id": 13,
+    "category": "text",
+    "problem": "Classify fake news articles from social media posts",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "text_processor",
+        "fact_checker",
+        "sentiment_analyzer",
+        "aggregator"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel processing of text, fact-checking, and sentiment analysis improves speed and accuracy for fake news classification."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"text_processor\", \"fact_checker\", \"sentiment_analyzer\", \"aggregator\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel processing of text, fact-checking, and sentiment analysis improves speed and accuracy for fake news classification.\"\n}",
+    "latency_ms": 1674
+  },
+  {
+    "id": 14,
+    "category": "text",
+    "problem": "Categorize customer support tickets into departments automatically",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "TicketClassifier",
+        "DepartmentRouter"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Sequential classification by a classifier agent followed by routing ensures accurate department assignment based on ticket content."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"TicketClassifier\", \"DepartmentRouter\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Sequential classification by a classifier agent followed by routing ensures accurate department assignment based on ticket content.\"\n}",
+    "latency_ms": 1425
+  },
+  {
+    "id": 15,
+    "category": "text",
+    "problem": "Detect toxic comments in online forums",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "ToxicCommentDetector"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "A single agent can efficiently classify comments as toxic or non-toxic using a pre-trained model, and parallel execution is not needed as there is no dependency between comments."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"ToxicCommentDetector\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"A single agent can efficiently classify comments as toxic or non-toxic using a pre-trained model, and parallel execution is not needed as there is no dependency between comments.\"\n}",
+    "latency_ms": 1625
+  },
+  {
+    "id": 16,
+    "category": "text",
+    "problem": "Classify intent in chatbot user messages for banking assistant",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "intent_classifier"
+      ],
+      "expected_accuracy": 0.95,
+      "rationale": "Single agent for intent classification is sufficient and efficient for banking assistant messages."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"intent_classifier\"],\n  \"expected_accuracy\": 0.95,\n  \"rationale\": \"Single agent for intent classification is sufficient and efficient for banking assistant messages.\"\n}",
+    "latency_ms": 1474
+  },
+  {
+    "id": 17,
+    "category": "text",
+    "problem": "Detect plagiarism in student essay submissions",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "plagiarism_detector",
+        "similarity_scorer",
+        "report_generator"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution allows multiple essays to be checked simultaneously against a database for efficient plagiarism detection."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"plagiarism_detector\", \"similarity_scorer\", \"report_generator\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution allows multiple essays to be checked simultaneously against a database for efficient plagiarism detection.\"\n}",
+    "latency_ms": 1803
+  },
+  {
+    "id": 18,
+    "category": "text",
+    "problem": "Classify news articles into topics: politics, sports, tech, finance",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "classifier"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Single classification task best handled by one agent sequentially."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"classifier\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Single classification task best handled by one agent sequentially.\"\n}",
+    "latency_ms": 1393
+  },
+  {
+    "id": 19,
+    "category": "text",
+    "problem": "Identify language of user queries in multilingual customer service",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "language_detector",
+        "response_router"
+      ],
+      "expected_accuracy": 0.95,
+      "rationale": "Parallel execution of language detection on each query ensures low latency, while a single detector agent can handle multiple queries simultaneously."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"language_detector\", \"response_router\"],\n  \"expected_accuracy\": 0.95,\n  \"rationale\": \"Parallel execution of language detection on each query ensures low latency, while a single detector agent can handle multiple queries simultaneously.\"\n}",
+    "latency_ms": 1410
+  },
+  {
+    "id": 20,
+    "category": "text",
+    "problem": "Classify legal contract clauses as standard, risky, or missing",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "ClassifierAgent",
+        "RiskAnalyzerAgent",
+        "MissingClauseDetectorAgent"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution allows independent classification of each clause type, improving efficiency for large contracts."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"ClassifierAgent\", \"RiskAnalyzerAgent\", \"MissingClauseDetectorAgent\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution allows independent classification of each clause type, improving efficiency for large contracts.\"\n}",
+    "latency_ms": 1607
+  },
+  {
+    "id": 21,
+    "category": "tabular",
+    "problem": "Predict customer churn for a telecom company from transaction data",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "DataPreprocessor",
+        "FeatureEngineer",
+        "ModelTrainer",
+        "Evaluator"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution of data preprocessing, feature engineering, and model training speeds up the pipeline while maintaining high accuracy for churn prediction."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"DataPreprocessor\", \"FeatureEngineer\", \"ModelTrainer\", \"Evaluator\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution of data preprocessing, feature engineering, and model training speeds up the pipeline while maintaining high accuracy for churn prediction.\"\n}",
+    "latency_ms": 1693
+  },
+  {
+    "id": 22,
+    "category": "tabular",
+    "problem": "Detect credit card fraud from transaction features",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "DataPreprocessor",
+        "FeatureExtractor",
+        "FraudDetector"
+      ],
+      "expected_accuracy": 0.95,
+      "rationale": "Parallel execution of preprocessing, feature extraction, and fraud detection enables real-time analysis of transaction features for high accuracy."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"DataPreprocessor\", \"FeatureExtractor\", \"FraudDetector\"],\n  \"expected_accuracy\": 0.95,\n  \"rationale\": \"Parallel execution of preprocessing, feature extraction, and fraud detection enables real-time analysis of transaction features for high accuracy.\"\n}",
+    "latency_ms": 1555
+  },
+  {
+    "id": 23,
+    "category": "tabular",
+    "problem": "Predict house prices from neighborhood and property features",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "feature_extractor",
+        "price_predictor"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution allows independent feature extraction and price prediction to be computed simultaneously, improving efficiency without sacrificing accuracy."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"feature_extractor\", \"price_predictor\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution allows independent feature extraction and price prediction to be computed simultaneously, improving efficiency without sacrificing accuracy.\"\n}",
+    "latency_ms": 1631
+  },
+  {
+    "id": 24,
+    "category": "tabular",
+    "problem": "Classify loan default risk from applicant financial profile",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "DataValidator",
+        "FeatureExtractor",
+        "RiskClassifier"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Sequential processing ensures data quality before feature extraction and classification, maximizing accuracy for structured financial data."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"DataValidator\", \"FeatureExtractor\", \"RiskClassifier\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Sequential processing ensures data quality before feature extraction and classification, maximizing accuracy for structured financial data.\"\n}",
+    "latency_ms": 1454
+  },
+  {
+    "id": 25,
+    "category": "tabular",
+    "problem": "Predict monthly sales volume for retail stores from historical data",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "DataCollector",
+        "FeatureEngineer",
+        "ModelTrainer",
+        "Predictor"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Sequential execution is suitable for a clear pipeline from data collection to prediction, with each step depending on the previous."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"DataCollector\", \"FeatureEngineer\", \"ModelTrainer\", \"Predictor\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Sequential execution is suitable for a clear pipeline from data collection to prediction, with each step depending on the previous.\"\n}",
+    "latency_ms": 1593
+  },
+  {
+    "id": 26,
+    "category": "tabular",
+    "problem": "Identify anomalous sensor readings in manufacturing equipment",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "DataCollector",
+        "AnomalyDetector",
+        "AlertGenerator"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution allows simultaneous processing of multiple sensor streams for real-time anomaly detection."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"DataCollector\", \"AnomalyDetector\", \"AlertGenerator\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution allows simultaneous processing of multiple sensor streams for real-time anomaly detection.\"\n}",
+    "latency_ms": 1406
+  },
+  {
+    "id": 27,
+    "category": "tabular",
+    "problem": "Predict employee attrition from HR metrics",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "data_cleaner",
+        "feature_engineer",
+        "model_trainer",
+        "evaluator"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Sequential processing is suitable for a standard ML pipeline where each step depends on the previous one."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"data_cleaner\", \"feature_engineer\", \"model_trainer\", \"evaluator\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Sequential processing is suitable for a standard ML pipeline where each step depends on the previous one.\"\n}",
+    "latency_ms": 1848
+  },
+  {
+    "id": 28,
+    "category": "tabular",
+    "problem": "Classify insurance claim severity from policy features",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "DataPreprocessor",
+        "FeatureExtractor",
+        "Classifier"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Sequential processing is suitable for a standard classification task with clear data flow from preprocessing to feature extraction to classification."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"DataPreprocessor\", \"FeatureExtractor\", \"Classifier\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Sequential processing is suitable for a standard classification task with clear data flow from preprocessing to feature extraction to classification.\"\n}",
+    "latency_ms": 1625
+  },
+  {
+    "id": 29,
+    "category": "tabular",
+    "problem": "Predict energy consumption for buildings from weather and occupancy",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "DataCollector",
+        "FeatureExtractor",
+        "Predictor"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Sequential pipeline suits the dependency where weather and occupancy data must be collected and features extracted before prediction."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"DataCollector\", \"FeatureExtractor\", \"Predictor\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Sequential pipeline suits the dependency where weather and occupancy data must be collected and features extracted before prediction.\"\n}",
+    "latency_ms": 1830
+  },
+  {
+    "id": 30,
+    "category": "tabular",
+    "problem": "Rank product recommendations from user purchase history CSV",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "DataLoader",
+        "FeatureExtractor",
+        "Ranker"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution allows independent processing of user history and product features before ranking."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"DataLoader\", \"FeatureExtractor\", \"Ranker\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution allows independent processing of user history and product features before ranking.\"\n}",
+    "latency_ms": 1420
+  },
+  {
+    "id": 31,
+    "category": "audio",
+    "problem": "Transcribe and classify customer service call recordings",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "Transcriber",
+        "Classifier"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Transcription and classification can be performed independently on the audio input, allowing parallel processing for efficiency."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"Transcriber\", \"Classifier\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Transcription and classification can be performed independently on the audio input, allowing parallel processing for efficiency.\"\n}",
+    "latency_ms": 1394
+  },
+  {
+    "id": 32,
+    "category": "audio",
+    "problem": "Detect machine failure sounds in factory audio streams",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "audio_processor",
+        "sound_classifier",
+        "failure_detector"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel processing of audio streams enables real-time detection of failure sounds without sequential bottlenecks."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"audio_processor\", \"sound_classifier\", \"failure_detector\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel processing of audio streams enables real-time detection of failure sounds without sequential bottlenecks.\"\n}",
+    "latency_ms": 2047
+  },
+  {
+    "id": 33,
+    "category": "audio",
+    "problem": "Classify music genres from short audio clips",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "feature_extractor",
+        "genre_classifier"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution allows simultaneous feature extraction and classification for multiple audio clips, improving throughput."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"feature_extractor\", \"genre_classifier\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution allows simultaneous feature extraction and classification for multiple audio clips, improving throughput.\"\n}",
+    "latency_ms": 1418
+  },
+  {
+    "id": 34,
+    "category": "audio",
+    "problem": "Identify speaker identity from voice recordings for authentication",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "VoiceFeatureExtractor",
+        "SpeakerEmbeddingGenerator",
+        "IdentityMatcher"
+      ],
+      "expected_accuracy": 0.95,
+      "rationale": "Parallel execution of feature extraction and embedding generation speeds up processing while maintaining high accuracy for authentication."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"VoiceFeatureExtractor\", \"SpeakerEmbeddingGenerator\", \"IdentityMatcher\"],\n  \"expected_accuracy\": 0.95,\n  \"rationale\": \"Parallel execution of feature extraction and embedding generation speeds up processing while maintaining high accuracy for authentication.\"\n}",
+    "latency_ms": 1512
+  },
+  {
+    "id": 35,
+    "category": "audio",
+    "problem": "Detect baby crying vs background noise in smart baby monitor",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "AudioPreprocessor",
+        "FeatureExtractor",
+        "BinaryClassifier"
+      ],
+      "expected_accuracy": 0.95,
+      "rationale": "Sequential pipeline with specialized agents for preprocessing, feature extraction, and binary classification ensures high accuracy for this binary audio classification task."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"AudioPreprocessor\", \"FeatureExtractor\", \"BinaryClassifier\"],\n  \"expected_accuracy\": 0.95,\n  \"rationale\": \"Sequential pipeline with specialized agents for preprocessing, feature extraction, and binary classification ensures high accuracy for this binary audio classification task.\"\n}",
+    "latency_ms": 2088
+  },
+  {
+    "id": 36,
+    "category": "multimodal",
+    "problem": "Classify product listings using both title text and thumbnail image",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "text_classifier",
+        "image_classifier",
+        "fusion"
+      ],
+      "expected_accuracy": 0.92,
+      "rationale": "Parallel processing of text and image modalities followed by fusion improves accuracy by leveraging complementary information."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"text_classifier\", \"image_classifier\", \"fusion\"],\n  \"expected_accuracy\": 0.92,\n  \"rationale\": \"Parallel processing of text and image modalities followed by fusion improves accuracy by leveraging complementary information.\"\n}",
+    "latency_ms": 1660
+  },
+  {
+    "id": 37,
+    "category": "multimodal",
+    "problem": "Generate image captions and detect brand logos in marketing materials",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "image_captioning_agent",
+        "brand_logo_detection_agent"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Both tasks are independent and can be executed simultaneously to improve efficiency."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"image_captioning_agent\", \"brand_logo_detection_agent\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Both tasks are independent and can be executed simultaneously to improve efficiency.\"\n}",
+    "latency_ms": 1406
+  },
+  {
+    "id": 38,
+    "category": "multimodal",
+    "problem": "Verify that product images match their text descriptions for listing quality",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "ImageAnalyzer",
+        "TextAnalyzer",
+        "Matcher"
+      ],
+      "expected_accuracy": 0.95,
+      "rationale": "Parallel execution of image and text analysis speeds up processing, followed by a matching step to ensure consistency."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"ImageAnalyzer\", \"TextAnalyzer\", \"Matcher\"],\n  \"expected_accuracy\": 0.95,\n  \"rationale\": \"Parallel execution of image and text analysis speeds up processing, followed by a matching step to ensure consistency.\"\n}",
+    "latency_ms": 1671
+  },
+  {
+    "id": 39,
+    "category": "multimodal",
+    "problem": "Detect hateful content in social media posts that combine image and text",
+    "response": {
+      "execution_mode": "hybrid",
+      "agent_topology": [
+        "image_analyzer",
+        "text_analyzer",
+        "fusion_analyzer"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Hybrid execution allows parallel image and text analysis followed by sequential fusion to detect multimodal hateful content."
+    },
+    "raw": "{\n  \"execution_mode\": \"hybrid\",\n  \"agent_topology\": [\"image_analyzer\", \"text_analyzer\", \"fusion_analyzer\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Hybrid execution allows parallel image and text analysis followed by sequential fusion to detect multimodal hateful content.\"\n}",
+    "latency_ms": 1582
+  },
+  {
+    "id": 40,
+    "category": "multimodal",
+    "problem": "Classify restaurant reviews using both photos and written text",
+    "response": {
+      "execution_mode": "hybrid",
+      "agent_topology": [
+        "text_agent",
+        "image_agent",
+        "fusion_agent"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Hybrid execution with parallel text and image processing followed by sequential fusion improves accuracy by combining multimodal features."
+    },
+    "raw": "{\n  \"execution_mode\": \"hybrid\",\n  \"agent_topology\": [\"text_agent\", \"image_agent\", \"fusion_agent\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Hybrid execution with parallel text and image processing followed by sequential fusion improves accuracy by combining multimodal features.\"\n}",
+    "latency_ms": 1622
+  },
+  {
+    "id": 41,
+    "category": "medical",
+    "problem": "Detect pneumonia from chest X-ray images",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "image_processor",
+        "feature_extractor",
+        "classifier"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution of image processing and feature extraction can speed up inference, and a classifier can then combine features for accurate pneumonia detection."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"image_processor\", \"feature_extractor\", \"classifier\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution of image processing and feature extraction can speed up inference, and a classifier can then combine features for accurate pneumonia detection.\"\n}",
+    "latency_ms": 1590
+  },
+  {
+    "id": 42,
+    "category": "medical",
+    "problem": "Classify brain tumor type from MRI scans",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "ImagePreprocessor",
+        "FeatureExtractor",
+        "Classifier"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Sequential processing is suitable for a standard classification pipeline where preprocessing, feature extraction, and classification are performed in order."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"ImagePreprocessor\", \"FeatureExtractor\", \"Classifier\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Sequential processing is suitable for a standard classification pipeline where preprocessing, feature extraction, and classification are performed in order.\"\n}",
+    "latency_ms": 1527
+  },
+  {
+    "id": 43,
+    "category": "medical",
+    "problem": "Detect malignant melanoma from dermoscopy skin lesion images",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "image_preprocessor",
+        "feature_extractor",
+        "classifier"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution of image preprocessing, feature extraction, and classification agents enables efficient processing of high-resolution dermoscopy images while maintaining diagnostic accuracy."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"image_preprocessor\", \"feature_extractor\", \"classifier\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution of image preprocessing, feature extraction, and classification agents enables efficient processing of high-resolution dermoscopy images while maintaining diagnostic accuracy.\"\n}",
+    "latency_ms": 1552
+  },
+  {
+    "id": 44,
+    "category": "medical",
+    "problem": "Identify diabetic retinopathy grade from retinal fundus photographs",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "image_preprocessor",
+        "feature_extractor",
+        "classifier"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Sequential processing of image preprocessing, feature extraction, and classification is standard for medical image grading tasks."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"image_preprocessor\", \"feature_extractor\", \"classifier\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Sequential processing of image preprocessing, feature extraction, and classification is standard for medical image grading tasks.\"\n}",
+    "latency_ms": 1870
+  },
+  {
+    "id": 45,
+    "category": "medical",
+    "problem": "Detect COVID-19 vs other pneumonia from CT scan slices",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "image_preprocessor",
+        "feature_extractor",
+        "classifier"
+      ],
+      "expected_accuracy": 0.92,
+      "rationale": "Parallel execution of preprocessing and feature extraction on multiple slices, then sequential classification, balances speed and accuracy for medical imaging."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"image_preprocessor\", \"feature_extractor\", \"classifier\"],\n  \"expected_accuracy\": 0.92,\n  \"rationale\": \"Parallel execution of preprocessing and feature extraction on multiple slices, then sequential classification, balances speed and accuracy for medical imaging.\"\n}",
+    "latency_ms": 1801
+  },
+  {
+    "id": 46,
+    "category": "edge_case",
+    "problem": "Build a system that makes things better",
+    "response": {
+      "execution_mode": "hybrid",
+      "agent_topology": [
+        "Analyzer",
+        "Planner",
+        "Executor",
+        "Evaluator"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Hybrid mode allows parallel analysis and planning, followed by sequential execution and evaluation to iteratively improve outcomes."
+    },
+    "raw": "{\n  \"execution_mode\": \"hybrid\",\n  \"agent_topology\": [\"Analyzer\", \"Planner\", \"Executor\", \"Evaluator\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Hybrid mode allows parallel analysis and planning, followed by sequential execution and evaluation to iteratively improve outcomes.\"\n}",
+    "latency_ms": 1626
+  },
+  {
+    "id": 47,
+    "category": "edge_case",
+    "problem": "Analyze my data and find patterns",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "DataAnalyzer",
+        "PatternFinder",
+        "PatternValidator"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution allows independent analysis of data and pattern discovery, with validation to ensure accuracy."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"DataAnalyzer\", \"PatternFinder\", \"PatternValidator\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution allows independent analysis of data and pattern discovery, with validation to ensure accuracy.\"\n}",
+    "latency_ms": 1592
+  },
+  {
+    "id": 48,
+    "category": "edge_case",
+    "problem": "I need AI for my app",
+    "response": {
+      "execution_mode": "sequential",
+      "agent_topology": [
+        "IntentClassifier",
+        "TaskAgent"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Simple sequential flow for general AI app with intent classification followed by task execution."
+    },
+    "raw": "{\n  \"execution_mode\": \"sequential\",\n  \"agent_topology\": [\"IntentClassifier\", \"TaskAgent\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Simple sequential flow for general AI app with intent classification followed by task execution.\"\n}",
+    "latency_ms": 1440
+  },
+  {
+    "id": 49,
+    "category": "edge_case",
+    "problem": "Detect problems and fix them automatically in real time at scale",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "ProblemDetector",
+        "RootCauseAnalyzer",
+        "AutoFixer"
+      ],
+      "expected_accuracy": 0.85,
+      "rationale": "Parallel execution enables real-time detection and automated fixes across large-scale systems by concurrently running detection and analysis agents."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"ProblemDetector\", \"RootCauseAnalyzer\", \"AutoFixer\"],\n  \"expected_accuracy\": 0.85,\n  \"rationale\": \"Parallel execution enables real-time detection and automated fixes across large-scale systems by concurrently running detection and analysis agents.\"\n}",
+    "latency_ms": 1523
+  },
+  {
+    "id": 50,
+    "category": "edge_case",
+    "problem": "Classify everything my users send whether it is images, text, or voice",
+    "response": {
+      "execution_mode": "parallel",
+      "agent_topology": [
+        "image_classifier",
+        "text_classifier",
+        "voice_classifier"
+      ],
+      "expected_accuracy": 0.95,
+      "rationale": "Parallel execution allows simultaneous classification of different modalities for faster response."
+    },
+    "raw": "{\n  \"execution_mode\": \"parallel\",\n  \"agent_topology\": [\"image_classifier\", \"text_classifier\", \"voice_classifier\"],\n  \"expected_accuracy\": 0.95,\n  \"rationale\": \"Parallel execution allows simultaneous classification of different modalities for faster response.\"\n}",
+    "latency_ms": 1760
+  }
+]

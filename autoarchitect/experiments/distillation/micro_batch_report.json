@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-05-06T11:18:20.408779",
+  "teacher_model": "deepseek-chat",
+  "total_calls": 150,
+  "successful": 150,
+  "failed": 0,
+  "pass_rate_pct": 100.0,
+  "per_core": [
+    {
+      "core": "task",
+      "friendly_name": "Task Understander",
+      "calls": 50,
+      "passed": 50,
+      "failed": 0,
+      "input_tokens": 6674,
+      "output_tokens": 3098,
+      "elapsed_s": 74.3
+    },
+    {
+      "core": "domain",
+      "friendly_name": "Domain Classifier",
+      "calls": 50,
+      "passed": 50,
+      "failed": 0,
+      "input_tokens": 6774,
+      "output_tokens": 3023,
+      "elapsed_s": 75.73
+    },
+    {
+      "core": "arch",
+      "friendly_name": "Architecture Advisor",
+      "calls": 50,
+      "passed": 50,
+      "failed": 0,
+      "input_tokens": 5724,
+      "output_tokens": 3379,
+      "elapsed_s": 80.47
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 19172,
+    "output_tokens": 9500,
+    "total_tokens": 28672,
+    "cost_usd": 0.0156
+  },
+  "performance": {
+    "avg_latency_ms": 1537,
+    "total_elapsed_min": 3.84
+  },
+  "projection_1000": {
+    "estimated_cost_usd": 0.31
+  },
+  "acceptance_gate": {
+    "pass_rate_ok": true,
+    "cost_ok": true,
+    "latency_ok": true,
+    "overall": true
+  }
+}
