@@ -374,6 +374,48 @@ class AgentNetwork:
         fused["wall_time"]         = round(time.time() - submit_time, 3)
         return fused
 
+    # ── ENSEMBLE FROM SAVED MODELS ──────────
+
+    def collaborate_from_models(self,
+                                  model_paths: dict,
+                                  problem: str,
+                                  test_data,
+                                  domain: str = None) -> dict:
+        """
+        Load agents from saved model files and run ensemble inference.
+
+        Parameters
+        ----------
+        model_paths : {domain: model_path_str | trained_result_dict}
+            e.g. {"image": "/path/to/hash_image.pth",
+                  "multimodal": {"model_path": "/path/...", "classes": [...]}}
+        problem     : original problem description (for agent naming)
+        test_data   : input to run ensemble on
+        domain      : primary domain for FusionAgent weight lookup
+
+        Returns the same dict as collaborate().
+        """
+        from api.agents.agent_factory import get_factory
+        factory = get_factory()
+        agents  = []
+
+        for dom, res in model_paths.items():
+            trained = res if isinstance(res, dict) else {"model_path": res}
+            try:
+                agent = factory.create_from_trained(problem, dom, trained)
+                agents.append(agent)
+                print(f"  [Network] Loaded {dom} agent from "
+                      f"{trained.get('model_path', 'N/A')}")
+            except Exception as e:
+                print(f"  [Network] Could not load {dom} agent: {e}")
+
+        if not agents:
+            return {"error": "No agents loaded from model_paths",
+                    "model_paths": list(model_paths.keys())}
+
+        return self.collaborate(agents, problem, test_data,
+                                domain=domain or next(iter(model_paths)))
+
     # ── COLLABORATION CYCLE ──────────────────
 
     def _network_collaboration_cycle(self) -> None:

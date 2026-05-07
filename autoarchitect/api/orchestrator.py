@@ -284,8 +284,16 @@ class AutoArchitectOrchestrator:
 
         # 8. Run agents
         if workflow["type"] == "multi":
-            result = self._run_multi_agent(
-                problem, workflow["agents"], image_data)
+            # Parallel when brain says parallel/hybrid, or by default for multi-agent
+            brain_res = workflow.get("brain_result") or {}
+            exec_mode = brain_res.get("architecture", {}).get(
+                "execution_mode", "parallel")
+            if exec_mode in ("parallel", "hybrid"):
+                result = self._run_parallel_ensemble(
+                    problem, workflow["agents"], image_data)
+            else:
+                result = self._run_multi_agent(
+                    problem, workflow["agents"], image_data)
         else:
             result = self._run_single_agent(
                 problem, domain, image_data)
@@ -581,7 +589,156 @@ class AutoArchitectOrchestrator:
         return result
 
     # ─────────────────────────────────────────────────────────────────────
-    # MULTI AGENT PIPELINE
+    # PARALLEL ENSEMBLE PIPELINE
+    # ─────────────────────────────────────────────────────────────────────
+    def _run_parallel_ensemble(self, problem: str,
+                                domains: list, image_data: str) -> dict:
+        """
+        Train all domain agents simultaneously using ThreadPoolExecutor,
+        then combine their outputs via FusionAgent with learned weights.
+
+        Both models are saved as models/trained/{hash}_{domain}.pth so the
+        NetworkZipGenerator can package them together.
+        """
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        import threading
+        import api.self_trainer as _st
+
+        _lock = threading.Lock()
+
+        def train_domain(domain: str) -> dict:
+            agent  = self._wake_agent(domain, problem)
+            result = agent.run(problem, image_data)
+            result["domain"] = domain
+
+            try:
+                print(f"  [Parallel] {domain} self-training...")
+                # Reset deduplication so each domain can use any dataset
+                with _lock:
+                    _st._used_datasets_this_run = set()
+                trained = _st.agent.train(problem, domain, epochs=3)
+
+                result.update({
+                    "train_accuracy": trained["train_accuracy"],
+                    "test_accuracy":  trained["test_accuracy"],
+                    "dataset":        trained["dataset"],
+                    "train_size":     trained["train_size"],
+                    "method":         trained.get("method", "darts_nas"),
+                    "self_trained":   True,
+                    "model_path":     trained.get("model_path"),
+                    "classes":        trained.get("classes", []),
+                })
+                print(f"  [Parallel] {domain} done: "
+                      f"{trained['test_accuracy']}%")
+            except Exception as e:
+                print(f"  [Parallel] {domain} train failed: {e}")
+                result["self_trained"] = False
+
+            return result
+
+        print(f"[Orchestrator] Parallel ensemble: {domains}")
+
+        agent_results  = []
+        all_accuracies = []
+        all_acc_dict   = {}
+
+        with ThreadPoolExecutor(max_workers=len(domains)) as executor:
+            futures = {
+                executor.submit(train_domain, d): d for d in domains
+            }
+            for future in as_completed(futures):
+                domain = futures[future]
+                try:
+                    res = future.result()
+                    agent_results.append(res)
+                    if res.get("test_accuracy"):
+                        all_accuracies.append(res["test_accuracy"])
+                        all_acc_dict[domain] = res["test_accuracy"]
+                except Exception as e:
+                    print(f"  [Parallel] {domain} future failed: {e}")
+
+        # Restore original domain order
+        _order = {d: i for i, d in enumerate(domains)}
+        agent_results.sort(
+            key=lambda r: _order.get(r.get("domain", ""), 99))
+
+        # Connect trained agents so factory wires models
+        trained_agents = []
+        for res in agent_results:
+            mp  = res.get("model_path")
+            cls = res.get("classes", [])
+            dom = res.get("domain")
+            if mp and cls:
+                try:
+                    from api.agents.agent_factory import get_factory
+                    ta  = get_factory().create_from_trained(
+                        problem, dom, res)
+                    key = f"{dom}_{problem[:20]}"
+                    self._agents[key] = ta
+                    trained_agents.append(ta)
+                    res["agent_name"] = ta.agent_name
+                    res["class_name"] = getattr(ta, "class_name", dom)
+                except Exception as e:
+                    print(f"   [Parallel] agent connect {dom}: {e}")
+
+        # Ensemble inference via AgentNetwork.collaborate()
+        ensemble_inference = {}
+        if len(trained_agents) >= 2 and image_data:
+            try:
+                from api.agents.agent_network import AgentNetwork
+                net = AgentNetwork(
+                    name=f"ensemble_{problem[:20]}")
+                ensemble_inference = net.collaborate(
+                    trained_agents, problem, image_data,
+                    domain=domains[0])
+                print(f"  [Parallel] Ensemble: "
+                      f"{ensemble_inference.get('label')} "
+                      f"conf={ensemble_inference.get('confidence')}")
+            except Exception as e:
+                print(f"  [Parallel] Ensemble inference skipped: {e}")
+
+        # Fuse architectures + evaluate
+        from api.agents.fusion_agent import FusionAgent
+        fused = FusionAgent().fuse_architectures(agent_results, problem)
+
+        evaluator  = self._wake_evaluator()
+        evaluation = evaluator.evaluate(fused, problem)
+        self._sleep_agent("evaluator")
+        for d in domains:
+            self._sleep_agent(d, problem)
+
+        avg_accuracy = round(
+            sum(all_accuracies) / len(all_accuracies), 1
+        ) if all_accuracies else 0
+
+        return {
+            "status":             "success",
+            "type":               "parallel_ensemble_nas",
+            "agents_used":        domains,
+            "agent_results":      agent_results,
+            "architecture":       fused.get("architecture", []),
+            "parameters":         fused.get("parameters", 0),
+            "search_time":        fused.get("search_time", 0),
+            "fusion":             fused,
+            "evaluation":         evaluation,
+            "self_trained":       len(all_accuracies) > 0,
+            "avg_accuracy":       avg_accuracy,
+            "all_accuracies":     all_acc_dict,
+            "ensemble_inference": ensemble_inference,
+            "dataset":            (agent_results[0].get("dataset", "unknown")
+                                   if agent_results else "unknown"),
+            "method":             (agent_results[0].get("method", "darts_nas")
+                                   if agent_results else "darts_nas"),
+            "message": (
+                f"Parallel Ensemble NAS complete! "
+                f"{len(domains)} agents trained simultaneously. "
+                f"Score: {evaluation['avg_score']}%"
+                + (f" | Accuracy: {avg_accuracy}%" if avg_accuracy else "")
+            ),
+        }
+
+    # ─────────────────────────────────────────────────────────────────────
+    # MULTI AGENT PIPELINE (sequential — kept for sequential topologies)
     # ─────────────────────────────────────────────────────────────────────
     def _run_multi_agent(self, problem: str,
                           domains: list, image_data: str) -> dict:
