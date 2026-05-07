@@ -250,31 +250,82 @@
         <p class="vr-sub">Real datasets. Held-out test data. Measurable accuracy.</p>
       </div>
       <div class="vr-grid">
-        <div class="vr-card">
-          <div class="vr-domain">Image classification</div>
-          <div class="vr-accuracy">86.6%</div>
-          <div class="vr-dataset">Pothole detection (taroii)</div>
+
+        <div class="vr-card" onclick="toggleVrCard(this)">
+          <div class="vr-card-front">
+            <span class="vr-icon">&#x1F4F7;</span>
+            <div class="vr-domain">Image classification</div>
+            <div class="vr-cta">See proof &rarr;</div>
+          </div>
+          <div class="vr-card-details">
+            <div class="vr-accuracy">86.6%</div>
+            <div class="vr-detail-row"><span class="vr-dl">Dataset</span><span class="vr-dv">Pothole detection (taroii)</span></div>
+            <div class="vr-detail-row"><span class="vr-dl">Split</span><span class="vr-dv">305 train / 67 held-out test</span></div>
+            <div class="vr-detail-row"><span class="vr-dl">Method</span><span class="vr-dv">ResNet18 transfer learning</span></div>
+            <div class="vr-hide">Hide &uarr;</div>
+          </div>
         </div>
-        <div class="vr-card">
-          <div class="vr-domain">Text classification</div>
-          <div class="vr-accuracy">73.1%</div>
-          <div class="vr-dataset">Fake news (GonzaloA)</div>
+
+        <div class="vr-card" onclick="toggleVrCard(this)">
+          <div class="vr-card-front">
+            <span class="vr-icon">&#x1F4DD;</span>
+            <div class="vr-domain">Text classification</div>
+            <div class="vr-cta">See proof &rarr;</div>
+          </div>
+          <div class="vr-card-details">
+            <div class="vr-accuracy">73.1%</div>
+            <div class="vr-detail-row"><span class="vr-dl">Dataset</span><span class="vr-dv">Fake news (GonzaloA)</span></div>
+            <div class="vr-detail-row"><span class="vr-dl">Split</span><span class="vr-dv">Real / fake article pairs</span></div>
+            <div class="vr-detail-row"><span class="vr-dl">Method</span><span class="vr-dv">DistilBERT fine-tuned</span></div>
+            <div class="vr-hide">Hide &uarr;</div>
+          </div>
         </div>
-        <div class="vr-card">
-          <div class="vr-domain">Tabular classification</div>
-          <div class="vr-accuracy">98%</div>
-          <div class="vr-dataset">Synthetic fraud detection</div>
+
+        <div class="vr-card" onclick="toggleVrCard(this)">
+          <div class="vr-card-front">
+            <span class="vr-icon">&#x1F4CA;</span>
+            <div class="vr-domain">Tabular classification</div>
+            <div class="vr-cta">See proof &rarr;</div>
+          </div>
+          <div class="vr-card-details">
+            <div class="vr-accuracy">98%</div>
+            <div class="vr-detail-row"><span class="vr-dl">Dataset</span><span class="vr-dv">Synthetic fraud detection</span></div>
+            <div class="vr-detail-row"><span class="vr-dl">Split</span><span class="vr-dv">80 / 20 stratified split</span></div>
+            <div class="vr-detail-row"><span class="vr-dl">Method</span><span class="vr-dv">XGBoost + feature engineering</span></div>
+            <div class="vr-hide">Hide &uarr;</div>
+          </div>
         </div>
-        <div class="vr-card">
-          <div class="vr-domain">Multimodal zero-shot</div>
-          <div class="vr-accuracy">87%</div>
-          <div class="vr-dataset">CIFAR-10 (CLIP)</div>
+
+        <div class="vr-card" onclick="toggleVrCard(this)">
+          <div class="vr-card-front">
+            <span class="vr-icon">&#x1F9E0;</span>
+            <div class="vr-domain">Multimodal zero-shot</div>
+            <div class="vr-cta">See proof &rarr;</div>
+          </div>
+          <div class="vr-card-details">
+            <div class="vr-accuracy">87%</div>
+            <div class="vr-detail-row"><span class="vr-dl">Dataset</span><span class="vr-dv">CIFAR-10 (10-class)</span></div>
+            <div class="vr-detail-row"><span class="vr-dl">Split</span><span class="vr-dv">10,000 held-out test images</span></div>
+            <div class="vr-detail-row"><span class="vr-dl">Method</span><span class="vr-dv">CLIP zero-shot (no fine-tuning)</span></div>
+            <div class="vr-hide">Hide &uarr;</div>
+          </div>
         </div>
-        <div class="vr-card">
-          <div class="vr-domain">Audio classification</div>
-          <div class="vr-accuracy">100%</div>
-          <div class="vr-dataset">Synthetic audio test</div>
+
+        <div class="vr-card" onclick="toggleVrCard(this)">
+          <div class="vr-card-front">
+            <span class="vr-icon">&#x1F3B5;</span>
+            <div class="vr-domain">Audio classification</div>
+            <div class="vr-cta">See proof &rarr;</div>
+          </div>
+          <div class="vr-card-details">
+            <div class="vr-accuracy">100%</div>
+            <div class="vr-detail-row"><span class="vr-dl">Dataset</span><span class="vr-dv">Synthetic audio test set</span></div>
+            <div class="vr-detail-row"><span class="vr-dl">Split</span><span class="vr-dv">Clean held-out audio samples</span></div>
+            <div class="vr-detail-row"><span class="vr-dl">Method</span><span class="vr-dv">CNN + MFCC features</span></div>
+            <div class="vr-hide">Hide &uarr;</div>
+          </div>
         </div>
+
       </div>
     </div>
   </section>

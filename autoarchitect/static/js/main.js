@@ -5,6 +5,16 @@ var currentAnalysis = null;
 var currentProblem  = '';
 var _activeJobId    = null;
 
+// ── VERIFIED RESULTS — PROGRESSIVE DISCLOSURE ──────────────────────────────
+
+function toggleVrCard(card) {
+  var wasExpanded = card.classList.contains('expanded');
+  document.querySelectorAll('.vr-card').forEach(function(c) {
+    c.classList.remove('expanded');
+  });
+  if (!wasExpanded) card.classList.add('expanded');
+}
+
 // ── PLACEHOLDER CYCLING ────────────────────────────────────────────────────
 
 var PLACEHOLDERS = [
