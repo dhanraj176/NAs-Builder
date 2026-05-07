@@ -845,6 +845,138 @@ textarea::placeholder { color: var(--muted2); }
 
 .hidden { display: none !important; }
 
+/* ── HERO SCOPE LINE ────────────────────────────── */
+
+.hero-scope {
+  font-size:   0.82rem;
+  color:       var(--muted2);
+  margin-top:  -24px;
+  margin-bottom: 36px;
+  font-style:  italic;
+}
+
+/* ── QUICK-START CHIPS ──────────────────────────── */
+
+.quick-start {
+  margin-bottom: 16px;
+}
+
+.qs-label {
+  font-size:     0.72rem;
+  color:         var(--muted2);
+  font-weight:   500;
+  margin-bottom: 8px;
+}
+
+.qs-chip-row {
+  display:   flex;
+  flex-wrap: wrap;
+  gap:       6px;
+}
+
+.qs-chip {
+  background:    transparent;
+  border:        1px solid var(--border2);
+  color:         var(--muted);
+  font-family:   inherit;
+  font-size:     0.73rem;
+  font-weight:   500;
+  padding:       5px 11px;
+  border-radius: 20px;
+  cursor:        pointer;
+  transition:    all 0.15s;
+}
+.qs-chip:hover {
+  border-color: var(--purple);
+  color:        var(--purple-h);
+  background:   var(--purple-dim);
+}
+.qs-chip.active {
+  border-color: var(--purple);
+  color:        var(--purple-h);
+  background:   var(--purple-dim);
+  font-weight:  600;
+}
+
+/* ── SCOPE WARNING ───────────────────────────────── */
+
+.scope-warning {
+  display:       flex;
+  align-items:   center;
+  gap:           8px;
+  background:    rgba(217,119,6,0.08);
+  border:        1px solid rgba(217,119,6,0.35);
+  border-radius: var(--r-sm);
+  padding:       9px 14px;
+  margin-bottom: 14px;
+  animation:     fadeIn 0.2s ease both;
+}
+
+.scope-warn-icon  { font-size: 0.85rem; flex-shrink: 0; }
+.scope-warn-text  { font-size: 0.8rem; color: var(--amber); font-weight: 600; }
+.scope-warn-redirect {
+  font-size:  0.78rem;
+  color:      var(--muted);
+  margin-left: 4px;
+}
+
+/* ── CONSTRAINT CHIPS ───────────────────────────── */
+
+.constraints {
+  margin-bottom: 16px;
+}
+
+.constraint-row {
+  display:   flex;
+  flex-wrap: wrap;
+  gap:       6px;
+  margin-top: 8px;
+}
+
+.constraint-chip {
+  background:    transparent;
+  border:        1px solid var(--border2);
+  color:         var(--muted);
+  font-family:   inherit;
+  font-size:     0.73rem;
+  font-weight:   500;
+  padding:       5px 11px;
+  border-radius: var(--r-sm);
+  cursor:        pointer;
+  transition:    all 0.15s;
+  user-select:   none;
+}
+.constraint-chip:hover {
+  border-color: var(--border);
+  color:        var(--text);
+}
+.constraint-chip.selected {
+  background:   var(--purple-dim);
+  border-color: var(--purple);
+  color:        var(--purple-h);
+  font-weight:  600;
+}
+
+/* ── SHIMMER (reasoning steps) ───────────────────── */
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.shimmer {
+  background:      linear-gradient(90deg,
+    rgba(255,255,255,0.04) 0%,
+    rgba(255,255,255,0.14) 50%,
+    rgba(255,255,255,0.04) 100%);
+  background-size: 200% 100%;
+  animation:       shimmer 1.5s ease-in-out infinite;
+  border-radius:   3px;
+  color:           var(--muted2);
+  padding:         1px 6px;
+  display:         inline-block;
+}
+
 /* ── RESPONSIVE ─────────────────────────────────── */
 
 @media (max-width: 680px) {

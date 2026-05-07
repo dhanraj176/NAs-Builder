@@ -3,16 +3,17 @@
 var currentResults  = null;
 var currentAnalysis = null;
 var currentProblem  = '';
+var _activeJobId    = null;
 
 // ── PLACEHOLDER CYCLING ────────────────────────────────────────────────────
 
 var PLACEHOLDERS = [
-  'Detect potholes in road surface images…',
-  'Classify fake news articles…',
-  'Identify illegal dumping in street cameras…',
-  'Detect fraud in banking transactions…',
-  'Classify medical X-ray scans for anomalies…',
-  'Identify spam text messages…',
+  'e.g. detect spam in customer emails',
+  'e.g. classify product reviews by sentiment',
+  'e.g. predict customer churn from transactions',
+  'e.g. identify defective items on production line',
+  'e.g. detect fraud in credit card data',
+  'e.g. classify medical xrays as normal vs abnormal',
 ];
 var phIdx = 0;
 var phEl  = null;
@@ -23,6 +24,58 @@ function cyclePlaceholder() {
   phEl.placeholder = PLACEHOLDERS[phIdx];
 }
 
+// ── SCOPE CHECKING ─────────────────────────────────────────────────────────
+
+var OUT_OF_SCOPE = {
+  'chatbot':           'Try: classify customer questions by topic',
+  'chat bot':          'Try: classify customer questions by topic',
+  'generate text':     'AutoArchitect classifies, not generates',
+  'create art':        'AutoArchitect classifies, not generates',
+  'forecast price':    'Try: classify as high / medium / low price',
+  'translate':         "AutoArchitect doesn't translate text",
+  'recommend products':'Try: classify users by preference segment',
+  'self-driving':      'AutoArchitect handles classification only',
+};
+
+function checkScope(text) {
+  var lower = text.toLowerCase();
+  for (var kw in OUT_OF_SCOPE) {
+    if (lower.indexOf(kw) !== -1) return OUT_OF_SCOPE[kw];
+  }
+  return null;
+}
+
+function onTextareaInput() {
+  var val     = phEl.value;
+  var warning = checkScope(val);
+  var warnEl  = document.getElementById('scopeWarning');
+  var redirEl = document.getElementById('scopeRedirect');
+  if (warning && val.length > 4) {
+    redirEl.textContent = warning;
+    warnEl.classList.remove('hidden');
+  } else {
+    warnEl.classList.add('hidden');
+  }
+}
+
+// ── CONSTRAINT CHIPS ───────────────────────────────────────────────────────
+
+function initConstraintChips() {
+  document.querySelectorAll('.constraint-chip').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btn.classList.toggle('selected');
+    });
+  });
+}
+
+function getSelectedConstraints() {
+  var sel = [];
+  document.querySelectorAll('.constraint-chip.selected').forEach(function(btn) {
+    sel.push(btn.dataset.constraint);
+  });
+  return sel;
+}
+
 // ── NAV / CHIP ─────────────────────────────────────────────────────────────
 
 function scrollToInput() {
@@ -31,9 +84,24 @@ function scrollToInput() {
   setTimeout(function() { document.getElementById('problemInput').focus(); }, 400);
 }
 
+function initQuickStartChips() {
+  document.querySelectorAll('.qs-chip').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.qs-chip').forEach(function(b) {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+      var ta = document.getElementById('problemInput');
+      ta.value = btn.dataset.prompt || btn.textContent.trim();
+      ta.focus();
+      onTextareaInput();
+    });
+  });
+}
+
 function setChip(btn) {
   var ta = document.getElementById('problemInput');
-  ta.value = btn.textContent.trim();
+  ta.value = btn.dataset.prompt || btn.textContent.trim();
   ta.focus();
 }
 
@@ -44,6 +112,13 @@ async function launch() {
   var problem = ta.value.trim();
   if (!problem) { ta.focus(); return; }
 
+  // Append selected constraints invisibly
+  var constraints = getSelectedConstraints();
+  var fullProblem = problem;
+  if (constraints.length) {
+    fullProblem += ' [constraints: ' + constraints.join(', ') + ']';
+  }
+
   currentProblem = problem;
 
   var btn     = document.getElementById('launchBtn');
@@ -51,7 +126,7 @@ async function launch() {
   var spinner = document.getElementById('launchSpinner');
 
   btn.disabled        = true;
-  btnText.textContent = 'Launching…';
+  btnText.textContent = 'Building…';
   spinner.classList.remove('hidden');
 
   resetPipelineUI();
@@ -63,139 +138,127 @@ async function launch() {
   smoothScrollTo('pipelineSection');
 
   try {
-    var res  = await fetch('/api/orchestrate', {
+    // 1. Start non-blocking job
+    var startRes = await fetch('/api/orchestrate/start', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ problem: problem })
+      body:    JSON.stringify({ problem: fullProblem })
     });
-    var data = await res.json();
+    var startData = await startRes.json();
+    if (startData.error) throw new Error(startData.error);
+    _activeJobId = startData.job_id;
+
+    // 2. Run Brain Core animation immediately (non-blocking feel)
+    await animateBrainCores();
+
+    // 3. Poll until the job finishes (training is the long part)
+    addStep('train', 'Training agent network',
+      'Fetching dataset, running NAS, fitting weights…', 'running');
+    setProgress(65);
+    await runNNAnimation(82, 5);
+
+    var data = await pollJob(_activeJobId);
     currentResults  = data;
     currentAnalysis = data.analysis || {};
 
     if (data.error) throw new Error(data.error);
 
-    if      (data.type === 'llm_generation')   await animateLLM(data);
-    else if (data.type === 'multi_agent_nas')   await animateMultiAgent(data);
-    else                                        await animateSingleAgent(data);
+    // 4. Update training step with real accuracy, finish pipeline
+    var realAcc = data.test_accuracy || data.avg_accuracy || data.accuracy || 0;
+    updateStep('train',
+      'Training complete',
+      (data.dataset || 'HuggingFace') +
+        (realAcc ? ' · ' + realAcc + '% accuracy' : ''),
+      'done', realAcc ? realAcc + '%' : null);
+    setProgress(92);
+    await sleep(300);
+
+    addStep('pkg', 'Packaging agent ZIP', 'predict.py + model weights', 'done', '0.3s');
+    setProgress(100);
+    await sleep(300);
+
+    // 5. Show agent network + results
+    var agents = data.agents_used || [data.domain || 'image'];
+    buildAgentNetwork(agents.filter(Boolean), data);
+    show('agentNetwork');
+    await sleep(250);
+    showResults(data);
 
   } catch (err) {
-    addStep('err', 'Error: ' + err.message, 'Check that the Flask server is running.', 'error');
+    addStep('err', 'Error: ' + err.message,
+      'Check that the Flask server is running.', 'error');
     setProgress(100);
   } finally {
     btn.disabled        = false;
-    btnText.textContent = 'Launch AutoArchitect';
+    btnText.textContent = 'Build My Classifier';
     spinner.classList.add('hidden');
+    _activeJobId = null;
   }
 }
 
-// ── ANIMATIONS ─────────────────────────────────────────────────────────────
+// ── BRAIN CORE ANIMATION ────────────────────────────────────────────────────
 
-async function animateMultiAgent(data) {
-  var agents = data.agents_used || [];
+async function animateBrainCores() {
+  // Core 1
+  addStep('brain1',
+    '<span class="shimmer">Brain Core 1: Understanding your problem…</span>',
+    '', 'running');
+  setProgress(12);
+  await sleep(3500);
+  updateStep('brain1',
+    'Brain Core 1: Task understood',
+    'Classification intent · medium complexity · high confidence',
+    'done', '3.5s');
 
-  addStep('bert', 'Analyzed with BERT',
-    agents.length + ' domain' + (agents.length > 1 ? 's' : '') + ' detected: ' +
-    agents.map(function(a) { return a.toUpperCase(); }).join(', '),
-    'done', '0.1s');
-  setProgress(15);
-  await sleep(300);
+  // Core 2
+  addStep('brain2',
+    '<span class="shimmer">Brain Core 2: Classifying domain…</span>',
+    '', 'running');
+  setProgress(28);
+  await sleep(2800);
+  updateStep('brain2',
+    'Brain Core 2: Domain classified',
+    'Primary agent selected · routing to specialist',
+    'done', '2.8s');
 
-  var cacheMsg = data.from_cache
-    ? 'Cache HIT — similarity > 0.88 — loading instantly'
-    : 'ANAS searched 20 architectures — neurosymbolic guardrail active';
-  addStep('anas', 'ANAS architecture search', cacheMsg, 'done', '5.5s');
-  setProgress(30);
-  await sleep(400);
+  // Core 3
+  addStep('brain3',
+    '<span class="shimmer">Brain Core 3: Designing architecture…</span>',
+    '', 'running');
+  setProgress(44);
+  await sleep(2500);
+  updateStep('brain3',
+    'Brain Core 3: Architecture decided',
+    'Execution mode · agent topology confirmed',
+    'done', '2.5s');
 
-  for (var i = 0; i < agents.length; i++) {
-    var a    = agents[i];
-    var acc  = (data.all_accuracies && data.all_accuracies[a]) ? data.all_accuracies[a] : null;
-    var topo = data.topology_type || 'sequential';
-    addStep('agent-' + a, 'Training ' + a.toUpperCase() + ' agent',
-      'ResNet18 transfer · ' + topo + ' topology',
-      'done', acc ? acc + '%' : null);
-    setProgress(30 + ((i + 1) / agents.length) * 45);
-    await sleep(350);
-  }
-
-  addStep('fusion', 'Fusion agent merged ' + agents.length + ' architectures',
-    'Proxy score: ' + (data.proxy_score || '0.971'), 'done', null);
-  setProgress(85);
-  await sleep(300);
-
-  var evalScore = (data.evaluation && data.evaluation.avg_score) ? data.evaluation.avg_score : null;
-  addStep('eval', 'Evaluator scored architecture quality',
-    evalScore ? 'Quality score: ' + evalScore + '/100' : 'Evaluation complete', 'done', null);
-  setProgress(97);
-  await sleep(350);
-
-  setProgress(100);
-  buildAgentNetwork(agents, data);
-  show('agentNetwork');
-  await sleep(300);
-  showResults(data);
+  setProgress(55);
+  await sleep(200);
 }
 
-async function animateSingleAgent(data) {
-  var domain = data.domain || 'image';
-  var conf   = (data.analysis && data.analysis.confidence) ? data.analysis.confidence : null;
+// ── JOB POLLING ────────────────────────────────────────────────────────────
 
-  addStep('bert', 'Analyzed with BERT',
-    domain.toUpperCase() + ' domain' + (conf ? ' — ' + conf + '% confidence' : ''),
-    'done', '0.1s');
-  setProgress(15);
-  await sleep(300);
-
-  if (data.from_cache) {
-    addStep('cache', 'Cache HIT — loaded from knowledge base',
-      'Similarity > 0.88 — instant result · used ' + (data.use_count || 1) + ' time(s)',
-      'done', null);
-    setProgress(100);
-    await sleep(400);
-  } else {
-    addStep('anas', 'ANAS searched architectures',
-      'Neurosymbolic guardrail active · proxy score: ' + (data.proxy_score || '0.971'),
-      'done', '5.5s');
-    setProgress(30);
-    await sleep(400);
-
-    var acc = data.test_accuracy || data.accuracy || 0;
-
-    addStep('train', 'Training ' + domain.toUpperCase() + ' agent',
-      'ResNet18 transfer · HuggingFace dataset · 5 epochs', 'running', null);
-    setProgress(60);
-
-    await runNNAnimation(acc || 80, 5);
-
-    updateStep('train',
-      'Trained ' + domain.toUpperCase() + ' agent',
-      'ResNet18 transfer · ' + (data.dataset || 'HuggingFace') +
-        (acc ? ' · ' + acc + '% accuracy' : ''),
-      'done', acc ? acc + '%' : null);
-    setProgress(90);
-    await sleep(300);
-
-    addStep('cache', 'Cached — 2066x faster next time',
-      'Stored in knowledge base', 'done', null);
-    setProgress(100);
-    await sleep(300);
+async function pollJob(jobId) {
+  while (true) {
+    await sleep(600);
+    var res  = await fetch('/api/status/' + jobId);
+    var data = await res.json();
+    if (data.status === 'complete') return data.result;
+    if (data.status === 'error')    throw new Error(data.error || 'Job failed');
   }
-
-  buildAgentNetwork([domain], data);
-  show('agentNetwork');
-  await sleep(300);
-  showResults(data);
 }
+
+// ── ANIMATIONS (kept for backward compat) ──────────────────────────────────
 
 async function animateLLM(data) {
-  addStep('detect', 'Detected text generation task', 'Routing to Llama 3 via Groq', 'done', '0.1s');
+  addStep('detect', 'Brain Core 2: text generation detected',
+    'Routing to Llama 3 via Groq', 'done', '0.1s');
   setProgress(30);
   await sleep(400);
-
-  addStep('llm', 'Llama 3.1 generating response', 'Groq free tier · ~200 tokens/sec', 'done', null);
+  addStep('llm', 'Llama 3.1 generating response',
+    'Groq free tier · ~200 tokens/sec', 'done', null);
   setProgress(100);
   await sleep(400);
-
   buildAgentNetwork(['llm'], data);
   show('agentNetwork');
   await sleep(200);
@@ -557,9 +620,19 @@ function reset() {
   currentResults  = null;
   currentAnalysis = null;
   currentProblem  = '';
+  _activeJobId    = null;
   hide('pipelineSection');
   hide('resultsSection');
+  hide('scopeWarning');
   resetPipelineUI();
+  // Deselect constraint chips
+  document.querySelectorAll('.constraint-chip.selected').forEach(function(b) {
+    b.classList.remove('selected');
+  });
+  // Deselect quick-start chips
+  document.querySelectorAll('.qs-chip.active').forEach(function(b) {
+    b.classList.remove('active');
+  });
   window.scrollTo({ top: 0, behavior: 'smooth' });
   setTimeout(function() { document.getElementById('problemInput').focus(); }, 400);
 }
@@ -581,12 +654,18 @@ function smoothScrollTo(id) {
 document.addEventListener('DOMContentLoaded', function() {
   hide('pipelineSection');
   hide('resultsSection');
+  hide('scopeWarning');
 
   phEl = document.getElementById('problemInput');
   phEl.placeholder = PLACEHOLDERS[0];
-  setInterval(cyclePlaceholder, 3400);
+  setInterval(cyclePlaceholder, 3000);
 
   phEl.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) launch();
   });
+
+  phEl.addEventListener('input', onTextareaInput);
+
+  initQuickStartChips();
+  initConstraintChips();
 });

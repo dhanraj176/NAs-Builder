@@ -16,6 +16,9 @@ from flask import Flask, render_template, request, jsonify, send_file
 from flask_cors import CORS
 import json
 import os
+import time
+import uuid
+import threading
 import zipfile
 from dotenv import load_dotenv
 from api.self_trainer import self_train
@@ -44,6 +47,9 @@ from api.data_uploader import (
 
 app = Flask(__name__)
 CORS(app)
+
+# In-memory job store for non-blocking orchestration
+_jobs = {}
 
 # ── ANAS toggle ────────────────────────────────────────────────────────────
 # Set to False to revert topology/workflow selection to template matching
@@ -925,6 +931,58 @@ python run_nas.py --problem "classify spam emails" --epochs 5
 
 ## AutoArchitect AI - Oakland Research Showcase 2026
 '''
+
+
+# ============================================
+# NON-BLOCKING JOB SYSTEM (Day 23)
+# ============================================
+
+@app.route('/api/orchestrate/start', methods=['POST'])
+def orchestrate_start():
+    """Start orchestration in background; return job_id immediately."""
+    data    = request.json or {}
+    problem = data.get('problem', '').strip()
+    if not problem:
+        return jsonify({'error': 'No problem provided'}), 400
+
+    job_id = str(uuid.uuid4())[:8]
+    _jobs[job_id] = {
+        'status':     'running',
+        'result':     None,
+        'error':      None,
+        'started_at': time.time(),
+        'elapsed':    0,
+    }
+
+    def _run():
+        try:
+            result = orchestrator.solve(problem=problem)
+            _jobs[job_id]['result'] = result
+            _jobs[job_id]['status'] = 'complete'
+        except Exception as e:
+            _jobs[job_id]['error']  = str(e)
+            _jobs[job_id]['status'] = 'error'
+        finally:
+            _jobs[job_id]['elapsed'] = round(
+                time.time() - _jobs[job_id]['started_at'], 1)
+
+    threading.Thread(target=_run, daemon=True).start()
+    return jsonify({'job_id': job_id})
+
+
+@app.route('/api/status/<job_id>', methods=['GET'])
+def job_status(job_id):
+    """Poll job status. Returns result once status === 'complete'."""
+    job = _jobs.get(job_id)
+    if not job:
+        return jsonify({'error': 'Job not found'}), 404
+    elapsed = round(time.time() - job['started_at'], 1)
+    return jsonify({
+        'status':  job['status'],
+        'elapsed': elapsed,
+        'result':  job['result'],
+        'error':   job['error'],
+    })
 
 
 if __name__ == '__main__':

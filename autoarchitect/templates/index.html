@@ -33,11 +33,14 @@
         <span class="badge-dot"></span>
         Now in beta &mdash; try it free
       </div>
-      <h1 class="hero-title">Describe any AI task.<br>Get a deployed agent.</h1>
+      <h1 class="hero-title">Build a classifier<br>in seconds</h1>
       <p class="hero-sub">
-        The fastest way to build and deploy AI agents.
-        Describe your problem in plain English &mdash;
-        AutoArchitect handles everything else.
+        Image, text, tabular, audio, or multimodal data.
+        Plain English in. Trained AI agent out.
+      </p>
+      <p class="hero-scope">
+        Not a chatbot or generator &mdash; we do classification,
+        exceptionally well.
       </p>
       <div class="hero-stats">
         <div class="hstat">
@@ -65,29 +68,57 @@
     <!-- INPUT CARD -->
     <section class="input-card" id="inputCard">
       <div class="input-card-inner">
+
+        <!-- QUICK-START CHIPS (above textarea) -->
+        <div class="quick-start">
+          <p class="qs-label">Build common agents in 2 clicks:</p>
+          <div class="qs-chip-row">
+            <button class="qs-chip" data-prompt="Detect fraudulent credit card transactions from spending patterns">&#x1F4B3; Fraud Detection</button>
+            <button class="qs-chip" data-prompt="Classify emails as spam or legitimate based on content">&#x1F4E7; Spam Filter</button>
+            <button class="qs-chip" data-prompt="Predict which customers will churn from usage history">&#x1F4CA; Churn Prediction</button>
+            <button class="qs-chip" data-prompt="Classify product reviews as positive or negative">&#x2B50; Sentiment Analysis</button>
+            <button class="qs-chip" data-prompt="Identify defective items on production line from photos">&#x1F50D; Defect Detection</button>
+            <button class="qs-chip" data-prompt="Classify medical xrays as normal or abnormal">&#x1FA7A; Medical Classification</button>
+          </div>
+        </div>
+
+        <!-- TEXTAREA -->
         <div class="textarea-wrap">
           <textarea
             id="problemInput"
             rows="3"
-            placeholder="Describe your problem in plain English..."
+            placeholder="e.g. detect spam in customer emails"
             spellcheck="false"
           ></textarea>
-          <div class="textarea-hint">Ctrl+Enter to launch</div>
+          <div class="textarea-hint">Ctrl+Enter to build</div>
         </div>
-        <div class="chips">
-          <span class="chip-label">Try:</span>
-          <button class="chip" onclick="setChip(this)">Detect potholes in road images</button>
-          <button class="chip" onclick="setChip(this)">Classify medical X-ray scans</button>
-          <button class="chip" onclick="setChip(this)">Detect fraud in banking transactions</button>
-          <button class="chip" onclick="setChip(this)">Classify spam text messages</button>
-          <button class="chip" onclick="setChip(this)">Identify illegal dumping in cameras</button>
+
+        <!-- SCOPE WARNING (shown when out-of-scope keywords detected) -->
+        <div class="scope-warning hidden" id="scopeWarning">
+          <span class="scope-warn-icon">&#x26A0;&#xFE0F;</span>
+          <span class="scope-warn-text">AutoArchitect specializes in classification.</span>
+          <span class="scope-warn-redirect" id="scopeRedirect"></span>
         </div>
+
+        <!-- CONSTRAINT CHIPS (below textarea) -->
+        <div class="constraints">
+          <p class="qs-label">Optimization preferences:</p>
+          <div class="constraint-row">
+            <button class="constraint-chip" data-constraint="fast">&#x26A1; Fast Training</button>
+            <button class="constraint-chip" data-constraint="accurate">&#x1F3AF; Maximum Accuracy</button>
+            <button class="constraint-chip" data-constraint="small">&#x1F4E6; Small Model</button>
+            <button class="constraint-chip" data-constraint="realtime">&#x2699;&#xFE0F; Real-time Inference</button>
+          </div>
+        </div>
+
+        <!-- LAUNCH -->
         <button class="btn-launch" id="launchBtn" onclick="launch()">
-          <span id="launchBtnText">Launch AutoArchitect</span>
+          <span id="launchBtnText">Build My Classifier</span>
           <svg id="launchSpinner" class="spinner hidden" viewBox="0 0 24 24" fill="none">
             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="12"/>
           </svg>
         </button>
+
       </div>
     </section>
 
