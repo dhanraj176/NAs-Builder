@@ -642,6 +642,26 @@ textarea::placeholder { color: var(--ink-tertiary); }
   letter-spacing: 0.4px;
 }
 
+.results-acc-context {
+  margin-top:  8px;
+  font-size:   12px;
+  color:       var(--ink-subtle);
+  line-height: 1.5;
+  max-width:   200px;
+}
+
+.results-acc-context.ctx-verified {
+  color: var(--success-h);
+}
+
+.acc-caveat {
+  display:     block;
+  font-size:   11px;
+  color:       var(--warn);
+  margin-top:  3px;
+  line-height: 1.4;
+}
+
 .results-right {
   display:        flex;
   flex-direction: column;

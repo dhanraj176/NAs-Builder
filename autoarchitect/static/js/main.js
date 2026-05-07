@@ -708,8 +708,49 @@ function showResults(data) {
     metaCard(params,     'Parameters') +
     metaCard(agents.length + ' agent' + (agents.length > 1 ? 's' : ''), 'Network size');
 
+  // Accuracy context — honest framing of test set and data type
+  var ctxEl = document.getElementById('resultsAccContext');
+  if (ctxEl) {
+    var ctx = _buildAccContext(data, acc);
+    ctxEl.innerHTML  = ctx.html;
+    ctxEl.className  = 'results-acc-context' + (ctx.verified ? ' ctx-verified' : '');
+  }
+
   show('resultsSection');
   smoothScrollTo('resultsSection');
+}
+
+function _buildAccContext(data, acc) {
+  var testSize   = parseInt(data.test_size || 0, 10);
+  var isReal     = !!(data.real_dataset || data.real_training);
+  var dataset    = (data.dataset || '').replace(/[_-]/g, ' ').trim();
+  var isSynthetic = !isReal;
+  var verified   = false;
+  var html       = '';
+
+  if (testSize > 0 && isReal && dataset && dataset !== 'none') {
+    // Best case: real named dataset with known test split
+    html = 'Verified on ' + testSize + ' held-out samples from ' + dataset;
+    verified = true;
+    if (testSize < 50) {
+      html += '<span class="acc-caveat">Small test set — results may vary with more data.</span>';
+      verified = false;
+    }
+  } else if (testSize > 0 && isSynthetic) {
+    html = 'on ' + testSize + ' synthetic test samples';
+    html += '<span class="acc-caveat">Synthetic data — real-world testing recommended.</span>';
+  } else if (testSize > 0) {
+    html = 'on ' + testSize + ' held-out samples';
+    if (testSize < 50) {
+      html += '<span class="acc-caveat">Small test set — results may vary with more data.</span>';
+    }
+  } else if (isSynthetic && !isReal) {
+    html = '<span class="acc-caveat">Synthetic data — real-world testing recommended.</span>';
+  } else if (acc >= 95) {
+    html = '<span class="acc-caveat">High accuracy — verify with your own held-out data.</span>';
+  }
+
+  return { html: html, verified: verified };
 }
 
 function metaCard(val, lbl) {

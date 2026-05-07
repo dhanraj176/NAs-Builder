@@ -183,6 +183,9 @@ class AutoArchitectOrchestrator:
                 "agents_used":  agents_used,
                 "evaluation":   meta.get("evaluation", {}),
                 "train_size":   meta.get("train_size", 0),
+                "test_size":    meta.get("test_size", 0),
+                "real_dataset": meta.get("real_dataset", False),
+                "dataset":      meta.get("dataset", ""),
                 "test_accuracy": avg_acc,
                 "avg_accuracy":  avg_acc,
             }
@@ -240,6 +243,9 @@ class AutoArchitectOrchestrator:
                 "agents_used":  sim_agents_used,
                 "evaluation":   sim_meta.get("evaluation", {}),
                 "train_size":   sim_meta.get("train_size", 0),
+                "test_size":    sim_meta.get("test_size", 0),
+                "real_dataset": sim_meta.get("real_dataset", False),
+                "dataset":      sim_meta.get("dataset", ""),
                 "test_accuracy": sim_avg_acc,
                 "avg_accuracy":  sim_avg_acc,
             }
@@ -325,6 +331,10 @@ class AutoArchitectOrchestrator:
             avg_accuracy   = result.get("avg_accuracy", 0),
             all_accuracies = result.get("all_accuracies", {}),
             evaluation     = result.get("evaluation", {}),
+            test_size      = result.get("test_size", 0),
+            real_dataset   = result.get("real_dataset", False),
+            dataset        = result.get("dataset", ""),
+            train_size     = result.get("train_size", 0),
         )
 
         # 11. Brain learns from result
@@ -556,6 +566,8 @@ class AutoArchitectOrchestrator:
             result["test_accuracy"]  = trained["test_accuracy"]
             result["dataset"]        = trained["dataset"]
             result["train_size"]     = trained["train_size"]
+            result["test_size"]      = trained.get("test_size", 0)
+            result["real_dataset"]   = trained.get("real_dataset", False)
             result["method"]         = trained.get("method", "darts_nas")
             result["real_training"]  = True
             result["model_path"]     = trained.get("model_path")
