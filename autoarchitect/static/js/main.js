@@ -15,6 +15,34 @@ function toggleVrCard(card) {
   if (!wasExpanded) card.classList.add('expanded');
 }
 
+// ── TYPEWRITER ──────────────────────────────────────────────────────────────
+
+async function typewriter(element, text, speed) {
+  speed = speed || 25;
+  element.textContent = '';
+  for (var i = 0; i <= text.length; i++) {
+    element.textContent = text.substring(0, i);
+    await sleep(speed);
+  }
+}
+
+// ── COUNT-UP ────────────────────────────────────────────────────────────────
+
+function countUp(element, target, duration) {
+  duration = duration || 1400;
+  var start = performance.now();
+  function step() {
+    var elapsed  = performance.now() - start;
+    var progress = Math.min(elapsed / duration, 1);
+    var eased    = 1 - Math.pow(1 - progress, 3);
+    var current  = target * eased;
+    element.textContent = current.toFixed(1) + '%';
+    if (progress < 1) requestAnimationFrame(step);
+    else element.textContent = target + '%';
+  }
+  requestAnimationFrame(step);
+}
+
 // ── PLACEHOLDER CYCLING ────────────────────────────────────────────────────
 
 var PLACEHOLDERS = [
@@ -215,10 +243,11 @@ async function animateBrainCores() {
     '', 'running');
   setProgress(12);
   await sleep(3500);
-  updateStep('brain1',
-    'Brain Core 1: Task understood',
+  updateStep('brain1', '',
     'Classification intent · medium complexity · high confidence',
     'done', '3.5s');
+  var el1 = document.querySelector('#ps-brain1 .ps-main');
+  if (el1) await typewriter(el1, 'Brain Core 1: Task understood', 22);
 
   // Core 2
   addStep('brain2',
@@ -226,10 +255,11 @@ async function animateBrainCores() {
     '', 'running');
   setProgress(28);
   await sleep(2800);
-  updateStep('brain2',
-    'Brain Core 2: Domain classified',
+  updateStep('brain2', '',
     'Primary agent selected · routing to specialist',
     'done', '2.8s');
+  var el2 = document.querySelector('#ps-brain2 .ps-main');
+  if (el2) await typewriter(el2, 'Brain Core 2: Domain classified', 22);
 
   // Core 3
   addStep('brain3',
@@ -237,10 +267,11 @@ async function animateBrainCores() {
     '', 'running');
   setProgress(44);
   await sleep(2500);
-  updateStep('brain3',
-    'Brain Core 3: Architecture decided',
+  updateStep('brain3', '',
     'Execution mode · agent topology confirmed',
     'done', '2.5s');
+  var el3 = document.querySelector('#ps-brain3 .ps-main');
+  if (el3) await typewriter(el3, 'Brain Core 3: Architecture decided', 22);
 
   setProgress(55);
   await sleep(200);
@@ -455,8 +486,15 @@ function buildAgentNetwork(agents, data) {
   var meta  = document.getElementById('agentNetworkMeta');
   var html  = '';
 
+  var flowArrow = '<div class="an-arrow"><svg width="28" height="12" viewBox="0 0 28 12" fill="none">' +
+    '<line x1="0" y1="6" x2="20" y2="6" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="3 3">' +
+    '<animate attributeName="stroke-dashoffset" from="0" to="-6" dur="0.55s" repeatCount="indefinite"/>' +
+    '</line>' +
+    '<polyline points="16,2 24,6 16,10" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '</svg></div>';
+
   html += '<div class="an-node"><div class="an-node-label">INPUT</div><div class="an-node-sub">Problem</div></div>';
-  html += '<div class="an-arrow">&#8594;</div>';
+  html += flowArrow;
 
   agents.forEach(function(a, i) {
     var acc = (data.all_accuracies && data.all_accuracies[a]) ? data.all_accuracies[a] : null;
@@ -464,15 +502,15 @@ function buildAgentNetwork(agents, data) {
             '<div class="an-node-label">' + a.toUpperCase() + '</div>' +
             '<div class="an-node-sub">' + (acc ? acc + '%' : 'NAS agent') + '</div>' +
             '</div>';
-    if (i < agents.length - 1) html += '<div class="an-arrow">&#8594;</div>';
+    if (i < agents.length - 1) html += flowArrow;
   });
 
   if (agents.length > 1) {
-    html += '<div class="an-arrow">&#8594;</div>';
+    html += flowArrow;
     html += '<div class="an-node"><div class="an-node-label">FUSION</div><div class="an-node-sub">Merge</div></div>';
   }
 
-  html += '<div class="an-arrow">&#8594;</div>';
+  html += flowArrow;
   html += '<div class="an-node"><div class="an-node-label">OUTPUT</div><div class="an-node-sub">Model</div></div>';
 
   nodes.innerHTML = html;
@@ -489,7 +527,11 @@ function showResults(data) {
             data.accuracy || (data.evaluation && data.evaluation.avg_score) || 0;
 
   var accEl = document.getElementById('resultsAccNum');
-  accEl.textContent = acc > 0 ? acc + '%' : '—';
+  if (acc > 0) {
+    countUp(accEl, acc, 1400);
+  } else {
+    accEl.textContent = '—';
+  }
   if      (acc >= 80) accEl.style.color = 'var(--green-h)';
   else if (acc >= 60) accEl.style.color = 'var(--amber)';
   else                accEl.style.color = 'var(--red)';
@@ -678,4 +720,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
   initQuickStartChips();
   initConstraintChips();
+
+  // Re-run Lucide in case DOMContentLoaded fires after script block
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+
+  // Scroll-triggered fade-in
+  if (typeof IntersectionObserver !== 'undefined') {
+    var scrollObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          scrollObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.scroll-fade').forEach(function(el) {
+      scrollObs.observe(el);
+    });
+  } else {
+    // Fallback: just show all immediately
+    document.querySelectorAll('.scroll-fade').forEach(function(el) {
+      el.classList.add('visible');
+    });
+  }
 });

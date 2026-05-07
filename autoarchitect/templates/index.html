@@ -8,8 +8,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/css/style.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
+
+  <!-- AMBIENT ORBS — fixed behind everything -->
+  <div class="ambient-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
 
   <!-- NAV -->
   <nav class="nav">
@@ -23,20 +30,21 @@
 
     <!-- HERO -->
     <section class="hero">
-      <div class="hero-badge">
+      <div class="hero-bg-grid" aria-hidden="true"></div>
+      <div class="hero-badge fade-up fade-up-d1">
         <span class="badge-dot"></span>
         Now in beta &mdash; try it free
       </div>
-      <h1 class="hero-title">Build a classifier<br>in seconds</h1>
-      <p class="hero-sub">
+      <h1 class="hero-title fade-up fade-up-d2">Build a classifier<br>in seconds</h1>
+      <p class="hero-sub fade-up fade-up-d3">
         Image, text, tabular, audio, or multimodal data.
         Plain English in. Trained AI agent out.
       </p>
-      <p class="hero-scope">
+      <p class="hero-scope fade-up fade-up-d3">
         Not a chatbot or generator &mdash; we do classification,
         exceptionally well.
       </p>
-      <div class="hero-cta">
+      <div class="hero-cta fade-up fade-up-d4">
         <a href="#build" class="primary-btn" onclick="scrollToInput(); return false;">Try it free</a>
         <a href="#hiw" class="secondary-btn">See how it works &rarr;</a>
       </div>
@@ -50,12 +58,12 @@
         <div class="quick-start">
           <p class="qs-label">Build common agents in 2 clicks:</p>
           <div class="qs-chip-row">
-            <button class="qs-chip" data-prompt="Detect fraudulent credit card transactions from spending patterns">&#x1F4B3; Fraud Detection</button>
-            <button class="qs-chip" data-prompt="Classify emails as spam or legitimate based on content">&#x1F4E7; Spam Filter</button>
-            <button class="qs-chip" data-prompt="Predict which customers will churn from usage history">&#x1F4CA; Churn Prediction</button>
-            <button class="qs-chip" data-prompt="Classify product reviews as positive or negative">&#x2B50; Sentiment Analysis</button>
-            <button class="qs-chip" data-prompt="Identify defective items on production line from photos">&#x1F50D; Defect Detection</button>
-            <button class="qs-chip" data-prompt="Classify medical xrays as normal or abnormal">&#x1FA7A; Medical Classification</button>
+            <button class="qs-chip" data-prompt="Detect fraudulent credit card transactions from spending patterns"><i data-lucide="shield-alert"></i> Fraud Detection</button>
+            <button class="qs-chip" data-prompt="Classify emails as spam or legitimate based on content"><i data-lucide="mail-x"></i> Spam Filter</button>
+            <button class="qs-chip" data-prompt="Predict which customers will churn from usage history"><i data-lucide="trending-down"></i> Churn Prediction</button>
+            <button class="qs-chip" data-prompt="Classify product reviews as positive or negative"><i data-lucide="message-square-heart"></i> Sentiment Analysis</button>
+            <button class="qs-chip" data-prompt="Identify defective items on production line from photos"><i data-lucide="search-x"></i> Defect Detection</button>
+            <button class="qs-chip" data-prompt="Classify medical xrays as normal or abnormal"><i data-lucide="stethoscope"></i> Medical Classification</button>
           </div>
         </div>
 
@@ -81,10 +89,10 @@
         <div class="constraints">
           <p class="qs-label">Optimization preferences:</p>
           <div class="constraint-row">
-            <button class="constraint-chip" data-constraint="fast">&#x26A1; Fast Training</button>
-            <button class="constraint-chip" data-constraint="accurate">&#x1F3AF; Maximum Accuracy</button>
-            <button class="constraint-chip" data-constraint="small">&#x1F4E6; Small Model</button>
-            <button class="constraint-chip" data-constraint="realtime">&#x2699;&#xFE0F; Real-time Inference</button>
+            <button class="constraint-chip" data-constraint="fast"><i data-lucide="zap"></i> Fast Training</button>
+            <button class="constraint-chip" data-constraint="accurate"><i data-lucide="target"></i> Maximum Accuracy</button>
+            <button class="constraint-chip" data-constraint="small"><i data-lucide="package"></i> Small Model</button>
+            <button class="constraint-chip" data-constraint="realtime"><i data-lucide="activity"></i> Real-time Inference</button>
           </div>
         </div>
 
@@ -190,13 +198,13 @@
   <!-- HOW IT WORKS -->
   <section class="hiw-section" id="hiw">
     <div class="hiw-inner">
-      <div class="hiw-heading">
+      <div class="hiw-heading scroll-fade">
         <div class="hiw-label">How it works</div>
         <h2 class="hiw-title">From description to deployment in three steps</h2>
       </div>
       <div class="hiw-grid">
 
-        <div class="hiw-card">
+        <div class="hiw-card scroll-fade">
           <div class="hiw-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
@@ -207,7 +215,7 @@
           <div class="hiw-card-body">Write your problem in plain English. No ML knowledge, no code, no configuration required.</div>
         </div>
 
-        <div class="hiw-card">
+        <div class="hiw-card scroll-fade">
           <div class="hiw-icon hiw-icon-purple">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="5" r="2" stroke="currentColor" stroke-width="1.75"/>
@@ -221,7 +229,7 @@
           <div class="hiw-card-body">ANAS searches 266M architectures, selects the optimal agent network, and trains on real data automatically.</div>
         </div>
 
-        <div class="hiw-card">
+        <div class="hiw-card scroll-fade">
           <div class="hiw-icon hiw-icon-green">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M12 3v13m0 0l-4-4m4 4l4-4M3 21h18" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
@@ -239,7 +247,7 @@
   <!-- VERIFIED RESULTS -->
   <section class="verified-results">
     <div class="vr-inner">
-      <div class="vr-heading">
+      <div class="vr-heading scroll-fade">
         <div class="vr-label">Benchmarks</div>
         <h2 class="vr-title">Verified on 5 domains</h2>
         <p class="vr-sub">Real datasets. Held-out test data. Measurable accuracy.</p>
@@ -248,7 +256,7 @@
 
         <div class="vr-card" onclick="toggleVrCard(this)">
           <div class="vr-card-front">
-            <span class="vr-icon">&#x1F4F7;</span>
+            <span class="vr-icon"><i data-lucide="image"></i></span>
             <div class="vr-domain">Image classification</div>
             <div class="vr-cta">See proof &rarr;</div>
           </div>
@@ -263,7 +271,7 @@
 
         <div class="vr-card" onclick="toggleVrCard(this)">
           <div class="vr-card-front">
-            <span class="vr-icon">&#x1F4DD;</span>
+            <span class="vr-icon"><i data-lucide="file-text"></i></span>
             <div class="vr-domain">Text classification</div>
             <div class="vr-cta">See proof &rarr;</div>
           </div>
@@ -278,7 +286,7 @@
 
         <div class="vr-card" onclick="toggleVrCard(this)">
           <div class="vr-card-front">
-            <span class="vr-icon">&#x1F4CA;</span>
+            <span class="vr-icon"><i data-lucide="table-2"></i></span>
             <div class="vr-domain">Tabular classification</div>
             <div class="vr-cta">See proof &rarr;</div>
           </div>
@@ -293,7 +301,7 @@
 
         <div class="vr-card" onclick="toggleVrCard(this)">
           <div class="vr-card-front">
-            <span class="vr-icon">&#x1F9E0;</span>
+            <span class="vr-icon"><i data-lucide="layers"></i></span>
             <div class="vr-domain">Multimodal zero-shot</div>
             <div class="vr-cta">See proof &rarr;</div>
           </div>
@@ -308,7 +316,7 @@
 
         <div class="vr-card" onclick="toggleVrCard(this)">
           <div class="vr-card-front">
-            <span class="vr-icon">&#x1F3B5;</span>
+            <span class="vr-icon"><i data-lucide="audio-lines"></i></span>
             <div class="vr-domain">Audio classification</div>
             <div class="vr-cta">See proof &rarr;</div>
           </div>
@@ -356,5 +364,9 @@
   </footer>
 
   <script src="/static/js/main.js"></script>
+  <script>
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  </script>
 </body>
 </html>
