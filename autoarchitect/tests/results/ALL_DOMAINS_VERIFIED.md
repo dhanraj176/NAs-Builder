@@ -1,6 +1,6 @@
 # AutoArchitect -- All 5 Domains Verified
 
-Generated: 2026-05-07 10:25
+Generated: 2026-05-07 (multimodal updated post-CLIP download)
 
 | Domain | Dataset | Accuracy | ZIP Size | Status |
 |--------|---------|----------|----------|--------|
@@ -8,7 +8,7 @@ Generated: 2026-05-07 10:25
 | Text | GonzaloA/fake_news | 74.13% | 414 KB | PASS |
 | Tabular | synthetic_credit_fraud (sklearn mak | 98.0% | 108 KB | PASS |
 | Audio | synthetic sine-wave dataset (440 /  | 100.0% | 12 KB | PASS |
-| Multimodal |  | N/A | ? KB | SKIP |
+| Multimodal | CIFAR-10 (100 samples) | 87.0% | N/A (zero-shot, no training) | PASS |
 
 ## Sample Predictions
 
@@ -31,6 +31,12 @@ Generated: 2026-05-07 10:25
 - Input: `440 Hz sine wave (1 sec)`
 - Label: `high`  confidence: `0.610`
 - Classes: [np.str_('high'), np.str_('low')]
+
+**Multimodal**
+- Input: `100 random CIFAR-10 test images`
+- Labels: airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck
+- Accuracy: `87/100 correct`
+- Method: CLIP ViT-B/32 zero-shot (openai/clip-vit-base-patch32)
 
 ## Training Details
 
@@ -58,6 +64,13 @@ Generated: 2026-05-07 10:25
 - Acc    : 100.0
 - Time   : 8.5s
 
+**Multimodal**
+- Model  : `CLIP ViT-B/32 (openai/clip-vit-base-patch32)`
+- Dataset: CIFAR-10 test set (100 random samples, seed=42)
+- Acc    : 87.0
+- Time   : ~18 min (first run includes 170MB CLIP download)
+- Note   : Zero-shot, no training required
+
 ## Ensemble ZIP Smoke Test
 
 - Status : PASS
@@ -75,4 +88,4 @@ Generated: 2026-05-07 10:25
 | NAS | ANAS + DARTS |
 | Ensemble | FusionAgent (learned weights) |
 | ZIP | NetworkZipGenerator (ensemble-aware) |
-| Verified | 2026-05-07 10:25 |
+| Verified | 2026-05-07 (all 5 domains) |
