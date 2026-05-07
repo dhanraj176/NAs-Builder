@@ -164,42 +164,43 @@ main {
   line-height:   1.7;
 }
 
-.hero-stats {
-  display:      inline-flex;
-  align-items:  center;
-  background:   var(--surface);
-  border:       1px solid var(--border);
-  border-radius: var(--r);
-  overflow:     hidden;
+.hero-cta {
+  display:     flex;
+  gap:         12px;
+  align-items: center;
+  flex-wrap:   wrap;
+  justify-content: center;
 }
 
-.hstat {
-  display:        flex;
-  flex-direction: column;
-  align-items:    center;
-  padding:        12px 24px;
+.primary-btn {
+  display:         inline-flex;
+  align-items:     center;
+  padding:         12px 28px;
+  background:      var(--accent);
+  color:           #fff;
+  font-size:       0.9rem;
+  font-weight:     600;
+  border-radius:   8px;
+  text-decoration: none;
+  transition:      background 0.15s, transform 0.1s;
+}
+.primary-btn:hover {
+  background: #2563eb;
+  transform:  translateY(-1px);
 }
 
-.hstat-num {
-  font-size:   1.15rem;
-  font-weight: 800;
-  color:       #fff;
-  line-height: 1;
+.secondary-btn {
+  display:         inline-flex;
+  align-items:     center;
+  padding:         12px 24px;
+  color:           var(--muted);
+  font-size:       0.9rem;
+  font-weight:     500;
+  text-decoration: none;
+  border-radius:   8px;
+  transition:      color 0.15s;
 }
-
-.hstat-lbl {
-  font-size:   0.67rem;
-  color:       var(--muted);
-  margin-top:  4px;
-  white-space: nowrap;
-}
-
-.hstat-divider {
-  width:      1px;
-  height:     36px;
-  background: var(--border);
-  flex-shrink: 0;
-}
+.secondary-btn:hover { color: #fff; }
 
 /* ── INPUT CARD ─────────────────────────────────── */
 
@@ -749,6 +750,78 @@ textarea::placeholder { color: var(--muted2); }
   line-height: 1.65;
 }
 
+/* ── VERIFIED RESULTS ───────────────────────────── */
+
+.verified-results {
+  border-top: 1px solid var(--border);
+  padding:    80px 24px;
+  text-align: center;
+}
+
+.vr-inner {
+  max-width: 860px;
+  margin:    0 auto;
+}
+
+.vr-label {
+  font-size:      0.7rem;
+  font-weight:    600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color:          var(--accent);
+  margin-bottom:  12px;
+}
+
+.vr-title {
+  font-size:     1.75rem;
+  font-weight:   800;
+  letter-spacing: -0.5px;
+  color:         #fff;
+  margin-bottom: 10px;
+}
+
+.vr-sub {
+  font-size:   0.9rem;
+  color:       var(--muted);
+  margin-bottom: 40px;
+}
+
+.vr-grid {
+  display:               grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap:                   16px;
+}
+
+.vr-card {
+  background:    var(--surface);
+  border:        1px solid var(--border);
+  border-radius: 10px;
+  padding:       24px 16px;
+  text-align:    center;
+}
+
+.vr-domain {
+  font-size:   0.7rem;
+  font-weight: 500;
+  color:       var(--muted);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.vr-accuracy {
+  font-size:   1.8rem;
+  font-weight: 800;
+  color:       #fff;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.vr-dataset {
+  font-size:  0.65rem;
+  color:      var(--muted);
+  line-height: 1.4;
+}
+
 /* ── USE CASES ─────────────────────────────────── */
 
 .uc-section {
@@ -981,9 +1054,7 @@ textarea::placeholder { color: var(--muted2); }
 
 @media (max-width: 680px) {
   .hero-title           { font-size: 1.9rem; letter-spacing: -0.8px; }
-  .hero-stats           { flex-wrap: wrap; justify-content: center; }
-  .hstat-divider        { display: none; }
-  .hstat                { padding: 10px 16px; }
+  .hero-cta             { flex-direction: column; align-items: center; }
   .results-meta-grid    { grid-template-columns: 1fr 1fr; }
   .results-top          { flex-direction: column; }
   .results-right        { align-items: flex-start; }
@@ -992,6 +1063,7 @@ textarea::placeholder { color: var(--muted2); }
   .hiw-grid             { grid-template-columns: 1fr; }
   .hiw-section          { padding: 52px 16px; }
   .uc-section           { padding: 40px 16px; }
+  .vr-grid              { grid-template-columns: repeat(2, 1fr); }
   .footer-inner         { grid-template-columns: 1fr; gap: 20px; }
   .footer-right         { text-align: left; }
   .footer-links         { flex-wrap: wrap; }

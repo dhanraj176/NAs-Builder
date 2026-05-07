@@ -19,7 +19,6 @@
         <a href="#" class="nav-link">Product</a>
         <a href="#" class="nav-link">Docs</a>
         <a href="#" class="nav-link">Research</a>
-        <a href="https://github.com/dhanraj176/NAs-Builder" target="_blank" class="nav-link">GitHub</a>
       </div>
       <button class="btn-nav-try" onclick="scrollToInput()">Try it free</button>
     </div>
@@ -42,26 +41,9 @@
         Not a chatbot or generator &mdash; we do classification,
         exceptionally well.
       </p>
-      <div class="hero-stats">
-        <div class="hstat">
-          <span class="hstat-num">2066x</span>
-          <span class="hstat-lbl">faster than manual</span>
-        </div>
-        <div class="hstat-divider"></div>
-        <div class="hstat">
-          <span class="hstat-num">86.6%</span>
-          <span class="hstat-lbl">average accuracy</span>
-        </div>
-        <div class="hstat-divider"></div>
-        <div class="hstat">
-          <span class="hstat-num">$0</span>
-          <span class="hstat-lbl">infrastructure cost</span>
-        </div>
-        <div class="hstat-divider"></div>
-        <div class="hstat">
-          <span class="hstat-num">42s</span>
-          <span class="hstat-lbl">avg deployment time</span>
-        </div>
+      <div class="hero-cta">
+        <a href="#build" class="primary-btn" onclick="scrollToInput(); return false;">Try it free</a>
+        <a href="#hiw" class="secondary-btn">See how it works &rarr;</a>
       </div>
     </section>
 
@@ -211,7 +193,7 @@
   </main>
 
   <!-- HOW IT WORKS -->
-  <section class="hiw-section">
+  <section class="hiw-section" id="hiw">
     <div class="hiw-inner">
       <div class="hiw-heading">
         <div class="hiw-label">How it works</div>
@@ -255,6 +237,44 @@
           <div class="hiw-card-body">Download your agent ZIP or hit a live API endpoint. Ready to use immediately, no infrastructure needed.</div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- VERIFIED RESULTS -->
+  <section class="verified-results">
+    <div class="vr-inner">
+      <div class="vr-heading">
+        <div class="vr-label">Benchmarks</div>
+        <h2 class="vr-title">Verified on 5 domains</h2>
+        <p class="vr-sub">Real datasets. Held-out test data. Measurable accuracy.</p>
+      </div>
+      <div class="vr-grid">
+        <div class="vr-card">
+          <div class="vr-domain">Image classification</div>
+          <div class="vr-accuracy">86.6%</div>
+          <div class="vr-dataset">Pothole detection (taroii)</div>
+        </div>
+        <div class="vr-card">
+          <div class="vr-domain">Text classification</div>
+          <div class="vr-accuracy">73.1%</div>
+          <div class="vr-dataset">Fake news (GonzaloA)</div>
+        </div>
+        <div class="vr-card">
+          <div class="vr-domain">Tabular classification</div>
+          <div class="vr-accuracy">98%</div>
+          <div class="vr-dataset">Synthetic fraud detection</div>
+        </div>
+        <div class="vr-card">
+          <div class="vr-domain">Multimodal zero-shot</div>
+          <div class="vr-accuracy">87%</div>
+          <div class="vr-dataset">CIFAR-10 (CLIP)</div>
+        </div>
+        <div class="vr-card">
+          <div class="vr-domain">Audio classification</div>
+          <div class="vr-accuracy">100%</div>
+          <div class="vr-dataset">Synthetic audio test</div>
+        </div>
       </div>
     </div>
   </section>
