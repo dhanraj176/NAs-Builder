@@ -181,6 +181,8 @@ class AutoArchitectOrchestrator:
                 "message":      "Loaded instantly from knowledge base!",
                 "type":         result_type,
                 "agents_used":  agents_used,
+                "evaluation":   meta.get("evaluation", {}),
+                "train_size":   meta.get("train_size", 0),
                 "test_accuracy": avg_acc,
                 "avg_accuracy":  avg_acc,
             }
@@ -189,7 +191,6 @@ class AutoArchitectOrchestrator:
                 base["self_trained"]   = meta.get("self_trained", False)
                 base["avg_accuracy"]   = avg_acc
                 base["all_accuracies"] = all_acc
-                base["evaluation"]     = meta.get("evaluation", {})
 
             base["readable_output"] = self._get_readable_output(problem, base)
             base["topology"]        = self._design_topology(
@@ -237,6 +238,8 @@ class AutoArchitectOrchestrator:
                 "message":      "Loaded instantly from knowledge base!",
                 "type":         sim_result_type,
                 "agents_used":  sim_agents_used,
+                "evaluation":   sim_meta.get("evaluation", {}),
+                "train_size":   sim_meta.get("train_size", 0),
                 "test_accuracy": sim_avg_acc,
                 "avg_accuracy":  sim_avg_acc,
             }

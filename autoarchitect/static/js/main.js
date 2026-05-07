@@ -522,9 +522,20 @@ function buildAgentNetwork(agents, data) {
 
 // ── RESULTS ─────────────────────────────────────────────────────────────────
 
+function _parseAcc(v) {
+  var n = parseFloat(v);
+  return (isNaN(n) || n <= 0) ? 0 : n;
+}
+
 function showResults(data) {
-  var acc = data.test_accuracy || data.avg_accuracy || data.cached_accuracy ||
-            data.accuracy || (data.evaluation && data.evaluation.avg_score) || 0;
+  var acc = _parseAcc(data.test_accuracy) ||
+            _parseAcc(data.avg_accuracy)  ||
+            _parseAcc(data.cached_accuracy) ||
+            _parseAcc(data.accuracy);
+  if (!acc && data.evaluation) {
+    acc = _parseAcc(data.evaluation.real_accuracy) ||
+          _parseAcc(data.evaluation.avg_score);
+  }
 
   var accEl = document.getElementById('resultsAccNum');
   if (acc > 0) {
@@ -541,7 +552,16 @@ function showResults(data) {
 
   var grid   = document.getElementById('resultsMetaGrid');
   var time   = data.elapsed || data.search_time || data.time || '—';
-  var params = data.parameters ? ((data.parameters / 1e6).toFixed(1) + 'M') : '—';
+  var params;
+  if (data.parameters > 0) {
+    params = (data.parameters / 1e6).toFixed(1) + 'M';
+  } else if (data.train_size > 0) {
+    params = data.train_size.toLocaleString() + ' samples';
+  } else if (data.evaluation && data.evaluation.avg_score > 0) {
+    params = data.evaluation.avg_score + '% score';
+  } else {
+    params = '—';
+  }
   var agents = (data.agents_used || [data.domain]).filter(Boolean);
   grid.innerHTML =
     metaCard(time + 's', 'Training time') +
