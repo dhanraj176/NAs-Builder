@@ -1340,6 +1340,129 @@ textarea::placeholder { color: var(--ink-tertiary); }
 
 .an-arrow svg { display: block; }
 
+/* ── LIVE TRAINING DASHBOARD ────────────────────── */
+
+.training-dash {
+  margin-top:     10px;
+  padding:        14px 16px;
+  background:     var(--surface-2);
+  border:         1px solid var(--hairline);
+  border-radius:  var(--r-md);
+  display:        flex;
+  flex-direction: column;
+  gap:            10px;
+  animation:      entranceFadeUp 0.3s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.td-top-row {
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+}
+
+.td-phase {
+  font-size:      11px;
+  font-weight:    600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color:          var(--primary-hover);
+}
+
+.td-status {
+  font-size:  13px;
+  color:      var(--ink-muted);
+  min-height: 18px;
+  transition: opacity 0.25s ease;
+}
+
+.td-progress-row {
+  display:     flex;
+  align-items: center;
+  gap:         10px;
+}
+
+.td-progress-track {
+  flex:          1;
+  height:        4px;
+  background:    var(--surface-4);
+  border-radius: 2px;
+  overflow:      hidden;
+}
+
+.td-progress-fill {
+  height:        100%;
+  width:         0%;
+  background:    var(--primary);
+  border-radius: 2px;
+  transition:    width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.td-progress-pct {
+  font-size:           12px;
+  font-weight:         500;
+  color:               var(--ink-subtle);
+  min-width:           34px;
+  text-align:          right;
+  font-variant-numeric: tabular-nums;
+}
+
+.td-epoch-label {
+  font-size:           12px;
+  color:               var(--ink-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.td-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:    8px;
+}
+
+.td-metric {
+  padding:       9px 10px;
+  background:    var(--surface-1);
+  border:        1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  text-align:    center;
+}
+
+.td-metric-val {
+  font-size:           17px;
+  font-weight:         600;
+  color:               var(--ink);
+  letter-spacing:      -0.4px;
+  line-height:         1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.td-metric-lbl {
+  font-size:      10px;
+  color:          var(--ink-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top:     3px;
+}
+
+.td-chart-section {
+  padding-top: 2px;
+}
+
+.td-chart-label {
+  font-size:      10px;
+  color:          var(--ink-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom:  5px;
+}
+
+.td-chart-svg {
+  width:      100%;
+  height:     50px;
+  display:    block;
+  overflow:   visible;
+  background: transparent;
+}
+
 /* ── REDUCED MOTION ─────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {

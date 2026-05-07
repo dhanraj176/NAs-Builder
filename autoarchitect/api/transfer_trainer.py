@@ -92,6 +92,8 @@ def train_transfer(problem: str, data: dict,
     for epoch in range(epochs):
         model.train()
         correct = total = 0
+        epoch_loss_sum = 0.0
+        num_batches    = 0
 
         for images, labels in data['train_loader']:
             # Resize to 224x224 for ResNet18 if needed
@@ -113,18 +115,24 @@ def train_transfer(problem: str, data: dict,
             loss.backward()
             optimizer.step()
 
-            preds    = out.argmax(dim=1)
-            correct += (preds == labels).sum().item()
-            total   += labels.size(0)
+            preds          = out.argmax(dim=1)
+            correct       += (preds == labels).sum().item()
+            total         += labels.size(0)
+            epoch_loss_sum += loss.item()
+            num_batches    += 1
 
-        acc = round(100 * correct / total, 2)
+        acc      = round(100 * correct / total, 2)
+        avg_loss = round(epoch_loss_sum / max(num_batches, 1), 4)
         epoch_results.append(acc)
-        print(f"   Epoch {epoch+1}/{epochs} -> Accuracy: {acc}%")
+        print(f"   Epoch {epoch+1}/{epochs} -> Accuracy: {acc}%  Loss: {avg_loss}")
         scheduler.step()
 
         if progress_callback:
             progress_callback(4, 6,
-                f"Transfer learning epoch {epoch+1}/{epochs} — {acc}%")
+                f"Transfer learning epoch {epoch+1}/{epochs} — {acc}%",
+                epoch=epoch + 1, total_epochs=epochs,
+                loss=avg_loss, accuracy=acc,
+                phase='Transfer learning')
 
     # Evaluate
     model.eval()

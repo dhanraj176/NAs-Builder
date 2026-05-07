@@ -123,6 +123,45 @@
 
         <div class="pipeline-steps" id="pipelineSteps"></div>
 
+        <!-- LIVE TRAINING DASHBOARD -->
+        <div id="trainingDash" class="training-dash hidden">
+          <div class="td-top-row">
+            <span class="td-phase" id="tdPhase">NAS architecture search</span>
+          </div>
+          <div class="td-status" id="tdStatus">Searching candidate architectures…</div>
+
+          <div class="td-progress-row">
+            <div class="td-progress-track">
+              <div class="td-progress-fill" id="tdProgressFill"></div>
+            </div>
+            <span class="td-progress-pct" id="tdProgressPct">0%</span>
+          </div>
+          <div class="td-epoch-label" id="tdEpochLabel">Initializing…</div>
+
+          <div class="td-metrics-row">
+            <div class="td-metric">
+              <div class="td-metric-val" id="tdLoss">—</div>
+              <div class="td-metric-lbl">Loss</div>
+            </div>
+            <div class="td-metric">
+              <div class="td-metric-val" id="tdAccuracy">—</div>
+              <div class="td-metric-lbl">Accuracy</div>
+            </div>
+            <div class="td-metric">
+              <div class="td-metric-val" id="tdETA">—</div>
+              <div class="td-metric-lbl">ETA</div>
+            </div>
+          </div>
+
+          <div class="td-chart-section">
+            <div class="td-chart-label">Loss curve</div>
+            <svg id="tdChartSvg" class="td-chart-svg" viewBox="0 0 300 50" preserveAspectRatio="none">
+              <path id="tdChartPath" fill="none" stroke="var(--primary)" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round" d=""/>
+            </svg>
+          </div>
+        </div>
+
         <!-- NEURAL NETWORK ANIMATION -->
         <div class="nn-viz hidden" id="nnViz">
           <canvas id="nnCanvas"></canvas>

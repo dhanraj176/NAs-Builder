@@ -947,16 +947,26 @@ def orchestrate_start():
 
     job_id = str(uuid.uuid4())[:8]
     _jobs[job_id] = {
-        'status':     'running',
-        'result':     None,
-        'error':      None,
-        'started_at': time.time(),
-        'elapsed':    0,
+        'status':           'running',
+        'result':           None,
+        'error':            None,
+        'started_at':       time.time(),
+        'elapsed':          0,
+        'training_metrics': None,
     }
 
     def _run():
+        def _metrics_cb(step, total, message, **kwargs):
+            _jobs[job_id]['training_metrics'] = {
+                'phase':            kwargs.get('phase', (message[:50] if message else 'Training')),
+                'current_epoch':    kwargs.get('epoch', 0),
+                'total_epochs':     kwargs.get('total_epochs', 0),
+                'current_loss':     kwargs.get('loss'),
+                'current_accuracy': kwargs.get('accuracy'),
+                'timestamp':        time.time(),
+            }
         try:
-            result = orchestrator.solve(problem=problem)
+            result = orchestrator.solve(problem=problem, progress_callback=_metrics_cb)
             _jobs[job_id]['result'] = result
             _jobs[job_id]['status'] = 'complete'
         except Exception as e:
@@ -978,10 +988,11 @@ def job_status(job_id):
         return jsonify({'error': 'Job not found'}), 404
     elapsed = round(time.time() - job['started_at'], 1)
     return jsonify({
-        'status':  job['status'],
-        'elapsed': elapsed,
-        'result':  job['result'],
-        'error':   job['error'],
+        'status':           job['status'],
+        'elapsed':          elapsed,
+        'result':           job['result'],
+        'error':            job['error'],
+        'training_metrics': job.get('training_metrics'),
     })
 
 

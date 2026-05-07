@@ -119,7 +119,7 @@ class AutoArchitectOrchestrator:
     # ─────────────────────────────────────────────────────────────────────
     # PUBLIC — main entry point
     # ─────────────────────────────────────────────────────────────────────
-    def solve(self, problem: str, image_data: str = "") -> dict:
+    def solve(self, problem: str, image_data: str = "", progress_callback=None) -> dict:
         start = time.time()
 
         # 1. LLM check first
@@ -286,6 +286,8 @@ class AutoArchitectOrchestrator:
                 print(f"[Orchestrator] Research skipped: {e}")
 
         # 8. Run agents
+        if progress_callback:
+            progress_callback(0, 6, 'Dataset search starting', phase='Dataset search')
         if workflow["type"] == "multi":
             # Parallel when brain says parallel/hybrid, or by default for multi-agent
             brain_res = workflow.get("brain_result") or {}
@@ -293,13 +295,16 @@ class AutoArchitectOrchestrator:
                 "execution_mode", "parallel")
             if exec_mode in ("parallel", "hybrid"):
                 result = self._run_parallel_ensemble(
-                    problem, workflow["agents"], image_data)
+                    problem, workflow["agents"], image_data,
+                    progress_callback=progress_callback)
             else:
                 result = self._run_multi_agent(
-                    problem, workflow["agents"], image_data)
+                    problem, workflow["agents"], image_data,
+                    progress_callback=progress_callback)
         else:
             result = self._run_single_agent(
-                problem, domain, image_data)
+                problem, domain, image_data,
+                progress_callback=progress_callback)
 
         # 9. Design topology
         agents_used        = result.get("agents_used", [domain])
@@ -533,15 +538,19 @@ class AutoArchitectOrchestrator:
     # SINGLE AGENT PIPELINE
     # ─────────────────────────────────────────────────────────────────────
     def _run_single_agent(self, problem: str,
-                           domain: str, image_data: str) -> dict:
+                           domain: str, image_data: str,
+                           progress_callback=None) -> dict:
         print(f"[Orchestrator] Single agent: {domain}")
+        if progress_callback:
+            progress_callback(1, 6, 'Agent waking up', phase='NAS search', epoch=0, total_epochs=3)
         agent  = self._wake_agent(domain,problem)
         result = agent.run(problem, image_data)
 
         try:
             print(f"[Orchestrator] Auto self-training for: {problem[:40]}")
             from api.self_trainer import self_train
-            trained = self_train(problem=problem, category=domain, epochs=3)
+            trained = self_train(problem=problem, category=domain, epochs=3,
+                                 progress_callback=progress_callback)
             result["self_trained"]   = True
             result["train_accuracy"] = trained["train_accuracy"]
             result["test_accuracy"]  = trained["test_accuracy"]
@@ -595,7 +604,8 @@ class AutoArchitectOrchestrator:
     # PARALLEL ENSEMBLE PIPELINE
     # ─────────────────────────────────────────────────────────────────────
     def _run_parallel_ensemble(self, problem: str,
-                                domains: list, image_data: str) -> dict:
+                                domains: list, image_data: str,
+                                progress_callback=None) -> dict:
         """
         Train all domain agents simultaneously using ThreadPoolExecutor,
         then combine their outputs via FusionAgent with learned weights.
@@ -744,7 +754,8 @@ class AutoArchitectOrchestrator:
     # MULTI AGENT PIPELINE (sequential — kept for sequential topologies)
     # ─────────────────────────────────────────────────────────────────────
     def _run_multi_agent(self, problem: str,
-                          domains: list, image_data: str) -> dict:
+                          domains: list, image_data: str,
+                          progress_callback=None) -> dict:
         print(f"[Orchestrator] Multi-agent pipeline: {domains}")
 
         agent_results  = []

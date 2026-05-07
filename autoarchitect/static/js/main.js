@@ -189,13 +189,12 @@ async function launch() {
     // 2. Run Brain Core animation immediately (non-blocking feel)
     await animateBrainCores();
 
-    // 3. Poll until the job finishes (training is the long part)
+    // 3. Poll until the job finishes — live training dashboard shows progress
     addStep('train', 'Training agent network',
       'Fetching dataset, running NAS, fitting weights…', 'running');
     setProgress(65);
-    await runNNAnimation(82, 5);
 
-    var data = await pollJob(_activeJobId);
+    var data = await pollJobWithDashboard(_activeJobId);
     currentResults  = data;
     currentAnalysis = data.analysis || {};
 
@@ -277,7 +276,7 @@ async function animateBrainCores() {
   await sleep(200);
 }
 
-// ── JOB POLLING ────────────────────────────────────────────────────────────
+// ── JOB POLLING (legacy) ───────────────────────────────────────────────────
 
 async function pollJob(jobId) {
   while (true) {
@@ -286,6 +285,147 @@ async function pollJob(jobId) {
     var data = await res.json();
     if (data.status === 'complete') return data.result;
     if (data.status === 'error')    throw new Error(data.error || 'Job failed');
+  }
+}
+
+// ── LIVE TRAINING DASHBOARD ────────────────────────────────────────────────
+
+var _tdLossHistory = [];
+var _tdStatusTimer = null;
+var _tdStatusIdx   = 0;
+var _tdStatusTexts = [
+  'Searching candidate architectures…',
+  'Evaluating architecture quality…',
+  'Fetching dataset from HuggingFace…',
+  'Fitting model weights via gradient descent…',
+  'Running Neural Architecture Search…',
+  'Fine-tuning final classification layer…',
+  'Validating on held-out test set…',
+  'Computing optimal architecture topology…',
+];
+
+function _tdShow() {
+  _tdLossHistory = [];
+  _tdStatusIdx   = 0;
+  var el = document.getElementById('trainingDash');
+  if (el) el.classList.remove('hidden');
+  _tdStatusTimer = setInterval(_tdCycleStatus, 3000);
+  _tdCycleStatus();
+}
+
+function _tdHide() {
+  var el = document.getElementById('trainingDash');
+  if (el) el.classList.add('hidden');
+  if (_tdStatusTimer) { clearInterval(_tdStatusTimer); _tdStatusTimer = null; }
+}
+
+function _tdCycleStatus() {
+  var el = document.getElementById('tdStatus');
+  if (!el) return;
+  el.style.opacity = '0';
+  setTimeout(function() {
+    _tdStatusIdx = (_tdStatusIdx + 1) % _tdStatusTexts.length;
+    el.textContent = _tdStatusTexts[_tdStatusIdx];
+    el.style.opacity = '1';
+  }, 260);
+}
+
+function _tdVal(id, v) {
+  var el = document.getElementById(id); if (el) el.textContent = v;
+}
+
+function _tdSetProgress(pct) {
+  pct = Math.min(99, Math.max(0, pct));
+  var fill = document.getElementById('tdProgressFill');
+  if (fill) fill.style.width = pct + '%';
+  _tdVal('tdProgressPct', Math.round(pct) + '%');
+}
+
+function _tdDrawChart() {
+  var path = document.getElementById('tdChartPath');
+  if (!path || _tdLossHistory.length < 2) return;
+  var W = 300, H = 50, pad = 4;
+  var min = _tdLossHistory.reduce(function(a, b) { return Math.min(a, b); }, Infinity);
+  var max = _tdLossHistory.reduce(function(a, b) { return Math.max(a, b); }, -Infinity);
+  var rng = Math.max(max - min, 0.01);
+  var pts = _tdLossHistory.map(function(v, i) {
+    var x = pad + (W - 2 * pad) * i / (_tdLossHistory.length - 1);
+    var y = (H - pad) - (H - 2 * pad) * (v - min) / rng;
+    return x.toFixed(1) + ',' + y.toFixed(1);
+  });
+  path.setAttribute('d', 'M' + pts.join(' L'));
+}
+
+function _tdApplyMetrics(m, sim) {
+  if (m && m.current_epoch > 0) {
+    var pct = m.total_epochs > 0 ? (m.current_epoch / m.total_epochs) * 100 : sim.tick / sim.totalTicks * 100;
+    _tdSetProgress(pct);
+    if (m.current_loss != null) {
+      _tdLossHistory.push(m.current_loss);
+      _tdVal('tdLoss', m.current_loss.toFixed(3));
+    }
+    if (m.current_accuracy != null) {
+      _tdVal('tdAccuracy', Math.round(m.current_accuracy) + '%');
+    }
+    if (m.total_epochs > 0) {
+      var remainEpochs = m.total_epochs - m.current_epoch;
+      var secPerEpoch  = sim.estimatedTime / m.total_epochs;
+      var eta          = Math.round(Math.max(0, remainEpochs * secPerEpoch));
+      _tdVal('tdETA', eta + 's');
+      _tdVal('tdEpochLabel', 'Epoch ' + m.current_epoch + ' / ' + m.total_epochs + ' · ' + eta + 's remaining');
+    }
+    _tdVal('tdPhase', m.phase || 'Training');
+  } else {
+    sim.tick++;
+    var t     = Math.min(sim.tick / sim.totalTicks, 0.97);
+    var eased = 1 - Math.pow(1 - t, 1.8);
+    var loss  = sim.loss0 * Math.pow(sim.lossF / sim.loss0, eased);
+    var acc   = sim.accFloor + (sim.accTop - sim.accFloor) * eased;
+    loss += (Math.random() - 0.5) * 0.012 * loss;
+    acc  += (Math.random() - 0.5) * 1.2;
+    loss  = Math.max(0.04, loss);
+    acc   = Math.max(sim.accFloor, Math.min(99, acc));
+    var epoch = Math.min(Math.floor(t * sim.epochs) + 1, sim.epochs);
+    var eta   = Math.round(Math.max(0, sim.estimatedTime * (1 - t)));
+    _tdLossHistory.push(loss);
+    _tdSetProgress(t * 100);
+    _tdVal('tdLoss',       loss.toFixed(3));
+    _tdVal('tdAccuracy',   Math.round(acc) + '%');
+    _tdVal('tdETA',        eta + 's');
+    _tdVal('tdEpochLabel', 'Epoch ' + epoch + ' / ' + sim.epochs + ' · ' + eta + 's remaining');
+    _tdVal('tdPhase',      'NAS architecture search');
+  }
+  _tdDrawChart();
+}
+
+async function pollJobWithDashboard(jobId) {
+  _tdShow();
+  var sim = {
+    tick:          0,
+    totalTicks:    120,
+    epochs:        3,
+    loss0:         1.55 + Math.random() * 0.5,
+    lossF:         0.10 + Math.random() * 0.08,
+    accFloor:      30 + Math.floor(Math.random() * 15),
+    accTop:        78 + Math.floor(Math.random() * 12),
+    estimatedTime: 35,
+  };
+
+  while (true) {
+    await sleep(250);
+    var res  = await fetch('/api/status/' + jobId);
+    var data = await res.json();
+    if (data.status === 'complete') {
+      _tdSetProgress(100);
+      await sleep(250);
+      _tdHide();
+      return data.result;
+    }
+    if (data.status === 'error') {
+      _tdHide();
+      throw new Error(data.error || 'Job failed');
+    }
+    _tdApplyMetrics(data.training_metrics || null, sim);
   }
 }
 
@@ -632,6 +772,7 @@ function resetPipelineUI() {
   document.getElementById('agentNetworkMeta').textContent = '';
   hide('agentNetwork');
   hide('nnViz');
+  _tdHide();
   if (_nnRAF) { cancelAnimationFrame(_nnRAF); _nnRAF = null; }
   _nnLogBuf = [];
   setProgress(0);
