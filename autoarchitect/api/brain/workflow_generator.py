@@ -10,11 +10,22 @@ import time
 from api.brain.strategy_library    import StrategyLibrary
 from api.brain.performance_tracker import PerformanceTracker
 from api.brain.meta_learner        import get_meta_learner
+from api.brain.distilled_brain     import get_distilled_brain
 
 # Domains the self-trainer can actually train (ANAS may suggest others like
 # "severity" or "report" which are topology-only agents, not trainable).
 _TRAINABLE_DOMAINS    = {"image", "text", "medical", "security"}
 _ANAS_PROXY_THRESHOLD = 0.70  # min proxy_score to trust ANAS over strategy library
+
+# Map Core 2 agent names → ANAS trainable domain names.
+# AudioAgent / TabularAgent / MultimodalAgent are excluded because no
+# trainable NAS agent exists for them yet; they fall through to ANAS.
+_BRAIN_TO_ANAS = {
+    "ImageAgent":    "image",
+    "TextAgent":     "text",
+    "MedicalAgent":  "medical",
+    "SecurityAgent": "security",
+}
 
 
 class WorkflowGenerator:
@@ -29,6 +40,7 @@ class WorkflowGenerator:
         self.library  = StrategyLibrary()
         self.tracker  = PerformanceTracker()
         self.meta     = get_meta_learner()
+        self.brain    = get_distilled_brain()
         self.use_anas = True  # set to False (via USE_ANAS in app.py) to revert to strategy library
         print("[WorkflowGenerator] ready!")
         print(f"   Knows {len(self.library.strategies)} strategies")
@@ -46,18 +58,35 @@ class WorkflowGenerator:
         start = time.time()
         print(f"\n[WorkflowGenerator] generating workflow for: {problem[:50]}")
 
-        # ── Try meta-learner first ──────────────────────────
-        meta_pred = self.meta.predict(
-            problem,
-            bert_embedding=bert_embedding
-        )
+        # ── Step 1: DistilledBrain (primary — frontier intelligence) ─────────
+        brain_result  = self.brain.think_with_fallback(problem)
+        brain_agent   = None
 
-        # Only override if VERY confident AND proven accurate
-        # Old threshold was 0.5 — too low, caused wrong agent selection
-        # New threshold: 0.85 confidence + 60% historical accuracy
-        if meta_pred.get("predicted") and \
-           meta_pred.get("confidence", 0) >= 0.85 and \
-           meta_pred.get("accuracy", 0) >= 10:
+        if brain_result.get("source") == "distilled_brain_v1":
+            primary_name = brain_result.get("classification", {}).get(
+                "primary_agent", "")
+            brain_agent  = _BRAIN_TO_ANAS.get(primary_name)
+            if brain_agent:
+                print(f"  [DistilledBrain] {primary_name} → {brain_agent}  "
+                      f"conf={brain_result.get('confidence', 0.0):.1%}")
+            else:
+                print(f"  [DistilledBrain] {primary_name} (no trainable ANAS agent) "
+                      f"-- falling through to MetaLearner / ANAS")
+
+        # ── Step 2: MetaLearner (secondary — historical patterns) ────────────
+        meta_pred = self.meta.predict(problem, bert_embedding=bert_embedding)
+
+        # ── Choose source ────────────────────────────────────────────────────
+        if brain_agent:
+            agents        = [brain_agent]
+            workflow_type = "single"
+            strategy_name = f"distilled_brain_{brain_agent}"
+            avg_accuracy  = 80.0
+            source        = "distilled_brain"
+
+        elif meta_pred.get("predicted") and \
+             meta_pred.get("confidence", 0) >= 0.85 and \
+             meta_pred.get("accuracy", 0) >= 10:
 
             agents        = meta_pred["agents"]
             workflow_type = "multi" if len(agents) > 1 else "single"
@@ -75,17 +104,10 @@ class WorkflowGenerator:
             source = "meta_learner"
 
         else:
-            # Print meta-learner low-confidence warning if applicable
             if meta_pred.get("predicted"):
-                print(f"  [MetaLearner] prediction:")
-                print(f"     Agents:     {meta_pred.get('agents', [])}")
-                print(f"     Dataset:    {meta_pred.get('dataset', 'unknown')}")
-                print(f"     Method:     {meta_pred.get('method', 'unknown')}")
-                print(f"     Expected:   ~{meta_pred.get('accuracy', 0)}%")
-                print(f"     Confidence: {meta_pred.get('confidence', 0):.1%}")
                 print(f"  [MetaLearner] confidence too low "
                       f"({meta_pred.get('confidence', 0):.1%}) "
-                      f"-- using strategy library")
+                      f"-- using ANAS / strategy library")
 
             # ANAS primary / strategy library fallback
             anas = (self._anas_suggest_workflow(problem, bert_domain, bert_embedding)
@@ -95,7 +117,7 @@ class WorkflowGenerator:
                 agents        = anas["agents"]
                 workflow_type = "multi" if len(agents) > 1 else "single"
                 strategy_name = f"anas_search_{'+'.join(agents)}"
-                avg_accuracy  = 80.0  # real accuracy comes from training
+                avg_accuracy  = 80.0
                 source        = "anas_search_engine"
             else:
                 strategy      = self.library.find_best_strategy(problem, bert_domain)
@@ -130,15 +152,22 @@ class WorkflowGenerator:
         print(f"     Agents:   {agents}")
         print(f"     Expected: ~{avg_accuracy}% accuracy")
 
+        confidence = (
+            brain_result.get("confidence", 0.7)
+            if source == "distilled_brain"
+            else meta_pred.get("confidence", 0.5)
+        )
+
         return {
             "type":              workflow_type,
             "agents":            agents,
             "strategy_name":     strategy_name,
             "steps":             steps,
             "expected_accuracy": avg_accuracy,
-            "confidence":        meta_pred.get("confidence", 0.5),
+            "confidence":        confidence,
             "generated_in":      elapsed,
             "source":            source,
+            "brain_result":      brain_result if source == "distilled_brain" else None,
             "meta_prediction":   meta_pred,
         }
 
@@ -251,6 +280,12 @@ class WorkflowGenerator:
                 h["problem"][:40]
                 for h in perf_insights.get("recent", [])
             ],
+            "distilled_brain": {
+                "available":    self.brain.is_available(),
+                "cores":        3,
+                "accuracy":     86.7,
+                "source":       "DeepSeek V3 distillation",
+            },
             "meta_learner": {
                 "status":        meta_insights.get("status"),
                 "examples":      meta_insights.get("examples", 0),
@@ -262,7 +297,7 @@ class WorkflowGenerator:
                 "until_retrain": meta_insights.get("until_retrain", 3),
                 "combo_performance": meta_insights.get(
                     "combo_performance", {}),
-            }
+            },
         }
 
     def _agent_description(self, agent: str, problem: str) -> str:

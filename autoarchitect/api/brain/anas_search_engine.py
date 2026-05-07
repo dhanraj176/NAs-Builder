@@ -70,7 +70,19 @@ from api.brain.anas_immune_system import (
     ImmuneSystem,
     get_immune_system,
 )
-from api.brain.meta_learner import get_meta_learner
+from api.brain.meta_learner    import get_meta_learner
+from api.brain.distilled_brain import get_distilled_brain
+
+# Map Core 2 agent names → ANAS AGENT_CATALOG keys.
+_BRAIN_TO_CATALOG = {
+    "ImageAgent":      ["image"],
+    "TextAgent":       ["text"],
+    "TabularAgent":    ["text"],
+    "AudioAgent":      ["audio"],
+    "MultimodalAgent": ["image", "text"],
+    "MedicalAgent":    ["medical"],
+    "SecurityAgent":   ["security"],
+}
 
 
 # ── Paths & constants ─────────────────────────────────────────────────────────
@@ -169,6 +181,7 @@ class ANASSearchEngine:
         self.space    = ANASSearchSpace(constraints)
         self.immune   = immune_system if immune_system is not None else get_immune_system()
         self.meta     = get_meta_learner()
+        self.brain    = get_distilled_brain()
         self._stats_path = stats_path
         self._td         = None   # lazy TopologyDesigner
 
@@ -438,46 +451,61 @@ class ANASSearchEngine:
         space:        ANASSearchSpace,
     ) -> List[NetworkArchitecture]:
         """
-        If MetaLearner confidence >= 0.85, prepend its predicted architecture.
+        Prepend a high-quality architecture candidate from the best available brain.
 
-        Mirrors the threshold used in WorkflowGenerator.generate() so that
-        the two systems agree on when the meta-learner is trustworthy.
-        The predicted arch is inserted at position 0 (highest priority) to
-        ensure it is always scored regardless of budget.
+        Priority:
+          1. DistilledBrain (frontier intelligence) — always tried first
+          2. MetaLearner    (historical patterns)   — fallback if brain unavailable
+
+        The injected arch is inserted at position 0 so it is always scored
+        regardless of budget, mirroring the original meta-guided approach.
         """
-        pred = self.meta.predict(problem, bert_embedding=bert_emb)
-        if not pred.get("predicted") or pred.get("confidence", 0.0) < 0.85:
-            return candidates
-
-        raw_agents = pred.get("agents", [])
-        agents = [a for a in raw_agents if a in AGENT_CATALOG]
         c = space.constraints
-        if c.require_output_agent and "report" in c.allowed_agents:
-            if "report" not in agents:
-                agents.append("report")
-            elif agents[-1] != "report":
-                agents.remove("report")
-                agents.append("report")
 
-        if not agents:
-            return candidates
+        def _inject(raw_agents: List[str],
+                    confidence: float,
+                    tag: str) -> Optional[List[NetworkArchitecture]]:
+            agents = [a for a in raw_agents if a in AGENT_CATALOG]
+            if c.require_output_agent and "report" in c.allowed_agents:
+                if "report" not in agents:
+                    agents.append("report")
+                elif agents[-1] != "report":
+                    agents.remove("report")
+                    agents.append("report")
+            if not agents:
+                return None
+            arch = NetworkArchitecture(
+                agents   = agents,
+                topology = _infer_topology(agents),
+                metadata = {"source": tag, "confidence": round(confidence, 4)},
+            )
+            if not arch.is_valid(c):
+                return None
+            existing_ids = {a.architecture_id() for a in candidates}
+            if arch.architecture_id() in existing_ids:
+                return None
+            print(f"  [{tag}] injecting: {arch.agents} (conf={confidence:.1%})")
+            return [arch] + candidates
 
-        meta_arch = NetworkArchitecture(
-            agents   = agents,
-            topology = _infer_topology(agents),
-            metadata = {
-                "source":     "meta_guided",
-                "confidence": round(pred["confidence"], 4),
-            },
-        )
-        if not meta_arch.is_valid(c):
-            return candidates
+        # ── 1. Try DistilledBrain ─────────────────────────────────────────
+        brain_result = self.brain.think_with_fallback(problem)
+        if brain_result.get("source") == "distilled_brain_v1":
+            primary_name = brain_result.get("classification", {}).get(
+                "primary_agent", "")
+            raw = _BRAIN_TO_CATALOG.get(primary_name, [])
+            if raw:
+                result = _inject(raw, brain_result.get("confidence", 0.7),
+                                 "DistilledBrain")
+                if result is not None:
+                    return result
 
-        existing_ids = {a.architecture_id() for a in candidates}
-        if meta_arch.architecture_id() not in existing_ids:
-            print(f"  [Meta] injecting prediction: {meta_arch.agents} "
-                  f"(conf={pred['confidence']:.1%})")
-            return [meta_arch] + candidates
+        # ── 2. Fall back to MetaLearner ───────────────────────────────────
+        pred = self.meta.predict(problem, bert_embedding=bert_emb)
+        if pred.get("predicted") and pred.get("confidence", 0.0) >= 0.85:
+            result = _inject(pred.get("agents", []), pred["confidence"],
+                             "MetaLearner")
+            if result is not None:
+                return result
 
         return candidates
 
