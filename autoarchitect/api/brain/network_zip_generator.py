@@ -26,7 +26,7 @@ BASE_DIR    = Path(__file__).parent.parent.parent
 TRAINED_DIR = BASE_DIR / "models" / "trained"
 CACHE_DIR   = BASE_DIR / "cache"
 
-REAL_AGENTS = {"image", "text", "medical", "security"}
+REAL_AGENTS = {"image", "text", "medical", "security", "tabular", "audio", "multimodal"}
 
 # Role-based names for secondary agents in multi-agent networks
 ROLE_CLASS_NAMES = {
@@ -47,7 +47,7 @@ class NetworkZipGenerator:
 
     def __init__(self):
         self.models_dir = BASE_DIR / "models"
-        print("📦 NetworkZipGenerator ready")
+        print("[ZIP] NetworkZipGenerator ready")
 
     # ── Main entry point ───────────────────────────────────────────────────
 
@@ -70,9 +70,9 @@ class NetworkZipGenerator:
         primary_file  = factory.generate_file_name(problem)
         primary_mod   = primary_file.replace(".py", "")
 
-        print(f"\n📦 Generating network zip")
+        print(f"\n[ZIP] Generating network zip")
         print(f"   Problem:  {problem[:60]}")
-        print(f"   Agents:   {' → '.join(agents)}")
+        print(f"   Agents:   {' + '.join(agents)}")
         print(f"   Topology: {topo_type}")
         print(f"   Primary:  {primary_class}")
 
@@ -117,9 +117,17 @@ class NetworkZipGenerator:
                 file_mod    = agent_file_map[domain]
                 file_name   = file_mod + ".py"
 
-                # Use factory for primary agent (named from problem)
-                # Use role-based code for secondary agents
-                if domain == agents[0]:
+                # Route agent code generation by domain
+                if domain == "tabular":
+                    code = self._tabular_agent_code(
+                        cls_name, file_mod, problem, classes, accuracy, dataset)
+                elif domain == "audio":
+                    code = self._audio_agent_code(
+                        cls_name, file_mod, problem, classes, accuracy, dataset)
+                elif domain == "multimodal":
+                    code = self._multimodal_agent_code(
+                        cls_name, file_mod, problem, classes, accuracy, dataset)
+                elif domain == agents[0]:
                     code = factory.generate_agent_code(
                         problem     = problem,
                         domain      = domain,
@@ -141,37 +149,38 @@ class NetworkZipGenerator:
                     )
 
                 zf.writestr(f"agents/{file_name}", code)
-                print(f"   ✅ agents/{file_name} ({cls_name})")
+                print(f"   [OK] agents/{file_name} ({cls_name})")
 
             # 2. Network connector — connects all agents
             zf.writestr("network.py",
                 self._generate_network(
                     problem, agents, topo_type,
                     agent_class_map, agent_file_map))
-            print(f"   ✅ network.py")
+            print(f"   [OK] network.py")
 
             # 3. Runner
             zf.writestr("run_network.py",
                 self._generate_runner(problem, agents,
                                       agent_class_map))
-            print(f"   ✅ run_network.py")
+            print(f"   [OK] run_network.py")
 
             # 4. API server
             zf.writestr("api_server.py",
                 self._generate_api(problem, agents,
                                    agent_class_map))
-            print(f"   ✅ api_server.py")
+            print(f"   [OK] api_server.py")
 
             # 5. Real trained model weights — one per agent
             for domain in agents:
                 mp       = model_paths.get(domain)
                 file_mod = agent_file_map[domain]
                 if mp and Path(mp).exists():
-                    model_key = f"{file_mod}_model.pth"
+                    src_ext   = Path(mp).suffix          # .pth or .pkl
+                    model_key = f"{file_mod}_model{src_ext}"
                     zf.write(mp, f"models/{model_key}")
-                    print(f"   ✅ models/{model_key}")
+                    print(f"   [OK] models/{model_key}")
                 else:
-                    print(f"   ⚠️  No trained model for {domain}")
+                    print(f"   [WARN] No trained model for {domain}")
 
             # 6. Classes metadata per agent
             for domain in agents:
@@ -188,7 +197,7 @@ class NetworkZipGenerator:
                 self._generate_readme(
                     problem, agents, topo_type,
                     agent_class_map, classes_info))
-            print(f"   ✅ README.md")
+            print(f"   [OK] README.md")
 
             # 8. Retrain script — one command to fine-tune on new data
             zf.writestr("retrain.py",
@@ -197,22 +206,44 @@ class NetworkZipGenerator:
                     domain     = agents[0],
                     model_file = f"{agent_file_map[agents[0]]}_model.pth",
                 ))
-            print(f"   ✅ retrain.py")
+            print(f"   [OK] retrain.py")
 
             # 9. Standalone predict.py — works on any machine
             primary_domain   = agents[0]
             primary_file_mod = agent_file_map[primary_domain]
             primary_cls_name = agent_class_map[primary_domain]
-            zf.writestr("predict.py",
-                self._generate_predict_script(
-                    problem    = problem,
-                    domain     = primary_domain,
-                    agent_mod  = primary_file_mod,
-                    agent_cls  = primary_cls_name,
-                    classes    = classes_info.get(primary_domain, {}).get("classes", []),
-                    accuracy   = classes_info.get(primary_domain, {}).get("test_accuracy", 0),
-                ))
-            print(f"   ✅ predict.py")
+            is_parallel = topo_type == "parallel" and len(agents) > 1
+
+            if is_parallel:
+                zf.writestr("predict.py",
+                    self._generate_ensemble_predict_script(
+                        problem, agents, agent_class_map,
+                        agent_file_map, classes_info))
+            elif primary_domain == "tabular":
+                zf.writestr("predict.py",
+                    self._generate_tabular_predict_script(
+                        problem, primary_file_mod, primary_cls_name,
+                        classes_info.get(primary_domain, {})))
+            elif primary_domain == "audio":
+                zf.writestr("predict.py",
+                    self._generate_audio_predict_script(
+                        problem, primary_file_mod, primary_cls_name,
+                        classes_info.get(primary_domain, {})))
+            elif primary_domain == "multimodal":
+                zf.writestr("predict.py",
+                    self._generate_multimodal_predict_script(
+                        problem, primary_file_mod, primary_cls_name))
+            else:
+                zf.writestr("predict.py",
+                    self._generate_predict_script(
+                        problem    = problem,
+                        domain     = primary_domain,
+                        agent_mod  = primary_file_mod,
+                        agent_cls  = primary_cls_name,
+                        classes    = classes_info.get(primary_domain, {}).get("classes", []),
+                        accuracy   = classes_info.get(primary_domain, {}).get("test_accuracy", 0),
+                    ))
+            print(f"   [OK] predict.py ({'ensemble' if is_parallel else primary_domain})")
 
             # 10. Vocab file for text domain
             for domain in agents:
@@ -226,9 +257,9 @@ class NetworkZipGenerator:
                 vocab_path = TRAINED_DIR / f"{h}_text_vocab.json"
                 if vocab_path.exists():
                     zf.write(str(vocab_path), f"models/{file_mod}_vocab.json")
-                    print(f"   ✅ models/{file_mod}_vocab.json")
+                    print(f"   [OK] models/{file_mod}_vocab.json")
 
-        print(f"\n✅ Network zip ready — "
+        print(f"\n[OK] Network zip ready -- "
               f"{len(agents)} agents, {topo_type} topology")
         return buf.getvalue()
 
@@ -241,11 +272,15 @@ class NetworkZipGenerator:
         if trained_models and domain in trained_models:
             mp = trained_models[domain]
             if Path(mp).exists():
-                cls_path = mp.replace('.pth', '_classes.json')
+                # Try _classes.json then _meta.json
+                cls_path  = mp.replace('.pth', '_classes.json').replace('.pkl', '_meta.json')
+                meta_path = mp.replace('.pth', '_meta.json').replace('.pkl', '_meta.json')
                 meta = {}
-                if Path(cls_path).exists():
-                    with open(cls_path) as f:
-                        meta = json.load(f)
+                for p in [cls_path, meta_path]:
+                    if Path(p).exists():
+                        with open(p, encoding="utf-8") as f:
+                            meta = json.load(f)
+                        break
                 return mp, meta
 
         cleaned    = re.sub(r'[^\w\s]', '', problem)
@@ -257,9 +292,19 @@ class NetworkZipGenerator:
         if model_path.exists():
             meta = {}
             if cls_path.exists():
-                with open(cls_path) as f:
+                with open(cls_path, encoding="utf-8") as f:
                     meta = json.load(f)
             return str(model_path), meta
+
+        # .pkl lookup for tabular / audio
+        pkl_path  = TRAINED_DIR / f"{h}_{domain}.pkl"
+        meta_path = TRAINED_DIR / f"{h}_{domain}_meta.json"
+        if pkl_path.exists():
+            meta = {}
+            if meta_path.exists():
+                with open(meta_path, encoding="utf-8") as f:
+                    meta = json.load(f)
+            return str(pkl_path), meta
 
         cache_model = CACHE_DIR / h / "model.pth"
         cache_meta  = CACHE_DIR / h / "metadata.json"
@@ -327,7 +372,7 @@ class NetworkZipGenerator:
         model.fc = nn.Linear(model.fc.in_features, num_classes)
         model.load_state_dict(
             torch.load(str(model_path), map_location="cpu", weights_only=True))
-        print(f"[Retrain] Loaded weights ✓")
+        print(f"[Retrain] Loaded weights OK")
 
         # ── 4. Build dataset — parent folder name = class label ───────────
         data_root = Path(new_data_path)
@@ -388,7 +433,7 @@ class NetworkZipGenerator:
         # Keep n_train as the remainder so counts always sum to n
         n_train = n - n_val - n_test
 
-        print(f"[Retrain] Dataset: {n} images — "
+        print(f"[Retrain] Dataset: {n} images - "
               f"train={n_train} / val={n_val} / test={n_test}")
 
         generator = torch.Generator().manual_seed(42)
@@ -468,8 +513,8 @@ class NetworkZipGenerator:
             train_loss        = running_loss / total if total else 0.0
             _, val_acc        = _eval_loader(val_loader)
 
-            print(f"[Retrain] Epoch {epoch}/{EPOCHS} — "
-                  f"loss: {train_loss:.4f} — val_acc: {val_acc:.2f}%")
+            print(f"[Retrain] Epoch {epoch}/{EPOCHS} - "
+                  f"loss: {train_loss:.4f} - val_acc: {val_acc:.2f}%")
 
             if val_acc >= best_val_acc:
                 best_val_acc = val_acc
@@ -483,9 +528,9 @@ class NetworkZipGenerator:
         _, test_acc = _eval_loader(test_loader)
         elapsed     = round(time.time() - t0, 1)
 
-        print(f"[Retrain] ✅ Done — test_acc: {test_acc:.2f}%  "
+        print(f"[Retrain] Done - test_acc: {test_acc:.2f}%  "
               f"best_val: {best_val_acc:.2f}%  time: {elapsed}s")
-        print(f"[Retrain] Saved → {model_path}")
+        print(f"[Retrain] Saved: {model_path}")
 
         return {
             "status":       "retrained",
@@ -509,16 +554,136 @@ class NetworkZipGenerator:
         classes_str = json.dumps(classes)
         num_classes = len(classes) or 2
         is_image    = domain in ("image", "medical")
-        is_transfer = "resnet18" in method or is_image
+        # Secondary agents use a lean template (no learn() f-string conflicts)
+        return self._secondary_agent_code(
+            class_name, agent_name, domain, problem,
+            classes_str, num_classes, accuracy, dataset)
 
-        if is_transfer:
-            return self._resnet_agent_code(
-                class_name, agent_name, problem,
-                classes_str, num_classes, accuracy, dataset)
-        else:
-            return self._darts_agent_code(
-                class_name, agent_name, problem,
-                classes_str, num_classes, accuracy, dataset)
+    def _secondary_agent_code(self, class_name: str, agent_name: str,
+                               domain: str, problem: str, classes_str: str,
+                               num_classes: int, accuracy: float,
+                               dataset: str) -> str:
+        """Lean agent code for secondary slots in multi-agent ZIPs.
+        Avoids f-string conflicts in learn() by omitting the learn method."""
+        is_image    = domain in ("image", "medical")
+        model_load  = (
+            f"""
+import torchvision.models as _models
+def _load_model(num_classes={num_classes}):
+    model    = _models.resnet18(weights=None)
+    model.fc = __import__('torch.nn', fromlist=['nn']).nn.Linear(
+        model.fc.in_features, num_classes)
+    if MODEL_PATH.exists():
+        try:
+            model.load_state_dict(__import__('torch').load(
+                str(MODEL_PATH), map_location='cpu', weights_only=True))
+            print('[OK] {class_name} loaded - {accuracy}% accuracy')
+        except Exception as e:
+            print('[!] Model load: ' + str(e))
+    model.eval()
+    return model
+"""
+        if is_image else
+            f"""
+def _load_model(num_classes={num_classes}):
+    import torch, torch.nn as nn
+    class _Net(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.stem  = nn.Sequential(nn.Conv2d(3,16,3,padding=1,bias=False),nn.BatchNorm2d(16),nn.ReLU())
+            self.gap   = nn.AdaptiveAvgPool2d(1)
+            self.fc    = nn.Linear(16, num_classes)
+        def forward(self, x):
+            x = self.stem(x)
+            return self.fc(self.gap(x).view(x.size(0),-1))
+    model = _Net()
+    if MODEL_PATH.exists():
+        try:
+            model.load_state_dict(torch.load(str(MODEL_PATH), map_location='cpu', weights_only=True))
+            print('[OK] {class_name} loaded - {accuracy}% accuracy')
+        except Exception as e:
+            print('[!] Model load: ' + str(e))
+    model.eval()
+    return model
+"""
+        )
+        transform_block = """
+import torchvision.transforms as _T
+_TRANSFORM = _T.Compose([
+    _T.Resize((224, 224)), _T.ToTensor(),
+    _T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+])
+""" if is_image else ""
+
+        predict_body = """
+        try:
+            from PIL import Image as _PIL
+            img    = _PIL.open(input_path).convert('RGB')
+            tensor = _TRANSFORM(img).unsqueeze(0)
+            with __import__('torch').no_grad():
+                out   = self.model(tensor)
+                probs = __import__('torch').softmax(out, dim=1)
+                conf  = float(probs.max())
+                idx   = int(probs.argmax())
+            label  = self.classes[idx] if idx < len(self.classes) else str(idx)
+            return {'agent': self.name, 'label': label, 'confidence': round(conf, 3),
+                    'input': str(input_path), 'timestamp': str(__import__('datetime').datetime.now())}
+        except Exception as e:
+            return {'agent': self.name, 'label': 'error', 'confidence': 0.0, 'error': str(e)}
+""" if is_image else """
+        try:
+            text   = input_data
+            if __import__('pathlib').Path(str(input_data)).exists():
+                with open(input_data, 'r', errors='ignore') as f: text = f.read()
+            import torch, numpy as np
+            vec = torch.zeros(1000)
+            for w in str(text).lower().split():
+                vec[hash(w) % 1000] += 1
+            if vec.sum() > 0: vec = vec / vec.sum()
+            pad = torch.zeros(3 * 32 * 32)
+            pad[:1000] = vec[:3 * 32 * 32]
+            tensor = pad.reshape(1, 3, 32, 32)
+            with torch.no_grad():
+                out   = self.model(tensor)
+                probs = torch.softmax(out, dim=1)
+                conf  = float(probs.max())
+                idx   = int(probs.argmax())
+            label  = self.classes[idx] if idx < len(self.classes) else str(idx)
+            return {'agent': self.name, 'label': label, 'confidence': round(conf, 3),
+                    'input': str(input_data)[:80], 'timestamp': str(__import__('datetime').datetime.now())}
+        except Exception as e:
+            return {'agent': self.name, 'label': 'error', 'confidence': 0.0, 'error': str(e)}
+"""
+
+        return (
+            f'"""\n{agent_name}.py -- AutoArchitect Secondary Agent\n'
+            f'Agent:    {class_name}\nDomain:   {domain}\n'
+            f'Accuracy: {accuracy}%\nProblem:  {problem[:60]}\n"""\n\n'
+            f'import os, json, time\nfrom pathlib import Path\n'
+            f'from datetime import datetime\n\n'
+            f'CLASSES    = {classes_str}\n'
+            f'MODEL_PATH = Path(__file__).parent.parent / "models" / "{agent_name}_model.pth"\n'
+            f'{transform_block}'
+            f'{model_load}\n'
+            f'class {class_name}:\n'
+            f'    def __init__(self):\n'
+            f'        self.name     = "{agent_name}"\n'
+            f'        self.classes  = CLASSES\n'
+            f'        self.accuracy = {accuracy}\n'
+            f'        self.model    = _load_model()\n'
+            f'        print("[Agent] {class_name} ready")\n\n'
+            f'    def predict(self, input_data: str) -> dict:\n'
+            f'{predict_body}\n'
+            f'    def act(self, result: dict) -> dict:\n'
+            f'        conf  = result.get("confidence", 0)\n'
+            f'        label = result.get("label", "?")\n'
+            f'        tag   = "ALERT" if conf > 0.85 else "LOG"\n'
+            f'        print(f"   [{{tag}}] {{label}} ({{conf:.0%}})")\n'
+            f'        result["action"] = tag.lower()\n'
+            f'        return result\n\n'
+            f'    def status(self) -> dict:\n'
+            f'        return {{"agent": self.name, "accuracy": self.accuracy, "classes": self.classes}}\n'
+        )
 
     def _generate_real_agent(self, agent_name: str,
                               problem: str, meta: dict) -> str:
@@ -1676,11 +1841,627 @@ if __name__ == "__main__":
     main()
 '''
 
+    def _generate_ensemble_predict_script(self, problem: str, agents: list,
+                                           agent_class_map: dict,
+                                           agent_file_map: dict,
+                                           classes_info: dict) -> str:
+        n_agents   = len(agents)
+        agent_list = ", ".join(agent_class_map[a] for a in agents)
+        return f'''"""
+predict.py -- Parallel Ensemble Inference
+Problem:      {problem[:60]}
+Architecture: PARALLEL ENSEMBLE ({n_agents} agents)
+Agents:       {agent_list}
+
+NOTE: First run may download foundation models (cached after first use):
+  - CLIP  (multimodal): ~340 MB
+  - Wav2Vec2 (audio):   ~360 MB
+  - DINOv2 (image):      ~86 MB
+
+Usage:
+  python predict.py --image  photo.jpg
+  python predict.py --text   "your text"
+  python predict.py --audio  sound.wav
+  python predict.py --input  any_file
+"""
+import argparse, importlib.util, json, sys, time
+from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+HERE = Path(__file__).parent
+
+
+def _load_all_agents():
+    agents_dir = HERE / "agents"
+    loaded = []
+    sys.path.insert(0, str(HERE))
+    for f in sorted(agents_dir.glob("*.py")):
+        if f.stem.startswith("_"):
+            continue
+        spec = importlib.util.spec_from_file_location(f.stem, str(f))
+        mod  = importlib.util.module_from_spec(spec)
+        try:
+            spec.loader.exec_module(mod)
+        except Exception as e:
+            print(f"Warning: could not load {{f.name}}: {{e}}", file=sys.stderr)
+            continue
+        for name in dir(mod):
+            obj = getattr(mod, name)
+            if (isinstance(obj, type) and name.endswith("Agent")
+                    and name != "DARTSNet"):
+                try:
+                    loaded.append((name, obj()))
+                except Exception as e:
+                    print(f"Warning: could not init {{name}}: {{e}}", file=sys.stderr)
+    return loaded
+
+
+def _fuse(results):
+    votes = {{}}
+    total_w = 0.0
+    for r in results:
+        label = r.get("label", "")
+        conf  = float(r.get("confidence", 0.5))
+        if label and label != "error":
+            votes[label]  = votes.get(label, 0.0) + conf
+            total_w      += conf
+    if not votes:
+        return {{"label": "unknown", "confidence": 0.0, "method": "ensemble_failed"}}
+    winner = max(votes, key=votes.get)
+    return {{
+        "label":       winner,
+        "confidence":  round(votes[winner] / total_w, 3) if total_w else 0.0,
+        "method":      "ensemble_confidence_weighted",
+        "votes":       {{k: round(v, 3) for k, v in votes.items()}},
+        "agents_used": len(results),
+    }}
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    grp = parser.add_mutually_exclusive_group(required=True)
+    grp.add_argument("--input", metavar="INPUT")
+    grp.add_argument("--image", metavar="PATH")
+    grp.add_argument("--text",  metavar="TEXT")
+    grp.add_argument("--audio", metavar="AUDIO")
+    args = parser.parse_args()
+
+    inp = args.input or args.image or args.text or args.audio
+
+    print("Loading ensemble agents...", file=sys.stderr)
+    agents = _load_all_agents()
+    if not agents:
+        print("ERROR: No agents found in agents/", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"Running {{len(agents)}} agents in parallel...", file=sys.stderr)
+    results = []
+    t0 = time.time()
+    with ThreadPoolExecutor(max_workers=len(agents)) as ex:
+        futures = {{ex.submit(agent.predict, inp): name for name, agent in agents}}
+        for fut in as_completed(futures):
+            aname = futures[fut]
+            try:
+                r = fut.result(timeout=120)
+                r["_agent"] = aname
+                results.append(r)
+                print(f"  [{{aname}}] {{r.get('label','?')}} ({{r.get('confidence',0):.0%}})",
+                      file=sys.stderr)
+            except Exception as e:
+                print(f"  [{{aname}}] error: {{e}}", file=sys.stderr)
+
+    elapsed = round(time.time() - t0, 2)
+    print(f"Ensemble done in {{elapsed}}s", file=sys.stderr)
+
+    if not results:
+        print(json.dumps({{"error": "all agents failed"}}))
+        sys.exit(1)
+    elif len(results) == 1:
+        print(json.dumps(results[0], indent=2))
+    else:
+        ensemble = _fuse(results)
+        ensemble["individual"] = results
+        ensemble["elapsed_s"]  = elapsed
+        print(json.dumps(ensemble, indent=2))
+
+
+if __name__ == "__main__":
+    main()
+'''
+
+    def _generate_tabular_predict_script(self, problem: str, agent_mod: str,
+                                          agent_cls: str, meta: dict) -> str:
+        feat_cols = json.dumps(meta.get("feature_columns", []))
+        return f'''"""
+predict.py -- Standalone tabular inference
+Problem: {problem[:60]}
+Agent:   {agent_cls}
+
+Usage:
+  python predict.py --csv   data.csv
+  python predict.py --row   "1.2,3.4,5.6,..."
+  python predict.py --row   "feat0=1.2,feat1=3.4"
+"""
+import argparse, importlib.util, json, sys
+from pathlib import Path
+
+HERE = Path(__file__).parent
+
+
+def _load_agent():
+    sys.path.insert(0, str(HERE))
+    for f in sorted((HERE / "agents").glob("*.py")):
+        if f.stem.startswith("_"):
+            continue
+        spec = importlib.util.spec_from_file_location(f.stem, str(f))
+        mod  = importlib.util.module_from_spec(spec)
+        try:
+            spec.loader.exec_module(mod)
+        except Exception as e:
+            print(f"Warning: {{e}}", file=sys.stderr)
+            continue
+        for name in dir(mod):
+            obj = getattr(mod, name)
+            if isinstance(obj, type) and name.endswith("Agent"):
+                return obj()
+    raise RuntimeError("No agent found in agents/")
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    grp = parser.add_mutually_exclusive_group(required=True)
+    grp.add_argument("--csv", help="CSV file (batch prediction)")
+    grp.add_argument("--row", help="Comma-separated values or key=value pairs")
+    args = parser.parse_args()
+
+    agent = _load_agent()
+    feat_cols = {feat_cols}
+
+    if args.csv:
+        import pandas as pd
+        df = pd.read_csv(args.csv)
+        results = [agent.predict(row.to_dict()) for _, row in df.iterrows()]
+        print(json.dumps(results, indent=2))
+    else:
+        if "=" in args.row:
+            pairs = [p.split("=") for p in args.row.split(",")]
+            data  = {{k.strip(): float(v.strip()) for k, v in pairs}}
+        else:
+            vals = [float(x) for x in args.row.split(",")]
+            data = dict(zip(feat_cols, vals)) if feat_cols else vals
+        result = agent.predict(data)
+        agent.act(result)
+        print(json.dumps(result, indent=2))
+
+
+if __name__ == "__main__":
+    main()
+'''
+
+    def _generate_audio_predict_script(self, problem: str, agent_mod: str,
+                                        agent_cls: str, meta: dict) -> str:
+        classes = json.dumps(meta.get("classes", []))
+        return f'''"""
+predict.py -- Standalone audio inference
+Problem: {problem[:60]}
+Agent:   {agent_cls}
+
+Requires: pip install librosa soundfile
+
+Usage:
+  python predict.py --audio sound.wav
+  python predict.py --audio recording.mp3
+"""
+import argparse, importlib.util, json, sys
+from pathlib import Path
+
+HERE = Path(__file__).parent
+
+
+def _load_agent():
+    sys.path.insert(0, str(HERE))
+    for f in sorted((HERE / "agents").glob("*.py")):
+        if f.stem.startswith("_"):
+            continue
+        spec = importlib.util.spec_from_file_location(f.stem, str(f))
+        mod  = importlib.util.module_from_spec(spec)
+        try:
+            spec.loader.exec_module(mod)
+        except Exception as e:
+            print(f"Warning: {{e}}", file=sys.stderr)
+            continue
+        for name in dir(mod):
+            obj = getattr(mod, name)
+            if isinstance(obj, type) and name.endswith("Agent"):
+                return obj()
+    raise RuntimeError("No agent found in agents/")
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--audio", required=True, help="Audio file (WAV/MP3/FLAC)")
+    args = parser.parse_args()
+    if not Path(args.audio).exists():
+        print(f"ERROR: {{args.audio}} not found", file=sys.stderr)
+        sys.exit(1)
+    agent = _load_agent()
+    result = agent.predict(args.audio)
+    agent.act(result)
+    print(json.dumps(result, indent=2))
+
+
+if __name__ == "__main__":
+    main()
+'''
+
+    def _generate_multimodal_predict_script(self, problem: str,
+                                             agent_mod: str, agent_cls: str) -> str:
+        return f'''"""
+predict.py -- CLIP zero-shot multimodal inference
+Problem: {problem[:60]}
+Agent:   {agent_cls}
+
+NOTE: First run downloads CLIP (~340 MB). Cached for future runs.
+
+Usage:
+  python predict.py --image photo.jpg
+  python predict.py --image photo.jpg --labels "cat,dog,bird"
+"""
+import argparse, importlib.util, json, sys
+from pathlib import Path
+
+HERE = Path(__file__).parent
+
+
+def _load_agent():
+    sys.path.insert(0, str(HERE))
+    for f in sorted((HERE / "agents").glob("*.py")):
+        if f.stem.startswith("_"):
+            continue
+        spec = importlib.util.spec_from_file_location(f.stem, str(f))
+        mod  = importlib.util.module_from_spec(spec)
+        try:
+            spec.loader.exec_module(mod)
+        except Exception as e:
+            print(f"Warning: {{e}}", file=sys.stderr)
+            continue
+        for name in dir(mod):
+            obj = getattr(mod, name)
+            if isinstance(obj, type) and name.endswith("Agent"):
+                return obj()
+    raise RuntimeError("No agent found in agents/")
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--image",  required=True)
+    parser.add_argument("--labels", help="Comma-separated candidate labels")
+    args = parser.parse_args()
+    if not Path(args.image).exists():
+        print(f"ERROR: {{args.image}} not found", file=sys.stderr)
+        sys.exit(1)
+    agent = _load_agent()
+    if args.labels:
+        labels = [l.strip() for l in args.labels.split(",")]
+        result = agent.classify_with_labels(args.image, labels)
+    else:
+        result = agent.predict(args.image)
+    agent.act(result)
+    print(json.dumps(result, indent=2))
+
+
+if __name__ == "__main__":
+    main()
+'''
+
+    def _tabular_agent_code(self, class_name: str, agent_name: str,
+                             problem: str, classes: list,
+                             accuracy: float, dataset: str) -> str:
+        classes_str = json.dumps(classes)
+        return f'''"""
+{agent_name}.py -- AutoArchitect Tabular Agent
+Agent:    {class_name}
+Model:    XGBoost / sklearn trained on {dataset}
+Accuracy: {accuracy}%
+Problem:  {problem[:60]}
+"""
+import json, pickle, time
+import numpy as np
+from pathlib import Path
+from datetime import datetime
+
+CLASSES    = {classes_str}
+MODEL_DIR  = Path(__file__).parent.parent / "models"
+MODEL_PATH = MODEL_DIR / "{agent_name}_model.pkl"
+META_PATH  = MODEL_DIR / "{agent_name}_meta.json"
+
+
+def _load_model():
+    if not MODEL_PATH.exists():
+        print(f"[!] No model at {{MODEL_PATH}}")
+        return None, {classes_str}, []
+    with open(MODEL_PATH, "rb") as f:
+        obj = pickle.load(f)
+    # Support both raw model and dict-wrapped
+    if isinstance(obj, dict) and "model" in obj:
+        model   = obj["model"]
+        classes = obj.get("classes", CLASSES)
+    else:
+        model   = obj
+        classes = CLASSES
+    meta = {{}}
+    if META_PATH.exists():
+        with open(META_PATH) as f:
+            meta = json.load(f)
+    feat_cols = meta.get("feature_columns", [])
+    print(f"[OK] {class_name} loaded - {accuracy}% accuracy")
+    return model, classes, feat_cols
+
+
+class {class_name}:
+    """
+    Tabular agent for: {problem[:60]}
+    Trained on: {dataset}
+    Accuracy:   {accuracy}%
+    Classes:    {classes_str}
+    """
+
+    def __init__(self):
+        self.name            = "{agent_name}"
+        self.problem         = "{problem[:60]}"
+        self.model, self.classes, self.feature_columns = _load_model()
+        self.accuracy        = {accuracy}
+        self.predictions     = 0
+        print(f"[Agent] {class_name} ready")
+
+    def predict(self, data) -> dict:
+        self.predictions += 1
+        if self.model is None:
+            return {{"label": "error", "confidence": 0.0, "error": "No trained model"}}
+        try:
+            if isinstance(data, str):
+                if "=" in data:
+                    pairs = [p.split("=") for p in data.split(",")]
+                    data  = {{k.strip(): float(v.strip()) for k, v in pairs}}
+                    vals  = [data.get(c, 0.0) for c in self.feature_columns]
+                else:
+                    vals = [float(x) for x in data.split(",")]
+                X = np.array([vals])
+            elif isinstance(data, dict):
+                if self.feature_columns:
+                    vals = [float(data.get(c, 0.0)) for c in self.feature_columns]
+                else:
+                    vals = list(data.values())
+                X = np.array([vals])
+            else:
+                X = np.array([data])
+
+            probs = self.model.predict_proba(X)[0]
+            idx   = int(np.argmax(probs))
+            label = self.classes[idx] if idx < len(self.classes) else str(idx)
+            return {{
+                "agent":      self.name,
+                "label":      label,
+                "confidence": round(float(probs[idx]), 3),
+                "top3": [
+                    {{"label": self.classes[int(i)] if int(i) < len(self.classes) else str(int(i)),
+                      "confidence": round(float(probs[int(i)]), 3)}}
+                    for i in np.argsort(probs)[::-1][:min(3, len(probs))]
+                ],
+                "timestamp": datetime.now().isoformat(),
+            }}
+        except Exception as e:
+            return {{"label": "error", "confidence": 0.0, "error": str(e)}}
+
+    def act(self, result: dict) -> dict:
+        label = result.get("label", "?")
+        conf  = result.get("confidence", 0)
+        tag   = "ALERT" if conf > 0.85 else "LOG"
+        print(f"   [{{tag}}] {{label}} ({{conf:.0%}})")
+        result["action"] = tag.lower()
+        return result
+
+    def status(self) -> dict:
+        return {{
+            "agent":       self.name,
+            "accuracy":    self.accuracy,
+            "predictions": self.predictions,
+            "classes":     self.classes,
+            "model_loaded": self.model is not None,
+        }}
+'''
+
+    def _audio_agent_code(self, class_name: str, agent_name: str,
+                           problem: str, classes: list,
+                           accuracy: float, dataset: str) -> str:
+        classes_str = json.dumps(classes)
+        return f'''"""
+{agent_name}.py -- AutoArchitect Audio Agent
+Agent:    {class_name}
+Model:    MFCC + RandomForest trained on {dataset}
+Accuracy: {accuracy}%
+Problem:  {problem[:60]}
+
+Requires: pip install librosa soundfile
+"""
+import json, pickle
+import numpy as np
+from pathlib import Path
+from datetime import datetime
+
+CLASSES    = {classes_str}
+MODEL_DIR  = Path(__file__).parent.parent / "models"
+MODEL_PATH = MODEL_DIR / "{agent_name}_model.pkl"
+
+
+def _load_model():
+    if not MODEL_PATH.exists():
+        print(f"[!] No model at {{MODEL_PATH}}")
+        return None, {classes_str}, 40
+    with open(MODEL_PATH, "rb") as f:
+        obj = pickle.load(f)
+    if isinstance(obj, dict):
+        return obj.get("model"), obj.get("classes", CLASSES), obj.get("feature_dim", 40)
+    return obj, CLASSES, 40
+
+
+class {class_name}:
+    """
+    Audio classification agent for: {problem[:60]}
+    Trained on: {dataset} | Accuracy: {accuracy}%
+    """
+
+    def __init__(self):
+        self.name     = "{agent_name}"
+        self.problem  = "{problem[:60]}"
+        self.model, self.classes, self.feature_dim = _load_model()
+        self.accuracy = {accuracy}
+        print(f"[Agent] {class_name} ready - {{len(self.classes)}} classes")
+
+    def predict(self, audio_path: str) -> dict:
+        if self.model is None:
+            return {{"label": "error", "confidence": 0.0, "error": "No trained model"}}
+        try:
+            import librosa
+            signal = librosa.load(str(audio_path), sr=22050, mono=True)[0]
+            mfcc   = librosa.feature.mfcc(y=signal, sr=22050, n_mfcc=self.feature_dim)
+            feat   = mfcc.mean(axis=1).reshape(1, -1)
+            probs  = self.model.predict_proba(feat)[0]
+            idx    = int(np.argmax(probs))
+            label  = self.classes[idx] if idx < len(self.classes) else str(idx)
+            return {{
+                "agent":      self.name,
+                "label":      label,
+                "confidence": round(float(probs[idx]), 3),
+                "top3": [
+                    {{"label": self.classes[int(i)], "confidence": round(float(probs[int(i)]), 3)}}
+                    for i in np.argsort(probs)[::-1][:min(3, len(probs))]
+                ],
+                "timestamp": datetime.now().isoformat(),
+            }}
+        except Exception as e:
+            return {{"label": "error", "confidence": 0.0, "error": str(e)}}
+
+    def act(self, result: dict) -> dict:
+        label = result.get("label", "?")
+        conf  = result.get("confidence", 0)
+        tag   = "ALERT" if conf > 0.85 else "LOG"
+        print(f"   [{{tag}}] {{label}} ({{conf:.0%}})")
+        result["action"] = tag.lower()
+        return result
+
+    def status(self) -> dict:
+        return {{"agent": self.name, "accuracy": self.accuracy, "classes": self.classes}}
+'''
+
+    def _multimodal_agent_code(self, class_name: str, agent_name: str,
+                                problem: str, classes: list,
+                                accuracy: float, dataset: str) -> str:
+        classes_str = json.dumps(classes)
+        return f'''"""
+{agent_name}.py -- AutoArchitect Multimodal Agent
+Agent:    {class_name}
+Model:    CLIP zero-shot (openai/clip-vit-base-patch32)
+Problem:  {problem[:60]}
+
+NOTE: First run downloads CLIP (~340 MB). Cached for future runs.
+"""
+import json
+from pathlib import Path
+from datetime import datetime
+import numpy as np
+
+CLASSES = {classes_str}
+
+
+class {class_name}:
+    """
+    CLIP zero-shot multimodal agent for: {problem[:60]}
+    No training required -- zero-shot generalization.
+    Candidate labels: {classes_str}
+    """
+
+    def __init__(self):
+        self.name        = "{agent_name}"
+        self.problem     = "{problem[:60]}"
+        self.classes     = CLASSES or []
+        self.clip_model  = None
+        self.clip_proc   = None
+        print(f"[Agent] {class_name} ready (CLIP zero-shot)")
+        if self.classes:
+            print(f"  Labels: {{self.classes}}")
+        else:
+            print("  Labels: pass --labels to predict.py")
+
+    def _load_clip(self) -> bool:
+        if self.clip_model is not None:
+            return True
+        try:
+            from transformers import CLIPProcessor, CLIPModel
+            print("[CLIP] Loading openai/clip-vit-base-patch32 (first run: ~340 MB)...")
+            self.clip_proc  = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+            self.clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
+            self.clip_model.eval()
+            print("[CLIP] Ready.")
+            return True
+        except Exception as e:
+            print(f"[CLIP] Load failed: {{e}}")
+            return False
+
+    def predict(self, image_path: str) -> dict:
+        labels = self.classes if self.classes else ["image"]
+        return self.classify_with_labels(image_path, labels)
+
+    def classify_with_labels(self, image_path: str, candidate_labels) -> dict:
+        if not self._load_clip():
+            return {{"label": "error", "confidence": 0.0,
+                    "error": "CLIP unavailable (no internet?)"}}
+        try:
+            import torch
+            from PIL import Image
+            image  = Image.open(image_path).convert("RGB")
+            inputs = self.clip_proc(text=candidate_labels, images=image,
+                                    return_tensors="pt", padding=True)
+            with torch.no_grad():
+                out   = self.clip_model(**inputs)
+                probs = out.logits_per_image.softmax(dim=1)[0].cpu().numpy()
+            idx   = int(np.argmax(probs))
+            label = candidate_labels[idx]
+            return {{
+                "agent":      self.name,
+                "label":      label,
+                "confidence": round(float(probs[idx]), 4),
+                "all_scores": {{l: round(float(p), 4)
+                               for l, p in zip(candidate_labels, probs)}},
+                "timestamp":  datetime.now().isoformat(),
+            }}
+        except Exception as e:
+            return {{"label": "error", "confidence": 0.0, "error": str(e)}}
+
+    def act(self, result: dict) -> dict:
+        label = result.get("label", "?")
+        conf  = result.get("confidence", 0)
+        print(f"   [CLIP] {{label}} ({{conf:.0%}})")
+        result["action"] = "classify"
+        return result
+
+    def status(self) -> dict:
+        return {{"agent": self.name, "classes": self.classes,
+                "clip_loaded": self.clip_model is not None}}
+'''
+
     def _requirements(self) -> str:
         return """torch>=2.0.0
 torchvision>=0.15.0
+torchaudio>=0.15.0
 pillow>=10.0.0
 numpy>=1.24.0
 requests>=2.28.0
 flask>=2.3.0
+scikit-learn>=1.2.0
+xgboost>=1.7.0
+pandas>=1.5.0
+transformers>=4.30.0
+soundfile>=0.12.0
+librosa>=0.10.0
 """
