@@ -659,10 +659,26 @@ textarea::placeholder { color: var(--ink-tertiary); }
 .results-section { animation: fadeUp 0.35s ease both; }
 
 .results-card {
-  background:    var(--surface-1);
-  border:        1px solid var(--hairline);
-  border-radius: var(--r-lg);
-  padding:       var(--space-xl);
+  background:       rgba(1, 1, 2, 0.85);
+  backdrop-filter:  blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border:           1px solid rgba(94, 106, 210, 0.15);
+  border-radius:    16px;
+  padding:          32px;
+  position:         relative;
+}
+
+.results-card::before {
+  content:     '';
+  position:    absolute;
+  top:         0;
+  left:        0;
+  width:       100%;
+  height:      1px;
+  background:  linear-gradient(90deg, transparent 0%, var(--primary) 50%, transparent 100%);
+  opacity:     0.4;
+  border-radius: 16px 16px 0 0;
+  pointer-events: none;
 }
 
 .results-top {

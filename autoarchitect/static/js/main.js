@@ -863,39 +863,61 @@ function _parseAcc(v) {
 }
 
 function showResults(data) {
-  var acc = _parseAcc(data.test_accuracy) ||
-            _parseAcc(data.avg_accuracy)  ||
-            _parseAcc(data.cached_accuracy) ||
-            _parseAcc(data.accuracy);
+  // Broad cascade: try every known accuracy field path
+  var acc = _parseAcc(data.test_accuracy)    ||
+            _parseAcc(data.avg_accuracy)     ||
+            _parseAcc(data.cached_accuracy)  ||
+            _parseAcc(data.accuracy)         ||
+            _parseAcc(data.test_acc)         ||
+            _parseAcc(data.final_accuracy);
   if (!acc && data.evaluation) {
-    acc = _parseAcc(data.evaluation.real_accuracy) ||
+    acc = _parseAcc(data.evaluation.test_accuracy) ||
+          _parseAcc(data.evaluation.accuracy)      ||
+          _parseAcc(data.evaluation.real_accuracy) ||
           _parseAcc(data.evaluation.avg_score);
   }
+  if (!acc && data.metrics) {
+    acc = _parseAcc(data.metrics.accuracy) ||
+          _parseAcc(data.metrics.test_accuracy);
+  }
+  // Normalize fraction (0–1) to percentage
+  if (acc > 0 && acc <= 1) acc = acc * 100;
 
   var accEl = document.getElementById('resultsAccNum');
   if (acc > 0) {
-    countUp(accEl, acc, 1400);
+    countUp(accEl, parseFloat(acc.toFixed(1)), 1400);
+    if      (acc >= 80) accEl.style.color = 'var(--green-h)';
+    else if (acc >= 60) accEl.style.color = 'var(--amber)';
+    else                accEl.style.color = 'var(--red)';
   } else {
     accEl.textContent = '—';
+    accEl.style.color = 'var(--ink-subtle)';   // neutral, not red
   }
-  if      (acc >= 80) accEl.style.color = 'var(--green-h)';
-  else if (acc >= 60) accEl.style.color = 'var(--amber)';
-  else                accEl.style.color = 'var(--red)';
 
   document.getElementById('resultsProblemName').textContent =
     currentProblem.length > 60 ? currentProblem.slice(0, 57) + '…' : currentProblem;
 
   var grid   = document.getElementById('resultsMetaGrid');
   var time   = data.elapsed || data.search_time || data.time || '—';
+  if (typeof time === 'number') time = time.toFixed(1);
+
+  // Broad cascade: try every known parameters field path
+  var rawParams = (data.parameters > 0 && data.parameters) ||
+                  (data.model && data.model.parameters > 0 && data.model.parameters) ||
+                  (data.model_parameters > 0 && data.model_parameters) ||
+                  (data.network_params > 0 && data.network_params);
   var params;
-  if (data.parameters > 0) {
-    params = (data.parameters / 1e6).toFixed(1) + 'M';
+  if (rawParams) {
+    if (rawParams >= 1e6) params = (rawParams / 1e6).toFixed(1) + 'M';
+    else if (rawParams >= 1e3) params = (rawParams / 1e3).toFixed(0) + 'K';
+    else params = rawParams.toString();
   } else if (data.train_size > 0) {
     params = data.train_size.toLocaleString() + ' samples';
-  } else if (data.evaluation && data.evaluation.avg_score > 0) {
-    params = data.evaluation.avg_score + '% score';
+  } else if (data.dataset_size > 0) {
+    params = data.dataset_size.toLocaleString() + ' samples';
   } else {
-    params = '—';
+    var agents = data.agents_used || [];
+    params = agents.length ? agents[0] + ' agent' : 'Pretrained';
   }
   var agents = (data.agents_used || [data.domain]).filter(Boolean);
   grid.innerHTML =
