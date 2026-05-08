@@ -113,7 +113,7 @@ body {
   height:     100%;
   object-fit: cover;
   transform:  translate(-50%, -50%);
-  opacity:    0.4;
+  opacity:    0.45;
   filter:     blur(2px);
 }
 
@@ -1680,41 +1680,40 @@ textarea::placeholder { color: var(--ink-tertiary); }
 /* ── DOMAIN ICONS (Verified Results) ────────────── */
 
 .domain-icon {
-  width:         80px;
-  height:        80px;
-  display:       flex;
-  align-items:   center;
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  background:    transparent;
-  border:        none;
-  border-radius: 16px;
-  padding:       0;
-  margin:        0 auto var(--space-md);
-  overflow:      visible;
-  transition:    transform 200ms ease, filter 200ms ease;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-bottom: 16px;
+  transition: transform 200ms ease;
 }
 
 .domain-icon img {
-  width:          100%;
-  height:         100%;
-  object-fit:     contain;
-  display:        block;
-  mix-blend-mode: screen;
-  filter:         drop-shadow(0 0 16px rgba(94, 106, 210, 0.3));
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  /* NO mix-blend-mode — keeps full color saturation */
+  filter: drop-shadow(0 0 20px rgba(94, 106, 210, 0.4));
+  transition: filter 200ms ease;
 }
 
 .vr-card:hover .domain-icon {
-  transform: translateY(-2px) scale(1.05);
+  transform: translateY(-3px) scale(1.05);
 }
 
 .vr-card:hover .domain-icon img {
-  filter: drop-shadow(0 0 24px rgba(94, 106, 210, 0.5));
+  filter: drop-shadow(0 0 30px rgba(94, 106, 210, 0.7));
 }
 
 @media (max-width: 768px) {
   .domain-icon {
-    width:  64px;
-    height: 64px;
+    width: 72px;
+    height: 72px;
   }
 }
 
