@@ -28,11 +28,17 @@
     </div>
   </nav>
 
-  <main>
+  <!-- HERO — full-viewport background video, outside <main> to break free of max-width -->
+  <section class="hero">
+    <video class="hero-bg-video"
+           autoplay loop muted playsinline
+           poster="/static/images/hero-centerpiece.png">
+      <source src="/static/videos/hero-loop.mp4" type="video/mp4">
+    </video>
+    <div class="hero-bg-overlay" aria-hidden="true"></div>
+    <div class="hero-bg-grid"    aria-hidden="true"></div>
 
-    <!-- HERO -->
-    <section class="hero section-glow">
-      <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-content">
       <div class="hero-badge fade-up fade-up-d1">
         <span class="badge-dot"></span>
         Now in beta &mdash; try it free
@@ -46,28 +52,14 @@
         Not a chatbot or generator &mdash; we do classification,
         exceptionally well.
       </p>
-
-      <!-- HERO MEDIA — animated video, static image fallback -->
-      <div class="hero-media fade-up fade-up-d4">
-        <video class="hero-video"
-               autoplay
-               loop
-               muted
-               playsinline
-               poster="/static/images/hero-centerpiece.png">
-          <source src="/static/videos/hero-loop.mp4" type="video/mp4">
-          <!-- Fallback: static image if video fails -->
-          <img src="/static/images/hero-centerpiece.png"
-               alt="AutoArchitect AI — Neural orchestration system"
-               class="hero-fallback-img">
-        </video>
-      </div>
-
-      <div class="hero-cta fade-up fade-up-d5">
+      <div class="hero-cta fade-up fade-up-d4">
         <a href="#build" class="primary-btn" onclick="scrollToInput(); return false;">Try it free</a>
         <a href="#hiw" class="secondary-btn">See how it works &rarr;</a>
       </div>
-    </section>
+    </div>
+  </section>
+
+  <main>
 
     <!-- INPUT CARD -->
     <section class="input-card" id="inputCard">
