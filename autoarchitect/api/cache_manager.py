@@ -84,10 +84,13 @@ def check_cache(problem):
     cache_path = os.path.join(CACHE_DIR, h)
     meta_path  = os.path.join(cache_path, 'metadata.json')
 
+    print(f"[CACHE] Looking up: '{problem[:50]}' hash={h}", flush=True)
+
     # 1. Exact match
     if os.path.exists(meta_path):
         with open(meta_path, 'r') as f:
             metadata = json.load(f)
+        print(f"[CACHE] HIT (exact) - returning cached result", flush=True)
         return {
             'found':      True,
             'hash':       h,
@@ -100,8 +103,8 @@ def check_cache(problem):
     # 2. Semantic similarity
     semantic = find_semantic_match(problem)
     if semantic:
-        print(f"🧠 Semantic match found! "
-              f"'{problem[:30]}' ≈ '{semantic['problem'][:30]}'")
+        print(f"[CACHE] HIT (semantic) '{problem[:30]}' ≈ '{semantic['problem'][:30]}'",
+              flush=True)
         sem_hash = get_problem_hash(semantic['problem'])
         return {
             'found':      True,
@@ -114,6 +117,7 @@ def check_cache(problem):
             'similarity': semantic.get('_similarity', 0)
         }
 
+    print(f"[CACHE] MISS - running full pipeline", flush=True)
     return {'found': False}
 
 
@@ -165,7 +169,8 @@ def save_to_cache(problem, category, confidence,
     cache_path = os.path.join(CACHE_DIR, h)
     os.makedirs(cache_path, exist_ok=True)
 
-    print(f"  🧠 Computing BERT embedding for cache...")
+    print(f"[CACHE] Saving result for hash {h} ('{problem[:40]}')", flush=True)
+    print(f"  🧠 Computing BERT embedding for cache...", flush=True)
     embedding = get_embedding(problem)
 
     metadata = {
@@ -194,7 +199,7 @@ def save_to_cache(problem, category, confidence,
     with open(os.path.join(cache_path, 'metadata.json'), 'w') as f:
         json.dump(metadata, f, indent=2)
 
-    print(f"✅ Saved to cache: {h} ({problem[:30]}...)")
+    print(f"[CACHE] Saved: {h} ('{problem[:30]}...')", flush=True)
     return h
 
 

@@ -47,8 +47,19 @@ class DistilledBrain:
         self._lazy_load_all()
 
         understanding  = self.core1.understand(problem_text)
+        print(f"[BRAIN] Core 1 -> domain={understanding.get('domain','?')}  "
+              f"intent={understanding.get('primary_intent','?')}  "
+              f"complexity={understanding.get('complexity','?')}", flush=True)
+
         classification = self.core2.classify(problem_text)
+        print(f"[BRAIN] Core 2 -> primary_agent={classification.get('primary_agent','?')}  "
+              f"secondary={classification.get('secondary_agents',[])}  "
+              f"conf={classification.get('confidence',0.0):.1%}", flush=True)
+
         architecture   = self.core3.advise(problem_text)
+        print(f"[BRAIN] Core 3 -> execution_mode={architecture.get('execution_mode','?')}  "
+              f"topology={architecture.get('agent_topology','?')}  "
+              f"conf={architecture.get('confidence',0.0):.1%}", flush=True)
 
         return {
             "understanding":  understanding,

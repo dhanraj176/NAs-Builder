@@ -6,11 +6,14 @@ import sys
 import io
 
 # Force UTF-8 on Windows cp1252 terminals so emoji in print() don't crash.
-# Must happen before any other import that calls print().
+# line_buffering=True ensures every \n flushes immediately — without it
+# the TextIOWrapper is block-buffered and nothing appears in real time.
 if hasattr(sys.stdout, 'buffer'):
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8',
+                                  errors='replace', line_buffering=True)
 if hasattr(sys.stderr, 'buffer'):
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8',
+                                  errors='replace', line_buffering=True)
 
 from flask import Flask, render_template, request, jsonify, send_file
 from flask_cors import CORS
@@ -44,6 +47,19 @@ from api.data_uploader import (
     process_user_data, train_on_user_data,
     predict_with_user_model
 )
+
+import logging
+
+# Ensure werkzeug HTTP request logs (the "127.0.0.1 POST /api/..." lines)
+# are always visible.  Flask debug mode sets this up, but our custom
+# sys.stderr wrapper can confuse the handler — re-attach it explicitly.
+_wz_logger = logging.getLogger('werkzeug')
+if not _wz_logger.handlers:
+    _wz_handler = logging.StreamHandler(sys.stderr)
+    _wz_handler.setFormatter(
+        logging.Formatter('%(message)s'))
+    _wz_logger.addHandler(_wz_handler)
+_wz_logger.setLevel(logging.INFO)
 
 app = Flask(__name__)
 CORS(app)
@@ -954,24 +970,40 @@ def orchestrate_start():
         'elapsed':          0,
         'training_metrics': None,
     }
+    print(f"\n[REQUEST] New build: '{problem[:60]}' job_id={job_id}", flush=True)
 
     def _run():
         def _metrics_cb(step, total, message, **kwargs):
+            phase = kwargs.get('phase', (message[:50] if message else 'Training'))
             _jobs[job_id]['training_metrics'] = {
-                'phase':            kwargs.get('phase', (message[:50] if message else 'Training')),
+                'phase':            phase,
                 'current_epoch':    kwargs.get('epoch', 0),
                 'total_epochs':     kwargs.get('total_epochs', 0),
                 'current_loss':     kwargs.get('loss'),
                 'current_accuracy': kwargs.get('accuracy'),
                 'timestamp':        time.time(),
             }
+            print(f"  [TRAIN] phase={phase} "
+                  f"epoch={kwargs.get('epoch',0)}/{kwargs.get('total_epochs',0)} "
+                  f"loss={kwargs.get('loss','?')} acc={kwargs.get('accuracy','?')}",
+                  flush=True)
+
+        print(f"[SOLVE] Starting orchestrator for job {job_id}", flush=True)
         try:
             result = orchestrator.solve(problem=problem, progress_callback=_metrics_cb)
             _jobs[job_id]['result'] = result
             _jobs[job_id]['status'] = 'complete'
+            elapsed = round(time.time() - _jobs[job_id]['started_at'], 1)
+            acc     = result.get('avg_accuracy') or result.get('test_accuracy', 0)
+            print(f"[COMPLETE] job {job_id} done in {elapsed}s  "
+                  f"accuracy={acc}%  from_cache={result.get('from_cache', False)}",
+                  flush=True)
         except Exception as e:
             _jobs[job_id]['error']  = str(e)
             _jobs[job_id]['status'] = 'error'
+            print(f"[ERROR] job {job_id} failed: {e}", flush=True)
+            import traceback
+            traceback.print_exc()
         finally:
             _jobs[job_id]['elapsed'] = round(
                 time.time() - _jobs[job_id]['started_at'], 1)
@@ -987,8 +1019,15 @@ def job_status(job_id):
     if not job:
         return jsonify({'error': 'Job not found'}), 404
     elapsed = round(time.time() - job['started_at'], 1)
+    status  = job['status']
+    if status == 'complete' and not job.get('_status_logged'):
+        job['_status_logged'] = True
+        acc = (job['result'] or {}).get('avg_accuracy') or \
+              (job['result'] or {}).get('test_accuracy', 0)
+        print(f"[STATUS] job {job_id} complete result returned to frontend  "
+              f"elapsed={elapsed}s accuracy={acc}%", flush=True)
     return jsonify({
-        'status':           job['status'],
+        'status':           status,
         'elapsed':          elapsed,
         'result':           job['result'],
         'error':            job['error'],

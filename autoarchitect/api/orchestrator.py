@@ -502,10 +502,15 @@ class AutoArchitectOrchestrator:
         if not self.topology_enabled:
             return {}
         try:
-            return self.topology_designer.design(
+            topology = self.topology_designer.design(
                 problem = problem,
                 domain  = domain,
             )
+            print(f"[ANAS] Selected topology: {topology.get('topology','?')}  "
+                  f"agents={topology.get('agents',[])}  "
+                  f"conf={topology.get('confidence',0):.0%}  "
+                  f"source={topology.get('source','?')}", flush=True)
+            return topology
         except Exception as e:
             print(f"[Orchestrator] Topology design skipped: {e}")
             return {}
@@ -557,10 +562,12 @@ class AutoArchitectOrchestrator:
         result = agent.run(problem, image_data)
 
         try:
-            print(f"[Orchestrator] Auto self-training for: {problem[:40]}")
+            print(f"[AGENT] {domain} training started...", flush=True)
             from api.self_trainer import self_train
+            _t0 = time.time()
             trained = self_train(problem=problem, category=domain, epochs=3,
                                  progress_callback=progress_callback)
+            _elapsed = round(time.time() - _t0, 1)
             result["self_trained"]   = True
             result["train_accuracy"] = trained["train_accuracy"]
             result["test_accuracy"]  = trained["test_accuracy"]
@@ -572,7 +579,9 @@ class AutoArchitectOrchestrator:
             result["real_training"]  = True
             result["model_path"]     = trained.get("model_path")
             result["classes"]        = trained.get("classes", [])
-            print(f"[Orchestrator] Self-trained! Accuracy: {trained['test_accuracy']}%")
+            print(f"[AGENT] {domain} training complete: "
+                  f"{trained['test_accuracy']}% in {_elapsed}s  "
+                  f"dataset={trained['dataset']}", flush=True)
 
             # Connect trained model to agent via factory
             mp      = trained.get("model_path")
@@ -637,11 +646,13 @@ class AutoArchitectOrchestrator:
             result["domain"] = domain
 
             try:
-                print(f"  [Parallel] {domain} self-training...")
+                print(f"[AGENT] {domain} training started...", flush=True)
+                _t0 = time.time()
                 # Reset deduplication so each domain can use any dataset
                 with _lock:
                     _st._used_datasets_this_run = set()
                 trained = _st.agent.train(problem, domain, epochs=3)
+                _elapsed = round(time.time() - _t0, 1)
 
                 result.update({
                     "train_accuracy": trained["train_accuracy"],
@@ -653,10 +664,11 @@ class AutoArchitectOrchestrator:
                     "model_path":     trained.get("model_path"),
                     "classes":        trained.get("classes", []),
                 })
-                print(f"  [Parallel] {domain} done: "
-                      f"{trained['test_accuracy']}%")
+                print(f"[AGENT] {domain} training complete: "
+                      f"{trained['test_accuracy']}% in {_elapsed}s  "
+                      f"dataset={trained['dataset']}", flush=True)
             except Exception as e:
-                print(f"  [Parallel] {domain} train failed: {e}")
+                print(f"[AGENT] {domain} training failed: {e}", flush=True)
                 result["self_trained"] = False
 
             return result
