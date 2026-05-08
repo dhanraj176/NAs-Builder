@@ -121,9 +121,68 @@ def check_cache(problem):
     return {'found': False}
 
 
+def _agent_compatible(problem: str, cached_agents: list) -> bool:
+    """
+    Return False when cached agents are a clear domain mismatch for the problem.
+
+    Uses substring matching (not word-splitting) to handle plurals/compounds.
+    'detect' is intentionally excluded from image keywords — it is too generic
+    and appears in tabular problems like "Detect fraudulent transactions".
+    """
+    p          = problem.lower()
+    agents_set = set(cached_agents)
+
+    # Tabular: fraud/credit/transaction data — strong numeric/structured signal
+    tabular_hit = any(kw in p for kw in
+                      ['fraud', 'churn', 'credit card', 'transaction', 'banking',
+                       'csv', 'tabular', 'propensity', 'structured data'])
+
+    # Image: explicit visual/camera/pixel references (NOT 'detect' — too generic)
+    image_hit = any(kw in p for kw in
+                    ['image', 'photo', 'camera', 'visual', 'picture',
+                     'video', 'pothole', 'dumping', 'xray', 'scan image'])
+
+    # Medical: clinical/health context
+    medical_hit = any(kw in p for kw in
+                      ['medical', 'health', 'x-ray', 'xray', 'diagnosis',
+                       'disease', 'patient', 'clinical', 'hospital', 'pneumonia'])
+
+    # Audio: sound/voice context
+    audio_hit = any(kw in p for kw in
+                    ['audio', 'sound', 'speech', 'voice call',
+                     'music', '.wav', 'recording', 'podcast'])
+
+    # Strong tabular without image → must have tabular agent
+    if tabular_hit and not image_hit:
+        if 'tabular' not in agents_set:
+            return False
+
+    # Strong image without tabular → must have image/medical/multimodal
+    if image_hit and not tabular_hit:
+        if not (agents_set & {'image', 'medical', 'multimodal'}):
+            return False
+
+    # Medical without tabular → must have medical or image
+    if medical_hit and not tabular_hit:
+        if not (agents_set & {'medical', 'image'}):
+            return False
+
+    # Audio → must have audio agent
+    if audio_hit:
+        if 'audio' not in agents_set:
+            return False
+
+    return True
+
+
 def find_semantic_match(problem: str,
-                        threshold: float = 0.94) -> dict:
-    """Find cached problem with similar meaning."""
+                        threshold: float = 0.97) -> dict:
+    """Find cached problem with similar meaning.
+
+    Threshold raised from 0.94 → 0.97 to prevent cross-agent false hits
+    (e.g., fraud/tabular matched against fraud/security at 0.949).
+    Agent compatibility is also checked before accepting any hit.
+    """
     if not os.path.exists(CACHE_DIR):
         return None
 
@@ -155,9 +214,16 @@ def find_semantic_match(problem: str,
             best_match['_similarity'] = round(score, 3)
 
     if best_match:
-        print(f"  🧠 Semantic similarity: "
+        # Validate agent compatibility — reject if obvious domain mismatch
+        cached_agents = best_match.get('agents_used', [])
+        if not _agent_compatible(problem, cached_agents):
+            print(f"[CACHE] Semantic match rejected: agent mismatch "
+                  f"({cached_agents} not suitable for '{problem[:40]}')",
+                  flush=True)
+            return None
+        print(f"  [CACHE] Semantic similarity: "
               f"{best_match['_similarity']} "
-              f"(threshold: {threshold})")
+              f"(threshold: {threshold})", flush=True)
     return best_match
 
 

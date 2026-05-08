@@ -108,6 +108,7 @@ class ToxicVault:
         os.makedirs(os.path.dirname(vault_path), exist_ok=True)
         self._entries: List[Dict[str, Any]] = self._load()
         # Pre-build numpy matrix for fast batch similarity — rebuilt on write.
+        # Only entries whose vector dim matches STRUCTURAL_DIM are included.
         self._vec_matrix: Optional[np.ndarray] = self._build_matrix()
 
     # ── Public API ────────────────────────────────────────────────────────────
@@ -220,7 +221,15 @@ class ToxicVault:
             try:
                 with open(self._path, "r") as f:
                     data = json.load(f)
-                    return data.get("entries", [])
+                entries = data.get("entries", [])
+                # Purge stale vectors: AGENT_CATALOG grew → STRUCTURAL_DIM changed.
+                # Keeping old-dim vectors causes matmul shape mismatch in check().
+                valid = [e for e in entries
+                         if len(e.get("structural_vector", [])) == STRUCTURAL_DIM]
+                if valid and len(valid) < len(entries):
+                    print(f"  [ToxicVault] Purged {len(entries) - len(valid)} stale "
+                          f"entries (vector dim != {STRUCTURAL_DIM})", flush=True)
+                return valid
             except Exception:
                 pass
         return []
@@ -360,7 +369,15 @@ class SuccessVault:
             try:
                 with open(self._path, "r") as f:
                     data = json.load(f)
-                    return data.get("entries", [])
+                entries = data.get("entries", [])
+                # Purge stale vectors: AGENT_CATALOG grew → STRUCTURAL_DIM changed.
+                # Keeping old-dim vectors causes matmul shape mismatch in similarity.
+                valid = [e for e in entries
+                         if len(e.get("structural_vector", [])) == STRUCTURAL_DIM]
+                if valid and len(valid) < len(entries):
+                    print(f"  [SuccessVault] Purged {len(entries) - len(valid)} stale "
+                          f"entries (vector dim != {STRUCTURAL_DIM})", flush=True)
+                return valid
             except Exception:
                 pass
         return []
