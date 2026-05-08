@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="preload" href="/static/videos/hero-loop.mp4" as="video" type="video/mp4">
+  <link rel="preload" href="/static/images/hero-centerpiece.png" as="image">
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
@@ -45,77 +47,20 @@
         exceptionally well.
       </p>
 
-      <!-- HERO VIZ — PROBLEM → BRAIN → AGENT flow -->
-      <div class="hero-viz fade-up fade-up-d4" aria-hidden="true">
-        <svg class="hero-viz-svg" viewBox="0 0 440 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-
-          <!-- PROBLEM box -->
-          <rect x="8" y="12" width="110" height="56" rx="8"
-                fill="#1c1c1f" stroke="rgba(94,106,210,0.32)" stroke-width="1"/>
-          <text x="63" y="33" text-anchor="middle" fill="#62666d"
-                font-size="8" font-weight="600" letter-spacing="1.4">PROBLEM</text>
-          <line x1="24" y1="46" x2="96" y2="46" stroke="#2a2a30" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="24" y1="55" x2="80" y2="55" stroke="#2a2a30" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="24" y1="62" x2="88" y2="62" stroke="#2a2a30" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
-          <text x="63" y="88" text-anchor="middle" fill="#3a3d44" font-size="8">plain English</text>
-
-          <!-- Arrow 1 with flowing data dot -->
-          <line x1="120" y1="40" x2="191" y2="40"
-                stroke="rgba(94,106,210,0.25)" stroke-width="1" stroke-dasharray="3 3"/>
-          <circle r="2.5" fill="rgba(94,106,210,0.9)">
-            <animateMotion path="M120,40 L191,40" dur="1.6s" repeatCount="indefinite"/>
-          </circle>
-          <polyline points="185,36.5 193,40 185,43.5"
-                    stroke="rgba(94,106,210,0.45)" stroke-width="1.2"
-                    stroke-linecap="round" stroke-linejoin="round"/>
-
-          <!-- BRAIN — pulsing centerpiece -->
-          <!-- Outer pulse ring — expands and fades -->
-          <circle cx="220" cy="40" r="30" fill="none" stroke="rgba(94,106,210,0.18)" stroke-width="1">
-            <animate attributeName="r"       values="26;35;26" dur="3s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0.6;0;0.6"  dur="3s" repeatCount="indefinite"/>
-          </circle>
-          <!-- Outer solid ring -->
-          <circle cx="220" cy="40" r="26" fill="#161618" stroke="rgba(94,106,210,0.5)" stroke-width="1">
-            <animate attributeName="stroke-opacity" values="0.5;0.9;0.5" dur="2.2s" repeatCount="indefinite"/>
-          </circle>
-          <!-- Inner rotating dashed ring -->
-          <circle cx="220" cy="40" r="17" fill="none"
-                  stroke="rgba(94,106,210,0.22)" stroke-width="0.8" stroke-dasharray="3 2">
-            <animateTransform attributeName="transform" type="rotate"
-                              from="0 220 40" to="360 220 40" dur="8s" repeatCount="indefinite"/>
-          </circle>
-          <!-- Core -->
-          <circle cx="220" cy="40" r="8" fill="rgba(94,106,210,0.75)">
-            <animate attributeName="r"            values="7;9.5;7"    dur="1.8s" repeatCount="indefinite"/>
-            <animate attributeName="fill-opacity" values="0.75;1;0.75" dur="1.8s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="220" cy="40" r="3" fill="rgba(165,180,252,0.9)"/>
-          <text x="220" y="76" text-anchor="middle" fill="#62666d"
-                font-size="8" font-weight="600" letter-spacing="1.4">BRAIN</text>
-          <text x="220" y="88" text-anchor="middle" fill="#3a3d44" font-size="8">ANAS &middot; 266M search</text>
-
-          <!-- Arrow 2 with flowing data dot (offset by half cycle) -->
-          <line x1="248" y1="40" x2="320" y2="40"
-                stroke="rgba(94,106,210,0.25)" stroke-width="1" stroke-dasharray="3 3"/>
-          <circle r="2.5" fill="rgba(94,106,210,0.9)">
-            <animateMotion path="M248,40 L320,40" dur="1.6s" begin="0.8s" repeatCount="indefinite"/>
-          </circle>
-          <polyline points="314,36.5 322,40 314,43.5"
-                    stroke="rgba(94,106,210,0.45)" stroke-width="1.2"
-                    stroke-linecap="round" stroke-linejoin="round"/>
-
-          <!-- AGENT box -->
-          <rect x="322" y="12" width="110" height="56" rx="8"
-                fill="#1c1c1f" stroke="rgba(39,166,68,0.32)" stroke-width="1"/>
-          <text x="377" y="33" text-anchor="middle" fill="#62666d"
-                font-size="8" font-weight="600" letter-spacing="1.4">AGENT</text>
-          <path d="M352,50 L364,62 L400,36"
-                stroke="rgba(39,166,68,0.65)" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round"/>
-          <text x="377" y="88" text-anchor="middle" fill="#3a3d44" font-size="8">trained model</text>
-
-        </svg>
+      <!-- HERO MEDIA — animated video, static image fallback -->
+      <div class="hero-media fade-up fade-up-d4">
+        <video class="hero-video"
+               autoplay
+               loop
+               muted
+               playsinline
+               poster="/static/images/hero-centerpiece.png">
+          <source src="/static/videos/hero-loop.mp4" type="video/mp4">
+          <!-- Fallback: static image if video fails -->
+          <img src="/static/images/hero-centerpiece.png"
+               alt="AutoArchitect AI — Neural orchestration system"
+               class="hero-fallback-img">
+        </video>
       </div>
 
       <div class="hero-cta fade-up fade-up-d5">
@@ -376,7 +321,9 @@
 
         <div class="vr-card" onclick="toggleVrCard(this)">
           <div class="vr-card-front">
-            <span class="vr-icon"><i data-lucide="image"></i></span>
+            <div class="domain-icon">
+              <img src="/static/images/domain-image.png" alt="Image classification" loading="lazy">
+            </div>
             <div class="vr-domain">Image classification</div>
             <div class="vr-cta">See proof &rarr;</div>
           </div>
@@ -391,7 +338,9 @@
 
         <div class="vr-card" onclick="toggleVrCard(this)">
           <div class="vr-card-front">
-            <span class="vr-icon"><i data-lucide="file-text"></i></span>
+            <div class="domain-icon">
+              <img src="/static/images/domain-text.png" alt="Text classification" loading="lazy">
+            </div>
             <div class="vr-domain">Text classification</div>
             <div class="vr-cta">See proof &rarr;</div>
           </div>
@@ -406,7 +355,9 @@
 
         <div class="vr-card" onclick="toggleVrCard(this)">
           <div class="vr-card-front">
-            <span class="vr-icon"><i data-lucide="table-2"></i></span>
+            <div class="domain-icon">
+              <img src="/static/images/domain-tabular.png" alt="Tabular classification" loading="lazy">
+            </div>
             <div class="vr-domain">Tabular classification</div>
             <div class="vr-cta">See proof &rarr;</div>
           </div>
@@ -421,7 +372,9 @@
 
         <div class="vr-card" onclick="toggleVrCard(this)">
           <div class="vr-card-front">
-            <span class="vr-icon"><i data-lucide="layers"></i></span>
+            <div class="domain-icon">
+              <img src="/static/images/domain-multimodal.png" alt="Multimodal zero-shot" loading="lazy">
+            </div>
             <div class="vr-domain">Multimodal zero-shot</div>
             <div class="vr-cta">See proof &rarr;</div>
           </div>
@@ -436,7 +389,9 @@
 
         <div class="vr-card" onclick="toggleVrCard(this)">
           <div class="vr-card-front">
-            <span class="vr-icon"><i data-lucide="audio-lines"></i></span>
+            <div class="domain-icon">
+              <img src="/static/images/domain-audio.png" alt="Audio classification" loading="lazy">
+            </div>
             <div class="vr-domain">Audio classification</div>
             <div class="vr-cta">See proof &rarr;</div>
           </div>
