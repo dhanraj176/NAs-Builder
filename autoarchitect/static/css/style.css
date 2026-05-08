@@ -1609,34 +1609,34 @@ textarea::placeholder { color: var(--ink-tertiary); }
 
 .hero-media {
   width:         100%;
-  max-width:     900px;
-  margin:        48px auto 32px;
+  max-width:     600px;
+  margin:        32px auto 24px;
   position:      relative;
   border-radius: 16px;
   overflow:      hidden;
+  aspect-ratio:  16 / 9;
   box-shadow:
     0 0 60px  rgba(94, 106, 210, 0.15),
     0 0 120px rgba(94, 106, 210, 0.08);
 }
 
 .hero-video {
-  width:         100%;
-  height:        auto;
-  display:       block;
-  object-fit:    cover;
-  border-radius: 16px;
+  width:      100%;
+  height:     100%;
+  display:    block;
+  object-fit: cover;
 }
 
 .hero-fallback-img {
-  width:   100%;
-  height:  auto;
-  display: none;
+  width:      100%;
+  height:     100%;
+  object-fit: cover;
+  display:    none;
 }
 
 @media (max-width: 768px) {
   .hero-media {
     max-width:     100%;
-    margin:        32px auto 24px;
     border-radius: 12px;
   }
 }
@@ -1644,35 +1644,37 @@ textarea::placeholder { color: var(--ink-tertiary); }
 /* ── DOMAIN ICONS (Verified Results) ────────────── */
 
 .domain-icon {
-  width:         64px;
-  height:        64px;
+  width:         80px;
+  height:        80px;
   display:       flex;
   align-items:   center;
   justify-content: center;
   background:    var(--surface-1);
   border:        1px solid var(--hairline);
-  border-radius: 12px;
-  padding:       8px;
+  border-radius: 16px;
+  padding:       0;
   margin:        0 auto var(--space-md);
+  overflow:      hidden;
   transition:    transform 200ms ease, box-shadow 200ms ease;
 }
 
 .domain-icon img {
-  width:       100%;
-  height:      100%;
-  object-fit:  contain;
-  display:     block;
+  width:      100%;
+  height:     100%;
+  object-fit: cover;
+  display:    block;
+  transform:  scale(1.2);
 }
 
 .vr-card:hover .domain-icon {
   transform:  translateY(-2px);
-  box-shadow: 0 0 24px rgba(94, 106, 210, 0.22);
+  box-shadow: 0 0 32px rgba(94, 106, 210, 0.3);
 }
 
 @media (max-width: 768px) {
   .domain-icon {
-    width:  56px;
-    height: 56px;
+    width:  64px;
+    height: 64px;
   }
 }
 
