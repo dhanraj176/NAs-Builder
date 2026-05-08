@@ -339,6 +339,7 @@ function _tdShow() {
   if (track) track.classList.remove('indeterminate');
   _tdStatusTimer = setInterval(_tdCycleStatus, 3000);
   _tdCycleStatus();
+  NeuralNetViz.start();
 }
 
 function _tdHide() {
@@ -348,6 +349,7 @@ function _tdHide() {
   if (track) track.classList.remove('indeterminate');
   if (_tdStatusTimer) { clearInterval(_tdStatusTimer); _tdStatusTimer = null; }
   _tdIndeterminate = false;
+  NeuralNetViz.stop();
 }
 
 function _tdCycleStatus() {
@@ -507,6 +509,135 @@ async function animateLLM(data) {
   await sleep(200);
   showResults(data);
 }
+
+// ── NEURAL NETWORK TRAINING VIZ (in training dashboard) ───────────────────
+
+var NeuralNetViz = (function() {
+  var LAYERS = [8, 12, 12, 4];
+  var _cv    = null;
+  var _ctx   = null;
+  var _raf   = null;
+  var _nodes = [];
+  var _parts = [];
+
+  function _init() {
+    _cv = document.getElementById('tdNNCanvas');
+    if (!_cv) return false;
+    var dpr = window.devicePixelRatio || 1;
+    var w   = (_cv.parentElement && _cv.parentElement.offsetWidth) || 180;
+    var h   = 62;
+    _cv.width        = w * dpr;
+    _cv.height       = h * dpr;
+    _cv.style.width  = w + 'px';
+    _cv.style.height = h + 'px';
+    _ctx = _cv.getContext('2d');
+    _ctx.scale(dpr, dpr);
+
+    _nodes = [];
+    _parts = [];
+
+    var pad  = 10;
+    var cols = LAYERS.length;
+    for (var li = 0; li < cols; li++) {
+      var n    = LAYERS[li];
+      var x    = pad + (w - pad * 2) * li / (cols - 1);
+      var step = h / (n + 1);
+      var col  = [];
+      for (var ni = 0; ni < n; ni++) {
+        col.push({
+          x:     x,
+          y:     step * (ni + 1),
+          phase: Math.random() * Math.PI * 2,
+          spd:   0.026 + Math.random() * 0.026,
+          act:   Math.random()
+        });
+      }
+      _nodes.push(col);
+    }
+    return true;
+  }
+
+  function _draw() {
+    if (!_ctx || !_cv) return;
+    var w = parseInt(_cv.style.width)  || _cv.width;
+    var h = parseInt(_cv.style.height) || _cv.height;
+    _ctx.clearRect(0, 0, w, h);
+
+    // Edges
+    _ctx.lineWidth = 0.4;
+    for (var li = 0; li < _nodes.length - 1; li++) {
+      var A = _nodes[li];
+      var B = _nodes[li + 1];
+      for (var a = 0; a < A.length; a++) {
+        for (var b = 0; b < B.length; b++) {
+          var alpha = 0.03 + A[a].act * 0.05;
+          if (Math.random() < 0.0006) alpha = 0.45;   // weight flash
+          _ctx.strokeStyle = 'rgba(94,106,210,' + alpha + ')';
+          _ctx.beginPath();
+          _ctx.moveTo(A[a].x, A[a].y);
+          _ctx.lineTo(B[b].x, B[b].y);
+          _ctx.stroke();
+        }
+      }
+    }
+
+    // Spawn data-flow particles
+    if (Math.random() < 0.16) {
+      var sl = Math.floor(Math.random() * (_nodes.length - 1));
+      var sf = Math.floor(Math.random() * _nodes[sl].length);
+      var st = Math.floor(Math.random() * _nodes[sl + 1].length);
+      _parts.push({ li: sl, fn: sf, tn: st, p: 0, spd: 0.032 + Math.random() * 0.032 });
+    }
+
+    // Draw particles
+    for (var i = _parts.length - 1; i >= 0; i--) {
+      var pt = _parts[i];
+      pt.p += pt.spd;
+      if (pt.p >= 1) { _parts.splice(i, 1); continue; }
+      var f  = _nodes[pt.li][pt.fn];
+      var t  = _nodes[pt.li + 1][pt.tn];
+      var px = f.x + (t.x - f.x) * pt.p;
+      var py = f.y + (t.y - f.y) * pt.p;
+      var g  = _ctx.createRadialGradient(px, py, 0, px, py, 4);
+      g.addColorStop(0, 'rgba(165,180,252,0.9)');
+      g.addColorStop(1, 'rgba(165,180,252,0)');
+      _ctx.fillStyle = g;
+      _ctx.beginPath(); _ctx.arc(px, py, 4, 0, Math.PI * 2); _ctx.fill();
+      _ctx.fillStyle = '#c7d2fe';
+      _ctx.beginPath(); _ctx.arc(px, py, 1.5, 0, Math.PI * 2); _ctx.fill();
+    }
+
+    // Nodes — pulsing activation
+    for (var li = 0; li < _nodes.length; li++) {
+      for (var ni = 0; ni < _nodes[li].length; ni++) {
+        var nd = _nodes[li][ni];
+        nd.phase += nd.spd;
+        nd.act = 0.2 + 0.8 * (0.5 + 0.5 * Math.sin(nd.phase));
+        var r = 2.2 + nd.act * 0.9;
+        _ctx.fillStyle   = 'rgba(94,106,210,'   + (0.35 + nd.act * 0.5) + ')';
+        _ctx.strokeStyle = 'rgba(165,180,252,' + (0.3  + nd.act * 0.4) + ')';
+        _ctx.lineWidth   = 0.7;
+        _ctx.beginPath(); _ctx.arc(nd.x, nd.y, r, 0, Math.PI * 2);
+        _ctx.fill(); _ctx.stroke();
+      }
+    }
+  }
+
+  function _loop() { _draw(); _raf = requestAnimationFrame(_loop); }
+
+  return {
+    start: function() {
+      if (_raf) return;
+      requestAnimationFrame(function() {
+        if (_init()) _loop();
+      });
+    },
+    stop: function() {
+      if (_raf) { cancelAnimationFrame(_raf); _raf = null; }
+      _nodes = []; _parts = [];
+    }
+  };
+})();
 
 // ── NEURAL NETWORK CANVAS ANIMATION ───────────────────────────────────────
 

@@ -1504,6 +1504,107 @@ textarea::placeholder { color: var(--ink-tertiary); }
   background: transparent;
 }
 
+/* ── FADE-UP D5 ─────────────────────────────────── */
+
+.fade-up-d5 { animation-delay: 0.52s; }
+
+/* ── HERO VIZ ────────────────────────────────────── */
+
+.hero-viz {
+  margin:    var(--space-xl) auto var(--space-xs);
+  max-width: 440px;
+  width:     100%;
+}
+
+.hero-viz-svg {
+  width:   100%;
+  height:  auto;
+  display: block;
+}
+
+.hero-viz-svg text {
+  font-family: -apple-system, "SF Pro Display", BlinkMacSystemFont,
+               "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ── SECTION GLOW ────────────────────────────────── */
+
+.section-glow {
+  position:  relative;
+  isolation: isolate;
+}
+
+.section-glow::before {
+  content:        '';
+  position:       absolute;
+  inset:          0;
+  pointer-events: none;
+  z-index:        -1;
+  background:     radial-gradient(
+    ellipse 70% 45% at 50% 0%,
+    rgba(94, 106, 210, 0.07) 0%,
+    transparent 62%
+  );
+}
+
+/* ── HIW CARD PERSONALITY PATTERNS ──────────────── */
+
+.hiw-card { position: relative; overflow: hidden; }
+
+/* Card 1 — sparse dot grid (describe / input) */
+.hiw-card-1::before {
+  content:        '';
+  position:       absolute;
+  inset:          0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(94,106,210,0.45) 1px, transparent 1px);
+  background-size: 20px 20px;
+  -webkit-mask-image: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, transparent 55%);
+  mask-image:         linear-gradient(135deg, rgba(0,0,0,0.3) 0%, transparent 55%);
+}
+
+/* Card 2 — diagonal mesh (build / brain) */
+.hiw-card-2::before {
+  content:        '';
+  position:       absolute;
+  inset:          0;
+  pointer-events: none;
+  background-image:
+    linear-gradient( 45deg, rgba(94,106,210,0.22) 1px, transparent 1px),
+    linear-gradient(-45deg, rgba(94,106,210,0.22) 1px, transparent 1px);
+  background-size: 18px 18px;
+  -webkit-mask-image: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, transparent 55%);
+  mask-image:         linear-gradient(135deg, rgba(0,0,0,0.3) 0%, transparent 55%);
+}
+
+/* Card 3 — green corner glow (deploy) */
+.hiw-card-3::before {
+  content:        '';
+  position:       absolute;
+  inset:          0;
+  pointer-events: none;
+  background:     radial-gradient(ellipse at top right, rgba(39,166,68,0.1) 0%, transparent 60%);
+}
+
+/* ── TRAINING DASHBOARD 2-COLUMN ROW ─────────────── */
+
+.td-training-row {
+  display:               grid;
+  grid-template-columns: 1fr 1fr;
+  gap:                   10px;
+  align-items:           start;
+}
+
+.td-nn-canvas {
+  display: block;
+  width:   100%;
+  height:  62px;
+}
+
+@media (max-width: 520px) {
+  .td-training-row { grid-template-columns: 1fr; }
+}
+
 /* ── REDUCED MOTION ─────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {

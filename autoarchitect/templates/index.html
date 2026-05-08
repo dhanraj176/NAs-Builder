@@ -29,7 +29,7 @@
   <main>
 
     <!-- HERO -->
-    <section class="hero">
+    <section class="hero section-glow">
       <div class="hero-bg-grid" aria-hidden="true"></div>
       <div class="hero-badge fade-up fade-up-d1">
         <span class="badge-dot"></span>
@@ -44,7 +44,81 @@
         Not a chatbot or generator &mdash; we do classification,
         exceptionally well.
       </p>
-      <div class="hero-cta fade-up fade-up-d4">
+
+      <!-- HERO VIZ — PROBLEM → BRAIN → AGENT flow -->
+      <div class="hero-viz fade-up fade-up-d4" aria-hidden="true">
+        <svg class="hero-viz-svg" viewBox="0 0 440 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+          <!-- PROBLEM box -->
+          <rect x="8" y="12" width="110" height="56" rx="8"
+                fill="#1c1c1f" stroke="rgba(94,106,210,0.32)" stroke-width="1"/>
+          <text x="63" y="33" text-anchor="middle" fill="#62666d"
+                font-size="8" font-weight="600" letter-spacing="1.4">PROBLEM</text>
+          <line x1="24" y1="46" x2="96" y2="46" stroke="#2a2a30" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="24" y1="55" x2="80" y2="55" stroke="#2a2a30" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="24" y1="62" x2="88" y2="62" stroke="#2a2a30" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+          <text x="63" y="88" text-anchor="middle" fill="#3a3d44" font-size="8">plain English</text>
+
+          <!-- Arrow 1 with flowing data dot -->
+          <line x1="120" y1="40" x2="191" y2="40"
+                stroke="rgba(94,106,210,0.25)" stroke-width="1" stroke-dasharray="3 3"/>
+          <circle r="2.5" fill="rgba(94,106,210,0.9)">
+            <animateMotion path="M120,40 L191,40" dur="1.6s" repeatCount="indefinite"/>
+          </circle>
+          <polyline points="185,36.5 193,40 185,43.5"
+                    stroke="rgba(94,106,210,0.45)" stroke-width="1.2"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- BRAIN — pulsing centerpiece -->
+          <!-- Outer pulse ring — expands and fades -->
+          <circle cx="220" cy="40" r="30" fill="none" stroke="rgba(94,106,210,0.18)" stroke-width="1">
+            <animate attributeName="r"       values="26;35;26" dur="3s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.6;0;0.6"  dur="3s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Outer solid ring -->
+          <circle cx="220" cy="40" r="26" fill="#161618" stroke="rgba(94,106,210,0.5)" stroke-width="1">
+            <animate attributeName="stroke-opacity" values="0.5;0.9;0.5" dur="2.2s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Inner rotating dashed ring -->
+          <circle cx="220" cy="40" r="17" fill="none"
+                  stroke="rgba(94,106,210,0.22)" stroke-width="0.8" stroke-dasharray="3 2">
+            <animateTransform attributeName="transform" type="rotate"
+                              from="0 220 40" to="360 220 40" dur="8s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Core -->
+          <circle cx="220" cy="40" r="8" fill="rgba(94,106,210,0.75)">
+            <animate attributeName="r"            values="7;9.5;7"    dur="1.8s" repeatCount="indefinite"/>
+            <animate attributeName="fill-opacity" values="0.75;1;0.75" dur="1.8s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="220" cy="40" r="3" fill="rgba(165,180,252,0.9)"/>
+          <text x="220" y="76" text-anchor="middle" fill="#62666d"
+                font-size="8" font-weight="600" letter-spacing="1.4">BRAIN</text>
+          <text x="220" y="88" text-anchor="middle" fill="#3a3d44" font-size="8">ANAS &middot; 266M search</text>
+
+          <!-- Arrow 2 with flowing data dot (offset by half cycle) -->
+          <line x1="248" y1="40" x2="320" y2="40"
+                stroke="rgba(94,106,210,0.25)" stroke-width="1" stroke-dasharray="3 3"/>
+          <circle r="2.5" fill="rgba(94,106,210,0.9)">
+            <animateMotion path="M248,40 L320,40" dur="1.6s" begin="0.8s" repeatCount="indefinite"/>
+          </circle>
+          <polyline points="314,36.5 322,40 314,43.5"
+                    stroke="rgba(94,106,210,0.45)" stroke-width="1.2"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- AGENT box -->
+          <rect x="322" y="12" width="110" height="56" rx="8"
+                fill="#1c1c1f" stroke="rgba(39,166,68,0.32)" stroke-width="1"/>
+          <text x="377" y="33" text-anchor="middle" fill="#62666d"
+                font-size="8" font-weight="600" letter-spacing="1.4">AGENT</text>
+          <path d="M352,50 L364,62 L400,36"
+                stroke="rgba(39,166,68,0.65)" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="377" y="88" text-anchor="middle" fill="#3a3d44" font-size="8">trained model</text>
+
+        </svg>
+      </div>
+
+      <div class="hero-cta fade-up fade-up-d5">
         <a href="#build" class="primary-btn" onclick="scrollToInput(); return false;">Try it free</a>
         <a href="#hiw" class="secondary-btn">See how it works &rarr;</a>
       </div>
@@ -153,12 +227,18 @@
             </div>
           </div>
 
-          <div class="td-chart-section">
-            <div class="td-chart-label">Loss curve</div>
-            <svg id="tdChartSvg" class="td-chart-svg" viewBox="0 0 300 50" preserveAspectRatio="none">
-              <path id="tdChartPath" fill="none" stroke="var(--primary)" stroke-width="1.5"
-                    stroke-linecap="round" stroke-linejoin="round" d=""/>
-            </svg>
+          <div class="td-training-row">
+            <div class="td-chart-section">
+              <div class="td-chart-label">Loss curve</div>
+              <svg id="tdChartSvg" class="td-chart-svg" viewBox="0 0 300 50" preserveAspectRatio="none">
+                <path id="tdChartPath" fill="none" stroke="var(--primary)" stroke-width="1.5"
+                      stroke-linecap="round" stroke-linejoin="round" d=""/>
+              </svg>
+            </div>
+            <div class="td-nn-panel" id="tdNNPanel">
+              <div class="td-chart-label">Neural network</div>
+              <canvas id="tdNNCanvas" class="td-nn-canvas"></canvas>
+            </div>
           </div>
         </div>
 
@@ -236,7 +316,7 @@
   </main>
 
   <!-- HOW IT WORKS -->
-  <section class="hiw-section" id="hiw">
+  <section class="hiw-section section-glow" id="hiw">
     <div class="hiw-inner">
       <div class="hiw-heading scroll-fade">
         <div class="hiw-label">How it works</div>
@@ -244,7 +324,7 @@
       </div>
       <div class="hiw-grid">
 
-        <div class="hiw-card scroll-fade">
+        <div class="hiw-card hiw-card-1 scroll-fade">
           <div class="hiw-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
@@ -255,7 +335,7 @@
           <div class="hiw-card-body">Write your problem in plain English. No ML knowledge, no code, no configuration required.</div>
         </div>
 
-        <div class="hiw-card scroll-fade">
+        <div class="hiw-card hiw-card-2 scroll-fade">
           <div class="hiw-icon hiw-icon-purple">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="5" r="2" stroke="currentColor" stroke-width="1.75"/>
@@ -269,7 +349,7 @@
           <div class="hiw-card-body">ANAS searches 266M architectures, selects the optimal agent network, and trains on real data automatically.</div>
         </div>
 
-        <div class="hiw-card scroll-fade">
+        <div class="hiw-card hiw-card-3 scroll-fade">
           <div class="hiw-icon hiw-icon-green">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M12 3v13m0 0l-4-4m4 4l4-4M3 21h18" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
@@ -285,7 +365,7 @@
   </section>
 
   <!-- VERIFIED RESULTS -->
-  <section class="verified-results">
+  <section class="verified-results section-glow">
     <div class="vr-inner">
       <div class="vr-heading scroll-fade">
         <div class="vr-label">Benchmarks</div>
