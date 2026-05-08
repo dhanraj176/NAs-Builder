@@ -1417,6 +1417,27 @@ textarea::placeholder { color: var(--ink-tertiary); }
   transition:    width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Indeterminate shimmer — active when backend training exceeds simulation time */
+.td-progress-track.indeterminate .td-progress-fill {
+  width:           100% !important;
+  transition:      none;
+  background:      linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--primary) 30%,
+    #a5b4fc 50%,
+    var(--primary) 70%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation:       td-shimmer 1.5s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes td-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
 .td-progress-pct {
   font-size:           12px;
   font-weight:         500;

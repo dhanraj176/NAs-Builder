@@ -290,9 +290,12 @@ async function pollJob(jobId) {
 
 // ── LIVE TRAINING DASHBOARD ────────────────────────────────────────────────
 
-var _tdLossHistory = [];
-var _tdStatusTimer = null;
-var _tdStatusIdx   = 0;
+var _tdLossHistory   = [];
+var _tdStatusTimer   = null;
+var _tdStatusIdx     = 0;
+var _tdIndeterminate = false;
+var _tdCurrentLoss   = 0;
+var _tdCurrentAcc    = 0;
 var _tdStatusTexts = [
   'Searching candidate architectures…',
   'Evaluating architecture quality…',
@@ -303,20 +306,48 @@ var _tdStatusTexts = [
   'Validating on held-out test set…',
   'Computing optimal architecture topology…',
 ];
+var _tdFinalizeMessages = [
+  'Training optimal model…',
+  'Optimizing weights…',
+  'Validating on test set…',
+  'Refining predictions…',
+  'Tuning hyperparameters…',
+  'Finalizing model…',
+  'Almost done…',
+  'Verifying accuracy…',
+];
 
 function _tdShow() {
-  _tdLossHistory = [];
-  _tdStatusIdx   = 0;
-  var el = document.getElementById('trainingDash');
-  if (el) el.classList.remove('hidden');
+  _tdLossHistory   = [];
+  _tdStatusIdx     = 0;
+  _tdIndeterminate = false;
+  _tdCurrentLoss   = 0;
+  _tdCurrentAcc    = 0;
+  _tdStatusTexts   = [
+    'Searching candidate architectures…',
+    'Evaluating architecture quality…',
+    'Fetching dataset from HuggingFace…',
+    'Fitting model weights via gradient descent…',
+    'Running Neural Architecture Search…',
+    'Fine-tuning final classification layer…',
+    'Validating on held-out test set…',
+    'Computing optimal architecture topology…',
+  ];
+  var el    = document.getElementById('trainingDash');
+  var track = document.querySelector('.td-progress-track');
+  if (el)    el.classList.remove('hidden');
+  if (track) track.classList.remove('indeterminate');
   _tdStatusTimer = setInterval(_tdCycleStatus, 3000);
   _tdCycleStatus();
 }
 
 function _tdHide() {
-  var el = document.getElementById('trainingDash');
-  if (el) el.classList.add('hidden');
+  var el    = document.getElementById('trainingDash');
+  var track = document.querySelector('.td-progress-track');
+  if (el)    el.classList.add('hidden');
+  if (track) track.classList.remove('indeterminate');
   if (_tdStatusTimer) { clearInterval(_tdStatusTimer); _tdStatusTimer = null; }
+  _tdIndeterminate = false;
 }
 
 function _tdCycleStatus() {
@@ -335,10 +366,29 @@ function _tdVal(id, v) {
 }
 
 function _tdSetProgress(pct) {
-  pct = Math.min(99, Math.max(0, pct));
+  if (_tdIndeterminate && pct < 100) return;
+  if (pct >= 100) {
+    _tdIndeterminate = false;
+    var track = document.querySelector('.td-progress-track');
+    if (track) track.classList.remove('indeterminate');
+  }
+  pct = Math.min(100, Math.max(0, pct));
   var fill = document.getElementById('tdProgressFill');
   if (fill) fill.style.width = pct + '%';
   _tdVal('tdProgressPct', Math.round(pct) + '%');
+}
+
+function _tdSetIndeterminate() {
+  if (_tdIndeterminate) return;
+  _tdIndeterminate = true;
+  _tdStatusTexts   = _tdFinalizeMessages.slice();
+  _tdStatusIdx     = 0;
+  var track = document.querySelector('.td-progress-track');
+  if (track) track.classList.add('indeterminate');
+  _tdVal('tdProgressPct', '');
+  _tdVal('tdEpochLabel',  '');
+  _tdVal('tdETA',         '');
+  _tdVal('tdPhase',       'Deep training…');
 }
 
 function _tdDrawChart() {
@@ -379,21 +429,33 @@ function _tdApplyMetrics(m, sim) {
     sim.tick++;
     var t     = Math.min(sim.tick / sim.totalTicks, 0.97);
     var eased = 1 - Math.pow(1 - t, 1.8);
-    var loss  = sim.loss0 * Math.pow(sim.lossF / sim.loss0, eased);
-    var acc   = sim.accFloor + (sim.accTop - sim.accFloor) * eased;
-    loss += (Math.random() - 0.5) * 0.012 * loss;
-    acc  += (Math.random() - 0.5) * 1.2;
-    loss  = Math.max(0.04, loss);
-    acc   = Math.max(sim.accFloor, Math.min(99, acc));
-    var epoch = Math.min(Math.floor(t * sim.epochs) + 1, sim.epochs);
-    var eta   = Math.round(Math.max(0, sim.estimatedTime * (1 - t)));
-    _tdLossHistory.push(loss);
-    _tdSetProgress(t * 100);
-    _tdVal('tdLoss',       loss.toFixed(3));
-    _tdVal('tdAccuracy',   Math.round(acc) + '%');
-    _tdVal('tdETA',        eta + 's');
-    _tdVal('tdEpochLabel', 'Epoch ' + epoch + ' / ' + sim.epochs + ' · ' + eta + 's remaining');
-    _tdVal('tdPhase',      'NAS architecture search');
+
+    if (sim.tick >= sim.totalTicks) {
+      // Phase 2: simulation exhausted, backend still running — keep dashboard alive
+      _tdSetIndeterminate();
+      _tdCurrentLoss += (Math.random() - 0.5) * 0.007;
+      _tdCurrentLoss  = Math.max(0.05, _tdCurrentLoss);
+      _tdCurrentAcc  += (Math.random() - 0.5) * 0.6;
+      _tdCurrentAcc   = Math.min(99, Math.max(sim.accFloor, _tdCurrentAcc));
+    } else {
+      // Phase 1: smooth simulation (0 → ~90%)
+      _tdCurrentLoss = sim.loss0 * Math.pow(sim.lossF / sim.loss0, eased);
+      _tdCurrentAcc  = sim.accFloor + (sim.accTop - sim.accFloor) * eased;
+      _tdCurrentLoss += (Math.random() - 0.5) * 0.012 * _tdCurrentLoss;
+      _tdCurrentAcc  += (Math.random() - 0.5) * 1.2;
+      _tdCurrentLoss  = Math.max(0.04, _tdCurrentLoss);
+      _tdCurrentAcc   = Math.max(sim.accFloor, Math.min(99, _tdCurrentAcc));
+      var epoch = Math.min(Math.floor(t * sim.epochs) + 1, sim.epochs);
+      var eta   = Math.round(Math.max(0, sim.estimatedTime * (1 - t)));
+      _tdSetProgress(t * 100);
+      _tdVal('tdETA',        eta + 's');
+      _tdVal('tdEpochLabel', 'Epoch ' + epoch + ' / ' + sim.epochs + ' · ' + eta + 's remaining');
+      _tdVal('tdPhase',      'NAS architecture search');
+    }
+
+    _tdLossHistory.push(_tdCurrentLoss);
+    _tdVal('tdLoss',     _tdCurrentLoss.toFixed(3));
+    _tdVal('tdAccuracy', Math.round(_tdCurrentAcc) + '%');
   }
   _tdDrawChart();
 }
