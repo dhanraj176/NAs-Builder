@@ -14,6 +14,15 @@
 </head>
 <body>
 
+  <!-- PAGE-LEVEL FIXED BACKGROUND VIDEO -->
+  <div class="page-bg-video" aria-hidden="true">
+    <video autoplay loop muted playsinline
+           poster="/static/images/hero-centerpiece.png">
+      <source src="/static/videos/hero-loop.mp4" type="video/mp4">
+    </video>
+    <div class="page-bg-fade"></div>
+  </div>
+
   <!-- AMBIENT ORBS — fixed behind everything -->
   <div class="ambient-orbs" aria-hidden="true">
     <div class="orb orb-1"></div>
@@ -28,15 +37,9 @@
     </div>
   </nav>
 
-  <!-- HERO — full-viewport background video, outside <main> to break free of max-width -->
+  <!-- HERO — text overlay on fixed page video -->
   <section class="hero">
-    <video class="hero-bg-video"
-           autoplay loop muted playsinline
-           poster="/static/images/hero-centerpiece.png">
-      <source src="/static/videos/hero-loop.mp4" type="video/mp4">
-    </video>
-    <div class="hero-bg-overlay" aria-hidden="true"></div>
-    <div class="hero-bg-grid"    aria-hidden="true"></div>
+    <div class="hero-bg-grid" aria-hidden="true"></div>
 
     <div class="hero-content">
       <div class="hero-badge fade-up fade-up-d1">
