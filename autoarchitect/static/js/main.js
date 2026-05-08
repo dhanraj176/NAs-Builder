@@ -394,9 +394,9 @@ function _tdSetIndeterminate() {
 }
 
 function _tdDrawChart() {
-  var path = document.getElementById('tdChartPath');
+  var path = document.getElementById('tdLossPath');
   if (!path || _tdLossHistory.length < 2) return;
-  var W = 300, H = 50, pad = 4;
+  var W = 600, H = 120, pad = 6;
   var min = _tdLossHistory.reduce(function(a, b) { return Math.min(a, b); }, Infinity);
   var max = _tdLossHistory.reduce(function(a, b) { return Math.max(a, b); }, -Infinity);
   var rng = Math.max(max - min, 0.01);
@@ -523,9 +523,10 @@ var NeuralNetViz = (function() {
   function _init() {
     _cv = document.getElementById('tdNNCanvas');
     if (!_cv) return false;
-    var dpr = window.devicePixelRatio || 1;
-    var w   = (_cv.parentElement && _cv.parentElement.offsetWidth) || 180;
-    var h   = 62;
+    var dpr    = window.devicePixelRatio || 1;
+    var parent = _cv.parentElement;
+    var w      = (parent && parent.offsetWidth)  || 600;
+    var h      = (parent && parent.offsetHeight) || 240;
     _cv.width        = w * dpr;
     _cv.height       = h * dpr;
     _cv.style.width  = w + 'px';
@@ -536,11 +537,12 @@ var NeuralNetViz = (function() {
     _nodes = [];
     _parts = [];
 
-    var pad  = 10;
-    var cols = LAYERS.length;
+    // Spread 4 layers across full width using percentage positions
+    var layerX = [w * 0.10, w * 0.35, w * 0.65, w * 0.90];
+    var cols   = LAYERS.length;
     for (var li = 0; li < cols; li++) {
       var n    = LAYERS[li];
-      var x    = pad + (w - pad * 2) * li / (cols - 1);
+      var x    = layerX[li];
       var step = h / (n + 1);
       var col  = [];
       for (var ni = 0; ni < n; ni++) {
@@ -548,7 +550,7 @@ var NeuralNetViz = (function() {
           x:     x,
           y:     step * (ni + 1),
           phase: Math.random() * Math.PI * 2,
-          spd:   0.026 + Math.random() * 0.026,
+          spd:   0.018 + Math.random() * 0.018,   // slower: meditative feel
           act:   Math.random()
         });
       }
@@ -571,7 +573,7 @@ var NeuralNetViz = (function() {
       for (var a = 0; a < A.length; a++) {
         for (var b = 0; b < B.length; b++) {
           var alpha = 0.03 + A[a].act * 0.05;
-          if (Math.random() < 0.0006) alpha = 0.45;   // weight flash
+          if (Math.random() < 0.00045) alpha = 0.45;  // weight flash (slowed)
           _ctx.strokeStyle = 'rgba(94,106,210,' + alpha + ')';
           _ctx.beginPath();
           _ctx.moveTo(A[a].x, A[a].y);
@@ -581,12 +583,12 @@ var NeuralNetViz = (function() {
       }
     }
 
-    // Spawn data-flow particles
-    if (Math.random() < 0.16) {
+    // Spawn data-flow particles (slowed spawn rate)
+    if (Math.random() < 0.12) {
       var sl = Math.floor(Math.random() * (_nodes.length - 1));
       var sf = Math.floor(Math.random() * _nodes[sl].length);
       var st = Math.floor(Math.random() * _nodes[sl + 1].length);
-      _parts.push({ li: sl, fn: sf, tn: st, p: 0, spd: 0.032 + Math.random() * 0.032 });
+      _parts.push({ li: sl, fn: sf, tn: st, p: 0, spd: 0.024 + Math.random() * 0.024 });
     }
 
     // Draw particles
@@ -598,22 +600,22 @@ var NeuralNetViz = (function() {
       var t  = _nodes[pt.li + 1][pt.tn];
       var px = f.x + (t.x - f.x) * pt.p;
       var py = f.y + (t.y - f.y) * pt.p;
-      var g  = _ctx.createRadialGradient(px, py, 0, px, py, 4);
+      var g  = _ctx.createRadialGradient(px, py, 0, px, py, 3);
       g.addColorStop(0, 'rgba(165,180,252,0.9)');
       g.addColorStop(1, 'rgba(165,180,252,0)');
       _ctx.fillStyle = g;
-      _ctx.beginPath(); _ctx.arc(px, py, 4, 0, Math.PI * 2); _ctx.fill();
+      _ctx.beginPath(); _ctx.arc(px, py, 3, 0, Math.PI * 2); _ctx.fill();
       _ctx.fillStyle = '#c7d2fe';
-      _ctx.beginPath(); _ctx.arc(px, py, 1.5, 0, Math.PI * 2); _ctx.fill();
+      _ctx.beginPath(); _ctx.arc(px, py, 1.2, 0, Math.PI * 2); _ctx.fill();
     }
 
-    // Nodes — pulsing activation
+    // Nodes — pulsing activation (smaller, ambient 3px)
     for (var li = 0; li < _nodes.length; li++) {
       for (var ni = 0; ni < _nodes[li].length; ni++) {
         var nd = _nodes[li][ni];
         nd.phase += nd.spd;
         nd.act = 0.2 + 0.8 * (0.5 + 0.5 * Math.sin(nd.phase));
-        var r = 2.2 + nd.act * 0.9;
+        var r = 1.5 + nd.act * 1.5;   // 1.5–3px, ambient feel
         _ctx.fillStyle   = 'rgba(94,106,210,'   + (0.35 + nd.act * 0.5) + ')';
         _ctx.strokeStyle = 'rgba(165,180,252,' + (0.3  + nd.act * 0.4) + ')';
         _ctx.lineWidth   = 0.7;

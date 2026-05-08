@@ -1544,24 +1544,73 @@ textarea::placeholder { color: var(--ink-tertiary); }
   margin-top:     3px;
 }
 
-.td-chart-section {
-  padding-top: 2px;
+.td-cinematic-row {
+  position:      relative;
+  width:         100%;
+  height:        240px;
+  margin-top:    16px;
+  border-radius: 12px;
+  overflow:      hidden;
+  background:    var(--surface-1);
+  border:        1px solid var(--hairline);
 }
 
-.td-chart-label {
-  font-size:      10px;
-  color:          var(--ink-tertiary);
+.td-nn-bg {
+  position: absolute;
+  top:      0;
+  left:     0;
+  width:    100%;
+  height:   100%;
+  z-index:  1;
+  opacity:  0.35;
+  filter:   blur(0.5px);
+}
+
+.td-nn-bg canvas {
+  width:   100%;
+  height:  100%;
+  display: block;
+}
+
+.td-nn-bg::after {
+  content:        '';
+  position:       absolute;
+  top:            0;
+  left:           0;
+  width:          100%;
+  height:         100%;
+  background:     radial-gradient(ellipse at center, transparent 0%, rgba(1, 1, 2, 0.4) 100%);
+  pointer-events: none;
+}
+
+.td-loss-fg {
+  position:        absolute;
+  top:             0;
+  left:            0;
+  width:           100%;
+  height:          100%;
+  z-index:         2;
+  padding:         16px 24px;
+  display:         flex;
+  flex-direction:  column;
+  justify-content: flex-end;
+  pointer-events:  none;
+}
+
+.td-loss-label {
+  font-size:      11px;
+  font-weight:    500;
+  letter-spacing: 0.4px;
+  color:          var(--ink-subtle);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom:  5px;
+  margin-bottom:  8px;
+  align-self:     flex-start;
 }
 
-.td-chart-svg {
-  width:      100%;
-  height:     50px;
-  display:    block;
-  overflow:   visible;
-  background: transparent;
+.td-loss-chart {
+  width:  100%;
+  height: 140px;
+  filter: drop-shadow(0 0 12px rgba(94, 106, 210, 0.4));
 }
 
 /* ── FADE-UP D5 ─────────────────────────────────── */
@@ -1648,21 +1697,18 @@ textarea::placeholder { color: var(--ink-tertiary); }
 
 /* ── TRAINING DASHBOARD 2-COLUMN ROW ─────────────── */
 
-.td-training-row {
-  display:               grid;
-  grid-template-columns: 1fr 1fr;
-  gap:                   10px;
-  align-items:           start;
-}
+@media (max-width: 768px) {
+  .td-cinematic-row {
+    height: 180px;
+  }
 
-.td-nn-canvas {
-  display: block;
-  width:   100%;
-  height:  62px;
-}
+  .td-nn-bg {
+    opacity: 0.25;
+  }
 
-@media (max-width: 520px) {
-  .td-training-row { grid-template-columns: 1fr; }
+  .td-loss-chart {
+    height: 100px;
+  }
 }
 
 /* ── PAGE VIDEO — mobile ────────────────────────── */

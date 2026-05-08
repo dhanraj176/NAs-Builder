@@ -167,18 +167,33 @@
             </div>
           </div>
 
-          <div class="td-training-row">
-            <div class="td-chart-section">
-              <div class="td-chart-label">Loss curve</div>
-              <svg id="tdChartSvg" class="td-chart-svg" viewBox="0 0 300 50" preserveAspectRatio="none">
-                <path id="tdChartPath" fill="none" stroke="var(--primary)" stroke-width="1.5"
-                      stroke-linecap="round" stroke-linejoin="round" d=""/>
+          <div class="td-cinematic-row">
+
+            <!-- Background layer: Neural network -->
+            <div class="td-nn-bg">
+              <canvas id="tdNNCanvas"></canvas>
+            </div>
+
+            <!-- Foreground layer: Loss curve -->
+            <div class="td-loss-fg">
+              <div class="td-loss-label">LOSS CURVE</div>
+              <svg class="td-loss-chart" viewBox="0 0 600 120" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="lossGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="var(--primary)"/>
+                    <stop offset="100%" stop-color="var(--primary-hover)"/>
+                  </linearGradient>
+                </defs>
+                <path id="tdLossPath"
+                      stroke="url(#lossGradient)"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      fill="none"
+                      d=""/>
               </svg>
             </div>
-            <div class="td-nn-panel" id="tdNNPanel">
-              <div class="td-chart-label">Neural network</div>
-              <canvas id="tdNNCanvas" class="td-nn-canvas"></canvas>
-            </div>
+
           </div>
         </div>
 
